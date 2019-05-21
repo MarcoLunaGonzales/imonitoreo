@@ -1,0 +1,78 @@
+<?php 
+	require_once '../conexion.php';
+	require_once '../functions.php';
+	require_once '../styles.php';
+
+	$dbh = new Conexion();
+
+	$codObjetivo=$_GET["cod_objetivo"];
+	$codIndicador=$_GET["cod_indicador"];
+
+	$nombreObjetivo=nameObjetivo($codObjetivo);
+	$nombreIndicador=nameIndicador($codIndicador);
+
+?>
+<input type="hidden" name="cod_objetivo" value="<?=$codObjetivo;?>">
+<input type="hidden" name="cod_indicador" value="<?=$codIndicador;?>">
+
+<div class="col-sm-12">
+  <div class="card">
+    <div class="card-header card-header-text <?=$colorCardDetail?>">
+      <div class="card-text">
+        <p class="card-category"><?=$nombreObjetivo;?> - <?=$nombreIndicador;?></p>
+      </div>
+    </div>
+    <div class="card-body table-responsive">
+      <table class="table table-hover">
+        <thead>
+			<th class="text-primary">Unidad\Area</th>
+        <?php
+		$stmtA = $dbh->prepare("SELECT codigo, abreviatura FROM areas where cod_estado=1 ORDER BY 2");
+		$stmtA->execute();
+		while ($rowA = $stmtA->fetch(PDO::FETCH_ASSOC)) {
+			$codigoA=$rowA['codigo'];
+			$abreviaturaA=$rowA['abreviatura'];
+		?>
+			<th class="text-primary"><?=$abreviaturaA?></th>
+		<?php	
+		}
+        ?>
+        </thead>
+        <tbody>
+            <?php
+			$stmtU = $dbh->prepare("SELECT codigo, abreviatura FROM unidades_organizacionales where cod_estado=1 ORDER BY 2");
+			$stmtU->execute();
+			while ($rowU = $stmtU->fetch(PDO::FETCH_ASSOC)) {
+				$codigoU=$rowU['codigo'];
+				$abreviaturaU=$rowU['abreviatura'];
+			?>                      
+			<tr>
+				<th class="text-primary"><?=$abreviaturaU?></th>
+			<?php	
+				$stmtA->execute();
+				while ($rowA = $stmtA->fetch(PDO::FETCH_ASSOC)) {
+					$codigoA=$rowA['codigo'];
+					$abreviaturaA=$rowA['abreviatura'];
+
+					$stmtVeri = $dbh->prepare("SELECT (select o.abreviatura from operadores o where o.codigo=i.cod_operador)operador, i.meta FROM indicadores_metas i where i.cod_indicador='$codIndicador' and i.cod_unidadorganizacional='$codigoU' and i.cod_area='$codigoA'");
+					$stmtVeri->execute();
+					while ($rowVeri = $stmtVeri->fetch(PDO::FETCH_ASSOC)) {
+						$nombreOperadorX=$rowVeri['operador'];
+						$valorMetaX=$rowVeri['meta'];
+						
+			?>
+				<td>
+					<?=$nombreOperadorX." ".$valorMetaX;?>
+				</td>
+			<?php				
+						
+					}
+				}
+			}
+            ?>
+          	</tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,465 @@
+function number_format(amount, decimals) {
+
+    amount += ''; // por si pasan un numero en vez de un string
+    amount = parseFloat(amount.replace(/[^0-9\.-]/g, '')); // elimino cualquier cosa que no sea numero o punto
+
+    decimals = decimals || 0; // por si la variable no fue fue pasada
+
+    // si no es un numero o es igual a cero retorno el mismo cero
+    if (isNaN(amount) || amount === 0) 
+        return parseFloat(0).toFixed(decimals);
+
+    // si es mayor o menor que cero retorno el valor formateado como numero
+    amount = '' + amount.toFixed(decimals);
+
+    var amount_parts = amount.split('.'),
+        regexp = /(\d+)(\d{3})/;
+
+    while (regexp.test(amount_parts[0]))
+        amount_parts[0] = amount_parts[0].replace(regexp, '$1' + ',' + '$2');
+
+    return amount_parts.join('.');
+}
+
+function nuevoAjax()
+{ var xmlhttp=false;
+  try {
+      xmlhttp = new ActiveXObject('Msxml2.XMLHTTP');
+  } catch (e) {
+  try {
+    xmlhttp = new ActiveXObject('Microsoft.XMLHTTP');
+  } catch (E) {
+    xmlhttp = false;
+  }
+  }
+  if (!xmlhttp && typeof XMLHttpRequest!='undefined') {
+  xmlhttp = new XMLHttpRequest();
+  }
+  return xmlhttp;
+}
+//INDICADORES DETALLE PROPIEDAD
+function ajaxPropiedad(objetivo, indicador){
+  var contenedor;
+  contenedor = document.getElementById('modal-body');
+  ajax=nuevoAjax();
+  ajax.open('GET', 'indicadores/ajaxPropiedad.php?cod_objetivo='+objetivo+'&cod_indicador='+indicador,true);
+  ajax.onreadystatechange=function() {
+    if (ajax.readyState==4) {
+      contenedor.innerHTML = ajax.responseText
+    }
+  }
+  ajax.send(null)
+}
+
+//INDICADORES REGISTRO DE METAS
+function ajaxMetas(objetivo, indicador){
+  var contenedor;
+  contenedor = document.getElementById('modal-body2');
+  ajax=nuevoAjax();
+  ajax.open('GET', 'indicadores/ajaxMetas.php?cod_objetivo='+objetivo+'&cod_indicador='+indicador,true);
+  ajax.onreadystatechange=function() {
+    if (ajax.readyState==4) {
+      contenedor.innerHTML = ajax.responseText
+    }
+  }
+  ajax.send(null)
+}
+
+function ajaxIndicadores(objetivo)
+{
+    var objetivo_estrategico=objetivo.value;
+    $("#div_indicadorest").html('<img src="loader.gif"/>');
+    $.ajax({
+        type: "POST",
+        dataType: 'html',
+        url: "objetivos_operativos/ajaxIndicadores.php",
+        data: "objetivo_estrategico="+objetivo_estrategico,
+        success: function(resp){
+            $('#div_indicadorest').html(resp);
+            $('.selectpicker_1').selectpicker(["refresh"]);
+        }
+    });
+}
+
+function ajaxArchivosSIS(anio, mes){
+  var contenedor;
+  contenedor = document.getElementById('modal-body');
+  ajax=nuevoAjax();
+  ajax.open('GET', 'solicitudFondosSIS/ajaxArchivos.php?anio='+anio+'&mes='+mes,true);
+  ajax.onreadystatechange=function() {
+    if (ajax.readyState==4) {
+      contenedor.innerHTML = ajax.responseText
+    }
+  }
+  ajax.send(null)
+}
+
+function ajaxCargosPOAI(codigoIndicador){
+  var contenedor;
+  contenedor = document.getElementById('modal-body');
+  ajax=nuevoAjax();
+  ajax.open('GET', 'poa/ajaxCargosPOAI.php?codigo_indicador='+codigoIndicador,true);
+  ajax.onreadystatechange=function() {
+    if (ajax.readyState==4) {
+      contenedor.innerHTML = ajax.responseText
+    }
+  }
+  ajax.send(null)
+}
+
+function ajaxNormas(sector,priorizada,divX)
+{
+    var cod_sector=sector.value;
+    $("#"+divX).html('<img src="loader.gif"/>');
+    $.ajax({
+        type: "POST",
+        dataType: 'html',
+        url: "poa/ajaxNormas.php",
+        data: {'cod_sector':cod_sector,
+              'priorizada':priorizada},
+        success: function(resp){
+            $('#'+divX).html(resp);
+            $('.selectpicker_1').selectpicker(["refresh"]);
+        }
+    });
+}
+
+function ajaxNormasS(sector,priorizada,divX,indice)
+{
+    var cod_sector=sector.value;
+    $("#"+divX).html('<img src="loader.gif"/>');
+    $.ajax({
+        type: "POST",
+        dataType: 'html',
+        url: "poa/ajaxNormasS.php",
+        data: {'cod_sector':cod_sector,
+              'priorizada':priorizada,
+              'indice':indice},
+        success: function(resp){
+            $('#'+divX).html(resp);
+            $('.selectpicker').selectpicker(["refresh"]);
+        }
+    });
+}
+
+var numFilas=0;
+var cantidadItems=0;
+
+//AJAX ADD ACTIVIDADES POA
+function addActividad(obj, cod_indicador, cod_unidad) {
+      numFilas++;
+      cantidadItems++;
+      
+      document.getElementById("cantidad_filas").value=numFilas;
+
+      console.log("num: "+numFilas+" cantidadItems: "+cantidadItems);
+      fi = document.getElementById('fiel');
+      contenedor = document.createElement('div');
+      contenedor.id = 'div'+numFilas;  
+      fi.type="style";
+      fi.appendChild(contenedor);
+      var divDetalle;
+      divDetalle=document.getElementById("div"+numFilas);
+      ajax=nuevoAjax();
+      ajax.open("GET","poa/ajaxActividades.php?cod_indicador="+cod_indicador+"&cod_unidad="+cod_unidad+"&codigo="+numFilas,true);
+      ajax.onreadystatechange=function(){
+        if (ajax.readyState==4) {
+          divDetalle.innerHTML=ajax.responseText;
+          $('.selectpicker').selectpicker(["refresh"]);
+       }
+      }   
+      ajax.send(null);
+}
+
+function addActividadPOAI(obj, cod_indicador, cod_unidad) {
+      numFilas++;
+      cantidadItems++;
+      
+      document.getElementById("cantidad_filas").value=numFilas;
+
+      console.log("num: "+numFilas+" cantidadItems: "+cantidadItems);
+      fi = document.getElementById('fiel');
+      contenedor = document.createElement('div');
+      contenedor.id = 'div'+numFilas;  
+      fi.type="style";
+      fi.appendChild(contenedor);
+      var divDetalle;
+      divDetalle=document.getElementById("div"+numFilas);
+      ajax=nuevoAjax();
+      ajax.open("GET","poa/ajaxActividadesPOAI.php?cod_indicador="+cod_indicador+"&cod_unidad="+cod_unidad+"&codigo="+numFilas,true);
+      ajax.onreadystatechange=function(){
+        if (ajax.readyState==4) {
+          divDetalle.innerHTML=ajax.responseText;
+          $('.selectpicker').selectpicker(["refresh"]);
+       }
+      }   
+      ajax.send(null);
+}
+
+function addActividadPON(obj, cod_indicador, cod_unidad) {
+      numFilas++;
+      cantidadItems++;
+      
+      document.getElementById("cantidad_filas").value=numFilas;
+
+      console.log("num: "+numFilas+" cantidadItems: "+cantidadItems);
+      fi = document.getElementById('fiel');
+      contenedor = document.createElement('div');
+      contenedor.id = 'div'+numFilas;  
+      fi.type="style";
+      fi.appendChild(contenedor);
+      var divDetalle;
+      divDetalle=document.getElementById("div"+numFilas);
+      ajax=nuevoAjax();
+      ajax.open("GET","poa/ajaxActividadesPON.php?cod_indicador="+cod_indicador+"&cod_unidad="+cod_unidad+"&codigo="+numFilas,true);
+      ajax.onreadystatechange=function(){
+        if (ajax.readyState==4) {
+          divDetalle.innerHTML=ajax.responseText;
+          $('.selectpicker').selectpicker(["refresh"]);
+       }
+      }   
+      ajax.send(null);
+}
+function minusActividad(numero) {
+  cantidadItems--;
+  console.log("TOTAL ITEMS: "+numFilas);
+  console.log("NUMERO A DISMINUIR: "+numero);
+  if(numero==numFilas){
+    numFilas=parseInt(numFilas)-1;
+  }
+  fi = document.getElementById('fiel');
+  fi.removeChild(document.getElementById('div'+numero));
+
+  document.getElementById("cantidad_filas").value=numFilas;
+}
+
+function completaActividad(combo, fila) {
+  var combo=combo.options[combo.selectedIndex].text;
+  var fila=fila;
+  document.getElementById("actividad"+fila).value=combo;
+  console.log(combo+" "+fila);
+}
+
+//ESTAS FUNCIONES SON DEL POA
+function verificaModalArea(){
+  $('#myModal').modal('show');
+}
+
+function enviarAreaPOA(indicador){
+  var comboarea=document.getElementById('areaModal');
+  var areaUnidad=comboarea.options[comboarea.selectedIndex].value;
+  location.href='index.php?opcion=registerPOAGroup&codigo='+indicador+'&areaUnidad='+areaUnidad;
+}
+
+function enviarAreaPOAI(indicador){
+  var comboarea=document.getElementById('areaModal');
+  var areaUnidad=comboarea.options[comboarea.selectedIndex].value;
+  location.href='index.php?opcion=registerPOAI&codigo='+indicador+'&areaUnidad='+areaUnidad;
+}
+
+function enviarAreaPOAPON(indicador){
+  var comboarea=document.getElementById('areaModal');
+  var areaUnidad=comboarea.options[comboarea.selectedIndex].value;
+  location.href='index.php?opcion=registerPOAPONGroup&codigo='+indicador+'&areaUnidad='+areaUnidad;
+}
+
+function enviarAsignarPOA(indicador){
+  var comboarea=document.getElementById('areaModal');
+  var areaUnidad=comboarea.options[comboarea.selectedIndex].value;
+  location.href='index.php?opcion=asignarPOA&codigo='+indicador+'&areaUnidad='+areaUnidad;
+}
+
+function enviarAsignarPOAI(indicador){
+  var comboarea=document.getElementById('areaModal');
+  var areaUnidad=comboarea.options[comboarea.selectedIndex].value;
+  location.href='index.php?opcion=asignarPOAI&codigo='+indicador+'&areaUnidad='+areaUnidad;
+}
+
+function enviarFiltroAreaUnidadPOA(indicador,indicadorPON){
+  var comboarea=document.getElementById('areaModal');
+  var combounidad=document.getElementById('unidadModal');
+  var area=comboarea.options[comboarea.selectedIndex].value;
+  var unidad=combounidad.options[combounidad.selectedIndex].value;
+  location.href='index.php?opcion=listActividadesPOA&codigo='+indicador+'&codigoPON='+indicadorPON+'&area='+area+'&unidad='+unidad;
+}
+
+function enviarFiltroAreaUnidadPOA2(indicador,indicadorPON){
+  var comboarea=document.getElementById('areaModal');
+  var combounidad=document.getElementById('unidadModal');
+  var area=comboarea.options[comboarea.selectedIndex].value;
+  var unidad=combounidad.options[combounidad.selectedIndex].value;
+  location.href='index.php?opcion=listActividadesPOAEjecucion&codigo='+indicador+'&codigoPON='+indicadorPON+'&area='+area+'&unidad='+unidad;
+}
+
+function enviarFiltroAreaUnidadPOA3(indicador,indicadorPON){
+  console.log("llega1");
+  var comboarea=document.getElementById('areaModal');
+  var combounidad=document.getElementById('unidadModal');
+  var area=comboarea.options[comboarea.selectedIndex].value;
+  var unidad=combounidad.options[combounidad.selectedIndex].value;
+  location.href='index.php?opcion=registerPOAEjecucion&codigo='+indicador+'&codigoPON='+indicadorPON+'&area='+area+'&unidad='+unidad;
+  console.log("llega2");
+}
+
+/*FUNCIONES AJAX PARA LAS SOLICITUDES DE FONDOS SIS*/
+function addSolicitudFondo(obj) {
+      numFilas++;
+      cantidadItems++;
+      
+      document.getElementById("cantidad_filas").value=numFilas;
+
+      console.log("num: "+numFilas+" cantidadItems: "+cantidadItems);
+      fi = document.getElementById('fiel');
+      contenedor = document.createElement('div');
+      contenedor.id = 'div'+numFilas;  
+      fi.type="style";
+      fi.appendChild(contenedor);
+      var divDetalle;
+      divDetalle=document.getElementById("div"+numFilas);
+      ajax=nuevoAjax();
+      ajax.open("GET","solicitudFondosSIS/ajaxSolicitud.php?codigo="+numFilas,true);
+      ajax.onreadystatechange=function(){
+        if (ajax.readyState==4) {
+          divDetalle.innerHTML=ajax.responseText;
+          $('.selectpicker').selectpicker(["refresh"]);
+       }
+      }   
+      ajax.send(null);
+}
+function minusSolicitudFondo(numero) {
+  cantidadItems--;
+  console.log("TOTAL ITEMS: "+numFilas);
+  console.log("NUMERO A DISMINUIR: "+numero);
+  if(numero==numFilas){
+    numFilas=parseInt(numFilas)-1;
+  }
+  fi = document.getElementById('fiel');
+  fi.removeChild(document.getElementById('div'+numero));
+
+  document.getElementById("cantidad_filas").value=numFilas;
+}
+//FUNCION PARA VER EL DETALLE DE UNA SOLICITUD DE FONDO SIS
+function ajaxDetalleSolicitudFondoSIS(solicitud){
+  var contenedor;
+  contenedor = document.getElementById('modal-body');
+  ajax=nuevoAjax();
+  ajax.open('GET', 'solicitudFondosSIS/ajaxDetalleSolicitud.php?codigo='+solicitud,true);
+  ajax.onreadystatechange=function() {
+    if (ajax.readyState==4) {
+      contenedor.innerHTML = ajax.responseText
+    }
+  }
+  ajax.send(null)
+}
+
+//FUNCION PARA PONER TOTALES A LAS TABLAS (SEGUIMIENTO SIS)
+function totalesSIS(){
+   var main=document.getElementById('main');   
+   var numFilas=main.rows.length;
+   var numCols=main.rows[1].cells.length;
+   
+   for(var j=2; j<=numCols-1; j++){
+    var subtotal=0;
+      for(var i=2; i<=numFilas-2; i++){
+          if(main.rows[i].cells[0].className.indexOf('primary')>0){
+            //alert(main.rows[i].cells[j].innerHTML+" i:"+i+" j:"+j+" "+main.rows[i].cells[0].className);
+            var datoS=main.rows[i].cells[j].innerHTML;
+            datoS=datoS.replace(/,/g,'');
+            //console.log(datoS);
+            var dato=parseFloat(datoS);
+            //console.log(dato);
+            subtotal=subtotal+dato;
+            var subtotalF=number_format(subtotal,2); 
+            console.log("si dato: "+dato);
+          }
+      }
+      var fila=document.createElement('TH');
+      main.rows[numFilas-1].appendChild(fila);
+      main.rows[numFilas-1].cells[j].className='text-right'; 
+      main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
+   }   
+   var datoPresS=main.rows[numFilas-1].cells[2].innerHTML;
+   datoPresS=datoPresS.replace(/,/g,'');
+   console.log(datoPresS);
+   var datoEjeS=main.rows[numFilas-1].cells[numCols-3].innerHTML;
+    datoEjeS=datoEjeS.replace(/,/g,'');
+   console.log(datoEjeS);
+    var porcentajeTotal=(parseFloat(datoEjeS)/parseFloat(datoPresS))*100;
+    var porcentajeTotalF=number_format(porcentajeTotal,2);
+   main.rows[numFilas-1].cells[numCols-1].innerHTML=porcentajeTotalF+" %";
+
+    //ACA OCULTAMOS LAS FILAS QUE TIENEN 0
+    for(var j=2; j<=numFilas-1; j++){
+      var totalFila=0;
+      for(var i=2; i<=numCols-1; i++){
+            var datoS=main.rows[j].cells[i].innerHTML;
+            datoS=datoS.replace(/,/g,'');
+            var dato=parseFloat(datoS);
+            totalFila=totalFila+dato;
+      }
+      if(totalFila==0){
+        console.log("ocultando fila: "+j);
+        main.rows[j].style.display = 'none';
+      }
+    }
+}
+
+function totalesSIS3(){
+   var main=document.getElementById('main');   
+   var numFilas=main.rows.length;
+   var numCols=main.rows[1].cells.length;
+   
+   for(var j=2; j<=numCols-1; j++){
+    var subtotal=0;
+      for(var i=2; i<=numFilas-2; i++){
+          if(main.rows[i].cells[0].className.indexOf('primary')>0){
+            var datoS=main.rows[i].cells[j].innerHTML;
+            datoS=datoS.replace(/,/g,'');
+            var dato=parseFloat(datoS);
+            subtotal=subtotal+dato;
+            var subtotalF=number_format(subtotal,2); 
+            console.log("si dato: "+dato);
+          }
+      }
+      var fila=document.createElement('TH');
+      main.rows[numFilas-1].appendChild(fila);
+      main.rows[numFilas-1].cells[j].className='text-right'; 
+      main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
+   }   
+    //ACA OCULTAMOS LAS FILAS QUE TIENEN 0
+    for(var j=1; j<=numFilas-1; j++){
+      var datoS=main.rows[j].cells[2].innerHTML;
+      datoS=datoS.replace(/,/g,'');
+      var dato=parseFloat(datoS);
+
+      if(dato==0){
+        console.log("ocultando fila: "+j);
+        main.rows[j].style.display = 'none';
+      }
+    }
+}
+
+
+function totalesSIS2(){
+   var main=document.getElementById('main');   
+   var numFilas=main.rows.length;
+   var numCols=main.rows[1].cells.length;
+   
+   for(var j=2; j<=numCols-1; j++){
+    var subtotal=0;
+      for(var i=1; i<=numFilas-2; i++){
+            var datoS=main.rows[i].cells[j].innerHTML;
+            datoS=datoS.replace(/,/g,'');
+            console.log(datoS);
+            var dato=parseFloat(datoS);
+            console.log(dato);
+            subtotal=subtotal+dato;
+            var subtotalF=number_format(subtotal,2); 
+            //console.log("si dato: "+dato);
+      }
+      var fila=document.createElement('TH');
+      main.rows[numFilas-1].appendChild(fila);
+      main.rows[numFilas-1].cells[j].className='text-right'; 
+      main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
+  }   
+}
