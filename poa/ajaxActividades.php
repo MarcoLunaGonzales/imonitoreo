@@ -5,6 +5,10 @@ require_once '../styles.php';
 
 $dbh = new Conexion();
 
+$sqlX="SET NAMES 'utf8'";
+$stmtX = $dbh->prepare($sqlX);
+$stmtX->execute();
+
 session_start();
 $globalAdmin=$_SESSION["globalAdmin"];
 $globalGestion=$_SESSION["globalGestion"];
@@ -148,13 +152,22 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 
 <div class="col-md-12">
 	<div class="row">
-	    <div class="col-sm-8">
+	    <div class="col-sm-6">
 		    <div class="form-group">
           		<label for="actividad<?=$codigo;?>" class="bmd-label-floating">Actividad</label>
-				<textarea class="form-control" name="actividad<?=$codigo;?>" id="actividad<?=$codigo;?>" required="true" rows="1" value="">
-				</textarea>
+				<textarea class="form-control" name="actividad<?=$codigo;?>" id="actividad<?=$codigo;?>" required="true" rows="1" value=""></textarea>
 			</div>
 		</div>
+
+		<div class="col-sm-2">
+	    	<div class="form-group">
+	        <select class="selectpicker form-control" name="clave_indicador<?=$codigo;?>" id="clave_indicador<?=$codigo;?>" data-style="<?=$comboColor;?>">
+			  	<option value="">CMI</option>
+				<option value="0">No</option>
+				<option value="1">Si</option>
+			</select>
+			</div>
+	  	</div>
 
 	  	<div class="col-sm-3">
 			<div class="form-group">
@@ -163,28 +176,6 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 			</div>
 		</div>
 
-	  	<!--div class="col-sm-2">
-	    	<div class="form-group">
-	        <select class="selectpicker" name="tipo_resultado<?=$codigo;?>" id="tipo_resultado<?=$codigo;?>" data-style="<?=$comboColor;?>" data-width="150px" required>
-			  	<option disabled selected value="">Tipo de Dato</option>
-			  	<?php
-			  	$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM tipos_resultado where cod_estado=1 order by 2");
-				$stmt->execute();
-				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-					$codigoX=$row['codigo'];
-					$nombreX=$row['nombre'];
-					$abrevX=$row['abreviatura'];
-				?>
-						<option value="<?=$codigoX;?>" data-subtext="<?=$abrevX?>"><?=$nombreX;?></option>	
-				<?php
-					}
-			  	?>
-			</select>
-			</div>
-	  	</div-->
-
-
-
 		<div class="col-sm-1">
 			<button rel="tooltip" class="btn btn-just-icon btn-danger btn-link" onclick="minusActividad('<?=$codigo;?>');">
 	                              <i class="material-icons">remove_circle</i>
@@ -192,4 +183,40 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 		</div>
 	</div>
 </div>
+
+
+
+<div class="col-md-12">
+	<div class="row">
+		<div class="col-sm-6">
+            <div class="form-group">
+            <label for="observaciones<?=$codigo;?>" class="bmd-label-floating">Observaciones</label>			
+          	<input class="form-control" type="text" name="observaciones<?=$codigo;?>" id="observaciones<?=$codigo;?>" onkeyup="javascript:this.value=this.value.toUpperCase();">	
+				</div>
+      	</div>
+
+		<div class="col-sm-4">
+        	<div class="form-group">
+	        <select class="selectpicker form-control" name="hito<?=$codigo;?>" id="hito<?=$codigo;?>" data-style="<?=$comboColor;?>">
+			  	<option disabled selected value="">Hito</option>
+			  	<?php
+			  	$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM hitos where cod_estado=1 order by 2");
+				$stmt->execute();
+				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+					$codigoX=$row['codigo'];
+					$nombreX=$row['nombre'];
+					$nombreX=substr($nombreX,0,40);
+					$abrevX=$row['abreviatura'];
+				?>
+				<option value="<?=$codigoX;?>"><?=$nombreX;?></option>	
+				<?php
+			  	}
+			  	?>
+			</select>
+			</div>
+      	</div>
+
+	</div>
+</div>
+
 <div class="h-divider">

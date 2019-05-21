@@ -67,7 +67,7 @@ $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n wh
 (a.cod_tiposeguimiento)as tipodato, 
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area,
 (SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador, 
-(select p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, actividad_extra
+(select p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, actividad_extra, clave_indicador
  from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 "; 
 if($globalAdmin==0){
   $sql.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) ";
@@ -105,6 +105,7 @@ $stmt->bindColumn('cod_area', $codArea);
 $stmt->bindColumn('datoclasificador', $datoClasificador);
 $stmt->bindColumn('personal', $personal);
 $stmt->bindColumn('actividad_extra', $actividadExtra);
+$stmt->bindColumn('clave_indicador', $actividadCMI);
 
 ?>
 
@@ -137,8 +138,7 @@ $stmt->bindColumn('actividad_extra', $actividadExtra);
                           <th>Actividad</th>
                           <th>Sector/Norma Priorizado</th>
                           <th>Sector/Norma</th>
-                          <th>Producto Esperado</th>
-                          <th>Seg.</th>
+                          <th>Act.CMI</th>
                           <th>Clasificador</th>
                           <th>Personal POAI</th>
                           <th data-orderable="false">Actions</th>
@@ -150,6 +150,11 @@ $stmt->bindColumn('actividad_extra', $actividadExtra);
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
                           $abrevArea=abrevArea($codArea);
                           $abrevUnidad=abrevUnidad($codUnidad);
+                          if($actividadCMI==1){
+                            $iconCheck="done";
+                          }else{
+                            $iconCheck="clear";
+                          }
                       ?>
                         <tr>
                           <td class="text-center"><?=$index;?></td>
@@ -157,8 +162,11 @@ $stmt->bindColumn('actividad_extra', $actividadExtra);
                           <td><?=$nombre;?></td>
                           <td><?=$sectorPriorizado." ".$normaPriorizada;?></td>
                           <td><?=$sector." ".$norma;?></td>
-                          <td><?=$productoEsperado;?></td>
-                          <td><?=$tipoDato;?></td>
+                          <td class="text-center">
+                            <div class="card-icon">
+                              <i class="material-icons"><?=$iconCheck;?></i>
+                            </div>
+                          </td>
                           <td><?=$datoClasificador;?></td>
                           <td><?=$personal;?></td>
                           <td class="td-actions text-right">

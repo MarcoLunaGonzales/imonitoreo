@@ -52,6 +52,10 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		$tipoSeguimiento=$_POST["tipo_seguimiento".$i];
 		$tipoResultado="1";//valor numerico por defecto
 		$datoClasificador=$_POST["clasificador".$i];
+		$observaciones=$_POST["observaciones".$i];
+		$hito=$_POST["hito".$i];
+		$claveIndicador=$_POST["clave_indicador".$i];
+
 
 		$codigoPOA=0;
 		if($codigo==0){
@@ -78,7 +82,7 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		if($codEstadoPOAGestion==3){
 			$actividadExtra=1;
 		}
-		$stmt = $dbh->prepare("INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_tiporesultado, cod_datoclasificador, actividad_extra) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_normapriorizada, :cod_norma, :cod_tiposeguimiento, :producto_esperado, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_tiporesultado, :cod_datoclasificador, :actividad_extra)");
+		$stmt = $dbh->prepare("INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_tiporesultado, cod_datoclasificador, actividad_extra, observaciones, cod_hito, clave_indicador) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_normapriorizada, :cod_norma, :cod_tiposeguimiento, :producto_esperado, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_tiporesultado, :cod_datoclasificador, :actividad_extra,:observaciones,:cod_hito,:clave_indicador)");
 		// Bind
 		$stmt->bindParam(':codigo', $codigoPOA);
 		$stmt->bindParam(':orden', $ordenPOA);
@@ -97,7 +101,10 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		$stmt->bindParam(':cod_tiporesultado', $tipoResultado);
 		$stmt->bindParam(':cod_datoclasificador', $datoClasificador);
 		$stmt->bindParam(':actividad_extra', $actividadExtra);
-
+		$stmt->bindParam(':observaciones', $observaciones);
+		$stmt->bindParam(':cod_hito', $hito);
+		$stmt->bindParam(':clave_indicador', $claveIndicador);
+		
 		$flagSuccess=$stmt->execute();	
 	}
 } 
