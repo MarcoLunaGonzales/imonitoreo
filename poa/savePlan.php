@@ -1,5 +1,5 @@
 <?php
-
+set_time_limit(0);
 require_once '../layouts/bodylogin.php';
 require_once '../conexion.php';
 require_once '../functions.php';

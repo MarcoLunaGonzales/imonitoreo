@@ -32,6 +32,9 @@ $globalArea=$_SESSION["globalArea"];
 $globalAdmin=$_SESSION["globalAdmin"];
 $globalUserPON=$_SESSION["globalUserPON"];
 
+//echo "GLOBALADMIN: ".$globalAdmin."<br>";
+//echo "GLOBALUSERPON: ".$globalUserPON."<br>";
+
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
@@ -43,11 +46,14 @@ $codEstadoPOAGestion=estadoPOAGestion($globalGestion);
 
 // Preparamos
 $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT s.abreviatura from comites c, sectores s where c.cod_sector=s.codigo and c.codigo=a.cod_comite)as sector, (SELECT c.nombre from comites c where c.codigo=a.cod_comite)as comite,
-(SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma, a.cod_unidadorganizacional, a.cod_area, (SELECT ep.nombre from estados_pon ep where ep.codigo=a.cod_estadopon)as estadopon, (select mg.nombre from modos_generacionpon mg where mg.codigo=a.cod_modogeneracionpon)as modogeneracionpon, (SELECT p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, a.actividad_extra
+(SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma, a.cod_unidadorganizacional, a.cod_area, (SELECT ep.nombre from estados_pon ep where ep.codigo=a.cod_estadopon)as estadopon, (select mg.nombre from modos_generacionpon mg where mg.codigo=a.cod_modogeneracionpon)as modogeneracionpon, (SELECT p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, a.actividad_extra, a.solicitante
  from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 "; 
-if($globalAdmin==0){
-  $sql.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) and a.cod_personal='$globalUser'";
-} 
+if($globalAdmin==0 && $globalUserPON!=2){
+  $sql.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) ";
+}
+if($globalUserPON!=2){
+  $sql.=" and a.cod_personal='$globalUser' ";
+}
 if($areaIndicador!=0){
   $sql.=" and a.cod_area='$areaIndicador' ";
 }
@@ -56,7 +62,7 @@ if($unidadIndicador!=0){
 }
 if($globalUserPON==1){
   $sql.="UNION SELECT a.codigo, a.orden, a.nombre, (SELECT s.abreviatura from comites c, sectores s where c.cod_sector=s.codigo and c.codigo=a.cod_comite)as sector, (SELECT c.nombre from comites c where c.codigo=a.cod_comite)as comite,
-(SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma, a.cod_unidadorganizacional, a.cod_area, (SELECT ep.nombre from estados_pon ep where ep.codigo=a.cod_estadopon)as estadopon, (select mg.nombre from modos_generacionpon mg where mg.codigo=a.cod_modogeneracionpon)as modogeneracionpon, (SELECT p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, a.actividad_extra
+(SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma, a.cod_unidadorganizacional, a.cod_area, (SELECT ep.nombre from estados_pon ep where ep.codigo=a.cod_estadopon)as estadopon, (select mg.nombre from modos_generacionpon mg where mg.codigo=a.cod_modogeneracionpon)as modogeneracionpon, (SELECT p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, a.actividad_extra, a.solicitante
  from actividades_poa a where a.cod_indicador='$codigoIndicadorPON' and a.cod_estado=1 and a.cod_personal='$globalUser' ";   
 } 
 $sql.=" order by cod_unidadorganizacional, cod_area, orden";
@@ -80,6 +86,7 @@ $stmt->bindColumn('estadopon', $estadopon);
 $stmt->bindColumn('modogeneracionpon', $modogeneracionpon);
 $stmt->bindColumn('personal', $personal);
 $stmt->bindColumn('actividad_extra', $actividadExtra);
+$stmt->bindColumn('solicitante', $solicitante);
 
 ?>
 
@@ -112,7 +119,7 @@ $stmt->bindColumn('actividad_extra', $actividadExtra);
                           <th>Tema a Normalizar</th>
                           <th>Sector - Comite</th>
                           <th>Norma de Ref.</th>
-                          <th>Estado</th>
+                          <th>Solicitante</th>
                           <th>Modo de Generacion</th>
                           <th>Responsable</th>
                           <th data-orderable="false">Actions</th>
@@ -131,7 +138,7 @@ $stmt->bindColumn('actividad_extra', $actividadExtra);
                           <td><?=$nombre;?></td>
                           <td><?=$sector." - ".$comite;?></td>
                           <td><?=$norma;?></td>
-                          <td><?=$estadopon;?></td>
+                          <td><?=$solicitante;?></td>
                           <td><?=$modogeneracionpon;?></td>
                           <td><?=$personal;?></td>
                           <td class="td-actions text-right">
@@ -221,7 +228,7 @@ $stmt->bindColumn('actividad_extra', $actividadExtra);
       </select> 
       </div>
       <div class="modal-footer">
-        <button type="button" class="<?=$button;?>" onclick="enviarFiltroAreaUnidadPOA(<?=$codigoIndicador;?>);">Aceptar</button>
+        <button type="button" class="<?=$button;?>" onclick="enviarFiltroAreaUnidadPOA(<?=$codigoIndicador;?>,<?=$codigoIndicadorPON;?>);">Aceptar</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
       </div>
     </div>

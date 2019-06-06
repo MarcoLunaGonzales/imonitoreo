@@ -12,6 +12,10 @@ $globalArea=$_SESSION["globalArea"];
 $globalAdmin=$_SESSION["globalAdmin"];
 
 
+$globalAreaEjecucion=$_SESSION["globalAreaEjecucion"];
+$globalUnidadEjecucion=$_SESSION["globalUnidadEjecucion"];
+
+
 $codigoIndicador=$codigo;
 $areaIndicador=$area;
 $unidadIndicador=$unidad;
@@ -82,9 +86,9 @@ $moduleName="Registro de Ejecucion POA";
 					  <h4 class="card-title"><?=$moduleName;?> - Mes Ejecucion: <?=$codMesX;?> Fecha Limite: <?=$fechaFinRegistroX;?></h4>
 					  <h6 class="card-title">Indicador: <?=$nombreIndicador;?></h6>
 					</div>
-					<a href="#" class="<?=$buttonCeleste;?> btn-round" data-toggle="modal" data-target="#myModal"  title="Filtrar">
+					<!--a href="#" class="<?=$buttonCeleste;?> btn-round" data-toggle="modal" data-target="#myModal"  title="Filtrar">
                         		<i class="material-icons">filter_list</i>
-                    		</a>
+            		</a-->
 				</div>
 				<div class="card-body ">
 					<div class="row">
@@ -97,12 +101,10 @@ $moduleName="Registro de Ejecucion POA";
 					</div>
 
 					<?php
-					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, (SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador,
+					$sqlLista="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada, (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, (SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador,
 					(SELECT c.codigo from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as codigodetalleclasificador
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
-					if($globalAdmin==0){
-						$sqlLista.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad)";
-					}
+					$sqlLista.=" and a.cod_area in ($globalAreaEjecucion) and a.cod_unidadorganizacional in ($globalUnidadEjecucion)";
 					if($areaIndicador!=0){
 						$sqlLista.=" and a.cod_area in ($areaIndicador) ";
 					}
@@ -118,6 +120,8 @@ $moduleName="Registro de Ejecucion POA";
 					$stmtLista->bindColumn('codigo', $codigo);
 					$stmtLista->bindColumn('orden', $orden);
 					$stmtLista->bindColumn('nombre', $nombre);
+					$stmtLista->bindColumn('normapriorizada', $normaPriorizada);
+					$stmtLista->bindColumn('norma', $norma);
 					$stmtLista->bindColumn('cod_tiporesultado', $codTipoDato);
 					$stmtLista->bindColumn('cod_unidadorganizacional', $codUnidad);
 					$stmtLista->bindColumn('cod_area', $codArea);
@@ -126,8 +130,8 @@ $moduleName="Registro de Ejecucion POA";
 
 					?>
 
-              		<div class="table-responsive">
-		                <table class="table table-bordered">
+              		<div class="table-responsive" >
+		                <table class="table table-condensed" id="tablePaginatorFixed" data-page-length='100'>
 		                  <thead>
 		                    <tr>
 		                      <th class="text-center"></th>
@@ -146,56 +150,84 @@ $moduleName="Registro de Ejecucion POA";
 		                      <th>Clasificador</th>
 		                      <th class="text-center table-warning">Plan</th>
 		                      <th class="text-center table-success">Sist.</th>
-		                      <th class="text-center table-success">POA</th>
-		                      <th class="text-center">Descripcion<br>Logro</th>
+		                      <th class="text-center table-success" width="130px">POA</th>
+		                      <th class="text-center" width="250px">Descripcion<br>Logro</th>
 		                      <th class="text-center">Archivo<br>Soporte</th>
 		                    </tr>
 		                  </thead>
 		                  <tbody>
 		                  <?php
 		                    $index=1;
+		                    $totalPlanificado=0;
+		                    $totalEjecutado=0;
 		                  	while ($row = $stmtLista->fetch(PDO::FETCH_BOUND)) {
                   				$abrevArea=abrevArea($codArea);
                           		$abrevUnidad=abrevUnidad($codUnidad);
 
+	                          $cadenaNormas="";
+	                          $cadenaN="";
+	                          $cadenaNP="";
+	                          if($normaPriorizada!=""){
+	                            $cadenaNP.="NP:".$normaPriorizada;
+	                          }
+	                          
+	                          if($norma!=""){
+	                            $cadenaN.="N:".$norma;
+	                          }
+
+	                          if($normaPriorizada!="" || $norma!=""){
+	                            $cadenaNormas="(".$cadenaNP."-".$cadenaN.")";
+	                          }
+
 		                  ?>
 		                    <tr>
-		                      <td class="text-center"><?=$orden;?></td>
+		                      <td class="text-center"><?=$index;?></td>
 		                      <td class="text-center"><?=$abrevArea."-".$abrevUnidad;?></td>
-		                      <td class="text-left small"><?=$nombre;?></td>
+		                      <td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?></td>
 		                      <td class="text-left small"><?=$datoclasificador;?>(<?=$codigodetalleclasificador;?>)</td>
 		                    <?php
 	                    	for($i=$codMesX;$i<=$codMesX;$i++){
-	                    		$sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
+	                    		$sqlRecupera="SELECT value_numerico from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
 	                    		$stmtRecupera = $dbh->prepare($sqlRecupera);
 								$stmtRecupera->bindParam(':cod_actividad',$codigo);
 								$stmtRecupera->bindParam(':cod_mes',$i);
 								$stmtRecupera->execute();
 								$valueNumero=0;
-								$valueString="";
-								$valueBooleano=0;
 								while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
 									$valueNumero=$rowRec['value_numerico'];
-									$valueString=$rowRec['value_string'];
-									$valueBooleano=$rowRec['value_booleano'];
 								}
-								$valueEjecutadoSistema=0;
-								if($codigoClasificador!=0){
-									$valueEjecutadoSistema=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
-								}
+
+								$totalPlanificado+=$valueNumero;
+
+								$valorEj=0;
+								$descripcionEj="";
+								$sqlRecupera="SELECT a.value_numerico, a.descripcion from actividades_poaejecucion a where a.cod_actividad='$codigo' and a.mes='$codMesX'";
+	                          	$stmtRecupera = $dbh->prepare($sqlRecupera);
+	                          	$stmtRecupera->execute();
+	                          	$estadoPonEj="";
+	                          	while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
+	                            	$valorEj=$rowRec['value_numerico'];
+		                            $descripcionEj=$rowRec['descripcion'];
+	                          	}
+	                          	if($valorEj==0){
+									if($codigoClasificador!=0){
+										$valorEj=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
+									}
+	                          	}
+	                          	$totalEjecutado+=$valorEj;
 	                    	?>
 	                    		<td class="text-center table-warning font-weight-bold">
 	                    			<?=formatNumberDec($valueNumero);?>
 	                    		</td>
 	                    		<td class="text-center table-success font-weight-bold">
-	                    			<?=($valueEjecutadoSistema==0)?"-":formatNumberDec($valueEjecutadoSistema);?>
-	                    			<input type="hidden" name="ejsistema|<?=$codigo;?>|<?=$i;?>" value="<?=$valueEjecutadoSistema;?>">
+	                    			<?=($valorEj==0)?"-":formatNumberDec($valorEj);?>
+	                    			<input type="hidden" name="ejsistema|<?=$codigo;?>|<?=$i;?>" value="<?=$valorEj;?>">
 	                    		</td>
 	                    		<td class="text-center table-success"> 
-	                    			<input class="form-control input-sm" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" value="<?=$valueEjecutadoSistema;?>" required>
+	                    			<input class="form-control" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="ejecutado" value="<?=$valorEj;?>" onChange="calcularTotalEj();" OnKeyUp="calcularTotalEj();" step="0.01" required>
 	                    		</td>
 	                    		<td class="text-center">
-	                    			<input class="form-control input-sm" type="text" name="explicacion|<?=$codigo;?>|<?=$i;?>">
+	                    			<textarea class="form-control input-sm" type="text" name="explicacion|<?=$codigo;?>|<?=$i;?>" rows="1"><?=$descripcionEj;?></textarea>
 	                    		</td>
 	                    		<td class="text-center">
 	                    			<input class="form-control-file" type="file" name="file|<?=$codigo;?>|<?=$i;?>">
@@ -210,6 +242,15 @@ $moduleName="Registro de Ejecucion POA";
     						}
 					        ?>
 		                  </tbody>
+		                  <tfooter>
+		                  	<tr>
+		                  		<th class="text-right" colspan="4">TOTALES</th>
+		                  		<th class="text-right"><?=formatNumberDec($totalPlanificado);?></th>
+		                  		<th></th>
+		                  		<th><input type="text" class="form-control input-sm" name="totalEj" id="totalEj" value="<?=formatNumberDec($totalEjecutado);?>" readonly="true"></th>
+		                  		<th></th>
+		                  	</tr>
+		                  </tfooter>
 		                </table>
 		              </div>
 
@@ -217,7 +258,7 @@ $moduleName="Registro de Ejecucion POA";
 	            
 				  <div class="card-footer ml-auto mr-auto">
 					<button type="submit" class="<?=$button;?>">Guardar</button>
-					<a href="?opcion=listActividadesPOAEjecucion&codigo=<?=$codigoIndicador;?>" class="<?=$buttonCancel;?>">Cancelar</a>
+					<a href="?opcion=listActividadesPOAEjecucion&codigo=<?=$codigoIndicador;?>&codigoPON=<?=$codigoIndicadorPON?>&area=<?=$globalAreaEjecucion?>&unidad=<?=$globalUnidadEjecucion?>" class="<?=$buttonCancel;?>">Cancelar</a>
 				  </div>
 			</div>
 		  </form>

@@ -67,7 +67,7 @@ if($unidadIndicador!=0){
 } 
 $sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
 
-//echo $sql;
+echo $sql;
 
 $stmt = $dbh->prepare($sql);
 // Ejecutamos

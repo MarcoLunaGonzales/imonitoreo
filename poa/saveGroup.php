@@ -40,10 +40,10 @@ $fechaHoraActual=date("Y-m-d H:i:s");
 
 for ($i=1;$i<=$cantidadFilas;$i++){ 	    	
 	// Prepare
-	$tipoSeguimiento=$_POST["tipo_seguimiento".$i];
+	$nombre=$_POST["actividad".$i];
 	//echo $i." area: ".$area." <br>";
 
-	if($tipoSeguimiento!=0 || $tipoSeguimiento!=""){
+	if($nombre!=0 || $nombre!=""){
 		$codigo=$_POST["codigo".$i];
 		$nombre=$_POST["actividad".$i];
 		$normaPriorizada=$_POST["norma_priorizada".$i];

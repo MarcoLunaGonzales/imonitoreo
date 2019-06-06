@@ -32,7 +32,6 @@
                 $.get("graficos/dataEgresosServicios.php",
 				{},
                 function (data){
-                    console.log("aqui mostramos los datos servicios Egresos:"+data);
                     var fondo = [];
                     var montoPresIngreso = [];
 					var montoEjIngreso = [];						
@@ -41,7 +40,8 @@
 						fondo.push(data[i].fondo);
                         console.log(data[i].fondo);
                         montoPresIngreso.push(data[i].montoPresIngreso);
-                        montoEjIngreso.push(data[i].montoEjIngreso);                        
+                        montoEjIngreso.push(data[i].montoEjIngreso);    
+                        console.log("DatoServEgresos:"+data[i].montoEjIngreso);                    
                     }
 					//alert(labs);
                     var chartdata = {

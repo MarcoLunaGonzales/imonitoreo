@@ -31,7 +31,7 @@ $_SESSION['anioTemporal']=$anio;
 $_SESSION['mesTemporal']=$mes;
 
 
-require("chartNacional.php");
+//require("chartNacional.php");
 ?>
 
 <div class="content">

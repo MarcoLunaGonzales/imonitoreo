@@ -45,10 +45,12 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		$comite=$_POST["comite".$i];
 		$norma=$_POST["norma".$i];
 		$modogeneracion=$_POST["modogeneracion".$i];
-		$estadopon=$_POST["estadopon".$i];
-		echo "ESTADO PON: ".$estadopon."<br>";
+		$estadopon=0;
 		$personal=$_POST["personal".$i];
 		$tipoResultado="1";//valor numerico por defecto
+		$tipoSolicitante=$_POST["tipo_solicitante".$i];
+		$solicitante=$_POST["solicitante".$i];
+
 
 		$codigoPOA=0;
 		if($codigo==0){
@@ -76,7 +78,7 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 			$actividadExtra=1;
 		}
 
-		$sql="INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_norma, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_comite, cod_estadopon, cod_modogeneracionpon, cod_personal, actividad_extra) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_norma, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_comite, :cod_estadopon, :cod_modogeneracionpon, :cod_personal, :actividad_extra)";
+		$sql="INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_norma, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_comite, cod_estadopon, cod_modogeneracionpon, cod_personal, actividad_extra, cod_tiposolicitante, solicitante) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_norma, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_comite, :cod_estadopon, :cod_modogeneracionpon, :cod_personal, :actividad_extra, :tipo_solicitante, :solicitante)";
 		$stmt = $dbh->prepare($sql);
 		
 		$values = array(':codigo' => $codigoPOA,
@@ -94,11 +96,13 @@ for ($i=1;$i<=$cantidadFilas;$i++){
         ':cod_estadopon'=> $estadopon,
         ':cod_modogeneracionpon'=> $modogeneracion,
         ':cod_personal'=> $personal,
-        ':actividad_extra'=>$actividadExtra      
+        ':actividad_extra'=>$actividadExtra,
+        ':tipo_solicitante'=>$tipoSolicitante,
+        ':solicitante'=>$solicitante
     	);
 
     	$exQuery=str_replace(array_keys($values), array_values($values), $sql);
-    	echo $exQuery;
+    	//echo $exQuery;
 		$flagSuccess=$stmt->execute($values);	
 
 		/*$stmt->bindParam(':orden', $i);

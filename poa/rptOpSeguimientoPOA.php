@@ -24,7 +24,7 @@ $dbh = new Conexion();
 	<div class="container-fluid">
 
 		<div class="col-md-12">
-		  <form id="form1" class="form-horizontal" action="poa/rptSeguimientoPOA.php" method="post" target="_blank">
+		  <form id="form1" class="form-horizontal" action="poa/rptSeguimientoPOAPerspectiva.php" method="post" target="_blank">
 		  	<!---->
 		  	<div class="card ">
 			  <div class="card-header <?=$colorCard;?> card-header-text">

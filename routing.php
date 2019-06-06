@@ -92,7 +92,15 @@
 		if ($_GET['opcion']=='activarPersonal') {
 			$codigo=$_GET['codigo'];
 			require_once('personal/saveActivar.php');
-		}			
+		}	
+
+		//PLAN DE CUENTAS
+		if ($_GET['opcion']=='listPlanCuentas') {
+			require_once('plan_de_cuentas/list2.php');
+		}
+		if ($_GET['opcion']=='addCostosDirectos') {
+			require_once('plan_de_cuentas/registerOfCostodirecto.php');
+		}				
 
 
 		//NORMAS
@@ -138,6 +146,10 @@
 		if ($_GET['opcion']=='deleteCargo') {
 			$codigo=$_GET['codigo'];
 			require_once('cargos/saveDelete.php');
+		}
+		if ($_GET['opcion']=='listFunciones') {
+			$codigo=$_GET['codigo'];
+			require_once('cargos/listFunciones.php');
 		}	
 
 
@@ -222,7 +234,9 @@
 		if ($_GET['opcion']=='descargarDatosConta') {
 			require_once('utilitarios/descargarDatosConta.php');
 		}
-		
+		if ($_GET['opcion']=='sincronizacionDatos') {
+			require_once('utilitarios/sincronizacionDatos.php');
+		}
 
 
 
@@ -333,6 +347,8 @@
 			require_once('poa/list.php');
 		}
 		if ($_GET['opcion']=='listPOAEjecucion') {
+			$area=$_GET['area'];
+			$unidad=$_GET['unidad'];
 			require_once('poa/listEjecucion.php');
 		}
 		if ($_GET['opcion']=='listActividadesPOA') {
@@ -404,42 +420,45 @@
 		if ($_GET['opcion']=='seguimientoPOA') {
 			require_once('poa/rptOpSeguimientoPOA.php');
 		}
+		if ($_GET['opcion']=='seguimientoPOAxArea') {
+			require_once('poa/rptOpSeguimientoPOAxArea.php');
+		}
 
 
 		//POAI
 		if ($_GET['opcion']=='asignarPOAI') {
 			$codigo=$_GET['codigo'];
 			$areaUnidad=$_GET['areaUnidad'];
-			require_once('poa/asignarPOAI.php');
+			require_once('poai/asignarPOAI.php');
 		}
 		if ($_GET['opcion']=='listPOAI') {
-			require_once('poa/listPOAI.php');
+			require_once('poai/listPOAI.php');
 		}
 		if ($_GET['opcion']=='listActividadesPOAI') {
 			$codigo=$_GET['codigo'];
 			$area=$_GET['area'];
 			$unidad=$_GET['unidad'];
-			require_once('poa/listActividadesPOAI.php');
+			require_once('poai/listActividadesPOAI.php');
 		}
 		if ($_GET['opcion']=='registerPOAI') {
 			$codigo=$_GET['codigo'];
 			$areaUnidad=$_GET['areaUnidad'];
-			require_once('poa/registerPOAI.php');
+			require_once('poai/registerPOAI.php');
 		}
 		if ($_GET['opcion']=='registerPOAIPlan') {
 			$codigo=$_GET['codigo'];
-			require_once('poa/registerPOAIPlan.php');
+			require_once('poai/registerPOAIPlan.php');
 		}
 		if ($_GET['opcion']=='listPOAIEjecucion') {
-			require_once('poa/listPOAIEjecucion.php');
+			require_once('poai/listPOAIEjecucion.php');
 		}
 		if ($_GET['opcion']=='listActividadesPOAIEjecucion') {
 			$codigo=$_GET['codigo'];
-			require_once('poa/listActividadesPOAIEjecucion.php');
+			require_once('poai/listActividadesPOAIEjecucion.php');
 		}
 		if ($_GET['opcion']=='registerPOAIEjecucion') {
 			$codigo=$_GET['codigo'];
-			require_once('poa/registerPOAIEjecucion.php');
+			require_once('poai/registerPOAIEjecucion.php');
 		}
 
 
@@ -464,6 +483,15 @@
 		}
 		if ($_GET['opcion']=='rptOpPresupuestoSIS') {
 			require_once('reportes/rptOpPresupuestoSIS.php');
+		}
+		if ($_GET['opcion']=='rptOpCursos') {
+			require_once('reportes/rptOpCursos.php');
+		}
+		if ($_GET['opcion']=='rptOpServicios') {
+			require_once('reportes/rptOpServicios.php');
+		}
+		if ($_GET['opcion']=='rptOpPlanAudi') {
+			require_once('reportes/rptOpPlanAudi.php');
 		}
 		
 		//COMPONENTES SIS

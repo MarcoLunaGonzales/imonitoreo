@@ -3,6 +3,10 @@
 require_once 'conexion.php';
 $dbh = new Conexion();
 
+$sqlX="SET NAMES 'utf8'";
+$stmtX = $dbh->prepare($sqlX);
+$stmtX->execute();
+
 $table="cargos";
 $moduleName="Cargos";
 
@@ -32,12 +36,13 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table">
+                    <table class="table" id="tablePaginator">
                       <thead>
                         <tr>
                           <th class="text-center">#</th>
                           <th>Nombre</th>
                           <th>Abreviatura</th>
+                          <th>Funciones</th>
                           <th class="text-right">Actions</th>
                         </tr>
                       </thead>
@@ -50,6 +55,18 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                           <td align="center"><?=$index;?></td>
                           <td><?=$nombre;?></td>
                           <td><?=$abreviatura;?></td>
+                          <td class="td-actions text-center">
+                            <?php
+                            if($globalAdmin==1){
+                            ?>
+                            <a href='index.php?opcion=listFunciones&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-info">
+                              <i class="material-icons">list</i>
+                            </a>
+
+                            <?php
+                            }
+                            ?>
+                          </td>
                           <td class="td-actions text-right">
                             <?php
                             if($globalAdmin==1){

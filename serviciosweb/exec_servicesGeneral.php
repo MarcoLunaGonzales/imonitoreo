@@ -201,6 +201,7 @@ echo "ok servicios oi<br>";
 */
 
 //SERVICIOS TLQ
+/*
 $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"403");
 $url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
 $tableInsert="servicios_tlq";
@@ -225,10 +226,11 @@ foreach ($detalle as $objDet){
 	$flagSuccess=$stmt->execute();
 }
 echo "ok servicios tlq<br>";
+*/
 
 
 //CLIENTES
-/*$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"Clientes"); 
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"Clientes"); 
 $url="http://ibnored.ibnorca.org/wsibno/cliente/ws-cliente-listas.php";
 $tableInsert="clientes";
 $json=callService($parametros, $url);
@@ -260,7 +262,6 @@ foreach ($detalle as $objDet){
 	$flagSuccess=$stmt->execute();
 }
 echo "ok CLIENTES<br>";
-*/
 
 
 

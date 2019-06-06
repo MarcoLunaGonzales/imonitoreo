@@ -33,7 +33,8 @@ $dbh = new Conexion();
                           <th>Mes</th>
                           <th data-orderable="false">Seguimiento</br>Detallado</th>
                           <th data-orderable="false">Detalle de Gastos</th>
-                          <th data-orderable="false">Detalle de Gastos (AccNum)</th>
+                          <th data-orderable="false">Detalle de Gastos (AccNum)-Mes</th>
+                          <th data-orderable="false">Detalle de Gastos (AccNum)-Acum</th>
                           <th data-orderable="false">Balance de Cuentas</th>
                        	  <th>Archivo 1</th>
                           <th>Archivo 2</th>
@@ -81,11 +82,18 @@ $dbh = new Conexion();
     	                	</td>
 
                         <td class="td-actions text-center">
-                          <a href='solicitudFondosSIS/reporteGastosSISAccNum.php?gestion=<?=$globalGestion;?>&mes=<?=$i?>' rel="tooltip" class="" target="_blank">
+                          <a href='solicitudFondosSIS/reporteGastosSISAccNum.php?gestion=<?=$globalGestion;?>&mes=<?=$i?>&tiporeporte=0' rel="tooltip" class="" target="_blank">
                                 <i class="material-icons">open_in_new</i>
                               </a>
                         </td>                        
-                          	<td class="td-actions text-center">
+                      	
+                        <td class="td-actions text-center">
+                          <a href='solicitudFondosSIS/reporteGastosSISAccNum.php?gestion=<?=$globalGestion;?>&mes=<?=$i?>&tiporeporte=1' rel="tooltip" class="" target="_blank">
+                                <i class="material-icons">open_in_new</i>
+                              </a>
+                        </td>
+
+                        <td class="td-actions text-center">
                             	<a href='solicitudFondosSIS/rptBalanceCuentasSIS.php?gestion=<?=$globalGestion;?>&mes=<?=$i?>' rel="tooltip" class="" target="_blank">
                             		<i class="material-icons">web_asset</i>
 	                            </a>

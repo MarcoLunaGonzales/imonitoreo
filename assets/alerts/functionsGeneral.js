@@ -98,7 +98,7 @@ function ajaxCargosPOAI(codigoIndicador){
   var contenedor;
   contenedor = document.getElementById('modal-body');
   ajax=nuevoAjax();
-  ajax.open('GET', 'poa/ajaxCargosPOAI.php?codigo_indicador='+codigoIndicador,true);
+  ajax.open('GET', 'poai/ajaxCargosPOAI.php?codigo_indicador='+codigoIndicador,true);
   ajax.onreadystatechange=function() {
     if (ajax.readyState==4) {
       contenedor.innerHTML = ajax.responseText
@@ -301,6 +301,14 @@ function enviarFiltroAreaUnidadPOA3(indicador,indicadorPON){
   console.log("llega2");
 }
 
+function enviarDefinicionAreaUnidad(){
+  var comboarea=document.getElementById('areaModal');
+  var combounidad=document.getElementById('unidadModal');
+  var area=comboarea.options[comboarea.selectedIndex].value;
+  var unidad=combounidad.options[combounidad.selectedIndex].value;
+  location.href='index.php?opcion=listPOAEjecucion&area='+area+'&unidad='+unidad;
+}
+
 /*FUNCIONES AJAX PARA LAS SOLICITUDES DE FONDOS SIS*/
 function addSolicitudFondo(obj) {
       numFilas++;
@@ -462,4 +470,85 @@ function totalesSIS2(){
       main.rows[numFilas-1].cells[j].className='text-right'; 
       main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
   }   
+}
+
+
+function totalesRptSec(){
+   var main=document.getElementById('main');   
+   var numFilas=main.rows.length;
+   var numCols=main.rows[2].cells.length;
+   
+   for(var j=2; j<=numCols-1; j++){
+    var subtotal=0;
+      for(var i=1; i<=numFilas-2; i++){
+            var datoS=main.rows[i].cells[j].innerHTML;
+            datoS=datoS.replace(/,/g,'');
+            console.log(datoS);
+            var dato=parseFloat(datoS);
+            console.log(dato);
+            subtotal=subtotal+dato;
+            var subtotalF=number_format(subtotal,2); 
+            //console.log("si dato: "+dato);
+      }
+      var fila=document.createElement('TH');
+      main.rows[numFilas-1].appendChild(fila);
+      main.rows[numFilas-1].cells[j].className='text-right'; 
+      main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
+  }   
+}
+
+
+function totalesDetallePOA(){
+   var main=document.getElementById('tablePaginatorReport');   
+   var numFilas=main.rows.length;
+   var numCols=main.rows[2].cells.length;
+   
+   for(var j=3; j<=numCols-1; j++){
+    var subtotal=0;
+      for(var i=2; i<=numFilas-2; i++){
+            var datoS=main.rows[i].cells[j].innerHTML;
+            datoS=datoS.trim();
+            console.log(datoS+" "+typeof(datoS));
+            if(datoS=="-"){
+              datoS="0";
+            }
+            datoS=datoS.replace(/,/g,'');
+            console.log(datoS);
+            var dato=parseFloat(datoS);
+            //console.log(dato);
+            subtotal=subtotal+dato;
+            var subtotalF=number_format(subtotal,0); 
+            console.log("subtotal: "+subtotalF);
+      }
+      var fila=document.createElement('TH');
+      main.rows[numFilas-1].appendChild(fila);
+      if(j%2==0){
+        main.rows[numFilas-1].cells[j].className='text-right text-primary'; 
+      }else{
+        main.rows[numFilas-1].cells[j].className='text-right'; 
+      }
+      main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
+  }   
+}
+
+var dynamicColors = function() {
+    var r = Math.floor(Math.random() * 255);
+    var g = Math.floor(Math.random() * 255);
+    var b = Math.floor(Math.random() * 255);
+    var arrayColors = new Array();
+    arrayColors[0]="rgb(" + r + "," + g + "," + b + ",0.2)";
+    arrayColors[1]="rgb(" + r + "," + g + "," + b + ")";
+    return arrayColors;
+}
+
+function calcularTotalEj(){
+  var suma=0;
+  var formulariop = document.getElementById("form1");
+  for (var i=0;i<formulariop.elements.length;i++){
+    console.log()
+    if (formulariop.elements[i].id.indexOf("ejecutado") !== -1 ){        
+      suma += (formulariop.elements[i].value) * 1;
+    }
+  }  
+  document.getElementById("totalEj").value=suma;  
 }

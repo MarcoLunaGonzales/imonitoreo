@@ -134,6 +134,15 @@ $moduleName="Registro de Ejecucion PON";
 	                          while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
 	                            $estadoPon=$rowRec['nombre'];
 	                          }
+
+	                          $sqlRecupera="SELECT ep.codigo, a.descripcion from actividades_poaejecucion a, estados_pon ep where a.value_numerico=ep.codigo and a.cod_actividad='$codigo' and a.mes='$codMesX'";
+	                          $stmtRecupera = $dbh->prepare($sqlRecupera);
+	                          $stmtRecupera->execute();
+	                          $estadoPonEj="";
+	                          while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
+	                            $estadoPonEj=$rowRec['codigo'];
+	                            $descripcionEj=$rowRec['descripcion'];
+	                          }
 	                    	?>
 	                    		<td class="text-center table-warning font-weight-bold">
 	                    			<?=$estadoPon;?>
@@ -141,21 +150,21 @@ $moduleName="Registro de Ejecucion PON";
 	                    		<td class="text-center table-success">
 		                    		<select class="form-control" name="plan|<?=$codigo;?>|<?=$i;?>" data-width="250px" >
 									<?php
-										$stmtOpe = $dbh->prepare("SELECT ep.codigo, ep.nombre, ep.abreviatura FROM estados_pon ep ORDER BY 3");
+										$stmtOpe = $dbh->prepare("SELECT ep.codigo, ep.nombre, ep.abreviatura, ep.cod_tipoestadopon FROM estados_pon ep ORDER BY 4,1");
 										$stmtOpe->execute();
 										while ($rowOpe = $stmtOpe->fetch(PDO::FETCH_ASSOC)) {
 											$codigoO=$rowOpe['codigo'];
 											$nombreO=$rowOpe['nombre'];
 											$abreviaturaO=$rowOpe['abreviatura'];
 									?>
-									<option value="<?=$codigoO;?>" ><?=$nombreO;?></option>
+									<option value="<?=$codigoO;?>" <?=($codigoO==$estadoPonEj)?"selected":"";?> ><?=$nombreO;?></option>
 									<?php
 										}
 									?>
 									</select> 
 	                    		</td>
 	                    		<td class="text-center">
-	                    			<input class="form-control input-sm" type="text" name="explicacion|<?=$codigo;?>|<?=$i;?>">
+	                    			<input class="form-control input-sm" type="text" name="explicacion|<?=$codigo;?>|<?=$i;?>" value="<?=$descripcionEj;?>"> 
 	                    		</td>
 	                    		<td class="text-center">
 	                    			<input class="form-control-file" type="file" name="file|<?=$codigo;?>|<?=$i;?>">

@@ -47,7 +47,7 @@ $sqlCount="";
 if($globalAdmin==1){
 	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador='$codigoIndicador' and cod_estado=1";	
 }else{
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador='$codigoIndicador' and cod_area='$globalArea' and cod_unidadorganizacional='$globalUnidad' and cod_estado=1";	
+	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador='$codigoIndicador' and cod_area in ($globalArea) and cod_unidadorganizacional in ($globalUnidad) and cod_estado=1";	
 }
 $stmtX = $dbh->prepare($sqlCount);
 $stmtX->execute();
@@ -209,7 +209,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 													$abreviaturaY=$rowY['abreviatura'];
 
 											?>
-													<option value="<?=$codigoY;?>" data-subtext="<?=$nombreY?>" <?=($codigoY==$normaPriorizada)?"selected":"";?>  ><?=$abreviaturaY;?></option>	
+													<option value="<?=$codigoY;?>" data-subtext="<?=$nombreY?>" <?=($codigoY==$norma)?"selected":"";?>  ><?=$abreviaturaY;?></option>	
 											<?php
 												}
 											?>
@@ -379,12 +379,13 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 		  	<?php
 		  	$sqlAreas="SELECT i.cod_indicador, u.codigo as codigoUnidad, u.nombre as nombreUnidad, u.abreviatura as abrevUnidad, a.codigo as codigoArea, a.nombre as nombreArea, a.abreviatura as abrevArea from indicadores_unidadesareas i, unidades_organizacionales u, areas a where i.cod_indicador='$codigoIndicador' and i.cod_area=a.codigo and i.cod_unidadorganizacional=u.codigo";
 		  	if($globalAdmin==0){
-		  		$sqlAreas.=" and i.cod_unidadorganizacional='$globalUnidad' and i.cod_area='$globalArea' ";
+		  		$sqlAreas.=" and i.cod_unidadorganizacional in ($globalUnidad) and i.cod_area in ($globalArea) ";
 		  	}
 		  	$sqlAreas.=" order by 3,6";
-		  	echo $sqlAreas;
+		  	//echo $sqlAreas;
 		  	$stmt = $dbh->prepare($sqlAreas);
 			$stmt->execute();
+
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 				$codigoU=$row['codigoUnidad'];
 				$nombreU=$row['nombreUnidad'];

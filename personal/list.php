@@ -68,7 +68,9 @@ $stmt->bindColumn('usuariopon', $usuarioPON);
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
 
                           if($usuarioPON==1){
-                            $estadoUsuarioPON="SI";
+                            $estadoUsuarioPON="USUARIO PON";
+                          }else if($usuarioPON==2){
+                            $estadoUsuarioPON="ADMIN PON";
                           }else{
                             $estadoUsuarioPON="NO";
                           }

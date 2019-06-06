@@ -9,14 +9,10 @@ $mesTemporal=$_GET['mesTemporal'];
 */
 session_start();
 
-$fondo1=$_SESSION["fondo1"];
-$nameFondo1=$_SESSION["nameFondo1"];
-$fondo2=$_SESSION["fondo2"];
-$nameFondo2=$_SESSION["nameFondo2"];
-$fondo3=$_SESSION["fondo3"];
-$nameFondo3=$_SESSION["nameFondo3"];
-$anioTemporal=$_SESSION["anioTemporal"];
-$mesTemporal=$_SESSION["mesTemporal"];
+$anioTemporal=$_GET["anioTemporal"];
+$mesTemporal=$_GET["mesTemporal"];
+$arrayOrganismos=$_GET["arrayOrganismos"];
+$arrayFondos=$_GET["arrayFondos"];
 
 require_once '../conexion.php';
 require_once '../functions.php';
@@ -48,22 +44,14 @@ require_once '../styles.php';
 	
 	$emparray[] = array();
 
-
-  	$montoPresEg1=round(presupuestoEgresosMes($fondo1,$anioTemporal,$mesTemporal,0,0,0),2);
-  	$montoPresEg2=round(presupuestoEgresosMes($fondo2,$anioTemporal,$mesTemporal,0,0,0),2);
-  	$montoPresEg3=round(presupuestoEgresosMes($fondo3,$anioTemporal,$mesTemporal,0,0,0),2);
-
-	$montoEjEg1=round(ejecutadoEgresosMes($fondo1,$anioTemporal,$mesTemporal,0,0,0),2);
-	$montoEjEg2=round(ejecutadoEgresosMes($fondo2,$anioTemporal,$mesTemporal,0,0,0),2);
-	$montoEjEg3=round(ejecutadoEgresosMes($fondo3,$anioTemporal,$mesTemporal,0,0,0),2);
-
-
-$emparray[]=array("fondo"=>$nameFondo1, "montoPres"=>$montoPresEg1, "montoEj"=>$montoEjEg1);
-
-$emparray[]=array("fondo"=>$nameFondo2, "montoPres"=>$montoPresEg2, "montoEj"=>$montoEjEg2);
-
-$emparray[]=array("fondo"=>$nameFondo3, "montoPres"=>$montoPresEg3, "montoEj"=>$montoEjEg3);
-
+$arrayFondosX = explode(",", $arrayFondos);
+$longitud = count($arrayFondosX);
+for($i=0; $i<$longitud; $i++){
+	$nameFondo=abrevFondo($arrayFondosX[$i]);
+  	$montoPresEg1=round(presupuestoEgresosMes($arrayFondosX[$i],$anioTemporal,$mesTemporal,0,0,0),2);
+	$montoEjEg1=round(ejecutadoEgresosMes($arrayFondosX[$i],$anioTemporal,$mesTemporal,0,0,0),2);
+	$emparray[]=array("fondo"=>$nameFondo, "montoPres"=>$montoPresEg1, "montoEj"=>$montoEjEg1);
+}
 
 array_splice($emparray, 0,1);
 	//echo json_encode(utf8json($emparray));

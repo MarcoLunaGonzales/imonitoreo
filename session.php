@@ -72,7 +72,7 @@ while ($rowDetalle = $stmt->fetch(PDO::FETCH_BOUND)) {
 		$arrayFondosReports=obtenerFondosReport(0);
 		$arrayOrganismosReports=obtenerOrganismosReport(0);		
 	}
-	if($perfil==3){
+	if($perfil==3 || $perfil==6){
 		$arrayUnidadesReports=obtenerUnidadesReport($codUnidadTrabajo);
 		$arrayFondosReports=obtenerFondosReport($codUnidadTrabajo);
 

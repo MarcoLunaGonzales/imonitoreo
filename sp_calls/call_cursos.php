@@ -23,17 +23,30 @@ while($resp = $query->fetch()){
 	$gestion=$resp['gestion'];
 	$idOficina=$resp['IdOficina'];
 	$idPrograma=$resp['IdPrograma'];
+	$sigla=$resp['Sigla'];
+	$codigoCurso=$resp['Codigo'];
+	$tipo=$resp['tipo'];
+	$nombreCurso=$resp['nombre_curso'];
+	$cantidadModulos=$resp['CantidadModulos'];
 	$estado=$resp['Estado'];
+	$costoModulo=$resp['costoModulo'];
+	$empresa=$resp['empresa'];
+	$nroModulo=$resp['NroModulo'];
+	$tema=$resp['tema'];
 	$fechaInicio=$resp['FechaInicio'];
 	$fechaFin=$resp['FechaFin'];
+	$dDocente=$resp['d_Docente'];
+	$cargaHoraria=$resp['CargaHoraria'];
+	$alumnosModulo=$resp['AlumnosModulo'];
 
-	$insert_str .= "('$indice','$gestion','$idOficina','$idPrograma','$estado','$fechaInicio','$fechaFin'),";	
 
-	if($indice%1000==0){
+	$insert_str .= "('$indice','$gestion','$idOficina','$idPrograma','$sigla','$codigoCurso','$cargaHoraria','$tipo','$nombreCurso','$cantidadModulos','$estado','$costoModulo','$empresa','$nroModulo','$tema','$fechaInicio','$fechaFin','$dDocente','$alumnosModulo'),";	
+
+	if($indice%2==0){
 		$insert_str = substr_replace($insert_str, '', -1, 1);
-		$sqlInserta="INSERT INTO ext_cursos (codigo, gestion, id_oficina, id_programa, estado, fecha_inicio, fecha_fin) 
+		$sqlInserta="INSERT INTO ext_cursos (codigo, gestion, id_oficina, id_programa, sigla, codigocurso, carga_horaria, tipo, nombre_curso, cantidad_modulos, estado, costo_modulo, empresa, nro_modulo, tema, fecha_inicio, fecha_fin, docente, alumnos_modulo) 
 			values ".$insert_str.";";
-		//echo $sqlInserta;
+		echo $sqlInserta;
 		$stmtInsert=$dbh->prepare($sqlInserta);
 		$stmtInsert->execute();
 		$insert_str="";
@@ -42,7 +55,7 @@ while($resp = $query->fetch()){
 }
 
 $insert_str = substr_replace($insert_str, '', -1, 1);
-$sqlInserta="INSERT INTO ext_cursos (codigo, gestion, id_oficina, id_programa, estado, fecha_inicio, fecha_fin) 
+$sqlInserta="INSERT INTO ext_cursos (codigo, gestion, id_oficina, id_programa, sigla, codigocurso, carga_horaria, tipo, nombre_curso, cantidad_modulos, estado, costo_modulo, empresa, nro_modulo, tema, fecha_inicio, fecha_fin, docente, alumnos_modulo) 
 	values ".$insert_str.";";
 //echo $sqlInserta;
 $stmtInsert=$dbh->prepare($sqlInserta);

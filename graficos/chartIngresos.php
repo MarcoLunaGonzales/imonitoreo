@@ -1,3 +1,9 @@
+<?php
+$anioTemporal=$anioTemporal;
+$mesTemporal=$mesTemporal;
+$arrayOrganismos=$arrayOrganismos;
+$arrayFondos=$arrayFondos;
+?>
 <style type="text/css">
 
 #chart-container2 {
@@ -30,7 +36,7 @@
             {
                 console.log("antes de los datos;");
                 $.get("graficos/dataIngresos.php",
-				{},
+				{anioTemporal:<?=$anioTemporal;?>,mesTemporal:<?=$mesTemporal;?>,arrayFondos:"<?=$arrayFondos;?>",arrayOrganismos:"<?=$arrayOrganismos?>"},
                 function (data){
                     console.log("aqui mostramos los datos:"+data);
                     var fondo = [];

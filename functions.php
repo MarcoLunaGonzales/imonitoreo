@@ -23,9 +23,70 @@ function nameMes($month){
   return $monthName;
 }
 
+function abrevMes($month){
+  if($month==1){
+    return ("Ene");
+  }
+  if($month==2){
+    return ("Feb");
+  }
+  if($month==3){
+    return ("Mar");
+  }
+  if($month==4){
+    return ("Abr");
+  }
+  if($month==5){
+    return ("May");
+  }
+  if($month==6){
+    return ("Jun");
+  } 
+  if($month==7){
+    return ("Jul");
+  }
+  if($month==8){
+    return ("Ago");
+  }
+  if($month==9){
+    return ("Sep");
+  }
+  if($month==10){
+    return ("Oct");
+  }         
+  if($month==11){
+    return ("Nov");
+  }         
+  if($month==12){
+    return ("Dic");
+  }             
+}
+
 function nameGestion($codigo){
    $dbh = new Conexion();
    $stmt = $dbh->prepare("SELECT nombre FROM gestiones where codigo=:codigo");
+   $stmt->bindParam(':codigo',$codigo);
+   $stmt->execute();
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $nombreX=$row['nombre'];
+   }
+   return($nombreX);
+}
+
+function nameCargo($codigo){
+   $dbh = new Conexion();
+   $stmt = $dbh->prepare("SELECT nombre FROM cargos where codigo=:codigo");
+   $stmt->bindParam(':codigo',$codigo);
+   $stmt->execute();
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $nombreX=$row['nombre'];
+   }
+   return($nombreX);
+}
+
+function nameCuenta($codigo){
+   $dbh = new Conexion();
+   $stmt = $dbh->prepare("SELECT nombre FROM po_plancuentas where codigo=:codigo");
    $stmt->bindParam(':codigo',$codigo);
    $stmt->execute();
    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -55,6 +116,18 @@ function obtieneOrdenPOA($indicador, $unidad, $area){
    $codigoX=0;
    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $codigoX=$row['orden'];
+   }
+   return($codigoX);  
+}
+
+function getCodigoEstadoPON(){
+  $dbh = new Conexion();
+  $sql="SELECT (IFNULL(max(e.codigo)+1,1)) as codigo from estados_pon e";
+  $stmt = $dbh->prepare($sql);
+   $stmt->execute();
+   $codigoX=0;
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $codigoX=$row['codigo'];
    }
    return($codigoX);  
 }
@@ -373,7 +446,7 @@ function obtenerOrganismosReport($codigo){
 //ACUMULADO 0=POR MES; 1=ACUMULADO; 2=TODA LA GESTION
 function planificacionPorIndicador($indicador, $area, $unidad, $mes, $acumulado){
   $dbh = new Conexion();
-  $sql="SELECT IFNULL(sum(ap.value_numerico),0)as cantidad from actividades_poa a, actividades_poaplanificacion ap where a.codigo=ap.cod_actividad and a.cod_indicador='$indicador' and a.cod_unidadorganizacional='$unidad' and a.cod_area='$area' ";
+  $sql="SELECT IFNULL(sum(ap.value_numerico),0)as cantidad from actividades_poa a, actividades_poaplanificacion ap where a.codigo=ap.cod_actividad and a.cod_indicador='$indicador' and a.cod_unidadorganizacional='$unidad' and a.cod_area='$area' and a.clave_indicador=1 ";
   if($acumulado==0){
     $sql.=" and ap.mes='$mes' ";
   }
@@ -392,7 +465,7 @@ function planificacionPorIndicador($indicador, $area, $unidad, $mes, $acumulado)
 //ACUMULADO 0=POR MES; 1=ACUMULADO; 2=TODA LA GESTION
 function ejecucionPorIndicador($indicador, $area, $unidad, $mes, $acumulado){
   $dbh = new Conexion();
-  $sql="SELECT IFNULL(sum(ap.value_numerico),0)as cantidad from actividades_poa a, actividades_poaejecucion ap where a.codigo=ap.cod_actividad and a.cod_indicador='$indicador' and a.cod_unidadorganizacional='$unidad' and a.cod_area='$area' ";
+  $sql="SELECT IFNULL(sum(ap.value_numerico),0)as cantidad from actividades_poa a, actividades_poaejecucion ap where a.codigo=ap.cod_actividad and a.cod_indicador='$indicador' and a.cod_unidadorganizacional='$unidad' and a.cod_area='$area' and a.clave_indicador=1 ";
   if($acumulado==0){
     $sql.=" and ap.mes='$mes' ";
   }
@@ -406,6 +479,48 @@ function ejecucionPorIndicador($indicador, $area, $unidad, $mes, $acumulado){
       $cantidadPlanificada=$row['cantidad'];
   }
   return($cantidadPlanificada);
+}
+
+function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
+  $dbh = new Conexion();
+  $sql="SELECT count(*) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.estado in ('Concluido','Abierto') and c.id_oficina in ($unidad) ";
+  if($acumulado==0){
+    $sql.=" and MONTH(c.fecha_inicio)='$mes' ";
+  }
+  if($acumulado==1){
+    $sql.=" and MONTH(c.fecha_inicio)<='$mes' ";  
+  }
+  if($tipocurso!=""){
+    $sql.=" and c.tipo in ('$tipocurso')";
+  }
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $numeroCursos=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $numeroCursos=$row['cantidad'];
+  }
+  return($numeroCursos);  
+}
+
+function alumnosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
+  $dbh = new Conexion();
+  $sql="SELECT sum(c.alumnos_modulo) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.estado in ('Concluido','Abierto') and c.id_oficina in ($unidad) ";
+  if($acumulado==0){
+    $sql.=" and MONTH(c.fecha_inicio)='$mes' ";
+  }
+  if($acumulado==1){
+    $sql.=" and MONTH(c.fecha_inicio)<='$mes' ";  
+  }  
+  if($tipocurso!=""){
+    $sql.=" and c.tipo in ('$tipocurso')";
+  }
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidad=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidad=$row['cantidad'];
+  }
+  return($cantidad);  
 }
 
 function cutString($string, $count){
@@ -593,7 +708,7 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
 
   //ESTA LINEA ES PARA LOS SERVICIOS OI
   if($clasificador==2){
-    $sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_registro)=$anio and MONTH(e.fecha_registro)=$mes;";
+    $sql="SELECT count(e.cantidad)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_registro)=$anio and MONTH(e.fecha_registro)=$mes;";
     //echo $sql;
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
@@ -615,5 +730,18 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
 
   return($valueRegistros);
 }
+
+function obtieneValorConfig($codigo){
+  $dbh = new Conexion();
+  $stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion='$codigo'");
+  $stmt->execute();
+  $valor="";
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $valor=$row['valor_configuracion'];
+  }  
+  return $valor;
+}
+
+
 
 ?>

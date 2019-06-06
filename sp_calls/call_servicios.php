@@ -1,9 +1,9 @@
 <?php
 
 set_time_limit(0);
-require_once '../conexion2.php';
+require_once '../conexionExtIbnorca.php';
 require_once '../conexion.php';
-$dbhExterno = new Conexion2();
+$dbhExterno = new ConexionExterno();
 $dbh = new Conexion();
 
 echo "<h3>Hora Inicio Proceso Servicios: " . date("Y-m-d H:i:s")."</h3>";

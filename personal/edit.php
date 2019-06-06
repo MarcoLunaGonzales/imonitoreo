@@ -112,7 +112,8 @@ if($codUnidadX>0){
 					  <select class="selectpicker" name="usuariopon" id="usuariopon" data-style="<?=$comboColor;?>" required>
 					  	<option disabled selected value=""></option>
 						<option value="0" <?=($usuarioPON==0)?"selected":"";?> > NO </option>
-						<option value="1" <?=($usuarioPON==1)?"selected":"";?> > SI </option>
+						<option value="1" <?=($usuarioPON==1)?"selected":"";?> > USUARIO PON </option>
+						<option value="2" <?=($usuarioPON==2)?"selected":"";?> > ADMIN PON </option>
 					  </select>
 					</div>
 				  </div>

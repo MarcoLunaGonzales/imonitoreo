@@ -61,12 +61,14 @@ if(isset($_GET['resumen'])){
                           <th class="text-center font-weight-bold">Cuenta</th>
                           <th class="text-center font-weight-bold">Presupuesto</th>
                           <th class="text-center font-weight-bold">Ejecucion</th>
-                          <th class="text-center font-weight-bold">%</th>
+                          <th class="text-center font-weight-bold">Cumplimiento %</th>
+                          <th class="text-center font-weight-bold">Participacion %</th>
                         </tr>
                       </thead>
 
                       <tbody>
                       <?php
+                        $montoTotalEjecucionIng=ejecutadoIngresosMes($fondoArray, $anio, $mes, $organismo, 0, 0);
                         $sql="SELECT pc.codigo, pc.nombre, pc.nivel from po_plancuentas pc where pc.codigo like '4%' and pc.nivel in (3,4,5) order by pc.codigo";
                         $stmt = $dbh->prepare($sql);
                         $stmt->execute();
@@ -92,17 +94,24 @@ if(isset($_GET['resumen'])){
                           $totalPresupuestoIngresos+=$montoPresupuestoCuenta;
                           $totalEjecutadoIngresos+=$montoEjecucionCuenta;
                           $porcentajeEjecucion=0;
+                          $participacionEjecucion=0;
+                          if($montoTotalEjecucionIng>0){
+                            $participacionEjecucion=($montoEjecucionCuenta/$montoTotalEjecucionIng)*100;
+                          }
+
                           if($montoPresupuestoCuenta>0){
                             $porcentajeEjecucion=($montoEjecucionCuenta/$montoPresupuestoCuenta)*100;
                           }
                           if($montoPresupuestoCuenta>0 || $montoEjecucionCuenta>0){
+                            
                       ?>
                         <tr>
                           <td class="text-right small"><?=$codigoCuenta;?></td>
                           <td><p class="<?=$styleText;?>"><?=$nombreCuenta;?></p></td>
-                          <td class="text-right font-weight-bold"><?=number_format($montoPresupuestoCuenta);?></td>
-                          <td class="text-right font-weight-bold"><?=number_format($montoEjecucionCuenta);?></td>
-                          <td class="text-right font-weight-bold"><?=number_format($porcentajeEjecucion);?></td>
+                          <td class="text-right"><?=number_format($montoPresupuestoCuenta);?></td>
+                          <td class="text-right"><?=number_format($montoEjecucionCuenta);?></td>
+                          <td class="text-right"><?=number_format($porcentajeEjecucion);?>%</td>     
+                          <td class="text-right"><?=number_format($participacionEjecucion);?>%</td>
                         </tr>
                         <?php
                           }
@@ -117,7 +126,8 @@ if(isset($_GET['resumen'])){
                           <td><p class="text-left font-weight-bold text-danger">TOTAL INGRESOS</p></td>
                           <td class="text-right font-weight-bold"><?=number_format($totalPresupuestoIngresos);?></td>
                           <td class="text-right font-weight-bold"><?=number_format($totalEjecutadoIngresos);?></td>
-                          <td class="text-right font-weight-bold"><?=number_format($totalPorcentaje);?></td>
+                          <td class="text-right font-weight-bold"><?=number_format($totalPorcentaje);?>%</td>
+                          <td class="text-right font-weight-bold">100%</td>
                         </tr>
                         <!--DESDE ACA SON LOS EGRESOS-->
                         <?php
@@ -132,6 +142,7 @@ if(isset($_GET['resumen'])){
                         $stmt->bindColumn('nivel', $nivelCuenta);
                         $totalPresupuestoEgresos=0;
                         $totalEjecutadoEgresos=0;
+                        $montoTotalEjecucionEg=ejecutadoEgresosMes($fondoArray,$anio,$mes,$organismo,0,0);
                         while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
                           if($nivelCuenta==3){
                             $styleText="text-left font-weight-bold text-danger";
@@ -147,6 +158,10 @@ if(isset($_GET['resumen'])){
                           $totalPresupuestoEgresos+=$montoPresupuestoCuenta;
                           $totalEjecutadoEgresos+=$montoEjecucionCuenta;
 
+                          $participacionEjecucion=0;
+                          if($montoTotalEjecucionEg>0){
+                            $participacionEjecucion=($montoEjecucionCuenta/$montoTotalEjecucionEg)*100;
+                          }
                           $porcentajeEjecucion=0;
                           if($montoPresupuestoCuenta>0){
                             $porcentajeEjecucion=($montoEjecucionCuenta/$montoPresupuestoCuenta)*100;
@@ -156,9 +171,10 @@ if(isset($_GET['resumen'])){
                         <tr>
                           <td class="text-right small"><?=$codigoCuenta;?></td>
                           <td><p class="<?=$styleText;?>"><?=$nombreCuenta;?></p></td>
-                          <td class="text-right font-weight-bold"><?=number_format($montoPresupuestoCuenta);?></td>
-                          <td class="text-right font-weight-bold"><?=number_format($montoEjecucionCuenta);?></td>                          
-                          <td class="text-right font-weight-bold"><?=number_format($porcentajeEjecucion);?></td>
+                          <td class="text-right"><?=number_format($montoPresupuestoCuenta);?></td>
+                          <td class="text-right"><?=number_format($montoEjecucionCuenta);?></td>     
+                          <td class="text-right"><?=number_format($porcentajeEjecucion);?>%</td>
+                          <td class="text-right"><?=number_format($participacionEjecucion);?>%</td>
 
                         </tr>
                         <?php
@@ -174,7 +190,8 @@ if(isset($_GET['resumen'])){
                           <td><p class="text-left font-weight-bold text-danger">TOTAL EGRESOS</p></td>
                           <td class="text-right font-weight-bold"><?=number_format($totalPresupuestoEgresos);?></td>
                           <td class="text-right font-weight-bold"><?=number_format($totalEjecutadoEgresos);?></td>
-                          <td class="text-right font-weight-bold"><?=number_format($totalPorcentaje);?></td>
+                          <td class="text-right font-weight-bold"><?=number_format($totalPorcentaje);?>%</td>
+                          <td class="text-right font-weight-bold">100%</td>
                         </tr>                        
                       </tbody>
                     </table>

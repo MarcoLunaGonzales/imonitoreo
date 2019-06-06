@@ -8,16 +8,10 @@ $codUnidadX=$codUnidadX;
 <style type="text/css">
 
 #chart-container<?=$aleatorio;?> {
-    width: 60%;
+    width: 70%;
 }
 </style>
-<?php
 
-//session_start();
-
-//$fondoTemporal='1011|1020';//echo "hola como vamos";
-
-?>
 <script type="text/javascript" src="../assets/chartjs/js/jquery.min.js"></script>
 <script type="text/javascript" src="../assets/chartjs/js/Chart.bundle.js"></script>
 <script type="text/javascript" src="../assets/chartjs/js/utils.js"></script>
@@ -36,8 +30,8 @@ $codUnidadX=$codUnidadX;
         function showGraph<?=$aleatorio;?>()
         {
             {
-                console.log("antes de los datos pOA;");
-                console.log("variables: "+<?=$codAreaX?>+" "+<?=$codUnidadX;?>);
+                //console.log("antes de los datos pOA;");
+                console.log("variablesPOA: "+<?=$codAreaX?>+" "+<?=$codUnidadX;?>);
                 $.get("dataPOA.php",
 				{codAreaX:<?=$codAreaX;?>,codUnidadX:<?=$codUnidadX;?>},
                 function (data){
@@ -49,7 +43,7 @@ $codUnidadX=$codUnidadX;
                     var unidad = [] ;
                     for (var i in data) {
 						mes.push(data[i].mes);
-                        console.log(data[i].area+" "+data[i].unidad+" "+data[i].mes+" "+data[i].presupuesto);
+                        //console.log(data[i].area+" "+data[i].unidad+" "+data[i].mes+" "+data[i].presupuesto);
                         presupuesto.push(data[i].presupuesto);
                         ejecutado.push(data[i].ejecutado);   
                         area.push(data[i].area);

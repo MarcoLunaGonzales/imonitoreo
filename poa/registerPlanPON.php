@@ -9,6 +9,7 @@ $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
+
 $globalAdmin=$_SESSION["globalAdmin"];
 $globalUserPON=$_SESSION["globalUserPON"];
 
@@ -24,7 +25,7 @@ $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
 $table="actividades_poa";
-$moduleName="Planificacion";
+$moduleName="Planificacion PON";
 
 //sacamos la periodicidad el 
 $sqlDatosAdi="SELECT i.cod_periodo, p.nombre as periodo from indicadores i, tipos_resultado t, periodos p where i.cod_periodo=p.codigo and t.codigo=i.cod_tiporesultado and i.codigo=:codigoIndicador";
@@ -70,13 +71,13 @@ $codEstadoPOAGestion=estadoPOAGestion($globalGestion);
 
 					<?php
 					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area
-					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1";
-					if($globalAdmin==0){
-						$sqlLista.=" and a.cod_area='$globalArea' and a.cod_unidadorganizacional='$globalUnidad' and a.cod_personal='$globalUser'";
-						if($codEstadoPOAGestion==3){
-							$sqlLista.=" and a.actividad_extra=1 ";
-						}
-					}
+					from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
+					if($globalUserPON!=2){
+						$sqlLista.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) and a.cod_personal='$globalUser' ";	
+					} 
+					if($codEstadoPOAGestion==3){
+						$sqlLista.=" and a.actividad_extra=1 ";
+					}					
 					if($globalUserPON==1){
 						$sqlLista.="UNION SELECT a.codigo, a.orden, a.nombre, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_personal='$globalUser'";
 						if($codEstadoPOAGestion==3){
@@ -84,6 +85,9 @@ $codEstadoPOAGestion=estadoPOAGestion($globalGestion);
 						}
 					}
 					$sqlLista.=" order by cod_unidadorganizacional, cod_area, orden";
+					
+					//echo $sqlLista;
+					
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();
@@ -99,7 +103,7 @@ $codEstadoPOAGestion=estadoPOAGestion($globalGestion);
 					?>
 
               		<div class="table-responsive">
-		                <table class="table table-striped">
+		                <table class="table table-condensed">
 		                  <thead>
 		                    <tr>
 		                      <th class="text-center">#</th>
@@ -129,7 +133,7 @@ $codEstadoPOAGestion=estadoPOAGestion($globalGestion);
 		                    <tr>
 		                      <td class="text-center"><?=$index;?></td>
 		                      <td class="text-center"><h6><p class="text-danger"><?=$abrevUnidad;?>-<?=$abrevArea;?></p></h6></td>
-		                      <td><?=$nombre;?></td>
+		                      <td class="text-left text-primary small"><?=$nombre;?></td>
 		                    <?php
 	                    	for($i=1;$i<=12;$i++){
 	                    		$sqlRecupera="SELECT value_numerico from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
@@ -145,10 +149,10 @@ $codEstadoPOAGestion=estadoPOAGestion($globalGestion);
 								}
 							?>
 	                    		<td>
-		                    		<select class="form-control" name="plan|<?=$codigo;?>|<?=$i;?>" data-width="250px" >
+		                    		<select class="form-control" name="plan|<?=$codigo;?>|<?=$i;?>">
 								  	<option disabled selected value="">-</option>
 								<?php
-									$stmtOpe = $dbh->prepare("SELECT ep.codigo, ep.nombre, ep.abreviatura FROM estados_pon ep ORDER BY 3");
+									$stmtOpe = $dbh->prepare("SELECT ep.codigo, ep.nombre, ep.abreviatura FROM estados_pon ep where ep.cod_tipoestadopon=1 ORDER BY 1");
 									$stmtOpe->execute();
 									while ($rowOpe = $stmtOpe->fetch(PDO::FETCH_ASSOC)) {
 										$codigoO=$rowOpe['codigo'];

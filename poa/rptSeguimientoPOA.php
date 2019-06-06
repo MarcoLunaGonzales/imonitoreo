@@ -9,8 +9,10 @@ require_once '../styles.php';
 
 session_start();
 
-$gestionX=$_POST["gestion"];
-$mes=$_POST["mes"];
+$gestionX=$_GET["gestion"];
+$mes=$_GET["mes"];
+$perspectiva=$_GET["perspectiva"];
+
 $anio=nameGestion($gestionX);
 
 $dbh = new Conexion();
@@ -27,22 +29,27 @@ $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 
+$globalUnidadesReports=$_SESSION["globalUnidadesReports"];
+$globalAreasReports=$_SESSION["globalAreasReports"];
+
 $globalAdmin=$_SESSION["globalAdmin"];
 $globalUserPON=$_SESSION["globalUserPON"];
 
 
 $sql="SELECT (select p.nombre from perspectivas p where p.codigo=o.cod_perspectiva)as perspectiva, o.codigo, o.abreviatura, o.descripcion, (SELECT g.nombre from gestiones g WHERE g.codigo=o.cod_gestion) as gestion, i.nombre as nombreindicador, i.codigo as codigoindicador
     FROM objetivos o, indicadores i, indicadores_unidadesareas iua
-  WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador";
+  WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and o.cod_perspectiva in ($perspectiva)";
 if($globalAdmin==0){
-  $sql.=" and iua.cod_area in ($globalArea) and iua.cod_unidadorganizacional in ($globalUnidad) ";
+  $sql.=" and iua.cod_area in ($globalAreasReports) and iua.cod_unidadorganizacional in ($globalUnidadesReports) ";
 }
 if($globalUserPON==1){
   $sql.=" union SELECT (select p.nombre from perspectivas p where p.codigo=o.cod_perspectiva)as perspectiva, o.codigo, o.abreviatura, o.descripcion, (SELECT g.nombre from gestiones g WHERE g.codigo=o.cod_gestion) as gestion, i.nombre as nombreindicador, i.codigo as codigoindicador FROM objetivos o, indicadores i, indicadores_unidadesareas iua WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' 
     and i.codigo=iua.cod_indicador and i.codigo='$codigoIndicadorPON' ";
 }
-$sql.=" group by i.codigo ORDER BY perspectiva, abreviatura";
+$sql.=" group by i.codigo ORDER BY perspectiva, abreviatura, i.nombre";
+
 //echo $sql;
+
 $stmt = $dbh->prepare($sql);
 // Ejecutamos
 $stmt->execute();
@@ -96,7 +103,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                     <td><?=$abreviatura;?></td>
                     <td><?=$nombreIndicador;?></td>
                     <td class="text-center">
-                    <a href='../graficos/rptPOA.php?tipo=1&codigo=<?=$codigoIndicador;?>&gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>' rel="tooltip" title="Ver Reporte" class="<?=$buttonDetail;?>">
+                    <a href='../graficos/rptPOA.php?tipo=1&codigo=<?=$codigoIndicador;?>&gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>' rel="tooltip" target="_BLANK" title="Ver Reporte" class="<?=$buttonDetail;?>">
                         <i class="material-icons">assessment</i>
                       </a>
                     </td>

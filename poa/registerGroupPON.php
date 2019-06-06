@@ -99,14 +99,16 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 					</div>
 
 					<?php
-					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_comite as comite, a.cod_norma, a.cod_estadopon as estadopon, a.cod_modogeneracionpon as modogeneracionpon, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_personal
-					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional='$codUnidadX' and a.cod_area='$codAreaX' and 
-					 	a.cod_personal='$globalUser' ";
+					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_comite as comite, a.cod_norma, a.cod_estadopon as estadopon, a.cod_modogeneracionpon as modogeneracionpon, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_personal, a.cod_tiposolicitante, a.solicitante
+					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional in ('$codUnidadX') and a.cod_area in ('$codAreaX') "; 
+					if($globalUserPON!=2){
+						$sqlLista.=" and a.cod_personal='$globalUser' ";	
+					} 
 					if($codEstadoPOAGestion==3){
 						$sqlLista.=" and a.actividad_extra=1 ";
 					}
 					if($globalUserPON==1){
-						$sqlLista.=" union SELECT a.codigo, a.orden, a.nombre, a.cod_comite as comite, a.cod_norma, a.cod_estadopon as estadopon, a.cod_modogeneracionpon as modogeneracionpon, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_personal
+						$sqlLista.=" union SELECT a.codigo, a.orden, a.nombre, a.cod_comite as comite, a.cod_norma, a.cod_estadopon as estadopon, a.cod_modogeneracionpon as modogeneracionpon, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_personal, a.cod_tiposolicitante, a.solicitante
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1  and a.cod_personal='$globalUser' ";
 						if($codEstadoPOAGestion==3){
 							$sqlLista.=" and a.actividad_extra=1 ";
@@ -134,6 +136,8 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 					$stmtLista->bindColumn('cod_unidadorganizacional', $codUnidad);
 					$stmtLista->bindColumn('cod_area', $codArea);
 					$stmtLista->bindColumn('cod_personal', $codPersonal);
+					$stmtLista->bindColumn('cod_tiposolicitante', $codTipoSolicitante);
+					$stmtLista->bindColumn('solicitante', $solicitante);
 
 					?>
 					<fieldset id="fiel" style="width:100%;border:0;">
@@ -151,10 +155,10 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 	                    
 		                    <div class="col-md-12">
 								<div class="row">
-									<div class="col-sm-4">
+									<div class="col-sm-3">
 				                        <div class="form-group">
             	            			<input type="hidden" name="codigo<?=$index;?>" id="codigo<?=$index;?>" value="<?=$codigo;?>">
-				                        <select class="selectpicker" name="comite<?=$index;?>" id="comite<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+				                        <select class="selectpicker form-control" name="comite<?=$index;?>" id="comite<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 									  		<option value="">Comite</option>
 										  	<?php
 										  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
@@ -186,9 +190,9 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 										</div>
 			                        </div>
 
-			                        <div class="col-sm-4">
+			                        <div class="col-sm-3">
 			                        	<div class="form-group">
-								        <select class="selectpicker" name="norma<?=$index;?>" id="norma<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+								        <select class="selectpicker form-control" name="norma<?=$index;?>" id="norma<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 										  	<option value="">Norma Referencia</option>
 										  	<?php
 										  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
@@ -220,9 +224,9 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 										</div>
 		                          	</div>
 
-			                        <div class="col-sm-4">
+			                        <div class="col-sm-2">
 			                        	<div class="form-group">
-								        <select class="selectpicker" name="modogeneracion<?=$index;?>" id="modogeneracion<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+								        <select class="selectpicker form-control" name="modogeneracion<?=$index;?>" id="modogeneracion<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 										  	<option value="">Modo Generacion</option>
 										  	<?php
 										  	$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM modos_generacionpon where cod_estado=1 order by 2");
@@ -240,6 +244,13 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 										</div>
 		                          	</div>
 
+		                          	<div class="col-sm-4">
+					                    <div class="form-group">
+					                    <label for="actividad<?=$index;?>" class="bmd-label-floating">Tema a Normalizar</label>			
+			                          	<textarea class="form-control" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();"><?=$nombre;?></textarea>	
+		 								</div>
+		                          	</div>
+
 
 	                      		</div>
 							</div>
@@ -247,28 +258,19 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 							<div class="col-md-12">
 								<div class="row">
 
-									<div class="col-sm-3">
-					                    <div class="form-group">
-					                    <label for="actividad<?=$index;?>" class="bmd-label-floating">Actividad</label>			
-			                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();"><?=$nombre;?>
-			                          	</textarea>	
-		 								</div>
-		                          	</div>
-
-		                          	
-			                        <div class="col-sm-4">
+			                        <div class="col-sm-3">
 			                        	<div class="form-group">
-								        <select class="selectpicker" name="estadopon<?=$index;?>" id="estadopon<?=$index;?>" data-style="<?=$comboColor;?>">
-										  	<option value="">Estado Inicial</option>
+								        <select class="selectpicker form-control" name="tipo_solicitante<?=$index;?>" id="tipo_solicitante<?=$index;?>" data-style="<?=$comboColor;?>" required="true">
+										  	<option value="">Sector Solicitante</option>
 										  	<?php
-										  	$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM estados_pon where cod_estado=1 order by 3");
+										  	$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM tipos_solicitante where cod_estado=1 order by 3");
 											$stmt->execute();
 											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 												$codigoX=$row['codigo'];
 												$nombreX=$row['nombre'];
 												$abreviaturaX=$row['abreviatura'];
 											?>
-												<option value="<?=$codigoX;?>" data-subtext="<?=$abreviaturaX?>" <?=($codigoX==$estadopon)?"selected":"";?>  ><?=$nombreX;?></option>	
+												<option value="<?=$codigoX;?>" data-subtext="<?=$abreviaturaX?>" <?=($codigoX==$codTipoSolicitante)?"selected":"";?>  ><?=$nombreX;?></option>	
 											<?php
 												}
 											?>
@@ -276,12 +278,19 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 										</div>
 		                          	</div>
 
+		                          	<div class="col-sm-4">
+					                    <div class="form-group">
+					                    <label for="solicitante<?=$index;?>" class="bmd-label-floating">Solicitante</label>			
+			                          	<input type="text" class="form-control" name="solicitante<?=$index;?>" id="solicitante<?=$index;?>" value="<?=$solicitante;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();">	
+		 								</div>
+		                          	</div>
+
 			                        <div class="col-sm-4">
 			                        	<div class="form-group">
 								        <select class="selectpicker" name="personal<?=$index;?>" id="personal<?=$index;?>" data-style="<?=$comboColor;?>">
 										  	<option value="">Responsable</option>
 										  	<?php
-										  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM personal2 p, personal_unidadesorganizacionales pu, personal_datosadicionales pd where p.codigo=pd.cod_personal and pd.cod_estado=1 and p.codigo=pu.cod_personal and pu.cod_unidad='$codUnidad' order by 2");
+										  	$stmt = $dbh->prepare("SELECT distinct(codigo)as codigo, nombre FROM personal2 p, personal_unidadesorganizacionales pu, personal_datosadicionales pd where p.codigo=pd.cod_personal and pd.cod_estado=1 order by 2");
 											$stmt->execute();
 											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 												$codigoX=$row['codigo'];
@@ -346,7 +355,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 		  	<option disabled selected value="">Area</option>
 		  	<?php
 		  	$sqlAreas="SELECT i.cod_indicador, u.codigo as codigoUnidad, u.nombre as nombreUnidad, u.abreviatura as abrevUnidad, a.codigo as codigoArea, a.nombre as nombreArea, a.abreviatura as abrevArea from indicadores_unidadesareas i, unidades_organizacionales u, areas a where i.cod_indicador='$codigoIndicador' and i.cod_area=a.codigo and i.cod_unidadorganizacional=u.codigo";
-		  	if($globalAdmin==0 && $globalUserPON!=1){
+		  	if($globalAdmin==0 && $globalUserPON==0){
 		  		$sqlAreas.=" and i.cod_unidadorganizacional in ($globalUnidad) and i.cod_area in ($globalArea) ";
 		  	}
 		  	$sqlAreas.=" order by 3,6";

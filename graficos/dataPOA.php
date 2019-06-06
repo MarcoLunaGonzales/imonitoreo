@@ -54,7 +54,8 @@ require_once '../styles.php';
 		$planificadoMes=planificacionPorIndicador($codIndicador,$codAreaTemporal,$codUnidadTemporal,$i,0);
       	$ejecutadoMes=ejecucionPorIndicador($codIndicador,$codAreaTemporal,$codUnidadTemporal,$i,0);
               
-	  	$emparray[]=array("area"=>$codAreaTemporal,"unidad"=>$codUnidadTemporal,"mes"=>$i, "presupuesto"=>$planificadoMes, "ejecutado"=>$ejecutadoMes);
+	  	$abrevMes=abrevMes($i);
+	  	$emparray[]=array("area"=>$codAreaTemporal,"unidad"=>$codUnidadTemporal,"mes"=>$abrevMes, "presupuesto"=>$planificadoMes, "ejecutado"=>$ejecutadoMes);
 	}
 
 array_splice($emparray, 0,1);

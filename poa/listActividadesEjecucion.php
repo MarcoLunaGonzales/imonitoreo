@@ -6,17 +6,22 @@ require_once 'styles.php';
 
 $dbh = new Conexion();
 
+$globalAreaEjecucion=$_SESSION["globalAreaEjecucion"];
+$globalUnidadEjecucion=$_SESSION["globalUnidadEjecucion"];
+$anioGlobal=$_SESSION["globalNombreGestion"]; 
+
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
 //SACAMOS LA CONFIGURACION PARA REDIRECCIONAR EL PON
-$stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=6");
-$stmt->execute();
-$codigoIndicadorPON=0;
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-  $codigoIndicadorPON=$row['valor_configuracion'];
-}
+$codigoIndicadorPON=obtieneValorConfig(6);
+
+//CODIGO DE INDICADOR PARA EL REPORTE DE CURSOS
+$codReporteCursos=obtieneValorConfig(14);
+
+//CODIGO DE INDICADOR PARA EL REPORTE DE SERVICIOS
+$codReporteServicios=obtieneValorConfig(15);
 
 $codigoIndicador=$codigo;
 $areaIndicador=$area;
@@ -24,6 +29,8 @@ $unidadIndicador=$unidad;
 
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
+
+$unidadesHijos=buscarHijosUO($globalUnidadEjecucion);
 
 $table="actividades_poa";
 $moduleName="Ejecucion de Actividades POA";
@@ -62,7 +69,6 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA QUE NO DE ERROR
 
 
-
 // Preparamos
 $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,
@@ -72,9 +78,8 @@ $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n wh
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado, (SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador,
           (SELECT c.codigo from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as codigodetalleclasificador
  from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
-if($globalAdmin==0){
-  $sql.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad)";
-}
+  $sql.=" and a.cod_area in ($globalAreaEjecucion) and a.cod_unidadorganizacional in ($globalUnidadEjecucion)";
+
 if($areaIndicador!=0){
   $sql.=" and a.cod_area in ($areaIndicador) ";
 }
@@ -118,16 +123,16 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                   <h4 class="card-title">Fecha Limite: <?=$fechaFinRegistroX;?></h4>
                   <h6 class="card-title">Objetivo: <?=$nombreObjetivo?></h6>
                   <h6 class="card-title">Indicador: <?=$nombreIndicador?>
-                    <a href="#" class="<?=$buttonCeleste;?> btn-round" data-toggle="modal" data-target="#myModal"  title="Filtrar">
+                    <!--a href="#" class="<?=$buttonCeleste;?> btn-round" data-toggle="modal" data-target="#myModal"  title="Filtrar">
                         <i class="material-icons">filter_list</i>
-                    </a>                    
+                    </a-->                    
                   </h6>
 
 
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-condensed" id="tablePaginatorFixed">
                       <thead>
                         <tr>
                           <th class="text-center">-</th>
@@ -158,6 +163,9 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                       <tbody>
                       <?php
                         $index=1;
+                        $totalPlanificado=0;
+                        $totalEjecutado=0;
+
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
                           $abrevArea=abrevArea($codArea);
                           $abrevUnidad=abrevUnidad($codUnidad);
@@ -200,31 +208,54 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                           if($codigoClasificador!=0){
                             $valueEjecutadoSistema=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
                           }
+
+                          $totalPlanificado+=$valueNumero;
+                          $totalEjecutado+=$valueNumeroEj;
+
+                          $url="";
+                          if($codReporteCursos==$codigoIndicador){
+                            $url="reportes/rptCursosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoPrograma=$codigodetalleclasificador";
+                          }
+                          if($codReporteServicios==$codigoIndicador){
+                            $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador";
+                          } 
+
+                          $cadenaNormas="";
+                          $cadenaN="";
+                          $cadenaNP="";
+                          if($normaPriorizada!=""){
+                            $cadenaNP.="NP:".$normaPriorizada;
+                          }
+                          
+                          if($norma!=""){
+                            $cadenaN.="N:".$norma;
+                          }
+
+                          if($normaPriorizada!="" || $norma!=""){
+                            $cadenaNormas="(".$cadenaNP."-".$cadenaN.")";
+                          }
+
+
+
                       ?>
+
                         <tr>
                           <td class="text-center"><?=$index;?></td>
                           <td><?=$abrevArea."-".$abrevUnidad;?></td>
-                          <td><?=$nombre;?></td>
+                          <td class="text-left"><?=$nombre;?><?=$cadenaNormas;?></td>
                           <td><?=$productoEsperado;?></td>
                           <td><?=$tipoDato;?></td>
                           <td><?=$datoclasificador;?>(<?=$codigodetalleclasificador;?>)</td>
-                          <?php
-                          if($codTipoDato==1 || $codTipoDato==3){
-                          ?>
-                            <td class="text-center table-warning font-weight-bold">
+                          <td class="text-center table-warning font-weight-bold">
                               <?=formatNumberDec($valueNumero);?>
-                            </td>
-                            <td class="text-center table-success font-weight-bold">
-                              <?=($valueEjecutadoSistema==0)?"-":formatNumberDec($valueEjecutadoSistema);?>
-                            </td>
-
-                            <td class="text-center table-success font-weight-bold"">
-                              <?=formatNumberDec($valueNumeroEj);?>
-                            </td>
-                          <?php 
-                            }
-                          ?>
-                            <td><?=$descripcionLogroEj?></td>
+                          </td>
+                          <td class="text-center table-success font-weight-bold">
+                            <?=($codReporteCursos==$codigoIndicador || $codReporteServicios==$codigoIndicador)?"<a href='$url' target='_blank'>".formatNumberDec($valueEjecutadoSistema)."</a>":formatNumberDec($valueEjecutadoSistema);?>
+                          </td>
+                          <td class="text-center table-success font-weight-bold"">
+                            <?=formatNumberDec($valueNumeroEj);?>
+                          </td>
+                          <td><?=$descripcionLogroEj?></td>
                           <?php
                             if($archivoEj!=""){
                                 $iconCheckFile="attach_file";
@@ -244,12 +275,22 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
             						}
             ?>
                       </tbody>
+                      <tfooter>
+                        <tr>
+                          <th colspan="6">Totales</th>
+                          <th class="text-right"><?=formatNumberDec($totalPlanificado);?></th>
+                          <th>-</th>
+                          <th class="text-right"><?=formatNumberDec($totalEjecutado);?></th>
+                          <th></th>
+                        </tr>
+                      </tfooter>
                     </table>
                   </div>
                 </div>
               </div>
         				<div class="card-body">
-                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAEjecucion&codigo=<?=$codigoIndicador?>&area=0&unidad=0'">Registrar Ejecucion</button>   
+                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAEjecucion&codigo=<?=$codigoIndicador?>&area=0&unidad=0'">Registrar Ejecucion</button>  
+                    <a href="?opcion=listPOAEjecucion&area=<?=$globalAreaEjecucion?>&unidad=<?=$globalUnidadEjecucion?>" class="<?=$buttonCancel;?>">Cancelar</a> 
                 </div>
             </div>
           </div>  

@@ -43,7 +43,6 @@ $dbh = new Conexion();
           </div>
         </div>
 
-
         <div class="row">
           <label class="col-sm-2 col-form-label">Mes</label>
           <div class="col-sm-7">
@@ -61,6 +60,20 @@ $dbh = new Conexion();
             <?php 
             }
               ?>
+            </select>
+          </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <label class="col-sm-2 col-form-label">Ver</label>
+          <div class="col-sm-7">
+          <div class="form-group">
+            <select class="selectpicker" title="Seleccionar" name="tiporeporte" id="tiporeporte" data-style="<?=$comboColor;?>" required>
+              <option disabled selected value=""></option>
+               <option value="0">Mes</option>
+               <option value="1">Acumulado</option>
             </select>
           </div>
           </div>

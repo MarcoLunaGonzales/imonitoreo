@@ -78,7 +78,7 @@ $dbh = new Conexion();
 				</div>
 
 				<div class="row">
-				  <label class="col-sm-2 col-form-label">Organismo</label>
+				  <label class="col-sm-2 col-form-label">Area</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
 					<?php

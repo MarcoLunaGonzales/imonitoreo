@@ -9,7 +9,7 @@ $moduleName="Estados PON";
 $globalAdmin=$_SESSION["globalAdmin"];
 
 // Preparamos
-$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura, porcentaje FROM $table where cod_estado=1");
+$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura, porcentaje, (select te.nombre from tipos_estadopon te where te.codigo=cod_tipoestadopon)as tipoestado FROM $table where cod_estado=1 order by 5 desc,2");
 // Ejecutamos
 $stmt->execute();
 // bindColumn
@@ -17,6 +17,7 @@ $stmt->bindColumn('codigo', $codigo);
 $stmt->bindColumn('nombre', $nombre);
 $stmt->bindColumn('abreviatura', $abreviatura);
 $stmt->bindColumn('porcentaje', $porcentaje);
+$stmt->bindColumn('tipoestado', $tipoestado);
 
 ?>
 
@@ -40,6 +41,7 @@ $stmt->bindColumn('porcentaje', $porcentaje);
                           <th>Nombre</th>
                           <th>Abreviatura</th>
                           <th>Porcentaje</th>
+                          <th>Tipo Estado</th>
                           <th class="text-right">Actions</th>
                         </tr>
                       </thead>
@@ -53,6 +55,7 @@ $stmt->bindColumn('porcentaje', $porcentaje);
                           <td><?=$nombre;?></td>
                           <td><?=$abreviatura;?></td>
                           <td><?=$porcentaje;?></td>
+                          <td><?=$tipoestado;?></td>
                           <td class="td-actions text-right">
                             <?php
                             if($globalAdmin==1){

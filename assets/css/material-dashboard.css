@@ -17937,7 +17937,8 @@ a .material-icons {
 .sidebar .nav p {
   margin: 0;
   line-height: 30px;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: bold;
   position: relative;
   display: block;
   height: auto;
@@ -17962,7 +17963,7 @@ a .material-icons {
   padding-left: 10px;
   padding-right: 10px;
   text-transform: capitalize;
-  font-size: 13px;
+  font-size: 11px;
 }
 
 .sidebar .sidebar-background {

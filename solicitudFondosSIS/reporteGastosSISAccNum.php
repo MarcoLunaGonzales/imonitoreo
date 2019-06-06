@@ -16,6 +16,8 @@ $stmtX->execute();
 
 $gestion=$_GET["gestion"];
 $mes=$_GET["mes"];
+$tiporeporte=$_GET["tiporeporte"];
+
 $anio=nameGestion($gestion);
 $nombreMes=nameMes($mes);
 
@@ -24,7 +26,12 @@ $globalUsuario=$_SESSION["globalUser"];
 
 
 $sqlDetalleX="SELECT pc.codigo, m.glosa_detalle, m.fecha, m.monto, m.fondo, m.organismo, m.ml_partida, 
-(select c.abreviatura from componentessis c where c.partida=m.ml_partida)as codigoact from po_mayores m, po_plancuentas pc where pc.codigo=m.cuenta and m.fondo=2001 and YEAR(m.fecha)='$anio' and MONTH(m.fecha)='$mes' and m.ml_partida<>'' order by m.fecha;";
+(select c.abreviatura from componentessis c where c.partida=m.ml_partida)as codigoact from po_mayores m, po_plancuentas pc where pc.codigo=m.cuenta and m.fondo=2001 and YEAR(m.fecha)='$anio' and m.ml_partida<>''";
+if($tiporeporte==0){
+  $sqlDetalleX.=" and MONTH(m.fecha)='$mes' order by m.fecha;";  
+}else if($tiporeporte==1){
+  $sqlDetalleX.=" and MONTH(m.fecha)<='$mes' order by m.fecha;";  
+}
 //echo $sqlDetalleX;
 $stmtDetalleX = $dbh->prepare($sqlDetalleX);
 $stmtDetalleX->execute();

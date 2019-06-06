@@ -18,7 +18,7 @@ $dbh = new Conexion();
                   <div class="card-icon">
                     <i class="material-icons">assignment</i>
                   </div>
-                  <h4 class="card-title">Descargar Datos de Contabilidad</h4>
+                  <h4 class="card-title">Descargar Datos Contabilidad</h4>
                 </div>
                 
                 <div class="card-body">

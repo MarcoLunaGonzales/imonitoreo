@@ -73,7 +73,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 <div class="content">
 	<div class="container-fluid">
 
-		<form id="form1" class="form-horizontal" action="poa/saveAsignarPOAI.php" method="post">
+		<form id="form1" class="form-horizontal" action="poai/saveAsignarPOAI.php" method="post">
 			<input type="hidden" name="cod_indicador" id="cod_indicador" value="<?=$codigoIndicador?>">
 			<input type="hidden" name="cantidad_filas" id="cantidad_filas" value="<?=$contadorRegistros;?>">
 			<input type="hidden" name="codigoUnidad" id="codigoUnidad" value="<?=$codUnidadX;?>">
@@ -110,8 +110,10 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.cod_personal
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional='$codUnidadX' and a.cod_area='$codAreaX' ";
 
-					 $sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
-					//echo $sql;
+					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+					
+					//echo $sqlLista;
+					
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();
@@ -145,8 +147,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 								<div class="col-sm-8">
 				                    <div class="form-group">
 				                    <label for="actividad<?=$index;?>" class="bmd-label-floating">Actividad</label>			
-		                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();"><?=$nombre;?>
-		                          	</textarea>	
+		                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();" readonly="true"><?=$nombre;?></textarea>	
 	 								</div>
 	                          	</div>
 		                          	
@@ -219,10 +220,12 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 		  	<?php
 		  	$sqlAreas="SELECT i.cod_indicador, u.codigo as codigoUnidad, u.nombre as nombreUnidad, u.abreviatura as abrevUnidad, a.codigo as codigoArea, a.nombre as nombreArea, a.abreviatura as abrevArea from indicadores_unidadesareas i, unidades_organizacionales u, areas a where i.cod_indicador='$codigoIndicador' and i.cod_area=a.codigo and i.cod_unidadorganizacional=u.codigo";
 		  	if($globalAdmin==0){
-		  		$sqlAreas.=" and i.cod_unidadorganizacional='$globalUnidad' and i.cod_area='$globalArea' ";
+		  		$sqlAreas.=" and i.cod_unidadorganizacional in ($globalUnidad) and i.cod_area in ($globalArea) ";
 		  	}
 		  	$sqlAreas.=" order by 3,6";
+		  	
 		  	echo $sqlAreas;
+		  	
 		  	$stmt = $dbh->prepare($sqlAreas);
 			$stmt->execute();
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
