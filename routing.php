@@ -384,6 +384,12 @@
 			$areaUnidad=$_GET['areaUnidad'];
 			require_once('poa/registerGroup.php');
 		}
+		if ($_GET['opcion']=='editPOAAct') {
+			$codigoActividad=$_GET['codigo'];
+			$codigoIndicador=$_GET['codigo_indicador'];
+			$areaUnidad=$_GET['areaUnidad'];
+			require_once('poa/edit.php');
+		}
 		if ($_GET['opcion']=='registerPOAPONGroup') {
 			$codigo=$_GET['codigo'];
 			$areaUnidad=$_GET['areaUnidad'];

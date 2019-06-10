@@ -55,14 +55,6 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 	$contadorRegistros=$row['nro_registros'];
 }
 
-//SACAMOS LA TABLA RELACIONADA
-$sqlClasificador="SELECT c.tabla FROM indicadores i, clasificadores c where i.codigo='$codigoIndicador' and i.cod_clasificador=c.codigo";
-$stmtClasificador = $dbh->prepare($sqlClasificador);
-$stmtClasificador->execute();
-$nombreTablaClasificador="";
-while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
-	$nombreTablaClasificador=$rowClasificador['tabla'];
-}
 
 ?>
 <script>
@@ -139,13 +131,15 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 					$stmtLista->bindColumn('cod_hito',$codHito);
 					?>
 					<fieldset id="fiel" style="width:100%;border:0;">
-						<button type="button" name="add" value="add" class="btn btn-danger btn-round btn-fab" onClick="addActividad(this,<?=$codigoIndicador;?>,<?=$codUnidadX;?>)" accesskey="a">
+						<button type="button" name="add" value="add" class="btn btn-danger btn-round btn-fab" onClick="addActividad(this,<?=$codigoIndicador;?>,<?=$codUnidadX;?>,<?=$codAreaX;?>)" accesskey="a">
 		                              <i class="material-icons">add</i>
 		                </button>						
 					        	<?php
 			                        $index=1;
 			                      	while ($rowLista = $stmtLista->fetch(PDO::FETCH_BOUND)) {
               							//echo $codUnidad." ----- ".$codArea." ".$norma;
+              							//SACAMOS LA TABLA RELACIONADA
+              							$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
 
 			                    ?>
 						<div id="div<?=$index;?>">	

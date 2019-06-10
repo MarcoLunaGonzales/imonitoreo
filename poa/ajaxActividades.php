@@ -18,18 +18,11 @@ $globalArea=$_SESSION["globalArea"];
 $codigo=$_GET['codigo'];
 $codigoIndicador=$_GET['cod_indicador'];
 $codUnidad=$_GET['cod_unidad'];
+$codArea=$_GET['cod_area'];
 
 $codUnidadHijosX=buscarHijosUO($codUnidad);
 
-
-//SACAMOS LA TABLA RELACIONADA
-$sqlClasificador="SELECT c.tabla FROM indicadores i, clasificadores c where i.codigo='$codigoIndicador' and i.cod_clasificador=c.codigo";
-$stmtClasificador = $dbh->prepare($sqlClasificador);
-$stmtClasificador->execute();
-$nombreTablaClasificador="";
-while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
-	$nombreTablaClasificador=$rowClasificador['tabla'];
-}
+$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
 
 ?>
 <div class="col-md-12">

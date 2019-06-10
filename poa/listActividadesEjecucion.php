@@ -23,6 +23,10 @@ $codReporteCursos=obtieneValorConfig(14);
 //CODIGO DE INDICADOR PARA EL REPORTE DE SERVICIOS
 $codReporteServicios=obtieneValorConfig(15);
 
+//CODIGO DE INDICADOR PARA EL REPORTE DE SERVICIOS
+$codReporteServicios2=obtieneValorConfig(17);
+
+
 $codigoIndicador=$codigo;
 $areaIndicador=$area;
 $unidadIndicador=$unidad;
@@ -56,18 +60,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 $nombreMes=nameMes($codMesX);
 //FIN FECHAS
 
-//SACAMOS LA TABLA RELACIONADA
-$sqlClasificador="SELECT c.codigo, c.tabla FROM indicadores i, clasificadores c where i.codigo='$codigoIndicador' and i.cod_clasificador=c.codigo";
-$stmtClasificador = $dbh->prepare($sqlClasificador);
-$stmtClasificador->execute();
-$nombreTablaClasificador="";
-$codigoClasificador=0;
-while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
-  $codigoClasificador=$rowClasificador['codigo'];
-  $nombreTablaClasificador=$rowClasificador['tabla'];
-}
-if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA QUE NO DE ERROR
-
 
 // Preparamos
 $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
@@ -75,8 +67,8 @@ $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n wh
 (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
 (SELECT t.abreviatura from tipos_seguimiento t where t.codigo=a.cod_tiposeguimiento)as tipodato, 
-a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado, (SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador,
-          (SELECT c.codigo from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as codigodetalleclasificador
+a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado, (select i.cod_clasificador from indicadores i where i.codigo=a.cod_indicador)as datoclasificador,
+          (a.cod_datoclasificador)as codigodetalleclasificador
  from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
   $sql.=" and a.cod_area in ($globalAreaEjecucion) and a.cod_unidadorganizacional in ($globalUnidadEjecucion)";
 
@@ -105,7 +97,7 @@ $stmt->bindColumn('producto_esperado', $productoEsperado);
 $stmt->bindColumn('cod_unidadorganizacional', $codUnidad);
 $stmt->bindColumn('cod_area', $codArea);
 $stmt->bindColumn('cod_tiporesultado', $codTipoDato);
-$stmt->bindColumn('datoclasificador', $datoclasificador);
+$stmt->bindColumn('datoclasificador', $datoClasificador);
 $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
 
 ?>
@@ -170,6 +162,10 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                           $abrevArea=abrevArea($codArea);
                           $abrevUnidad=abrevUnidad($codUnidad);
 
+                          $codigoTablaClasificador=obtieneCodigoClasificador($codigoIndicador,$codArea);
+                          $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
+                          $nombreDatoClasificador=obtieneDatoClasificador($datoClasificador,$nombreTablaClasificador);
+
                           //SACAMOS LA PLANIFICACION
                           $sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
                           $stmtRecupera = $dbh->prepare($sqlRecupera);
@@ -205,8 +201,8 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                           //FIN PLANIFICACION
 
                           $valueEjecutadoSistema=0;
-                          if($codigoClasificador!=0){
-                            $valueEjecutadoSistema=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
+                          if($codigoTablaClasificador!=0){
+                            $valueEjecutadoSistema=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
                           }
 
                           $totalPlanificado+=$valueNumero;
@@ -217,6 +213,9 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                             $url="reportes/rptCursosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoPrograma=$codigodetalleclasificador";
                           }
                           if($codReporteServicios==$codigoIndicador){
+                            $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador";
+                          }
+                          if($codReporteServicios2==$codigoIndicador){
                             $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador";
                           } 
 
@@ -245,12 +244,12 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                           <td class="text-left"><?=$nombre;?><?=$cadenaNormas;?></td>
                           <td><?=$productoEsperado;?></td>
                           <td><?=$tipoDato;?></td>
-                          <td><?=$datoclasificador;?>(<?=$codigodetalleclasificador;?>)</td>
+                          <td><?=$nombreDatoClasificador;?></td>
                           <td class="text-center table-warning font-weight-bold">
                               <?=formatNumberDec($valueNumero);?>
                           </td>
                           <td class="text-center table-success font-weight-bold">
-                            <?=($codReporteCursos==$codigoIndicador || $codReporteServicios==$codigoIndicador)?"<a href='$url' target='_blank'>".formatNumberDec($valueEjecutadoSistema)."</a>":formatNumberDec($valueEjecutadoSistema);?>
+                            <?=($codReporteCursos==$codigoIndicador || $codReporteServicios==$codigoIndicador || $codReporteServicios2==$codigoIndicador)?"<a href='$url' target='_blank'>".formatNumberDec($valueEjecutadoSistema)."</a>":formatNumberDec($valueEjecutadoSistema);?>
                           </td>
                           <td class="text-center table-success font-weight-bold"">
                             <?=formatNumberDec($valueNumeroEj);?>

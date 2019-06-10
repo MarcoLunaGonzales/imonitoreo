@@ -40,18 +40,6 @@ $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 
-//SACAMOS LA TABLA RELACIONADA
-$sqlClasificador="SELECT c.codigo, c.tabla FROM indicadores i, clasificadores c where i.codigo='$codigoIndicador' and i.cod_clasificador=c.codigo";
-$stmtClasificador = $dbh->prepare($sqlClasificador);
-$stmtClasificador->execute();
-$nombreTablaClasificador="";
-$codigoClasificador=0;
-while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
-	$codigoClasificador=$rowClasificador['codigo'];
-  	$nombreTablaClasificador=$rowClasificador['tabla'];
-}
-if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA QUE NO DE ERROR
-
 
 
 //SACAMOS LAS FECHAS DE REGISTRO DEL MES EN CURSO
@@ -101,8 +89,8 @@ $moduleName="Registro de Ejecucion POA";
 					</div>
 
 					<?php
-					$sqlLista="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada, (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, (SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador,
-					(SELECT c.codigo from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as codigodetalleclasificador
+					$sqlLista="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada, (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, (select i.cod_clasificador from indicadores i where i.codigo=a.cod_indicador)as datoclasificador,
+				          (a.cod_datoclasificador)as codigodetalleclasificador
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
 					$sqlLista.=" and a.cod_area in ($globalAreaEjecucion) and a.cod_unidadorganizacional in ($globalUnidadEjecucion)";
 					if($areaIndicador!=0){
@@ -164,6 +152,10 @@ $moduleName="Registro de Ejecucion POA";
                   				$abrevArea=abrevArea($codArea);
                           		$abrevUnidad=abrevUnidad($codUnidad);
 
+                          		$codigoTablaClasificador=obtieneCodigoClasificador($codigoIndicador,$codArea);
+                          		$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
+	                         	$nombreDatoClasificador=obtieneDatoClasificador($datoclasificador,$nombreTablaClasificador);
+
 	                          $cadenaNormas="";
 	                          $cadenaN="";
 	                          $cadenaNP="";
@@ -181,10 +173,10 @@ $moduleName="Registro de Ejecucion POA";
 
 		                  ?>
 		                    <tr>
-		                      <td class="text-center"><?=$index;?></td>
+		                      <td class="text-center"><?=$index;?><?=$codigoTablaClasificador;?></td>
 		                      <td class="text-center"><?=$abrevArea."-".$abrevUnidad;?></td>
 		                      <td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?></td>
-		                      <td class="text-left small"><?=$datoclasificador;?>(<?=$codigodetalleclasificador;?>)</td>
+		                      <td class="text-left small"><?=$nombreDatoClasificador;?>)</td>
 		                    <?php
 	                    	for($i=$codMesX;$i<=$codMesX;$i++){
 	                    		$sqlRecupera="SELECT value_numerico from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
@@ -210,8 +202,8 @@ $moduleName="Registro de Ejecucion POA";
 		                            $descripcionEj=$rowRec['descripcion'];
 	                          	}
 	                          	if($valorEj==0){
-									if($codigoClasificador!=0){
-										$valorEj=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
+									if($codigoTablaClasificador!=0){
+										$valorEj=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
 									}
 	                          	}
 	                          	$totalEjecutado+=$valorEj;

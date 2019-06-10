@@ -136,16 +136,16 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           <td class="text-right"><?=formatNumberInt($montoSolicitudComponente,2);?></td><?php
                           }
                           ?>
-                          <td class="text-right font-weight-bold"><?=formatNumberInt($totalSolicitudes,2);?></td>
-                          <td class="text-right font-weight-bold"><?=formatNumberInt($montoEjecucionComponente,2);?></td>
-                          <td class="text-right"><?=formatNumberInt(($totalSolicitudes-$montoEjecucionComponente),2);?></td>
+                          <td class="text-right font-weight-bold"><?=formatNumberDec($totalSolicitudes,2);?></td>
+                          <td class="text-right font-weight-bold"><?=formatNumberDec($montoEjecucionComponente,2);?></td>
+                          <td class="text-right"><?=formatNumberDec(($totalSolicitudes-$montoEjecucionComponente),2);?></td>
                           <?php
                           $porcentajeEjecucion=0;
                           if($montoPresComponente>0){
                             $porcentajeEjecucion=($montoEjecucionComponente/$montoPresComponente)*100;
                           }
                           ?>
-                          <td class="text-right"><?=formatNumberInt($porcentajeEjecucion,2);?>%</td>
+                          <td class="text-right"><?=formatNumberDec($porcentajeEjecucion,2);?>%</td>
                         </tr>
                       <?php
                       }

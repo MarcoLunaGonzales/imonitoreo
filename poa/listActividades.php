@@ -38,14 +38,6 @@ $stmtX->execute();
 $codEstadoPOAGestion=estadoPOAGestion($globalGestion);
 
 //SACAMOS LA TABLA RELACIONADA
-$sqlClasificador="SELECT c.tabla FROM indicadores i, clasificadores c where i.codigo='$codigoIndicador' and i.cod_clasificador=c.codigo";
-$stmtClasificador = $dbh->prepare($sqlClasificador);
-$stmtClasificador->execute();
-$nombreTablaClasificador="";
-while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
-  $nombreTablaClasificador=$rowClasificador['tabla'];
-}
-if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA QUE NO DE ERROR
 
 //SACAMOS SI EL INDICADOR TIENE ALGUNA PERSONA ASIGNADA
 //SI ES ASI FILTRAMOS POR PERSONA Y SI NO PUES NO HACEMOS NADA
@@ -66,7 +58,7 @@ $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n wh
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
 (a.cod_tiposeguimiento)as tipodato, 
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area,
-(SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador, 
+(a.cod_datoclasificador)as datoclasificador, 
 (select p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, actividad_extra, clave_indicador
  from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 "; 
 if($globalAdmin==0){
@@ -150,6 +142,10 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
                           $abrevArea=abrevArea($codArea);
                           $abrevUnidad=abrevUnidad($codUnidad);
+
+                          $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
+                          $nombreDatoClasificador=obtieneDatoClasificador($datoClasificador,$nombreTablaClasificador);
+
                           if($actividadCMI==1){
                             $iconCheck="done";
                           }else{
@@ -167,12 +163,15 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                               <i class="material-icons"><?=$iconCheck;?></i>
                             </div>
                           </td>
-                          <td><?=$datoClasificador;?></td>
+                          <td class="text-left small"><?=$nombreDatoClasificador;?></td>
                           <td><?=$personal;?></td>
                           <td class="td-actions text-right">
                             <?php
                             if($codEstadoPOAGestion!=3 || $actividadExtra==1){
                             ?>
+                            <a href="index.php?opcion=editPOAAct&codigo=<?=$codigo;?>&codigo_indicador=<?=$codigoIndicador?>&areaUnidad=<?=$codUnidad;?>|<?=$codArea;?>" class="btn btn-success">
+                              <i class="material-icons">edit</i>
+                            </a>
                             <button rel="tooltip" class="btn btn-danger" onclick="alerts.showSwal('warning-message-and-confirmation','index.php?opcion=deletePOAAct&codigo=<?=$codigo;?>&codigo_indicador=<?=$codigoIndicador?>')">
                               <i class="material-icons">close</i>
                             </button>
@@ -198,9 +197,9 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
 
                     <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAPlan&codigo=<?=$codigoIndicador?>'">Planificar</button>  
 
-                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOA&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar Personal</button>
+                    <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOA&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar Personal</button>
 
-                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOAI&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar POAI</button>
+                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOAI&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar POAI</button-->
 
                     <a href="?opcion=listPOA" class="<?=$buttonCancel;?>">Cancelar</a> 
                 </div>

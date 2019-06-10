@@ -677,6 +677,9 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
   $dbh = new Conexion();
   $unidadHijos=buscarHijosUO($unidad);
   $valueRegistros=0;
+  
+  //echo "clasificador:".$clasificador;
+  
   if($clasificador==3){
     $sql="SELECT count(*)as registros from ext_cursos e where e.id_oficina in ($unidadHijos) and MONTH(e.fecha_inicio)=$mes and YEAR(e.fecha_inicio)=$anio and e.id_programa='$codigoClasificador'";
     $stmt = $dbh->prepare($sql);
@@ -708,8 +711,16 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
 
   //ESTA LINEA ES PARA LOS SERVICIOS OI
   if($clasificador==2){
-    $sql="SELECT count(e.cantidad)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_registro)=$anio and MONTH(e.fecha_registro)=$mes;";
-    //echo $sql;
+    $codIndicadorContar=obtieneValorConfig(16);
+    $codIndicadorSumar=obtieneValorConfig(17);
+    $sql="";
+    if($codIndicadorContar==$indicador){
+      $sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";      
+    }
+    if($codIndicadorSumar==$indicador){
+        $sql="SELECT sum(e.monto_facturado)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";
+    }
+    //echo $codIndicadorContar." ".$codIndicadorSumar." ".$indicador;
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -719,7 +730,7 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
 
   //ESTA LINEA ES PARA LOS SERVICIOS TLQ
   if($clasificador==4){
-    $sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_tlq_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_registro)=$anio and MONTH(e.fecha_registro)=$mes;";
+    $sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_tlq_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";
     //echo $sql;
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
@@ -742,6 +753,86 @@ function obtieneValorConfig($codigo){
   return $valor;
 }
 
+
+function obtieneTablaClasificador($indicador, $area){
+  $dbh = new Conexion();
+  $sqlClasificador="SELECT IFNULL(i.cod_clasificador,0)as clasificador FROM indicadores i where i.codigo='$indicador'";
+  $stmtClasificador = $dbh->prepare($sqlClasificador);
+  $stmtClasificador->execute();
+  $codClasificador=0;
+  while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
+    $codClasificador=$rowClasificador['clasificador'];
+  }
+  $codigoTabla=0;
+  if($codClasificador>0){
+    if($area==11){
+      $codigoTabla=2;
+    }
+    if($area==13 || $area==38 || $area==39){
+      $codigoTabla=1;
+    }
+    if($area==40){
+      $codigoTabla=4;
+    }
+  }
+  //sacamos el nombre de la tabla
+  $sqlClasificador="SELECT c.tabla FROM clasificadores c where c.codigo=$codigoTabla";
+  //echo $sqlClasificador;
+  $stmtClasificador = $dbh->prepare($sqlClasificador);
+  $stmtClasificador->execute();
+  $nombreTablaClasificador="";
+  while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
+    $nombreTablaClasificador=$rowClasificador['tabla'];
+  }
+  return $nombreTablaClasificador;
+}
+
+function obtieneCodigoClasificador($indicador, $area){
+  $dbh = new Conexion();
+  //echo "indicador-".$indicador." area.".$area;
+  $sqlClasificador="SELECT IFNULL(i.cod_clasificador,0)as clasificador FROM indicadores i where i.codigo='$indicador'";
+  $stmtClasificador = $dbh->prepare($sqlClasificador);
+  $stmtClasificador->execute();
+  $codClasificador=0;
+  while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
+    $codClasificador=$rowClasificador['clasificador'];
+  }
+  $codigoTabla=0;
+  if($codClasificador>0){
+    if($area==11){
+      $codigoTabla=2;
+    }
+    if($area==13 || $area==38 || $area==39){
+      $codigoTabla=1;
+    }
+    if($area==40){
+      $codigoTabla=4;
+    }
+  }
+  return $codigoTabla;
+}
+
+function obtieneDatoClasificador($datoClasi,$nombreTabla){
+  $dbh = new Conexion();
+  if($nombreTabla=="clientes"){
+    $sqlClasificador="SELECT concat(c.nombre,' (',u.abreviatura,')')as nombre from clientes c, unidades_organizacionales u where u.codigo=c.cod_unidad and c.codigo='$datoClasi'";
+    $stmtClasificador = $dbh->prepare($sqlClasificador);
+    $stmtClasificador->execute();
+    $nombreClasi=0;
+    while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
+      $nombreClasi=$rowClasificador['nombre'];
+    }
+  }else{
+    $sqlClasificador="SELECT nombre from $nombreTabla where codigo='$datoClasi'";
+    $stmtClasificador = $dbh->prepare($sqlClasificador);
+    $stmtClasificador->execute();
+    $nombreClasi=0;
+    while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
+      $nombreClasi=$rowClasificador['nombre'];
+    }
+  }
+  return($nombreClasi);
+}
 
 
 ?>

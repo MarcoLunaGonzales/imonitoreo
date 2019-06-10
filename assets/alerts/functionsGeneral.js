@@ -146,7 +146,7 @@ var numFilas=0;
 var cantidadItems=0;
 
 //AJAX ADD ACTIVIDADES POA
-function addActividad(obj, cod_indicador, cod_unidad) {
+function addActividad(obj, cod_indicador, cod_unidad, cod_area) {
       numFilas++;
       cantidadItems++;
       
@@ -161,7 +161,7 @@ function addActividad(obj, cod_indicador, cod_unidad) {
       var divDetalle;
       divDetalle=document.getElementById("div"+numFilas);
       ajax=nuevoAjax();
-      ajax.open("GET","poa/ajaxActividades.php?cod_indicador="+cod_indicador+"&cod_unidad="+cod_unidad+"&codigo="+numFilas,true);
+      ajax.open("GET","poa/ajaxActividades.php?cod_indicador="+cod_indicador+"&cod_unidad="+cod_unidad+"&cod_area="+cod_area+"&codigo="+numFilas,true);
       ajax.onreadystatechange=function(){
         if (ajax.readyState==4) {
           divDetalle.innerHTML=ajax.responseText;
@@ -398,15 +398,17 @@ function totalesSIS(){
 
     //ACA OCULTAMOS LAS FILAS QUE TIENEN 0
     for(var j=2; j<=numFilas-1; j++){
-      var totalFila=0;
+      var bandera=0;
       for(var i=2; i<=numCols-1; i++){
             var datoS=main.rows[j].cells[i].innerHTML;
             datoS=datoS.replace(/,/g,'');
             var dato=parseFloat(datoS);
-            totalFila=totalFila+dato;
+            if(dato!=0){
+              bandera=1;  
+            }
       }
-      if(totalFila==0){
-        console.log("ocultando fila: "+j);
+      if(bandera==0){
+        console.log("ocultando fila X: "+main.rows[j].cells[0].innerHTML);
         main.rows[j].style.display = 'none';
       }
     }
