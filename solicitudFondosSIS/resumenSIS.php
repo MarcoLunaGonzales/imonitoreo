@@ -8,10 +8,14 @@ $globalAdmin=$_SESSION["globalAdmin"];
 $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
+$globalServerArchivos=$_SESSION["globalServerArchivos"];
+
 $anio=nameGestion($globalGestion);
 
 $dbh = new Conexion();
 
+$banderaReg=verificaRegistrosSIS($anio);
+//echo $banderaReg;
 ?>
 <div class="content">
 	<div class="container-fluid">
@@ -38,33 +42,36 @@ $dbh = new Conexion();
                           <th data-orderable="false">Balance de Cuentas</th>
                        	  <th>Archivo 1</th>
                           <th>Archivo 2</th>
-                          <th>Cargar Archivos</th>
+                          <th>UploadArchivo 1</th>
+                          <th>UploadArchivo 2<th>
                         </tr>
                       </thead>
                       <tbody>
 <?php
                       	for($i=1;$i<=12;$i++) {
                           $sqlCount="";
-                          $sqlCount="SELECT count(*)as nro_registros, archivo FROM sis_archivos where anio='$anio' and mes='$i' and nro_archivo=1"; 
+                          $sqlCount="SELECT archivo, id FROM sis_archivos where anio='$anio' and mes='$i' and nro_archivo=1"; 
                           $stmtX = $dbh->prepare($sqlCount);
                           $stmtX->execute();
                           $contadorReg1=0;
                           $nameArchivo1="";
+                          $idArchivo1=0;
                           while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
-                            $contadorReg1=$row['nro_registros'];
                             $nameArchivo1=$row['archivo'];
+                            $idArchivo1=$row['id'];
                           }
 
                           $sqlCount="";
-                          $sqlCount="SELECT count(*)as nro_registros, archivo FROM sis_archivos where anio='$anio' and mes='$i' and nro_archivo=2"; 
+                          $sqlCount="SELECT archivo, id FROM sis_archivos where anio='$anio' and mes='$i' and nro_archivo=2"; 
                           //echo $sqlCount;
                           $stmtX = $dbh->prepare($sqlCount);
                           $stmtX->execute();
                           $contadorReg2=0;
                           $nameArchivo2="";
+                          $idArchivo2=0;
                           while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
-                            $contadorReg2=$row['nro_registros'];
                             $nameArchivo2=$row['archivo'];
+                            $idArchivo2=$row['id'];
                           }
 ?>
                         <tr>
@@ -99,32 +106,57 @@ $dbh = new Conexion();
 	                            </a>
     	                	</td> 
     	                	<td class="td-actions text-center">
-                          <a href='filesSIS/<?=$nameArchivo1;?>' rel="tooltip" class="" target="_blank">
-                                <?php
-                                if($contadorReg1>0){
-                                ?>
+                          <div id="divArchivo1<?=$i;?>">
+                            <?php
+                            if($nameArchivo1!=0){
+                            ?>
+                            <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$nameArchivo1;?>' rel="tooltip" class="" target="_blank">
                             		<i class="material-icons">attachment</i>
-                                <?php
-                                }
-                                ?>
-	                            </a>
+                            </a>
+
+                            <button class="<?=$buttonCancel;?> btn-round" onclick="alerts.showSwal('warning-message-and-confirmation','javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$nameArchivo1?>\',\'divArchivo1<?=$i;?>\',12,\'<?=$idArchivo1;?>\');')">
+                                <i class="material-icons">delete_forever</i>
+                            </button>
+                            <?php
+                            }
+                            ?>
+                          </div>
     	                	</td>
     	                	<td class="td-actions text-center">
-    	                		<a href='filesSIS/<?=$nameArchivo2;?>' rel="tooltip" class="" target="_blank">
-                              <?php
-                                if($contadorReg2>0){
-                                ?>
-                                  <i class="material-icons">attachment</i>
-                                <?php
-                                }
-                              ?>	                            
+    	                		<div id="divArchivo2<?=$i;?>">
+                          <?php
+                          if($nameArchivo2!=0){
+                          ?>
+                            <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$nameArchivo2;?>' rel="tooltip" class="" target="_blank">
+                              <i class="material-icons">attachment</i>
                             </a>
+
+                            <button class="<?=$buttonCancel;?> btn-round" onclick="alerts.showSwal('warning-message-and-confirmation',''javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$nameArchivo2?>\',\'divArchivo2<?=$i;?>\',12,\'<?=$idArchivo2;?>\');')">
+                                <i class="material-icons">delete_forever</i>
+                            </button>
+
+                          <?php
+                          }
+                          ?>
+                          </div>
     	                	</td>    	                	
                         <td class="td-actions text-center">
                           <?php
                           if($globalAdmin==1){
                           ?>
-                          <a href="#" class="<?=$buttonMorado;?> btn-round" data-toggle="modal" data-target="#myModal" title="Cargar" onClick="ajaxArchivosSIS(<?=$anio?>,<?=$i?>);">
+                          <a href="#" class="<?=$buttonMorado;?> btn-round" data-toggle="modal" data-target="#myModal" title="Cargar" onClick="ajaxArchivosSIS(<?=$anio?>,<?=$i?>,<?=$idArchivo1?>,'divArchivo1<?=$i;?>');">
+                                <i class="material-icons">cloud_upload</i>
+                          </a>
+                          <?php
+                          }
+                          ?>
+                        </td>
+
+                        <td class="td-actions text-center">
+                          <?php
+                          if($globalAdmin==1){
+                          ?>
+                          <a href="#" class="<?=$buttonMorado;?> btn-round" data-toggle="modal" data-target="#myModal" title="Cargar" onClick="ajaxArchivosSIS(<?=$anio?>,<?=$i?>,<?=$idArchivo2?>,'divArchivo2<?=$i;?>');">
                                 <i class="material-icons">cloud_upload</i>
                           </a>
                           <?php
@@ -150,7 +182,7 @@ $dbh = new Conexion();
 
 
 <!-- Classic Modal -->
-<form id="form1" enctype="multipart/form-data" class="form-horizontal" action="solicitudFondosSIS/saveFiles.php" method="post">
+<form id="formuploadajaxsis" enctype="multipart/form-data" class="form-horizontal" method="post">
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -164,7 +196,7 @@ $dbh = new Conexion();
 
       </div>
       <div class="modal-footer">
-        <button type="submit" class="<?=$buttonMorado;?>" >Subir</button>
+        <button type="submit" class="<?=$buttonMorado;?>" value="Subir Archivo">Subir</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
       </div>
     </div>

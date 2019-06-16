@@ -7,24 +7,21 @@
 
 	session_start();
 	
-	$anio=$_GET["anio"];
-	$mes=$_GET["mes"];
-	$idSIS=$_GET["idSIS"];
+	$nombre=$_GET["nombre"];
+	$id=$_GET["id"];
 	$divContenedor=$_GET["divContenedor"];
 
 	$globalUsuario=$_SESSION["globalUser"];
 	$urlServer=$_SESSION["globalServerArchivos"];
 
 ?>
-<input type="hidden" name="anio" value="<?=$anio;?>">
-<input type="hidden" name="mes" value="<?=$mes;?>">
-<input type="hidden" name="idSIS" id="idSIS" value="<?=$idSIS;?>">
+<input type="hidden" name="id" id="id" value="<?=$id;?>">
 <input type="hidden" name="divContenedor" id="divContenedor" value="<?=$divContenedor;?>">
 <input type="hidden" name="url_server" id="url_server" value="<?=$urlServer;?>">
 
 
-<input type="hidden" name="idD" id="idD" value="12">
-<input type="hidden" name="idR" id="idR" value="<?=$idSIS;?>">
+<input type="hidden" name="idD" id="idD" value="13">
+<input type="hidden" name="idR" id="idR" value="<?=$id;?>">
 <input type="hidden" name="idusr" id="idusr" value="<?=$globalUsuario;?>">
 <input type="hidden" name="Tipodoc" id="Tipodoc" value="176">
 <input type="hidden" name="descripcion" id="descripcion" value="archivosis">
@@ -37,8 +34,7 @@
   <div class="card">
     <div class="card-header card-header-text <?=$colorCardDetail?>">
       <div class="card-text">
-        <h6 class="card-category">Año: <?=$anio;?></h6>
-        <h6 class="card-category">Mes: <?=$mes;?></h6>
+      	<h4><?=$nombre;?></h4>
       </div>
 	  	
       	<div class="row">

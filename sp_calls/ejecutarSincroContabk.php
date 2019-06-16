@@ -28,15 +28,11 @@ $dbh = new Conexion();
 
 echo "<h6>Hora Inicio Proceso: " . date("Y-m-d H:i:s")."</h6>";
 
-//conexion modificado IBNORCA- INGE
-  $dsn = "conta"; 
-  //debe ser de sistema no de usuario
-  $usuario = "consultadb";
-  $clave="consultaibno1$";
-  //realizamos la conexion mediante odbc
-  $conexión=odbc_connect($dsn, $usuario, $clave);
-//end modificado
-
+$server="192.168.10.19";
+$database="ibnorca2019";
+$user="consultadb";
+$password="consultaibno1$";
+$conexión = odbc_connect("Driver={SQL Server Native Client 10.0};Server=$server;Database=$database;", $user, $password);
 if (!$conexión) { 
   exit( "Error al conectar: " . $conexión);
 }else{
@@ -55,14 +51,8 @@ if (!$conexión) {
   while ($rowMaxCod = $stmtMaxCod->fetch(PDO::FETCH_ASSOC)) {
     $indiceMax=$rowMaxCod['maximo'];
   }
-  
-/* query MARCO original
-  $sql = "SELECT v.fondo, v.ano, v.mes, CONVERT(char(10), v.fecha,126)as fecha, v.cta_n1, v.cta_n2, v.cta_n3, v.cta_n4, v.cuenta, v.partida, v.MontoBs, v.organismo, v.ML_Partida, v.glosa, v.GlosaDeta, v.clase, v.numero from ibnorca2019.dbo.vw_MayorContable v";
- */
-// query modificado IBNORCA - INGE (se agrego el nombre de base de datos a la tabla del from ibnorca2019.dbo.vw_MayorContable
- $sql = "SELECT v.fondo, v.ano, v.mes, CONVERT(char(10), v.fecha,126)as fecha, v.cta_n1, v.cta_n2, v.cta_n3, v.cta_n4, v.cuenta, v.partida, v.MontoBs, v.organismo, v.ML_Partida, v.glosa, v.GlosaDeta, v.clase, v.numero from ibnorca2019.dbo.vw_MayorContable v";
-// end modificado
 
+  $sql = "SELECT v.fondo, v.ano, v.mes, CONVERT(char(10), v.fecha,126)as fecha, v.cta_n1, v.cta_n2, v.cta_n3, v.cta_n4, v.cuenta, v.partida, v.MontoBs, v.organismo, v.ML_Partida, v.glosa, v.GlosaDeta, v.clase, v.numero from vw_MayorContable v";
   //echo $sql."<br>";
   $rs = odbc_exec( $conexión, $sql );
   if ( !$rs ) { 
@@ -89,16 +79,10 @@ if (!$conexión) {
     $mlPartida=odbc_result($rs,"ML_Partida");
     $glosa=odbc_result($rs,"glosa");
     $glosa=clean_string($glosa);
-    
-    $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
-    $reemplazar=array("", "", "", "");
-    $glosa=str_ireplace($buscar,$reemplazar,$glosa);
-    
     $glosa=addslashes($glosa);
     
     $glosaDetalle=odbc_result($rs,"GlosaDeta");
     $glosaDetalle=clean_string($glosaDetalle);
-    $glosaDetalle=str_ireplace($buscar,$reemplazar,$glosaDetalle);
     $glosaDetalle=addslashes($glosaDetalle);
 
     $clase=odbc_result($rs,"clase");

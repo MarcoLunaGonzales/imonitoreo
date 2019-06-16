@@ -81,11 +81,11 @@ function ajaxIndicadores(objetivo)
     });
 }
 
-function ajaxArchivosSIS(anio, mes){
+function ajaxArchivosSIS(anio, mes, id, divContenedor){
   var contenedor;
   contenedor = document.getElementById('modal-body');
   ajax=nuevoAjax();
-  ajax.open('GET', 'solicitudFondosSIS/ajaxArchivos.php?anio='+anio+'&mes='+mes,true);
+  ajax.open('GET', 'solicitudFondosSIS/ajaxArchivos.php?anio='+anio+'&mes='+mes+'&idSIS='+id+'&divContenedor='+divContenedor,true);
   ajax.onreadystatechange=function() {
     if (ajax.readyState==4) {
       contenedor.innerHTML = ajax.responseText
@@ -93,6 +93,21 @@ function ajaxArchivosSIS(anio, mes){
   }
   ajax.send(null)
 }
+
+
+function ajaxArchivosEj(nombreAct, id, divContenedor){
+  var contenedor;
+  contenedor = document.getElementById('modal-body');
+  ajax=nuevoAjax();
+  ajax.open('GET', 'poa/ajaxArchivos.php?nombre='+nombreAct+'&id='+id+'&divContenedor='+divContenedor,true);
+  ajax.onreadystatechange=function() {
+    if (ajax.readyState==4) {
+      contenedor.innerHTML = ajax.responseText
+    }
+  }
+  ajax.send(null)
+}
+
 
 function ajaxCargosPOAI(codigoIndicador){
   var contenedor;
@@ -553,4 +568,45 @@ function calcularTotalEj(){
     }
   }  
   document.getElementById("totalEj").value=suma;  
+}
+
+//CON ESTE PROCESO ENVIAMSO LOS ARCHIVOS AJAX A LA LIBRERIA DEL ING. WILLY
+    $(function(){
+        $("#formuploadajaxsis").on("submit", function(e){
+            e.preventDefault();
+            var f = $(this);
+            var divContenedor=document.getElementById('divContenedor').value;
+            console.log("DIV A AFECTAR: "+divContenedor);
+            var formData = new FormData(document.getElementById("formuploadajaxsis"));
+            $.ajax({
+                url: "http://192.168.10.112/itranet/documentos/guardar_archivo.php",
+                type: "post",
+                dataType: "html",
+                data: formData,
+                cache: false,
+                contentType: false,
+       processData: false
+            })
+                .done(function(res){
+                    //$("#mensaje").html("Respuesta: " + res);
+                    document.getElementById(divContenedor).innerHTML="<i class='material-icons' style='color:green'>attachment</i>";
+                    $('#myModal').modal('hide');
+                    //location.reload();
+                });
+        });
+    });
+
+
+//FUNCION QUE LLAMA A BORRAR ARCHIVOS DEL ING. WILLY
+function ajaxDeleteArchivo(urlServer, idArchivo, divContenedor, idDir, id){
+  var contenedor;
+  contenedor = document.getElementById(divContenedor);
+  ajax=nuevoAjax();
+  ajax.open('GET', urlServer+'eliminar.php?idD='+idDir+'&idR='+idArchivo+'&r=http://www.google.com&idRe='+id,true);
+  ajax.onreadystatechange=function() {
+    if (ajax.readyState==4) {
+      contenedor.innerHTML = ""
+    }
+  }
+  ajax.send(null)
 }

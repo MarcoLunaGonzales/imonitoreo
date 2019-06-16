@@ -108,10 +108,10 @@ if(isset($_GET['resumen'])){
                         <tr>
                           <td class="text-right small"><?=$codigoCuenta;?></td>
                           <td><p class="<?=$styleText;?>"><?=$nombreCuenta;?></p></td>
-                          <td class="text-right"><?=number_format($montoPresupuestoCuenta);?></td>
-                          <td class="text-right"><?=number_format($montoEjecucionCuenta);?></td>
-                          <td class="text-right"><?=number_format($porcentajeEjecucion);?>%</td>     
-                          <td class="text-right"><?=number_format($participacionEjecucion);?>%</td>
+                          <td class="text-right"><?=formatNumberDec($montoPresupuestoCuenta);?></td>
+                          <td class="text-right"><?=formatNumberDec($montoEjecucionCuenta);?></td>
+                          <td class="text-right"><?=formatNumberDec($porcentajeEjecucion);?>%</td>     
+                          <td class="text-right"><?=formatNumberDec($participacionEjecucion);?>%</td>
                         </tr>
                         <?php
                           }
@@ -124,9 +124,9 @@ if(isset($_GET['resumen'])){
                         <tr>
                           <td class="text-right small">-</td>
                           <td><p class="text-left font-weight-bold text-danger">TOTAL INGRESOS</p></td>
-                          <td class="text-right font-weight-bold"><?=number_format($totalPresupuestoIngresos);?></td>
-                          <td class="text-right font-weight-bold"><?=number_format($totalEjecutadoIngresos);?></td>
-                          <td class="text-right font-weight-bold"><?=number_format($totalPorcentaje);?>%</td>
+                          <td class="text-right font-weight-bold"><?=formatNumberDec($totalPresupuestoIngresos);?></td>
+                          <td class="text-right font-weight-bold"><?=formatNumberDec($totalEjecutadoIngresos);?></td>
+                          <td class="text-right font-weight-bold"><?=formatNumberDec($totalPorcentaje);?>%</td>
                           <td class="text-right font-weight-bold">100%</td>
                         </tr>
                         <!--DESDE ACA SON LOS EGRESOS-->
@@ -171,10 +171,10 @@ if(isset($_GET['resumen'])){
                         <tr>
                           <td class="text-right small"><?=$codigoCuenta;?></td>
                           <td><p class="<?=$styleText;?>"><?=$nombreCuenta;?></p></td>
-                          <td class="text-right"><?=number_format($montoPresupuestoCuenta);?></td>
-                          <td class="text-right"><?=number_format($montoEjecucionCuenta);?></td>     
-                          <td class="text-right"><?=number_format($porcentajeEjecucion);?>%</td>
-                          <td class="text-right"><?=number_format($participacionEjecucion);?>%</td>
+                          <td class="text-right"><?=formatNumberDec($montoPresupuestoCuenta);?></td>
+                          <td class="text-right"><?=formatNumberDec($montoEjecucionCuenta);?></td>     
+                          <td class="text-right"><?=formatNumberDec($porcentajeEjecucion);?>%</td>
+                          <td class="text-right"><?=formatNumberDec($participacionEjecucion);?>%</td>
 
                         </tr>
                         <?php
@@ -188,9 +188,9 @@ if(isset($_GET['resumen'])){
                         <tr>
                           <td class="text-right small">-</td>
                           <td><p class="text-left font-weight-bold text-danger">TOTAL EGRESOS</p></td>
-                          <td class="text-right font-weight-bold"><?=number_format($totalPresupuestoEgresos);?></td>
-                          <td class="text-right font-weight-bold"><?=number_format($totalEjecutadoEgresos);?></td>
-                          <td class="text-right font-weight-bold"><?=number_format($totalPorcentaje);?>%</td>
+                          <td class="text-right font-weight-bold"><?=formatNumberDec($totalPresupuestoEgresos);?></td>
+                          <td class="text-right font-weight-bold"><?=formatNumberDec($totalEjecutadoEgresos);?></td>
+                          <td class="text-right font-weight-bold"><?=formatNumberDec($totalPorcentaje);?>%</td>
                           <td class="text-right font-weight-bold">100%</td>
                         </tr>                        
                       </tbody>
@@ -286,8 +286,8 @@ if(isset($_GET['resumen'])){
                     <td class="text-right small"><?=$nombreOrganismoX;?></td>
                     <td class="text-right small"><?=$codigoCuenta;?></td>
                     <td><p class="<?=$styleText;?>"><?=$nombreCuenta;?></p></td>
-                    <td class="text-right font-weight-bold"><?=number_format($montoPresupuestoCuenta);?></td>
-                    <td class="text-right font-weight-bold"><?=number_format($montoEjecucionCuenta);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberDec($montoPresupuestoCuenta);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberDec($montoEjecucionCuenta);?></td>
                   </tr>
                   <?php
                     }
@@ -298,8 +298,8 @@ if(isset($_GET['resumen'])){
                     <td><p class="text-left font-weight-bold text-danger">TOTAL INGRESOS <?=$abrevFondoX;?> <?=$nombreOrganismoX;?></p></td>
                     <td class="text-right small">-</td>
                     <td class="text-right small">-</td>
-                    <td class="text-right font-weight-bold"><?=number_format($totalPresupuestoIngresos);?></td>
-                    <td class="text-right font-weight-bold"><?=number_format($totalEjecutadoIngresos);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberDec($totalPresupuestoIngresos);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberDec($totalEjecutadoIngresos);?></td>
                   </tr>
                   <!--DESDE ACA SON LOS EGRESOS-->
                   <?php
@@ -334,8 +334,8 @@ if(isset($_GET['resumen'])){
                     <td class="text-right small"><?=$nombreOrganismoX;?></td>
                     <td class="text-right small"><?=$codigoCuenta;?></td>
                     <td><p class="<?=$styleText;?>"><?=$nombreCuenta;?></p></td>
-                    <td class="text-right font-weight-bold"><?=number_format($montoPresupuestoCuenta);?></td>
-                    <td class="text-right font-weight-bold"><?=number_format($montoEjecucionCuenta);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberDec($montoPresupuestoCuenta);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberDec($montoEjecucionCuenta);?></td>
                   </tr>
                   <?php
                     }
@@ -346,8 +346,8 @@ if(isset($_GET['resumen'])){
                     <td><p class="text-left font-weight-bold text-danger">TOTAL EGRESOS <?=$abrevFondoX;?> <?=$nombreOrganismoX;?></p></td>
                     <td class="text-right small">-</td>
                     <td class="text-right small">-</td>
-                    <td class="text-right font-weight-bold"><?=number_format($totalPresupuestoEgresos);?></td>
-                    <td class="text-right font-weight-bold"><?=number_format($totalEjecutadoEgresos);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberDec($totalPresupuestoEgresos);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberDec($totalEjecutadoEgresos);?></td>
                   </tr>                        
           <?php
           }

@@ -49,44 +49,21 @@ foreach($_POST as $nombre_campo => $valor){
 
 		$ejeSistema=$_POST["ejsistema|".$codActividadX."|".$mesX];
 		$explicacionLogro=$_POST["explicacion|".$codActividadX."|".$mesX];
-		//$fileEjecucion=$_FILES["file|".$codActividadX."|".$mesX];
-		$fileEjecucion="file|".$codActividadX."|".$mesX;
-
-		//CARGAMOS EL ARCHIVO PARA CADA FILA
-		$fechahora=date("dmy.Hi");
-		$archivoName=$fechahora.$_FILES[$fileEjecucion]['name'];
-		if ($_FILES[$fileEjecucion]["error"] > 0){
-			echo "Error: " . $_FILES[$fileEjecucion]['error'] . "<br>";
-			$archivoName="";
-		}
-		else{
-				//echo "Nombre: " . $_FILES['archivo']['name'] . "<br>";
-				//echo "Tipo: " . $_FILES['archivo']['type'] . "<br>";
-				//echo "Tamaño: " . (($_FILES["archivo"]["size"])/1024)/1024 . " MB<br>";
-				//echo "Carpeta temporal: " . $_FILES['archivo']['tmp_name'];
-				move_uploaded_file($_FILES[$fileEjecucion]['tmp_name'], "../filesApp/".$archivoName);		
-		}
-		//FIN CARGAR ARCHIVO
 	    
-		//borramos la tabla
-		$stmtDel = $dbh->prepare("DELETE FROM $table WHERE cod_actividad='$codActividadX' and mes='$mesX'"); 
-		$flagSuccess=$stmtDel->execute();
-
 	    $sql="";
-    	$sql="INSERT INTO $table (cod_actividad, mes, value_numerico, descripcion, archivo, value_numericosistema) VALUES (:cod_actividad, :cod_mes, :valor, :descripcion, :archivo, :value_numericosistema)";	    	
+    	$sql="UPDATE $table SET value_numerico=:valor, descripcion=:descripcion, value_numericosistema=:value_numericosistema where cod_actividad=:cod_actividad and mes=:cod_mes";	    	
 
 	    $stmt = $dbh->prepare($sql);
 		$values = array( ':cod_actividad' => $codActividadX,
         ':cod_mes' => $mesX,
         ':valor' => $valor,
         ':descripcion' => $explicacionLogro,
-        ':archivo'=> $archivoName,
         ':value_numericosistema'=> $ejeSistema
     	);
 
     	$exQuery=str_replace(array_keys($values), array_values($values), $sql);
 		
-		echo $exQuery.";<br>";
+		//echo $exQuery.";<br>";
 		
 		$flagSuccess2=$stmt->execute($values);
 		if($flagSuccess2==false){

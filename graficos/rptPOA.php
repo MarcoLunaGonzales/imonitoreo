@@ -363,7 +363,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         }              
                       ?>
                       <tr>
-                        <td class="text-left"><?=$abrevArea;?></td>
+                        <td class="text-left"><a href="detalleActividadPOA.php?codIndicador=<?=$codIndicador;?>&unidad=<?=$codUnidadX;?>&area=<?=$codAreaX;?>&codActividad=0" target="_blank"><?=$abrevArea;?></a></td>
                         <td class="text-right"><?=formatNumberInt($planificadoMes);?></td>
                         <td class="text-right"><?=formatNumberInt($ejecutadoMes);?></td>
                         <td class="text-right"><?=formatNumberInt($porcentaje);?></td>

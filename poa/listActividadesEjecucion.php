@@ -10,6 +10,8 @@ $globalAreaEjecucion=$_SESSION["globalAreaEjecucion"];
 $globalUnidadEjecucion=$_SESSION["globalUnidadEjecucion"];
 $anioGlobal=$_SESSION["globalNombreGestion"]; 
 
+$globalServerArchivos=$_SESSION["globalServerArchivos"];
+
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
@@ -133,7 +135,6 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                           <th></th>
                           <th></th>
                           <th></th>
-                          <th></th>
                           <th colspan="2" class="font-weight-bold table-success small">Ejecutado</th>
                           <th></th>
                           <th></th>
@@ -143,7 +144,7 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                           <th>Area</th>
                           <th>Actividad</th>
                           <th>Producto Esperado</th>
-                          <th>Seg.</th>
+                          <!--th>Seg.</th-->
                           <th>Clasificador</th>
                           <th class="table-warning">Plan</th>
                           <th class="table-success">Sist.</th>
@@ -234,16 +235,16 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                             $cadenaNormas="(".$cadenaNP."-".$cadenaN.")";
                           }
 
-
-
+                          $actRetrasadas=obtieneActRetrasadas($codigo,$codAnioX,$codMesX,$codigoIndicador,$codUnidad,$codArea);
+                          
                       ?>
 
                         <tr>
                           <td class="text-center"><?=$index;?></td>
                           <td><?=$abrevArea."-".$abrevUnidad;?></td>
-                          <td class="text-left"><?=$nombre;?><?=$cadenaNormas;?></td>
+                          <td class="text-left"><?=$nombre;?><?=$cadenaNormas;?><?=$actRetrasadas?></td>
                           <td><?=$productoEsperado;?></td>
-                          <td><?=$tipoDato;?></td>
+                          <!--td><?=$tipoDato;?></td-->
                           <td><?=$nombreDatoClasificador;?></td>
                           <td class="text-center table-warning font-weight-bold">
                               <?=formatNumberDec($valueNumero);?>
@@ -263,8 +264,8 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                               }
                           ?>
                             <td><div class="card-icon">
-                                <a href="filesApp/<?=$archivoEj;?>" target="_blank">
-                                  <i class="material-icons"><?=$iconCheckFile;?></i>
+                                <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$archivoEj;?>' rel="tooltip" class="" target="_blank">
+                                    <i class="material-icons"><?=$iconCheckFile;?></i>
                                 </a>
                               </div>
                             </td>

@@ -22,11 +22,12 @@ $codigoIndicador=$_GET["codIndicador"];
 $codAreaX=$_GET["area"];
 $codUnidadX=$_GET["unidad"];
 
+$codActividad=$_GET["codActividad"];
+
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
 
 $dbh = new Conexion();
-
 
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
@@ -57,7 +58,11 @@ $moduleName="Detalle de Actividades";
 					<?php
 					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_tiporesultado,
 					a.cod_unidadorganizacional, a.cod_area
-					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_area='$codAreaX' and a.cod_unidadorganizacional='$codUnidadX' order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_area='$codAreaX' and a.cod_unidadorganizacional='$codUnidadX' ";
+					if($codActividad>0){
+						$sqlLista.=" and a.codigo in ($codActividad) ";
+					}
+					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();
@@ -149,12 +154,14 @@ $moduleName="Detalle de Actividades";
 										$valueNumero=$rowRec['value_numerico'];
 									}
 
-									$sqlRecuperaEj="SELECT value_numerico from actividades_poaejecucion where cod_actividad=$codigo and mes=$i";
+									$sqlRecuperaEj="SELECT value_numerico, descripcion from actividades_poaejecucion where cod_actividad=$codigo and mes=$i";
 		                    		$stmtRecupera = $dbh->prepare($sqlRecuperaEj);
 									$stmtRecupera->execute();
 									$valueEj=0;
+									$descEj="";
 									while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
 										$valueEj=$rowRec['value_numerico'];
+										$descEj=$rowRec['descripcion'];
 									}
 									$totalPlani+=$valueNumero;
 									$totalEje+=$valueEj;
@@ -163,7 +170,7 @@ $moduleName="Detalle de Actividades";
 		                    		<td class="text-right small">
 		                    			<?=($valueNumero>0)?formatNumberInt($valueNumero):"-";?>
 		                    		</td>
-		                    		<td class="text-right text-primary small">
+		                    		<td class="text-right text-primary small" title="<?=($descEj!='')?$descEj:'';?>" bgcolor="<?=($descEj!='')?'#f28972':'';?>">
 		                    			<?=($valueEj>0)?formatNumberInt($valueEj):"-";?>
 		                    		</td>
 	                    	<?php	
@@ -195,6 +202,8 @@ $moduleName="Detalle de Actividades";
 		  </form>
 	</div>
 </div>
+
+<h6>Nota: Las celdas coloreadas contienen observaciones de la ejecucion registrada del mes.</h6>
 
 <script type="text/javascript">
   totalesDetallePOA();

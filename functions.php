@@ -24,42 +24,18 @@ function nameMes($month){
 }
 
 function abrevMes($month){
-  if($month==1){
-    return ("Ene");
-  }
-  if($month==2){
-    return ("Feb");
-  }
-  if($month==3){
-    return ("Mar");
-  }
-  if($month==4){
-    return ("Abr");
-  }
-  if($month==5){
-    return ("May");
-  }
-  if($month==6){
-    return ("Jun");
-  } 
-  if($month==7){
-    return ("Jul");
-  }
-  if($month==8){
-    return ("Ago");
-  }
-  if($month==9){
-    return ("Sep");
-  }
-  if($month==10){
-    return ("Oct");
-  }         
-  if($month==11){
-    return ("Nov");
-  }         
-  if($month==12){
-    return ("Dic");
-  }             
+  if($month==1){    return ("Ene");   }
+  if($month==2){    return ("Feb");  }
+  if($month==3){    return ("Mar");  }
+  if($month==4){    return ("Abr");  }
+  if($month==5){    return ("May");  }
+  if($month==6){    return ("Jun");  } 
+  if($month==7){    return ("Jul");  }
+  if($month==8){    return ("Ago");  }
+  if($month==9){    return ("Sep");  }
+  if($month==10){    return ("Oct");  }         
+  if($month==11){    return ("Nov");  }         
+  if($month==12){    return ("Dic");  }             
 }
 
 function nameGestion($codigo){
@@ -834,5 +810,106 @@ function obtieneDatoClasificador($datoClasi,$nombreTabla){
   return($nombreClasi);
 }
 
+function obtieneActRetrasadas($codigoActividad,$anio,$mes,$codIndicador,$unidad,$area){
+  $dbh = new Conexion();
+  
+  $sql="SELECT ap.mes, ap.value_numerico as planificado, 
+  (select ae.value_numerico from actividades_poaejecucion ae where ae.mes=ap.mes and ap.cod_actividad=ae.cod_actividad) as ejecutado
+  from actividades_poaplanificacion ap where ap.cod_actividad=$codigoActividad and ap.mes<=$mes";
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $observacion="";
+  $totalPlani=0;
+  $totalEj=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $mes=$row['mes'];
+    $valorPlanificado=$row['planificado'];
+    $valorEjecutado=$row['ejecutado'];
+    $totalPlani+=$valorPlanificado;
+    $totalEj+=$valorEjecutado;
+  }
+  if($totalPlani>$totalEj){
+    $observacion="<a href='graficos/detalleActividadPOA.php?codIndicador=$codIndicador&unidad=$unidad&area=$area&codActividad=$codigoActividad' target='_blank'><i class='material-icons' style='color:orange' title='Actividades Pendientes'>error</i></a>";
+  }else{
+    $observacion="";
+    $sql="SELECT sum(ap.value_numerico) as planificado, (select sum(ae.value_numerico) from actividades_poaejecucion ae where ap.cod_actividad=ae.cod_actividad) as ejecutado from actividades_poaplanificacion ap where ap.cod_actividad=$codigoActividad";
+    //echo $sql;
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    $totalPlani=0;
+    $totalEj=0;
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $totalPlani=$row['planificado'];
+      $totalEj=$row['ejecutado'];
+    }
+    if($totalEj>=$totalPlani){
+      $observacion="<a href='graficos/detalleActividadPOA.php?codIndicador=$codIndicador&unidad=$unidad&area=$area&codActividad=$codigoActividad' target='_blank'><i class='material-icons' style='color:#37F95D' title='Completed'>check_circle</i></a>";
+    }
+  }
+  return($observacion);
+}
 
+function verificaRegistrosSIS($anio){
+  $dbh = new Conexion();
+  $bandera=0;
+  $sql="SELECT count(*)as contador from sis_archivos s where s.anio=$anio";
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidadRegistros=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidadRegistros=$row['contador'];
+  }
+  if($cantidadRegistros==0){
+    $bandera=1;
+    for($i=1;$i<=12;$i++){
+      $sqlCodigo=
+      $sqlInsert="INSERT into sis_archivos(anio, mes, nro_archivo, archivo) values ('$anio','$i',1,'0')";
+      $stmtInsert = $dbh->prepare($sqlInsert);
+      $stmtInsert->execute();
+
+      $sqlInsert="INSERT into sis_archivos(anio, mes, nro_archivo, archivo) values ('$anio','$i',2,'0')";
+      $stmtInsert = $dbh->prepare($sqlInsert);
+      $stmtInsert->execute();
+    }
+  }
+  return($bandera);  
+}
+
+function verificaRegistroEjecucion($codigoActividad,$anio,$mes){
+  $dbh = new Conexion();
+  $sql="SELECT IFNULL(SUM(a.id),0)as id from actividades_poaejecucion a where a.cod_actividad=$codigoActividad and a.mes=$mes";
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $idRegistro=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $idRegistro=$row['id'];
+  }
+  if($idRegistro==0){
+    $sqlInsert="INSERT INTO actividades_poaejecucion(cod_actividad, mes, value_numerico) values ('$codigoActividad','$mes',0)";
+    $stmtInsert=$dbh->prepare($sqlInsert);
+    $stmtInsert->execute();
+
+    $sql="SELECT a.id as id from actividades_poaejecucion a where a.cod_actividad=$codigoActividad and a.mes=$mes";
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    $idRegistro=0;
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $idRegistro=$row['id'];
+    }
+  }
+  return($idRegistro);
+}
+
+
+function verificaArchivoEjecucion($idRegistroEjecucion){
+  $dbh = new Conexion();
+  $sql="SELECT IFNULL(SUM(a.archivo),0)as archivo from actividades_poaejecucion a where a.id=$idRegistroEjecucion";
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $archivo=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $archivo=$row['archivo'];
+  }
+  return($archivo);
+}
 ?>

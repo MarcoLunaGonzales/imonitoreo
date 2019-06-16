@@ -40,6 +40,7 @@ $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 
+$globalServerArchivos=$_SESSION["globalServerArchivos"];
 
 
 //SACAMOS LAS FECHAS DE REGISTRO DEL MES EN CURSO
@@ -149,6 +150,12 @@ $moduleName="Registro de Ejecucion POA";
 		                    $totalPlanificado=0;
 		                    $totalEjecutado=0;
 		                  	while ($row = $stmtLista->fetch(PDO::FETCH_BOUND)) {
+              					
+              					//REVISAMOS SI ESTA INSERTADO PARA INSERTAR LA EJECUCION
+              					$idRegistroEjecucion=verificaRegistroEjecucion($codigo,$codAnioX,$codMesX);
+
+              					$banderaArchivo=verificaArchivoEjecucion($idRegistroEjecucion);
+
                   				$abrevArea=abrevArea($codArea);
                           		$abrevUnidad=abrevUnidad($codUnidad);
 
@@ -175,7 +182,7 @@ $moduleName="Registro de Ejecucion POA";
 		                    <tr>
 		                      <td class="text-center"><?=$index;?><?=$codigoTablaClasificador;?></td>
 		                      <td class="text-center"><?=$abrevArea."-".$abrevUnidad;?></td>
-		                      <td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?></td>
+		                      <td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?><?=$idRegistroEjecucion;?></td>
 		                      <td class="text-left small"><?=$nombreDatoClasificador;?>)</td>
 		                    <?php
 	                    	for($i=$codMesX;$i<=$codMesX;$i++){
@@ -201,9 +208,10 @@ $moduleName="Registro de Ejecucion POA";
 	                            	$valorEj=$rowRec['value_numerico'];
 		                            $descripcionEj=$rowRec['descripcion'];
 	                          	}
+	                          	$valorEjSis=0;
 	                          	if($valorEj==0){
 									if($codigoTablaClasificador!=0){
-										$valorEj=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
+										$valorEjSis=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
 									}
 	                          	}
 	                          	$totalEjecutado+=$valorEj;
@@ -212,17 +220,36 @@ $moduleName="Registro de Ejecucion POA";
 	                    			<?=formatNumberDec($valueNumero);?>
 	                    		</td>
 	                    		<td class="text-center table-success font-weight-bold">
-	                    			<?=($valorEj==0)?"-":formatNumberDec($valorEj);?>
-	                    			<input type="hidden" name="ejsistema|<?=$codigo;?>|<?=$i;?>" value="<?=$valorEj;?>">
+	                    			<?=($valorEjSis==0)?"-":formatNumberDec($valorEjSis);?>
+	                    			<input type="hidden" name="ejsistema|<?=$codigo;?>|<?=$i;?>" value="<?=$valorEjSis;?>">
 	                    		</td>
 	                    		<td class="text-center table-success"> 
-	                    			<input class="form-control" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="ejecutado" value="<?=$valorEj;?>" onChange="calcularTotalEj();" OnKeyUp="calcularTotalEj();" step="0.01" required>
+	                    			<input class="form-control" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="ejecutado" value="<?=($valorEj=='')?'0':formatNumberDec($valorEj);?>" onChange="calcularTotalEj();" OnKeyUp="calcularTotalEj();" step="0.01" required>
 	                    		</td>
 	                    		<td class="text-center">
 	                    			<textarea class="form-control input-sm" type="text" name="explicacion|<?=$codigo;?>|<?=$i;?>" rows="1"><?=$descripcionEj;?></textarea>
 	                    		</td>
-	                    		<td class="text-center">
-	                    			<input class="form-control-file" type="file" name="file|<?=$codigo;?>|<?=$i;?>">
+	                    		<td class="td-actions text-center">
+	                    			<?php
+			                          if($banderaArchivo>0){
+	                          		?>
+			                            <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$nameArchivo2;?>' rel="tooltip" class="" target="_blank">
+			                              <i class="material-icons">attachment</i>
+			                            </a>
+			                            <a href="#" class="<?=$buttonCancel;?> btn-round" data-toggle="modal" data-target="#myModal" title="Borrar" onClick="ajaxDeleteArchivo(<?=$globalServerArchivos;?>,<?=$idArchivo2?>,'divArchivo2<?=$i;?>');">
+			                                <i class="material-icons">delete_forever</i>
+			                            </a>
+		                          	<?php
+		                          	}else{
+		                          	?>
+	                    			<div id="divArchivo<?=$i;?>">
+		                    			<a href="#" class="<?=$buttonMorado;?> btn-round" data-toggle="modal" data-target="#myModal" onClick="ajaxArchivosEj('<?=$nombre;?>',<?=$idRegistroEjecucion?>,'divArchivo<?=$i;?>');">
+    	    		                    	<i class="material-icons">cloud_upload</i>
+			                          	</a>
+		                          	</div>
+		                          	<?php
+		                          	}
+		                          	?>
 	                    		</td>
 	                    	<?php
 	                    	}
@@ -257,64 +284,28 @@ $moduleName="Registro de Ejecucion POA";
 	</div>
 </div>
 
+
+
 <!-- Classic Modal -->
+<form id="formuploadajaxsis" enctype="multipart/form-data" class="form-horizontal" method="post">
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Filtrar Area/Unidad</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Adjuntar Archivo</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body" style="text-align:center;">
-      <select class="selectpicker" name="unidadModal" id="unidadModal" data-style="<?=$comboColor;?>" required>
-        <option disabled selected value="">Unidad</option>
-        <?php
-        $sqlAreas="SELECT i.cod_indicador, u.codigo as codigoUnidad, u.nombre as nombreUnidad, u.abreviatura as abrevUnidad from indicadores_unidadesareas i, unidades_organizacionales u where i.cod_indicador='$codigoIndicador' and i.cod_unidadorganizacional=u.codigo";
-        if($globalAdmin==0){
-          $sqlAreas.=" and i.cod_unidadorganizacional in ($globalUnidad)";
-        }
-        $sqlAreas.=" GROUP BY u.codigo order by 3";
-        $stmt = $dbh->prepare($sqlAreas);
-      $stmt->execute();
-      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $codigoU=$row['codigoUnidad'];
-        $nombreU=$row['nombreUnidad'];
-        $abrevU=$row['abrevUnidad'];
-      ?>
-      <option value="<?=$codigoU;?>" data-subtext="<?=$nombreU;?>"><?=$abrevU;?></option>
-      <?php 
-      }
-        ?>
-      </select>
+      <div class="modal-body" id="modal-body" style="text-align:center;">
 
-      <select class="selectpicker" name="areaModal" id="areaModal" data-style="<?=$comboColor;?>" required>
-        <option disabled selected value="">Area</option>
-        <?php
-        $sqlAreas="SELECT i.cod_indicador, a.codigo as codigoArea, a.nombre as nombreArea, a.abreviatura as abrevArea from indicadores_unidadesareas i, areas a where i.cod_indicador='$codigoIndicador' and i.cod_area=a.codigo ";
-        if($globalAdmin==0){
-          $sqlAreas.=" and i.cod_area in ($globalArea) ";
-        }
-        $sqlAreas.=" GROUP BY a.codigo order by 3";
-        $stmt = $dbh->prepare($sqlAreas);
-      $stmt->execute();
-      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $codigoA=$row['codigoArea'];
-        $nombreA=$row['nombreArea'];
-        $abrevA=$row['abrevArea'];
-      ?>
-      <option value="<?=$codigoA;?>" data-subtext="<?=$nombreA?>"><?=$abrevA;?></option>
-      <?php 
-      }
-        ?>
-      </select> 
       </div>
       <div class="modal-footer">
-        <button type="button" class="<?=$button;?>" onclick="enviarFiltroAreaUnidadPOA3(<?=$codigoIndicador;?>,<?=$codigoIndicadorPON;?>);">Aceptar</button>
+        <button type="submit" class="<?=$buttonMorado;?>" value="Subir Archivo">Subir</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>
 </div>
+</form>
 <!--  End Modal -->

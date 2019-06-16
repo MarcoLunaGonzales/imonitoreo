@@ -90,6 +90,8 @@ while ($rowDetalle = $stmt->fetch(PDO::FETCH_BOUND)) {
 	$_SESSION['globalAreasReports']=$arrayAreasReports;
 	$_SESSION['globalOrganismosReports']=$arrayOrganismosReports;
 	$_SESSION['globalFondosReports']=$arrayFondosReports;
+	$_SESSION['globalServerArchivos']="http://192.168.10.112/itranet/documentos/";
+
 
 }
 header("location:index.php");
