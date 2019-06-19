@@ -109,6 +109,9 @@ $stmt->bindColumn('nivel', $nivelComponente);
                       <tbody>
                       <?php
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+                          $responsable=obtenerResponsableSIS($codigoComponente);
+
+
                           if($nivelComponente==1){
                             $styleText="text-left font-weight-bold text-danger";
                           }
@@ -124,7 +127,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                       ?>
                         <tr>
                           <td class="<?=$styleText;?>" ><?=$abreviaturaComponente;?></td>
-                          <td><p class="<?=$styleText;?>" ><?=$nombreComponente;?></p></td>
+                          <td><p class="<?=$styleText;?>" ><?=$nombreComponente;?><?=$responsable;?></p></td>
                           <td class="text-right font-weight-bold"><?=formatNumberInt($montoPresComponente,2);?></td>
                           <?php
                           $stmtSolicitudes->execute();

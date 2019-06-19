@@ -114,7 +114,7 @@ $banderaReg=verificaRegistrosSIS($anio);
                             		<i class="material-icons">attachment</i>
                             </a>
 
-                            <button class="<?=$buttonCancel;?> btn-round" onclick="alerts.showSwal('warning-message-and-confirmation','javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$nameArchivo1?>\',\'divArchivo1<?=$i;?>\',12,\'<?=$idArchivo1;?>\');')">
+                            <button class="<?=$buttonCancel;?> btn-round" onClick="alerts.showSwal('warning-message-and-confirmation','javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$nameArchivo1?>\',\'divArchivo1<?=$i;?>\',12,\'<?=$idArchivo1;?>\');')">
                                 <i class="material-icons">delete_forever</i>
                             </button>
                             <?php
@@ -131,7 +131,7 @@ $banderaReg=verificaRegistrosSIS($anio);
                               <i class="material-icons">attachment</i>
                             </a>
 
-                            <button class="<?=$buttonCancel;?> btn-round" onclick="alerts.showSwal('warning-message-and-confirmation',''javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$nameArchivo2?>\',\'divArchivo2<?=$i;?>\',12,\'<?=$idArchivo2;?>\');')">
+                            <button class="<?=$buttonCancel;?> btn-round" onclick="alerts.showSwal('warning-message-and-confirmation','javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$nameArchivo2?>\',\'divArchivo2<?=$i;?>\',12,\'<?=$idArchivo2;?>\');')">
                                 <i class="material-icons">delete_forever</i>
                             </button>
 

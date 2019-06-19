@@ -15,11 +15,13 @@ session_start();
 $mesTemporal=$_GET["mesX"];
 $anioTemporal=$_GET["anioX"];
 $codAreaTemporal=$_GET["codAreaX"];
+$codUnidadTemporal=$_GET["codUnidadX"];
 
-/*
-$mesTemporal=4;
+
+/*$mesTemporal=4;
 $anioTemporal=2019;
 $codAreaTemporal=13;
+$codUnidadTemporal=9;
 */
 
 require_once '../conexion.php';
@@ -52,30 +54,17 @@ require_once '../styles.php';
 	
 	$emparray[] = array();
 
-$cadenaUnidades=obtieneValorConfig(11);
 
-$tipoCursoCorto=obtieneValorConfig(12);
-$tipoCursoEspecialista=obtieneValorConfig(13);
+$sqlC="SELECT distinct(e.tipo)as tipo from ext_cursos e order by 1";
+$stmtC = $dbh->prepare($sqlC);
+$stmtC->execute();
+$stmtC->bindColumn('tipo', $tipoCurso);
+$totalCursos=0;
+while($rowC = $stmtC -> fetch(PDO::FETCH_BOUND)){
+  	$tipoCursoX=$tipoCurso;
+	$numeroCursos=cursosPorUnidad($codUnidadTemporal,$anioTemporal,$mesTemporal,0,$tipoCursoX);
 
-$tipoCursoRegular=obtieneValorConfig(18);
-$tipoCursoOnline=obtieneValorConfig(19);
-
-
-$sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
-$stmtU = $dbh->prepare($sqlU);
-$stmtU->execute();
-$stmtU->bindColumn('codigo', $codigoX);
-$stmtU->bindColumn('abreviatura', $abrevX);
-
-while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-
-	$numeroCursos1=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,$tipoCursoCorto);
-	$numeroCursos2=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,$tipoCursoEspecialista);
-	$numeroCursos3=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,$tipoCursoRegular);
-	$numeroCursos4=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,$tipoCursoOnline);
-	
-	$emparray[]=array("unidad"=>$abrevX, "curso1"=>$numeroCursos1, "curso2"=>$numeroCursos2, "curso3"=>$numeroCursos3, "curso4"=>$numeroCursos4);
-
+	$emparray[]=array("tipocurso"=>$tipoCursoX, "curso1"=>$numeroCursos);
 }
 array_splice($emparray, 0,1);
 echo json_encode($emparray);

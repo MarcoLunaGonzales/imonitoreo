@@ -46,6 +46,7 @@
   <script src="../assets/alerts/functionsGeneral.js"></script>
   <script src="../assets/js/plugins/jquery.dataTables.min.js"></script>
   <script src="../assets/js/plugins/dataTables.fixedHeader.min.js"></script>
+
   <!--ESTE ES EL DOCUMENTO DEL BODYLOGIN -->
   <script>
     $(document).ready(function() {
@@ -56,7 +57,7 @@
 	
   </script>
 
-    <script type="text/javascript">
+  <script type="text/javascript">
     $(document).ready(function() {
         $('#tablePaginatorReport').DataTable({
             "paging":   false,

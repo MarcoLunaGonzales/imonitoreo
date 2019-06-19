@@ -52,6 +52,19 @@ $dbh = new Conexion();
           </div>
         </div>
 
+        <div class="row">
+          <label class="col-sm-2 col-form-label">Opciones</label>
+          <div class="col-sm-7">
+          <div class="form-group">
+            <select class="selectpicker" title="Seleccionar" name="tipo" id="tipo" data-style="<?=$comboColor;?>" required>
+              <option value="0">Borrar Todo y Cargar</option>
+              <option value="1">Anexar/Sobreescribir la(s) fila(s) del Archivo</option>
+            </select>
+          </div>
+          </div>
+        </div>
+
+
         </div>
         <div class="card-footer ml-auto mr-auto">
         <button type="submit" class="<?=$button;?>">Guardar</button>

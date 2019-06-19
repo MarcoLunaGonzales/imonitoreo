@@ -100,7 +100,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $totalAlumnosAcum+=$numeroAlumnosAcum;
                   ?>
                   <tr>
-                    <td class="text-left"><?=$abrevX;?></td>
+                    <td class="text-left"><a href="rptSECxUnidad.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=$abrevX;?></a></td>
                     <td class="text-right"><?=formatNumberInt($numeroCursos);?></td>
                     <td class="text-right"><?=formatNumberInt($numeroAlumnos);?></td>
                     <td class="text-right"><?=formatNumberInt($numeroCursosAcum);?></td>
@@ -311,7 +311,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <th class="text-center font-weight-bold"><?=$tipoCursoX;?></th>
                     <?php
                     }
-
+                    ?>
+                    <th class="text-center font-weight-bold">Total</th>
+                    <?php
                     $stmtC->execute();
                     $stmtC->bindColumn('tipo', $tipoCurso);
                     while($rowC = $stmtC -> fetch(PDO::FETCH_BOUND)){
@@ -344,25 +346,33 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtC = $dbh->prepare($sqlC);
                     $stmtC->execute();
                     $stmtC->bindColumn('tipo', $tipoCurso);
+                    $totalCursos=0;
                     while($rowC = $stmtC -> fetch(PDO::FETCH_BOUND)){
                       $tipoCursoX=$tipoCurso;
-                      $numeroCursos=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,$tipoCursoX);                    
+                      $numeroCursos=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,$tipoCursoX);
+                      $totalCursos+=$numeroCursos;                
                   ?>
                     <td class="text-right"><?=formatNumberInt($numeroCursos);?></td>
                   <?php
                     }
+                  ?>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalCursos);?></td>
+                  <?php
                     $sqlC="SELECT distinct(e.tipo)as tipo from ext_cursos e order by 1";
                     $stmtC = $dbh->prepare($sqlC);
                     $stmtC->execute();
                     $stmtC->bindColumn('tipo', $tipoCurso);
+                    $totalCursoAcum=0;
                     while($rowC = $stmtC -> fetch(PDO::FETCH_BOUND)){
                       $tipoCursoX=$tipoCurso;
-                      $numeroCursos=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,1,$tipoCursoX);                    
+                      $numeroCursos=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,1,$tipoCursoX);
+                      $totalCursoAcum+=$numeroCursos;      
                   ?>
                     <td class="text-right"><?=formatNumberInt($numeroCursos);?></td>                  
                   <?php
                     }
                   ?>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalCursoAcum);?></td>
                   </tr>
                   <?php
                   }

@@ -16,7 +16,7 @@ $gestion=$_POST["gestion"];
 
 $anio=nameGestion($gestion);
 
-$sql="SELECT distinct(c.partida), c.nombre from sis_presupuesto p, componentessis c
+$sql="SELECT distinct(c.partida), c.nombre, c.abreviatura from sis_presupuesto p, componentessis c
 where p.cod_cuenta=c.partida and p.cod_ano='$anio' and p.monto>0";
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
@@ -24,6 +24,7 @@ $stmt->execute();
 // bindColumn
 $stmt->bindColumn('partida', $codCuenta);
 $stmt->bindColumn('nombre', $nombreCuenta);
+$stmt->bindColumn('abreviatura', $abreviatura);
 
 $totalEne=0;
 $totalFeb=0;
@@ -54,9 +55,10 @@ $totalDic=0;
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-condensed" id="tablePaginatorReport">
                       <thead>
                         <tr>
+                          <th class="text-center font-weight-bold small">Codigo</th>
                           <th class="text-center font-weight-bold small">Partida</th>
                           <th class="text-center font-weight-bold small">Actividad</th>
                           <th class="text-center font-weight-bold">Ene</th>
@@ -81,6 +83,7 @@ $totalDic=0;
                           $totalCuenta=0;
                       ?>
                         <tr>
+                          <td class="text-center small"><?=$abreviatura;?></td>
                           <td class="text-center small"><?=$codCuenta;?></td>
                           <td class="text-left small"><?=$nombreCuenta;?></td>
                       <?php
@@ -116,6 +119,8 @@ $totalDic=0;
             <?php
             						}
             ?>
+                      </tbody>
+                      <tfoot>
                         <tr>
                           <td></td>
                           <td class="font-weight-bold">TOTAL</td>
@@ -133,9 +138,7 @@ $totalDic=0;
                           <td class="text-right font-weight-bold"><?=formatNumberDec($totalDic);?></td>
                           <td class="text-right font-weight-bold"><?=formatNumberDec($totalIngresos);?></td>
                          </tr>
-
-
-                      </tbody>
+                      </tfoot>
                     </table>
                   </div>
                 </div>

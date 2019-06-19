@@ -15,16 +15,25 @@ $gestion=$_GET["gestion"];
 $nameGestion=nameGestion($gestion);
 
 $mes=$_GET["mes"];
-
 $unidadOrganizacional=$_GET["unidad_organizacional"];
+$area=$_GET["area"];
+$nameArea=nameArea($area);
 
 $mesString=implode(",", $mes);
 $unidadOrgString=implode(",", $unidadOrganizacional);
 
 $unidadOrgString=buscarHijosUO($unidadOrgString);
 
-$sql="SELECT u.abreviatura, 
-(select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, e.cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, sd.nombre as nombreservicio from ext_servicios e, servicios_oi_detalle sd, unidades_organizacionales u where u.codigo=e.id_oficina and  e.idclaservicio=sd.codigo and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_registro)=$nameGestion and MONTH(e.fecha_registro) in ($mesString)";
+$sql="";
+if($area==11){
+  $sql="SELECT u.abreviatura, 
+  (select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, e.cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, sd.nombre as nombreservicio, e.monto_facturado from ext_servicios e, servicios_oi_detalle sd, unidades_organizacionales u where u.codigo=e.id_oficina and  e.idclaservicio=sd.codigo and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura) in ($mesString)";
+}else{
+  $sql="SELECT u.abreviatura, (select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, 
+  e.cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, e.monto_facturado 
+  from ext_servicios e, unidades_organizacionales u where u.codigo=e.id_oficina 
+  and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura) in ($mesString) and e.id_area=$area";
+}
 
 //sd.cod_servicio=$codigoClasificador and
 //echo $sql;
@@ -40,7 +49,10 @@ $stmt->bindColumn('cantidad', $cantidad);
 $stmt->bindColumn('fecha_registro', $fechaRegistro);
 $stmt->bindColumn('fecha_factura', $fechaFactura);
 $stmt->bindColumn('estado_servicio', $estadoServicio);
-$stmt->bindColumn('nombreservicio', $nombreServicio);
+if($area==11){
+$stmt->bindColumn('nombreservicio', $nombreServicio);  
+}
+$stmt->bindColumn('monto_facturado', $montoFactura);
 
 ?>
 
@@ -54,12 +66,13 @@ $stmt->bindColumn('nombreservicio', $nombreServicio);
                     <i class="material-icons">assignment</i>
                   </div>
                   <h4 class="card-title">Reporte de Servicios</h4>
-                  <h6 class="card-title">Gestion: <?=$nameGestion;?> Mes:<?=$mesString;?></h6>
+                  <h6 class="card-title">Area: <?=$nameArea;?> </h6>
+                  <h6 class="card-title"> Gestion: <?=$nameGestion;?> Mes:<?=$mesString;?></h6>
 
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-condensed">
+                    <table class="table table-condensed" id="tablePaginatorReport">
                       <thead>
                         <tr>
                           <th class="text-center">-</th>
@@ -71,12 +84,18 @@ $stmt->bindColumn('nombreservicio', $nombreServicio);
                           <th class="font-weight-bold">FechaFactura</th>
                           <th class="font-weight-bold">Estado</th>
                           <th class="font-weight-bold">Nombre</th>
+                          <th class="font-weight-bold">Monto</th>
+                          <th class="font-weight-bold">MontoNeto</th>
                         </tr>
                       </thead>
                       <tbody>
                       <?php
                         $index=1;
+                        $totalCantidad=0;
+                        $totalMonto=0;
+                        $totalNeto=0;
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+                          $montoNeto=$montoFactura*0.87;
                       ?>
                         <tr>
                           <td class="text-center"><?=$index;?></td>
@@ -87,13 +106,27 @@ $stmt->bindColumn('nombreservicio', $nombreServicio);
                           <td><?=$fechaRegistro;?></td>
                           <td><?=$fechaFactura;?></td>
                           <td><?=$estadoServicio;?></td>
-                          <td class="text-left small"><?=$nombreServicio;?></td>
+                          <td class="text-left small"><?=($area==11)?$nombreServicio:$tipoServicio;?></td>
+                          <td class="text-right"><?=formatNumberDec($montoFactura);?></td>
+                          <td class="text-right"><?=formatNumberDec($montoNeto);?></td>
                         </tr>
                         <?php
+                          $totalCantidad+=$cantidad;
+                          $totalMonto+=$montoFactura;
+                          $totalNeto+=$montoNeto;
                           $index++;
                         }
                         ?>
                       </tbody>
+                      <tfoot>
+                        <tr>
+                          <th colspan="4"></th>
+                          <th><?=$totalCantidad;?></th>
+                          <th colspan="4"></th>
+                          <th><?=formatNumberDec($totalMonto);?></th>
+                          <th><?=formatNumberDec($totalNeto);?></th>
+                        </tr>
+                      </tfoot>
                     </table>
                   </div>
                 </div>

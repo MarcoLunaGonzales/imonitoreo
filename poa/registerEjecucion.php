@@ -66,7 +66,7 @@ $moduleName="Registro de Ejecucion POA";
 <div class="content">
 	<div class="container-fluid">
 
-		  <form id="form1" enctype="multipart/form-data" class="form-horizontal" action="poa/saveEjecucion.php" method="post">
+		  <form id="form1" class="form-horizontal" action="poa/saveEjecucion.php" method="post">
 			<input type="hidden" name="cod_indicador" id="cod_indicador" value="<?=$codigoIndicador;?>">
 			
 			<div class="card">
@@ -161,7 +161,7 @@ $moduleName="Registro de Ejecucion POA";
 
                           		$codigoTablaClasificador=obtieneCodigoClasificador($codigoIndicador,$codArea);
                           		$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
-	                         	$nombreDatoClasificador=obtieneDatoClasificador($datoclasificador,$nombreTablaClasificador);
+	                         	$nombreDatoClasificador=obtieneDatoClasificador($codigodetalleclasificador,$nombreTablaClasificador);
 
 	                          $cadenaNormas="";
 	                          $cadenaN="";
@@ -182,7 +182,7 @@ $moduleName="Registro de Ejecucion POA";
 		                    <tr>
 		                      <td class="text-center"><?=$index;?><?=$codigoTablaClasificador;?></td>
 		                      <td class="text-center"><?=$abrevArea."-".$abrevUnidad;?></td>
-		                      <td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?><?=$idRegistroEjecucion;?></td>
+		                      <td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?></td>
 		                      <td class="text-left small"><?=$nombreDatoClasificador;?>)</td>
 		                    <?php
 	                    	for($i=$codMesX;$i<=$codMesX;$i++){
@@ -230,26 +230,26 @@ $moduleName="Registro de Ejecucion POA";
 	                    			<textarea class="form-control input-sm" type="text" name="explicacion|<?=$codigo;?>|<?=$i;?>" rows="1"><?=$descripcionEj;?></textarea>
 	                    		</td>
 	                    		<td class="td-actions text-center">
+	                    			<div id="divArchivo<?=$i;?>">
 	                    			<?php
 			                          if($banderaArchivo>0){
 	                          		?>
-			                            <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$nameArchivo2;?>' rel="tooltip" class="" target="_blank">
+			                            <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$banderaArchivo;?>' rel="tooltip" class="" target="_blank">
 			                              <i class="material-icons">attachment</i>
 			                            </a>
-			                            <a href="#" class="<?=$buttonCancel;?> btn-round" data-toggle="modal" data-target="#myModal" title="Borrar" onClick="ajaxDeleteArchivo(<?=$globalServerArchivos;?>,<?=$idArchivo2?>,'divArchivo2<?=$i;?>');">
+			                            <a href="#" class="<?=$buttonCancel;?> btn-round" onClick="alerts.showSwal('warning-message-and-confirmation','javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$banderaArchivo?>\',\'divArchivo<?=$i;?>\',12,\'<?=$idRegistroEjecucion;?>\');')">
 			                                <i class="material-icons">delete_forever</i>
 			                            </a>
 		                          	<?php
 		                          	}else{
 		                          	?>
-	                    			<div id="divArchivo<?=$i;?>">
 		                    			<a href="#" class="<?=$buttonMorado;?> btn-round" data-toggle="modal" data-target="#myModal" onClick="ajaxArchivosEj('<?=$nombre;?>',<?=$idRegistroEjecucion?>,'divArchivo<?=$i;?>');">
     	    		                    	<i class="material-icons">cloud_upload</i>
 			                          	</a>
-		                          	</div>
 		                          	<?php
 		                          	}
 		                          	?>
+		                          </div>
 	                    		</td>
 	                    	<?php
 	                    	}
@@ -271,7 +271,7 @@ $moduleName="Registro de Ejecucion POA";
 		                  	</tr>
 		                  </tfooter>
 		                </table>
-		              </div>
+	              	</div>
 
 		        </div>
 	            

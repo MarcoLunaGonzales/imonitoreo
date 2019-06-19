@@ -9,6 +9,8 @@ require_once '../functions.php';
 $dbh = new Conexion();
 
 $gestion=$_POST["gestion"];
+$tipoCargado=$_POST["tipo"];
+
 $nombreGestion=nameGestion($gestion);
 
 $urlRedirect="../index.php?opcion=cargarPresupuestoSIS";
@@ -23,10 +25,12 @@ $globalAdmin=$_SESSION["globalAdmin"];
 
 $fechaHoraActual=date("Y-m-d H:i:s");
 
-//borramos la tabla
-$stmtDel = $dbh->prepare("DELETE FROM sis_presupuesto WHERE cod_ano=:cod_anio");
-$stmtDel->bindParam(':cod_anio', $nombreGestion);
-$flagSuccess=$stmtDel->execute();
+//borramos la tabla SI EL TIPO ES 0
+if($tipoCargado==0){
+	$stmtDel = $dbh->prepare("DELETE FROM sis_presupuesto WHERE cod_ano=:cod_anio");
+	$stmtDel->bindParam(':cod_anio', $nombreGestion);
+	$flagSuccess=$stmtDel->execute();	
+}
 
 $fechahora=date("dmy.Hi");
 $archivoName=$fechahora.$_FILES['file']['name'];
@@ -143,6 +147,14 @@ while(!feof($file)){
 		$idCuenta=$partidaX;
 
 		if($partidaX!="0"){
+			//BORRAMOS SI EL TIPO ES 1
+			if($tipoCargado==1){
+				$stmtDel = $dbh->prepare("DELETE FROM sis_presupuesto WHERE cod_ano=:cod_anio and cod_cuenta=:cod_cuenta");
+				$stmtDel->bindParam(':cod_anio', $nombreGestion);
+				$stmtDel->bindParam(':cod_cuenta', $idCuenta);
+				$flagSuccess=$stmtDel->execute();	
+			}
+
 			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,

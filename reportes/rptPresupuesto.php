@@ -51,13 +51,13 @@ $totalDic=0;
                   <div class="card-icon">
                     <i class="material-icons">assignment</i>
                   </div>
-                  <h4 class="card-title">Reporte Revision Presupuesto</h4>
+                  <h4 class="card-title">Reporte Revision Presupuesto Operativo</h4>
                   <h6 class="card-title">Gestion: <?=$anio;?> -- Oficina: <?=$nameFondo;?> -- Area: <?=$nameOrganismo;?></h6>
 
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-condensed">
                       <thead>
                         <tr>
                           <th class="text-center font-weight-bold">CodCuenta</th>
@@ -85,7 +85,7 @@ $totalDic=0;
                       ?>
                         <tr>
                           <td class="text-center"><?=$codCuenta;?></td>
-                          <td><?=$nombreCuenta;?></td>
+                          <td class="text-left"><?=$nombreCuenta;?></td>
                       <?php
                         for($i=1;$i<=12;$i++){
                           $sqlDatos="SELECT p.monto as monto from po_presupuesto p where p.cod_ano='$anio' and p.cod_fondo='$fondo' and p.cod_organismo='$organismo' and p.cod_cuenta='$codCuenta' and p.cod_mes='$i'";
@@ -166,7 +166,7 @@ $totalDic=0;
                           ?>
                         <tr>
                           <td class="text-center"><?=$codCuenta;?></td>
-                          <td><?=$nombreCuenta;?></td>
+                          <td class="text-left"><?=$nombreCuenta;?></td>
                       <?php
                         for($i=1;$i<=12;$i++){
                           $sqlDatos="SELECT p.monto as monto from po_presupuesto p where p.cod_ano='$anio' and p.cod_fondo='$fondo' and p.cod_organismo='$organismo' and p.cod_cuenta='$codCuenta' and p.cod_mes='$i'";

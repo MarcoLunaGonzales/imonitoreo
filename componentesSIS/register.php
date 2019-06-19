@@ -82,6 +82,29 @@ $moduleName="Actividad SIS";
 				</div>
 
 
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Responsable</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <select class="selectpicker" name="cod_personal" id="cod_personal" data-style="<?=$comboColor;?>">
+					  	<option disabled selected value=""></option>
+					  	<?php
+					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM personal2 p, personal_datosadicionales pd where p.codigo=pd.cod_personal and pd.cod_estado in (1) order by 2");
+						$stmt->execute();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+							$codigoX=$row['codigo'];
+							$nombreX=$row['nombre'];
+						?>
+						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<?php	
+						}
+					  	?>
+					  </select>
+					</div>
+				  </div>
+				</div>
+
+
 			  </div>
 		  </div>
 

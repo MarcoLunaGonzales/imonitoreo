@@ -513,7 +513,7 @@
 		}
 		if ($_GET['opcion']=='deleteComponenteSIS') {
 			$codigo=$_GET['codigo'];
-			require_once('componentesSIS/delete.php');
+			require_once('componentesSIS/saveDelete.php');
 		}
 
 		if ($_GET['opcion']=='listExternalCostsSIS') {

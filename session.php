@@ -90,8 +90,25 @@ while ($rowDetalle = $stmt->fetch(PDO::FETCH_BOUND)) {
 	$_SESSION['globalAreasReports']=$arrayAreasReports;
 	$_SESSION['globalOrganismosReports']=$arrayOrganismosReports;
 	$_SESSION['globalFondosReports']=$arrayFondosReports;
-	$_SESSION['globalServerArchivos']="http://192.168.10.112/itranet/documentos/";
+	$_SESSION['globalServerArchivos']="http://ibnored.ibnorca.org/itranet/documentos/";
 
+
+
+	$sIdentificador = "monitoreo";
+	$sKey="837b8d9aa8bb73d773f5ef3d160c9b17";
+	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, "operacion"=>"Menu", "IdUsuario"=>183);
+	$datos=json_encode($datos);
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL,"http://ibnored.ibnorca.org/wsibno19/verifica/ws-user-personal.php");
+	curl_setopt($ch, CURLOPT_POST, TRUE);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $datos);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	$remote_server_output = curl_exec ($ch);
+	curl_close ($ch);
+	//header('Content-type: application/json');   
+	//print_r($remote_server_output);       
+	$obj=json_decode($remote_server_output);
+	$_SESSION['globalMenuJson']=$obj;
 
 }
 header("location:index.php");

@@ -16,7 +16,7 @@ $moduleName="Actividades SIS";
 
 // Preparamos
 $stmt = $dbh->prepare("SELECT cp.codigo, cp.nombre, cp.abreviatura, cp.nivel, (select abreviatura 
-from componentessis cpc where cp.cod_padre=cpc.codigo)cod_padre, partida FROM $table cp where cp.cod_estado=1;
+from componentessis cpc where cp.cod_padre=cpc.codigo)cod_padre, partida, (select p.nombre from personal2 p where p.codigo=cp.cod_personal)as personal FROM $table cp where cp.cod_estado=1;
 ");
 // Ejecutamos
 $stmt->execute();
@@ -27,6 +27,7 @@ $stmt->bindColumn('abreviatura', $abreviatura);
 $stmt->bindColumn('nivel', $nivel);
 $stmt->bindColumn('cod_padre', $cod_padre);
 $stmt->bindColumn('partida', $partida);
+$stmt->bindColumn('personal', $personal);
 
 ?>
 
@@ -51,6 +52,7 @@ $stmt->bindColumn('partida', $partida);
                           <th>Partida</th>
                           <th data-orderable="false">Nivel</th>
                           <th data-orderable="false">Padre</th>
+                          <th data-orderable="false">Responsable</th>
                           <th class="text-right" data-orderable="false">Actions</th>
                         </tr>
                       </thead>
@@ -65,6 +67,7 @@ $stmt->bindColumn('partida', $partida);
                           <td><?=$partida;?></td>
                           <td><?=$nivel;?></td>
                           <td><?=$cod_padre;?></td>
+                          <td><?=$personal;?></td>
                           <td class="td-actions text-right">
                             <?php
                             if($globalAdmin==1){

@@ -5,6 +5,7 @@ $aleatorio=rand(200,2000);
 $codAreaX=$codAreaX;
 $anioX=$anioX;
 $mesX=$mesX;
+$codUnidadX=$codUnidadX;
 
 ?>
 <style type="text/css">
@@ -33,20 +34,14 @@ $mesX=$mesX;
         {
             {
                 console.log("variablesCursos: "+<?=$codAreaX?>+" "+<?=$mesX;?>);
-                $.get("dataCursosTipo.php",
-				{codAreaX:<?=$codAreaX;?>,anioX:<?=$anioX;?>,mesX:<?=$mesX?>},
+                $.get("dataCursosTipoUnidad.php",
+				{codUnidadX:<?=$codUnidadX;?>,codAreaX:<?=$codAreaX;?>,anioX:<?=$anioX;?>,mesX:<?=$mesX?>},
                 function (data){
-                    var unidad = [];
+                    var tipocurso = [];
                     var curso1 = [];
-                    var curso2 = [];                       
-                    var curso3 = [];
-                    var curso4 = [];                       
                     for (var i in data) {
-						unidad.push(data[i].unidad);
+						tipocurso.push(data[i].tipocurso);
                         curso1.push(data[i].curso1);
-                        curso2.push(data[i].curso2);   
-                        curso3.push(data[i].curso3);
-                        curso4.push(data[i].curso4);   
                     }
                     
                     var ArrayColor1=dynamicColors();
@@ -55,43 +50,16 @@ $mesX=$mesX;
                     var ArrayColor2=dynamicColors();
                     var bk2=ArrayColor2[0];
                     var borde2=ArrayColor2[1];
-                    var ArrayColor3=dynamicColors();
-                    var bk3=ArrayColor3[0];
-                    var borde3=ArrayColor3[1];
-                    var ArrayColor4=dynamicColors();
-                    var bk4=ArrayColor4[0];
-                    var borde4=ArrayColor4[1];
 
                     var chartdata = {
-                        labels: unidad,
+                        labels: tipocurso,
                         datasets: [
                             {
-                                label: 'CC',
+                                label: '# Cursos',
                                 backgroundColor: bk1,
                                 borderColor: borde1,
                                 borderWidth:2,
                                 data: curso1
-                            },
-                            {
-                                label: 'PF',
-                                backgroundColor: bk2,
-                                borderColor: borde2,
-                                borderWidth:2,
-                                data: curso2
-                            },
-                            {
-                                label: 'CR',
-                                backgroundColor: bk3,
-                                borderColor: borde3,
-                                borderWidth:2,
-                                data: curso3
-                            },
-                            {
-                                label: 'CO',
-                                backgroundColor: bk4,
-                                borderColor: borde4,
-                                borderWidth:2,
-                                data: curso4
                             }
                         ]
                     };

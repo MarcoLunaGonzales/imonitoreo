@@ -271,7 +271,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 }
     ?>            
                 <tr>
-                  <td class="font-weight-bold">RESULTADO</td>
+                  <td class="font-weight-bold">Resultado Mes</td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($resultadoPres);?></td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($resultadoEj);?></td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($porcentajeResultado);?></td>
@@ -330,7 +330,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 }
                 ?>            
                 <tr>
-                  <td class="font-weight-bold">RESULTADO</td>
+                  <td class="font-weight-bold">Resultado Acum.</td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($resultadoPresAcum);?></td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($resultadoEjAcum);?></td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($porcentajeResultado);?></td>
@@ -342,7 +342,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             <table width="100%">
               <tr>
                 <td class="text-center font-weight-bold table-success" colspan="2">
-                  Rentabilidad: <?=($montoEjIngConjunto>0)?formatNumberInt(($resultadoEj/$montoEjIngConjunto)*100):0;?> %
+                  Rentabilidad Mes: <?=($montoEjIngConjunto>0)?formatNumberInt(($resultadoEj/$montoEjIngConjunto)*100):0;?> %
                 </td>
                 <td class="text-center font-weight-bold table-success" colspan="2">
                   Rentabilidad Acum: <?=($montoEjIngAcumulado>0)?formatNumberInt(($resultadoEjAcum/$montoEjIngAcumulado)*100):0;?> %

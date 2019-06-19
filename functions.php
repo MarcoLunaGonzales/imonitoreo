@@ -912,4 +912,19 @@ function verificaArchivoEjecucion($idRegistroEjecucion){
   }
   return($archivo);
 }
+
+function obtenerResponsableSIS($codigoComponente){
+  $dbh = new Conexion();
+  $sql="SELECT p.nombre from personal2 p, componentessis c where c.cod_personal=p.codigo and c.codigo=$codigoComponente";
+  //echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $personal="";
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $personal="Responsable: (".$row['nombre'].")";
+  }
+  return($personal);  
+}
+
 ?>
+

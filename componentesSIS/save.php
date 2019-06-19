@@ -15,9 +15,10 @@ $partida=$_POST["partida"];
 $nivel=$_POST["nivel"];
 $padre=$_POST["padre"];
 $codEstado="1";
+$personal=$_POST["cod_personal"];
 
 // Prepare
-$stmt = $dbh->prepare("INSERT INTO $table (nombre, abreviatura, nivel, cod_padre, partida, cod_estado) VALUES (:nombre, :abreviatura, :nivel, :cod_padre, :partida, :cod_estado)");
+$stmt = $dbh->prepare("INSERT INTO $table (nombre, abreviatura, nivel, cod_padre, partida, cod_estado, cod_personal) VALUES (:nombre, :abreviatura, :nivel, :cod_padre, :partida, :cod_estado, :cod_personal)");
 // Bind
 $stmt->bindParam(':nombre', $nombre);
 $stmt->bindParam(':abreviatura', $abreviatura);
@@ -25,6 +26,7 @@ $stmt->bindParam(':nivel', $nivel);
 $stmt->bindParam(':partida', $partida);
 $stmt->bindParam(':cod_padre', $padre);
 $stmt->bindParam(':cod_estado', $codEstado);
+$stmt->bindParam(':cod_personal', $personal);
 
 $flagSuccess=$stmt->execute();
 showAlertSuccessError($flagSuccess,$urlRedirect);

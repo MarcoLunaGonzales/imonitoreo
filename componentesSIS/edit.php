@@ -10,7 +10,7 @@ $moduleName="Editar Actividad SIS";
 
 //RECIBIMOS LAS VARIABLES
 $codigo=$codigo;
-$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura, cod_padre, nivel, partida FROM $table where codigo=:codigo");
+$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura, cod_padre, nivel, partida, cod_personal FROM $table where codigo=:codigo");
 // Ejecutamos
 $stmt->bindParam(':codigo',$codigo);
 $stmt->execute();
@@ -22,6 +22,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 	$codPadreX=$row['cod_padre'];
 	$nivelX=$row['nivel'];
 	$partidaX=$row['partida'];
+	$codPersonalX=$row['cod_personal'];
 }
 
 ?>
@@ -91,6 +92,28 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 							$nombreX=$row['abreviatura'];
 						?>
 						<option value="<?=$codigoX;?>" <?=($codigoX==$codPadreX)?"selected":"";?> ><?=$nombreX;?></option>
+						<?php	
+						}
+					  	?>
+					  </select>
+					</div>
+				  </div>
+				</div>
+
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Responsable</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <select class="selectpicker" name="cod_personal" id="cod_personal" data-style="<?=$comboColor;?>">
+					  	<option disabled selected value=""></option>
+					  	<?php
+					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM personal2 p, personal_datosadicionales pd where p.codigo=pd.cod_personal and pd.cod_estado in (1) order by 2");
+						$stmt->execute();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+							$codigoX=$row['codigo'];
+							$nombreX=$row['nombre'];
+						?>
+						<option value="<?=$codigoX;?>" <?=($codigoX==$codPersonalX)?"selected":"";?> ><?=$nombreX;?></option>
 						<?php	
 						}
 					  	?>

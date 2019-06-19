@@ -495,19 +495,20 @@ function totalesRptSec(){
    var numFilas=main.rows.length;
    var numCols=main.rows[2].cells.length;
    
-   for(var j=2; j<=numCols-1; j++){
+   for(var j=1; j<=numCols-1; j++){
     var subtotal=0;
-      for(var i=1; i<=numFilas-2; i++){
+      for(var i=2; i<=numFilas-2; i++){
             var datoS=main.rows[i].cells[j].innerHTML;
             datoS=datoS.replace(/,/g,'');
             console.log(datoS);
             var dato=parseFloat(datoS);
             console.log(dato);
             subtotal=subtotal+dato;
-            var subtotalF=number_format(subtotal,2); 
+            var subtotalF=number_format(subtotal,0); 
             //console.log("si dato: "+dato);
       }
-      var fila=document.createElement('TH');
+      var fila=document.createElement('th');
+      console.log("totalfilas: "+numFilas+" j: "+j);
       main.rows[numFilas-1].appendChild(fila);
       main.rows[numFilas-1].cells[j].className='text-right'; 
       main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
@@ -579,7 +580,7 @@ function calcularTotalEj(){
             console.log("DIV A AFECTAR: "+divContenedor);
             var formData = new FormData(document.getElementById("formuploadajaxsis"));
             $.ajax({
-                url: "http://192.168.10.112/itranet/documentos/guardar_archivo.php",
+                url: "http://ibnored.ibnorca.org/itranet/documentos/guardar_archivo.php",
                 type: "post",
                 dataType: "html",
                 data: formData,
@@ -605,7 +606,7 @@ function ajaxDeleteArchivo(urlServer, idArchivo, divContenedor, idDir, id){
   ajax.open('GET', urlServer+'eliminar.php?idD='+idDir+'&idR='+idArchivo+'&r=http://www.google.com&idRe='+id,true);
   ajax.onreadystatechange=function() {
     if (ajax.readyState==4) {
-      contenedor.innerHTML = ""
+      contenedor.innerHTML = "ArchivoBorrado"
     }
   }
   ajax.send(null)

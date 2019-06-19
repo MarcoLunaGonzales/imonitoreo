@@ -27,7 +27,9 @@ alerts = {
       }).then((result) => {
           if (result.value) {
             location.href=url; 
+            return(true);
           } else if (result.dismiss === Swal.DismissReason.cancel) {
+            return(false);
           }
         })
     } 

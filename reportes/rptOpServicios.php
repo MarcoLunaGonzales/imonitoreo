@@ -58,7 +58,7 @@ $dbh = new Conexion();
 				  <label class="col-sm-2 col-form-label">Mes</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
-					  <select class="selectpicker form-control" title="Seleccione una opcion" name="mes[]" id="mes" data-style="select-with-transition" multiple required>
+					  <select class="selectpicker" title="Seleccione una opcion" name="mes[]" id="mes" data-style="select-with-transition" multiple required>
 					  	<option disabled selected value=""></option>
 					  	<?php
 					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM meses order by 1");
@@ -101,18 +101,18 @@ $dbh = new Conexion();
 				  </div>
 				</div>
 
-				<!--div class="row">
-				  <label class="col-sm-2 col-form-label">Tipo de Curso</label>
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Area</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
-					  <select class="selectpicker form-control" title="Seleccione una opcion" name="tipocursos[]" id="tipocursos" data-style="select-with-transition" multiple="" required>
+					  <select class="selectpicker" data-style="<?=$comboColor;?>" title="Seleccione una opcion" name="area" id="area" required>
 					  	<option disabled selected value=""></option>
 					  	<?php
-					  	$stmt = $dbh->prepare("SELECT distinct(e.tipo) as tipo from ext_cursos e ORDER BY 1");
+					  	$stmt = $dbh->prepare("SELECT codigo, abreviatura from areas a where a.codigo in (38,39,11) order by 2");
 						$stmt->execute();
 						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-							$codigoX="'".$row['tipo']."'";
-							$nombreX=$row['tipo'];
+							$codigoX=$row['codigo'];
+							$nombreX=$row['abreviatura'];
 						?>
 						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
 						<?php	
@@ -121,7 +121,8 @@ $dbh = new Conexion();
 					  </select>
 					</div>
 				  </div>
-				</div-->
+				</div>
+
 			  </div>
 			  <div class="card-footer ml-auto mr-auto">
 				<button type="submit" class="<?=$button;?>">Ver Reporte</button>

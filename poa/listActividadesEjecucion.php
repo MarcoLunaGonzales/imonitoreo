@@ -28,6 +28,9 @@ $codReporteServicios=obtieneValorConfig(15);
 //CODIGO DE INDICADOR PARA EL REPORTE DE SERVICIOS
 $codReporteServicios2=obtieneValorConfig(17);
 
+//CODIGO DE INDICADOR PARA EL REPORTE DE SERVICIOS
+$codReporteServicios3=obtieneValorConfig(20);
+
 
 $codigoIndicador=$codigo;
 $areaIndicador=$area;
@@ -165,7 +168,8 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
 
                           $codigoTablaClasificador=obtieneCodigoClasificador($codigoIndicador,$codArea);
                           $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
-                          $nombreDatoClasificador=obtieneDatoClasificador($datoClasificador,$nombreTablaClasificador);
+                          $nombreDatoClasificador=obtieneDatoClasificador($codigodetalleclasificador,$nombreTablaClasificador);
+
 
                           //SACAMOS LA PLANIFICACION
                           $sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
@@ -218,6 +222,9 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                           }
                           if($codReporteServicios2==$codigoIndicador){
                             $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador";
+                          }
+                          if($codReporteServicios3==$codigoIndicador){
+                            $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador";
                           } 
 
                           $cadenaNormas="";
@@ -250,7 +257,7 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                               <?=formatNumberDec($valueNumero);?>
                           </td>
                           <td class="text-center table-success font-weight-bold">
-                            <?=($codReporteCursos==$codigoIndicador || $codReporteServicios==$codigoIndicador || $codReporteServicios2==$codigoIndicador)?"<a href='$url' target='_blank'>".formatNumberDec($valueEjecutadoSistema)."</a>":formatNumberDec($valueEjecutadoSistema);?>
+                            <?=($codReporteCursos==$codigoIndicador || $codReporteServicios==$codigoIndicador || $codReporteServicios2==$codigoIndicador || $codReporteServicios3==$codigoIndicador )?"<a href='$url' target='_blank'>".formatNumberDec($valueEjecutadoSistema)."</a>":formatNumberDec($valueEjecutadoSistema);?>
                           </td>
                           <td class="text-center table-success font-weight-bold"">
                             <?=formatNumberDec($valueNumeroEj);?>

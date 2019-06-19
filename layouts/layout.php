@@ -1,7 +1,8 @@
 <?php 
 	include("head.php");
 	include("librerias.php");
-	include("menu.php");
+	//include("menuService.php");
+  include("menu.php");
 ?>    
     <div class="main-panel">
       <div class="content">
