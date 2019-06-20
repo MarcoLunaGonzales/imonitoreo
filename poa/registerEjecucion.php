@@ -177,12 +177,13 @@ $moduleName="Registro de Ejecucion POA";
 	                          if($normaPriorizada!="" || $norma!=""){
 	                            $cadenaNormas="(".$cadenaNP."-".$cadenaN.")";
 	                          }
+	                          $actRetrasadas=obtieneActRetrasadas($codigo,$codAnioX,$codMesX,$codigoIndicador,$codUnidad,$codArea);
 
 		                  ?>
 		                    <tr>
-		                      <td class="text-center"><?=$index;?><?=$codigoTablaClasificador;?></td>
+		                      <td class="text-center"><?=$index;?></td>
 		                      <td class="text-center"><?=$abrevArea."-".$abrevUnidad;?></td>
-		                      <td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?></td>
+		                      <td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?><?=$actRetrasadas;?></td>
 		                      <td class="text-left small"><?=$nombreDatoClasificador;?>)</td>
 		                    <?php
 	                    	for($i=$codMesX;$i<=$codMesX;$i++){
@@ -237,7 +238,7 @@ $moduleName="Registro de Ejecucion POA";
 			                            <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$banderaArchivo;?>' rel="tooltip" class="" target="_blank">
 			                              <i class="material-icons">attachment</i>
 			                            </a>
-			                            <a href="#" class="<?=$buttonCancel;?> btn-round" onClick="alerts.showSwal('warning-message-and-confirmation','javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$banderaArchivo?>\',\'divArchivo<?=$i;?>\',12,\'<?=$idRegistroEjecucion;?>\');')">
+			                            <a href="#" class="<?=$buttonCancel;?> btn-round" onClick="alerts.showSwal('warning-message-and-confirmation','javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$banderaArchivo?>\',\'divArchivo<?=$i;?>\',13,\'<?=$idRegistroEjecucion;?>\');')">
 			                                <i class="material-icons">delete_forever</i>
 			                            </a>
 		                          	<?php
@@ -277,7 +278,7 @@ $moduleName="Registro de Ejecucion POA";
 	            
 				  <div class="card-footer ml-auto mr-auto">
 					<button type="submit" class="<?=$button;?>">Guardar</button>
-					<a href="?opcion=listActividadesPOAEjecucion&codigo=<?=$codigoIndicador;?>&codigoPON=<?=$codigoIndicadorPON?>&area=<?=$globalAreaEjecucion?>&unidad=<?=$globalUnidadEjecucion?>" class="<?=$buttonCancel;?>">Cancelar</a>
+					<a href="?opcion=listActividadesPOAEjecucion&codigo=<?=$codigoIndicador;?>&codigoPON=<?=$codigoIndicadorPON?>&area=<?=$globalAreaEjecucion?>&unidad=<?=$globalUnidadEjecucion?>" class="<?=$buttonCancel;?>">Volver Atras</a>
 				  </div>
 			</div>
 		  </form>

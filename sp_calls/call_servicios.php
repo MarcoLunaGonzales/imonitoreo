@@ -33,12 +33,16 @@ while($resp = $query->fetch()){
 	$estadoServicio=$resp['estadoServicio'];
 	$Mt_Facturado=$resp['Mt_Facturado'];
 	$fechaEstadofactura=$resp['fechaEstadofactura'];
+	$nroServicio=$resp['Nro_Servicio'];
+	$idCotizacion=$resp['IdCotizacion'];
+	$estadoFactura=$resp['estadoFactura'];
+	$datosFactura=$resp['DatosFactura'];
 
-	$insert_str .= "('$indice','$idClaServicio','$d_tipo','$idOficina','$idArea','$cantidad','$total_cotizado','$idCliente','$idServicio','$fechaRegistro','$estadoServicio','$Mt_Facturado','$fechaEstadofactura'),";	
+	$insert_str .= "('$indice','$idClaServicio','$d_tipo','$idOficina','$idArea','$cantidad','$total_cotizado','$idCliente','$idServicio','$fechaRegistro','$estadoServicio','$Mt_Facturado','$fechaEstadofactura','$nroServicio','$idCotizacion','$estadoFactura','$datosFactura'),";	
 
 	if($indice%10==0){
 		$insert_str = substr_replace($insert_str, '', -1, 1);
-		$sqlInserta="INSERT INTO ext_servicios (codigo, idclaservicio, d_tipo, id_oficina, id_area, cantidad, total_cotizado, id_cliente, id_servicio, fecha_registro, estado_servicio, monto_facturado, fecha_factura) values ".$insert_str.";";
+		$sqlInserta="INSERT INTO ext_servicios (codigo, idclaservicio, d_tipo, id_oficina, id_area, cantidad, total_cotizado, id_cliente, id_servicio, fecha_registro, estado_servicio, monto_facturado, fecha_factura, nro_servicio, id_cotizacion, estado_factura, datos_factura) values ".$insert_str.";";
 		echo $sqlInserta;
 		$stmtInsert=$dbh->prepare($sqlInserta);
 		$flagSuccess=$stmtInsert->execute();
@@ -56,7 +60,7 @@ while($resp = $query->fetch()){
 }
 
 $insert_str = substr_replace($insert_str, '', -1, 1);
-$sqlInserta="INSERT INTO ext_servicios (codigo, idclaservicio, d_tipo, id_oficina, id_area, cantidad, total_cotizado, id_cliente, id_servicio, fecha_registro, estado_servicio, monto_facturado, fecha_factura) values ".$insert_str.";";
+$sqlInserta="INSERT INTO ext_servicios (codigo, idclaservicio, d_tipo, id_oficina, id_area, cantidad, total_cotizado, id_cliente, id_servicio, fecha_registro, estado_servicio, monto_facturado, fecha_factura, nro_servicio, id_cotizacion, estado_factura, datos_factura) values ".$insert_str.";";
 //echo $sqlInserta;
 $stmtInsert=$dbh->prepare($sqlInserta);
 $stmtInsert->execute();

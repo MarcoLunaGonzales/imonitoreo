@@ -161,6 +161,7 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                         $index=1;
                         $totalPlanificado=0;
                         $totalEjecutado=0;
+                        $totalEjecutadoSistema=0;
 
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
                           $abrevArea=abrevArea($codArea);
@@ -212,20 +213,21 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
 
                           $totalPlanificado+=$valueNumero;
                           $totalEjecutado+=$valueNumeroEj;
+                          $totalEjecutadoSistema+=$valueEjecutadoSistema;
 
                           $url="";
                           if($codReporteCursos==$codigoIndicador){
                             $url="reportes/rptCursosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoPrograma=$codigodetalleclasificador";
                           }
                           if($codReporteServicios==$codigoIndicador){
-                            $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador";
+                            $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador&area=$codArea";
                           }
                           if($codReporteServicios2==$codigoIndicador){
-                            $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador";
+                            $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador&area=$codArea";
                           }
                           if($codReporteServicios3==$codigoIndicador){
-                            $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador";
-                          } 
+                            $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador&area=$codArea";
+                          }
 
                           $cadenaNormas="";
                           $cadenaN="";
@@ -264,10 +266,10 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                           </td>
                           <td><?=$descripcionLogroEj?></td>
                           <?php
-                            if($archivoEj!=""){
-                                $iconCheckFile="attach_file";
-                              }else{
+                            if($archivoEj=="" || $archivoEj==0){
                                 $iconCheckFile="";
+                              }else{
+                                $iconCheckFile="attach_file";
                               }
                           ?>
                             <td><div class="card-icon">
@@ -284,9 +286,9 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                       </tbody>
                       <tfooter>
                         <tr>
-                          <th colspan="6">Totales</th>
+                          <th colspan="5">Totales</th>
                           <th class="text-right"><?=formatNumberDec($totalPlanificado);?></th>
-                          <th>-</th>
+                          <th class="text-right"><?=formatNumberDec($totalEjecutadoSistema);?></th>
                           <th class="text-right"><?=formatNumberDec($totalEjecutado);?></th>
                           <th></th>
                         </tr>
@@ -297,7 +299,7 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
               </div>
         				<div class="card-body">
                     <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAEjecucion&codigo=<?=$codigoIndicador?>&area=0&unidad=0'">Registrar Ejecucion</button>  
-                    <a href="?opcion=listPOAEjecucion&area=<?=$globalAreaEjecucion?>&unidad=<?=$globalUnidadEjecucion?>" class="<?=$buttonCancel;?>">Cancelar</a> 
+                    <a href="?opcion=listPOAEjecucion&area=<?=$globalAreaEjecucion?>&unidad=<?=$globalUnidadEjecucion?>" class="<?=$buttonCancel;?>">Volver Atras</a> 
                 </div>
             </div>
           </div>  

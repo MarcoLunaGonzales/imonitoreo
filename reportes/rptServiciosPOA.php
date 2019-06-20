@@ -16,14 +16,21 @@ $mes=$_GET["mes"];
 
 $unidadOrganizacional=$_GET["unidad_organizacional"];
 $codigoServicio=$_GET["codigoServicio"];
+$area=$_GET["area"];
 
 //$mesString=implode(",", $mes);
 //$unidadOrgString=implode(",", $unidadOrganizacional);
 
 $unidadOrgString=buscarHijosUO($unidadOrganizacional);
 
-$sql="SELECT u.abreviatura, 
-(select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, e.cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, sd.nombre as nombreservicio, e.monto_facturado from ext_servicios e, servicios_oi_detalle sd, unidades_organizacionales u where u.codigo=e.id_oficina and  e.idclaservicio=sd.codigo and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura) in ($mes) and sd.cod_servicio=$codigoServicio";
+$sql="";
+if($area==11){
+  $sql="SELECT u.abreviatura, 
+  (select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, e.cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, sd.nombre as nombreservicio, e.monto_facturado from ext_servicios e, servicios_oi_detalle sd, unidades_organizacionales u where u.codigo=e.id_oficina and  e.idclaservicio=sd.codigo and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura) in ($mes) and sd.cod_servicio=$codigoServicio";  
+}else{
+  $sql="SELECT u.abreviatura, 
+  (select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, e.cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, e.monto_facturado from ext_servicios e, unidades_organizacionales u where u.codigo=e.id_oficina and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura) in ($mes) and e.id_cliente=$codigoServicio";
+}
 
 // and
 //echo $sql;
@@ -39,7 +46,9 @@ $stmt->bindColumn('cantidad', $cantidad);
 $stmt->bindColumn('fecha_registro', $fechaRegistro);
 $stmt->bindColumn('fecha_factura', $fechaFactura);
 $stmt->bindColumn('estado_servicio', $estadoServicio);
-$stmt->bindColumn('nombreservicio', $nombreServicio);
+if($area==11){
+  $stmt->bindColumn('nombreservicio', $nombreServicio);  
+}
 $stmt->bindColumn('monto_facturado', $montoFacturado);
 
 ?>
@@ -93,7 +102,7 @@ $stmt->bindColumn('monto_facturado', $montoFacturado);
                           <td><?=$fechaRegistro;?></td>
                           <td><?=$fechaFactura;?></td>
                           <td><?=$estadoServicio;?></td>
-                          <td class="text-left small"><?=$nombreServicio;?></td>
+                          <td class="text-left small"><?=($area==11)?$nombreServicio:$tipoServicio;?></td>
                           <td><?=formatNumberDec($montoFacturado);?></td>
                           <td><?=formatNumberDec($montoNeto);?></td>
                         </tr>

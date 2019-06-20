@@ -666,22 +666,42 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
   }
   //ESTA LINEA ES PARA TCP
   if($clasificador==1 && $area==39){
-    $sql="SELECT count(*)as registros from ext_planauditorias e where e.id_cliente=$codigoClasificador and e.codigoservicio like '%TCP%' and YEAR(e.fecha_realizada)=$anio and MONTH(e.fecha_realizada)=$mes";
+    $codIndicadorContar=obtieneValorConfig(16);
+    $codIndicadorSumar=obtieneValorConfig(17);
+    if($codIndicadorContar==$indicador){
+      $sql="SELECT count(*)as registros from ext_planauditorias e where e.id_cliente=$codigoClasificador and e.codigoservicio like '%TCP%' and YEAR(e.fecha_realizada)=$anio and MONTH(e.fecha_realizada)=$mes";
+    }
+    if($codIndicadorSumar==$indicador){
+      $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e where e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area=$area and e.id_cliente=$codigoClasificador";      
+    }
     //echo $sql;
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $valueRegistros=$row['registros'];
+      if($codIndicadorSumar==$indicador){
+        $valueRegistros=$valueRegistros*0.87;
+      }      
     }
   }
   //ESTA LINEA ES PARA TCS
   if($clasificador==1 && $area==38){
-    $sql="SELECT count(*)as registros from ext_planauditorias e where e.id_cliente=$codigoClasificador and e.codigoservicio like '%TCS%' and YEAR(e.fecha_realizada)=$anio and MONTH(e.fecha_realizada)=$mes";
+    $codIndicadorContar=obtieneValorConfig(16);
+    $codIndicadorSumar=obtieneValorConfig(17);
+    if($codIndicadorContar==$indicador){
+      $sql="SELECT count(*)as registros from ext_planauditorias e where e.id_cliente=$codigoClasificador and e.codigoservicio like '%TCS%' and YEAR(e.fecha_realizada)=$anio and MONTH(e.fecha_realizada)=$mes";
+    }
+    if($codIndicadorSumar==$indicador){
+      $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e where e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area=$area and e.id_cliente=$codigoClasificador";      
+    }
     //echo $sql;
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $valueRegistros=$row['registros'];
+      if($codIndicadorSumar==$indicador){
+        $valueRegistros=$valueRegistros*0.87;
+      }      
     }
   }
 
@@ -694,13 +714,16 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
       $sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";      
     }
     if($codIndicadorSumar==$indicador){
-        $sql="SELECT sum(e.monto_facturado)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";
+        $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";
     }
     //echo $codIndicadorContar." ".$codIndicadorSumar." ".$indicador;
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $valueRegistros=$row['registros'];
+      if($codIndicadorSumar==$indicador){
+        $valueRegistros=$valueRegistros*0.87;
+      }
     }
   }
 
@@ -744,7 +767,10 @@ function obtieneTablaClasificador($indicador, $area){
     if($area==11){
       $codigoTabla=2;
     }
-    if($area==13 || $area==38 || $area==39){
+    if($area==13){
+      $codigoTabla=3;
+    }
+    if($area==38 || $area==39){
       $codigoTabla=1;
     }
     if($area==40){
@@ -778,8 +804,11 @@ function obtieneCodigoClasificador($indicador, $area){
     if($area==11){
       $codigoTabla=2;
     }
-    if($area==13 || $area==38 || $area==39){
+    if($area==38 || $area==39){
       $codigoTabla=1;
+    }
+    if($area==13){
+      $codigoTabla=3;
     }
     if($area==40){
       $codigoTabla=4;

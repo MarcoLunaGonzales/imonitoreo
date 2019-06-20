@@ -644,6 +644,13 @@ if($globalPerfilX==2){
                 </li> 
 
                 <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
+                    <span class="sidebar-mini"> IxA </span>
+                    <span class="sidebar-normal">Indicadores x Area</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=filtroSeguimientoPresOp">
                     <span class="sidebar-mini"> SPO </span>
                     <span class="sidebar-normal"> Seguimiento PO </span>
@@ -885,6 +892,13 @@ if($globalPerfilX==3){
                   <a class="nav-link" href="?opcion=seguimientoPOA">
                     <span class="sidebar-mini"> SPOA </span>
                     <span class="sidebar-normal">Seguimiento POA</span>
+                  </a>
+                </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
+                    <span class="sidebar-mini"> IxA </span>
+                    <span class="sidebar-normal">Indicadores x Area</span>
                   </a>
                 </li> 
 
