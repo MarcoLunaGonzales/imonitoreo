@@ -125,7 +125,7 @@ $nombreArea=nameArea($codArea);
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&perspectiva=2" target="_BLANK">
+                    <a href="../rpt_indicadores/rptTCP.php?gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>&codArea=<?=$codArea;?>" target="_BLANK">
                       <i class="material-icons">blur_on</i>
                     </a>
                   </div>
@@ -162,8 +162,35 @@ $nombreArea=nameArea($codArea);
                 </div>
               </div>
             </div>
+
+
+          <?php
+            $codArea="11";
+            $nombreArea=nameArea($codArea);
+            ?>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <div class="card card-stats">
+                <div class="card-header card-header-primary card-header-icon">
+                  <div class="card-icon">
+                    <a href="../rpt_indicadores/rptOI.php?gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>&codArea=<?=$codArea;?>" target="_BLANK">
+                      <i class="material-icons">blur_on</i>
+                    </a>
+                  </div>
+                  <p class="card-category">Area</p>
+                  <h3 class="card-title"><?=$nombreArea;?></h3>
+                </div>
+                <div class="card-footer">
+                  <div class="card-category">
+                    <i class="material-icons">blur_on</i>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
+
+
+          </div>
 
         </div>
       </div>

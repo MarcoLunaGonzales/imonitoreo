@@ -499,6 +499,144 @@ function alumnosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   return($cantidad);  
 }
 
+function serviciosPorUnidad($unidad, $anio, $mes, $acumulado, $tipoServicio, $vista){//vista 1 cantidad, 2 monto bs.
+  $dbh = new Conexion();
+  $sql="SELECT sum(e.monto_facturado)as monto, sum(e.cantidad)as cantidad from ext_servicios e, servicios_oi_detalle sd, servicios_oi so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anio and e.id_oficina in ($unidad) and so.codigo in ($tipoServicio)";
+  if($acumulado==0){
+    $sql.=" and MONTH(e.fecha_factura)=$mes ";
+  }
+  if($acumulado==1){
+    $sql.=" and MONTH(e.fecha_factura)<=$mes ";  
+  }
+ // echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidadServicios=0;
+  $montoServicios=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidadServicios=$row['cantidad'];
+      $montoServicios=$row['monto'];
+  }
+  $variableDevolver=0;
+  if($vista==1){
+    $variableDevolver=$cantidadServicios;
+  }else{
+    $variableDevolver=$montoServicios;
+  }
+  return($variableDevolver);  
+}
+
+function serviciosPorUnidadTCP($unidad, $area, $anio, $mes, $acumulado, $tipoServicio, $vista){//vista 1 cantidad, 2 monto bs.
+  $dbh = new Conexion();
+  
+  $tablaServicios="";
+  $tablaServiciosDet="";
+  if($area==38){
+    $tablaServicios="servicios_tcs";
+    $tablaServiciosDet="servicios_tcs_detalle";
+  }
+  if($area==39){
+    $tablaServicios="servicios_tcp";
+    $tablaServiciosDet="servicios_tcp_detalle";
+  }
+  if($area==40){
+    $tablaServicios="servicios_tlq";
+    $tablaServiciosDet="servicios_tlq_detalle";
+  }
+
+  $sql="SELECT sum(e.monto_facturado)as monto, sum(e.cantidad)as cantidad from ext_servicios e, $tablaServiciosDet sd, $tablaServicios so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anio and e.id_oficina in ($unidad) and so.codigo in ($tipoServicio)";
+  if($acumulado==0){
+    $sql.=" and MONTH(e.fecha_factura)=$mes ";
+  }
+  if($acumulado==1){
+    $sql.=" and MONTH(e.fecha_factura)<=$mes ";  
+  }
+ // echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidadServicios=0;
+  $montoServicios=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidadServicios=$row['cantidad'];
+      $montoServicios=$row['monto'];
+  }
+  $variableDevolver=0;
+  if($vista==1){
+    $variableDevolver=$cantidadServicios;
+  }else{
+    $variableDevolver=$montoServicios;
+  }
+  return($variableDevolver);  
+}
+
+function serviciosPorUnidadDetalle($unidad, $anio, $mes, $acumulado, $tipoServicio, $vista){//vista 1 cantidad, 2 monto bs.
+  $dbh = new Conexion();
+  $sql="SELECT sum(e.monto_facturado)as monto, sum(e.cantidad)as cantidad from ext_servicios e, servicios_oi_detalle sd, servicios_oi so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anio and e.id_oficina in ($unidad) and sd.codigo in ($tipoServicio)";
+  if($acumulado==0){
+    $sql.=" and MONTH(e.fecha_factura)=$mes ";
+  }
+  if($acumulado==1){
+    $sql.=" and MONTH(e.fecha_factura)<=$mes ";  
+  }
+ // echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidadServicios=0;
+  $montoServicios=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidadServicios=$row['cantidad'];
+      $montoServicios=$row['monto'];
+  }
+  $variableDevolver=0;
+  if($vista==1){
+    $variableDevolver=$cantidadServicios;
+  }else{
+    $variableDevolver=$montoServicios;
+  }
+  return($variableDevolver);  
+}
+
+function serviciosPorUnidadDetalleTCP($unidad, $area, $anio, $mes, $acumulado, $tipoServicio, $vista){//vista 1 cantidad, 2 monto bs.
+  $dbh = new Conexion();
+  $tablaServicios="";
+  $tablaServiciosDet="";
+  if($area==38){
+    $tablaServicios="servicios_tcs";
+    $tablaServiciosDet="servicios_tcs_detalle";
+  }
+  if($area==39){
+    $tablaServicios="servicios_tcp";
+    $tablaServiciosDet="servicios_tcp_detalle";
+  }
+  if($area==40){
+    $tablaServicios="servicios_tlq";
+    $tablaServiciosDet="servicios_tlq_detalle";
+  }
+  $sql="SELECT sum(e.monto_facturado)as monto, sum(e.cantidad)as cantidad from ext_servicios e, $tablaServiciosDet sd, $tablaServicios so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anio and e.id_oficina in ($unidad) and sd.codigo in ($tipoServicio)";
+  if($acumulado==0){
+    $sql.=" and MONTH(e.fecha_factura)=$mes ";
+  }
+  if($acumulado==1){
+    $sql.=" and MONTH(e.fecha_factura)<=$mes ";  
+  }
+ // echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidadServicios=0;
+  $montoServicios=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidadServicios=$row['cantidad'];
+      $montoServicios=$row['monto'];
+  }
+  $variableDevolver=0;
+  if($vista==1){
+    $variableDevolver=$cantidadServicios;
+  }else{
+    $variableDevolver=$montoServicios;
+  }
+  return($variableDevolver);  
+}
+
 function cutString($string, $count){
   $string=substr($string, 0, $count);
   return $string;
