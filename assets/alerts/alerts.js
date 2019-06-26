@@ -32,6 +32,26 @@ alerts = {
             return(false);
           }
         })
+    }
+    else if (type == 'warning-message-and-confirmation2') {
+      swal({
+        title: 'Esta Seguro?',
+        text: "Se borraran los datos anteriores!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        confirmButtonText: 'Si, Generar!',
+        cancelButtonText: 'No, Cancelar!',
+        buttonsStyling: false
+      }).then((result) => {
+          if (result.value) {
+            location.href=url; 
+            return(true);
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            return(false);
+          }
+        })
     } 
   },
 }

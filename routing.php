@@ -237,6 +237,21 @@
 		if ($_GET['opcion']=='sincronizacionDatos') {
 			require_once('utilitarios/sincronizacionDatos.php');
 		}
+		if ($_GET['opcion']=='versionarPOA') {
+			require_once('versiones_poa/list.php');
+		}
+		if ($_GET['opcion']=='deleteVersionPOA') {
+			$codigo=$_GET['codigo'];
+			require_once('versiones_poa/saveDelete.php');
+		}
+		if ($_GET['opcion']=='registerVersionPOA') {
+			require_once('versiones_poa/register.php');
+		}
+		if ($_GET['opcion']=='generarVersionPOA') {
+			$codigo=$_GET['codigo'];
+			require_once('versiones_poa/saveGenerarPOA.php');
+		}
+		
 
 
 

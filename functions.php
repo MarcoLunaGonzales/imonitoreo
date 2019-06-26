@@ -439,6 +439,26 @@ function planificacionPorIndicador($indicador, $area, $unidad, $mes, $acumulado)
 }
 
 //ACUMULADO 0=POR MES; 1=ACUMULADO; 2=TODA LA GESTION
+function planificacionPorIndicadorVersion($indicador, $area, $unidad, $mes, $acumulado, $version){
+  $dbh = new Conexion();
+  $sql="SELECT IFNULL(sum(ap.value_numerico),0)as cantidad from actividades_poa_version a, actividades_poaplanificacion_version ap where a.codigo=ap.cod_actividad and a.cod_indicador='$indicador' and a.cod_unidadorganizacional='$unidad' and a.cod_area='$area' and a.clave_indicador=1 and a.cod_version=ap.cod_version and a.cod_version=$version";
+  if($acumulado==0){
+    $sql.=" and ap.mes='$mes' ";
+  }
+  if($acumulado==1){
+    $sql.=" and ap.mes<='$mes' ";  
+  }
+//  echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidadPlanificada=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidadPlanificada=$row['cantidad'];
+  }
+  return($cantidadPlanificada);
+}
+
+//ACUMULADO 0=POR MES; 1=ACUMULADO; 2=TODA LA GESTION
 function ejecucionPorIndicador($indicador, $area, $unidad, $mes, $acumulado){
   $dbh = new Conexion();
   $sql="SELECT IFNULL(sum(ap.value_numerico),0)as cantidad from actividades_poa a, actividades_poaejecucion ap where a.codigo=ap.cod_actividad and a.cod_indicador='$indicador' and a.cod_unidadorganizacional='$unidad' and a.cod_area='$area' and a.clave_indicador=1 ";

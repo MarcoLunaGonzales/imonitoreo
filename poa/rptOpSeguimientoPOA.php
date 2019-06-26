@@ -78,6 +78,29 @@ $dbh = new Conexion();
 				  </div>
 				</div>
 
+
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Incluir Planificacion Version</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <select class="selectpicker" title="Seleccione una opcion" name="version" id="version" data-style="<?=$comboColor;?>">
+					  	<option value="0" selected="true">-</option>
+					  	<?php
+					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM versiones_poa order by 1");
+						$stmt->execute();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+							$codigoX=$row['codigo'];
+							$nombreX=$row['nombre'];
+						?>
+						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<?php	
+						}
+					  	?>
+					  </select>
+					</div>
+				  </div>
+				</div>
+
 			  </div>
 			  <div class="card-footer ml-auto mr-auto">
 				<button type="submit" class="<?=$button;?>">Ver Reporte</button>

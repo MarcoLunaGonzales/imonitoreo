@@ -12,6 +12,8 @@ session_start();
 $gestionX=$_GET["gestion"];
 $mes=$_GET["mes"];
 $perspectiva=$_GET["perspectiva"];
+$version=$_GET["version"];
+
 
 $anio=nameGestion($gestionX);
 
@@ -22,6 +24,7 @@ $moduleName="Seguimiento POA - $mes $anio";
 //echo $fondoArray."fondoArray";
 $_SESSION['anioTemporal']=$anio;
 $_SESSION['mesTemporal']=$mes;
+$_SESSION['versionTemporal']=$version;
 
 
 $globalUser=$_SESSION["globalUser"];
@@ -103,7 +106,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                     <td><?=$abreviatura;?></td>
                     <td><?=$nombreIndicador;?></td>
                     <td class="text-center">
-                    <a href='../graficos/rptPOA.php?tipo=1&codigo=<?=$codigoIndicador;?>&gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>' rel="tooltip" target="_BLANK" title="Ver Reporte" class="<?=$buttonDetail;?>">
+                    <a href='../graficos/rptPOA.php?tipo=1&codigo=<?=$codigoIndicador;?>&gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>&version=<?=$version;?>' rel="tooltip" target="_BLANK" title="Ver Reporte" class="<?=$buttonDetail;?>">
                         <i class="material-icons">assessment</i>
                       </a>
                     </td>

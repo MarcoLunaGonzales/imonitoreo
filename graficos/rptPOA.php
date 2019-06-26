@@ -17,6 +17,8 @@ $nombreMes=nameMes($mesTemporal);
 $anioTemporal=$_GET["anio"];
 $codIndicador=$_GET["codigo"];
 $codGestion=$_GET["gestion"];
+$versionPOA=$_GET["version"];
+
 
 $nombreObjetivo=nameObjetivoxIndicador($codIndicador);
 $nombreIndicador=nameIndicador($codIndicador);
@@ -183,7 +185,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                       <?php
                       $codAreaX=$codAreaX;
                       $codUnidadX=$codUnidadX;
-                      require("chartPOA.php");
+                      $codVersionX=$versionPOA;
+                      if($versionPOA>0){
+                        require("chartPOAVersion.php");
+                      }else{
+                        require("chartPOA.php");                        
+                      }
                       ?>
                     </div>
                   </div>

@@ -470,6 +470,13 @@ if($globalPerfilX==1){
                     <span class="sidebar-mini"> SD </span>
                     <span class="sidebar-normal"> Sincronizacion de Datos </span>
                   </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=versionarPOA">
+                    <span class="sidebar-mini"> VP </span>
+                    <span class="sidebar-normal"> Versionar POA </span>
+                  </a>
                 </li>   
 
 

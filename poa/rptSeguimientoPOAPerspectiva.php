@@ -11,6 +11,8 @@ session_start();
 
 $gestionX=$_POST["gestion"];
 $mes=$_POST["mes"];
+$version=$_POST["version"];
+
 $anio=nameGestion($gestionX);
 
 $dbh = new Conexion();
@@ -20,6 +22,7 @@ $moduleName="Seguimiento POA - $mes $anio";
 //echo $fondoArray."fondoArray";
 $_SESSION['anioTemporal']=$anio;
 $_SESSION['mesTemporal']=$mes;
+$_SESSION['versionTemporal']=$version;
 
 
 $globalUser=$_SESSION["globalUser"];
@@ -86,7 +89,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card card-stats">
                 <div class="card-header card-header-warning card-header-icon">
                   <div class="card-icon">
-                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&perspectiva=3" target="_BLANK">
+                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=3" target="_BLANK">
                       <i class="material-icons">person_pin</i>
                     </a>
                   </div>
@@ -105,7 +108,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card card-stats">
                 <div class="card-header card-header-rose card-header-icon">
                   <div class="card-icon">
-                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&perspectiva=4" target="_BLANK">
+                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=4" target="_BLANK">
                       <i class="material-icons">attach_money</i>
                     </a>
                   </div>
@@ -124,7 +127,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card card-stats">
                 <div class="card-header card-header-success card-header-icon">
                   <div class="card-icon">
-                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&perspectiva=1" target="_BLANK">
+                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=1" target="_BLANK">
                       <i class="material-icons">store</i>
                     </a>
                   </div>
@@ -143,7 +146,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&perspectiva=2" target="_BLANK">
+                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=2" target="_BLANK">
                       <i class="material-icons">blur_on</i>
                     </a>
                   </div>
