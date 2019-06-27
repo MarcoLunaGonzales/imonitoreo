@@ -76,6 +76,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <h4 class="title">Objetivo: <?=$nombreObjetivo;?></h4>
               <h4 class="title">Indicador: <?=$nombreIndicador;?></h3>
               <h6>Año: <?=$anioTemporal;?> Mes: <?=$mesTemporal;?></h6>
+              
+              <h6 class="text-left">
+              <table><tr><td bgcolor="#FBB1E9">Nota: En las tablas la fila coloreada contiene la información de la programacion Inicial</td></tr></table>
+              </h6>
+
 
             </div>
             <div class="row">      
@@ -119,6 +124,30 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $porcentajeGestion=0;
                 if($planificadoGestion>0){
                   $porcentajeGestion=($ejecutadoGestion/$planificadoGestion)*100;
+                }
+
+
+                if($versionPOA>0){
+                  $planificadoMesV=planificacionPorIndicadorVersion($codIndicador,$codAreaX,$codUnidadX,$mesTemporal,0,$versionPOA);
+                  $ejecutadoMesV=ejecucionPorIndicador($codIndicador,$codAreaX,$codUnidadX,$mesTemporal,0);
+                  $porcentajeV=0;
+                  if($planificadoMesV>0){
+                    $porcentajeV=($ejecutadoMesV/$planificadoMesV)*100;
+                  }
+
+                  $planificadoMesAcumV=planificacionPorIndicadorVersion($codIndicador,$codAreaX,$codUnidadX,$mesTemporal,1,$versionPOA);
+                  $ejecutadoMesAcumV=ejecucionPorIndicador($codIndicador,$codAreaX,$codUnidadX,$mesTemporal,1);
+                  $porcentajeAcumV=0;
+                  if($planificadoMesAcumV>0){
+                    $porcentajeAcumV=($ejecutadoMesAcumV/$planificadoMesAcumV)*100;
+                  }
+
+                  $planificadoGestionV=planificacionPorIndicadorVersion($codIndicador,$codAreaX,$codUnidadX,$mesTemporal,2,$versionPOA);
+                  $ejecutadoGestionV=ejecucionPorIndicador($codIndicador,$codAreaX,$codUnidadX,$mesTemporal,2);
+                  $porcentajeGestionV=0;
+                  if($planificadoGestionV>0){
+                    $porcentajeGestionV=($ejecutadoGestionV/$planificadoGestionV)*100;
+                  }
                 }
             ?>
 
@@ -164,6 +193,23 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             <td class="text-right"><?=formatNumberInt($ejecutadoGestion);?></td>
                             <td class="text-right"><?=formatNumberInt($porcentajeGestion);?></td>
                           </tr>
+                          <?php
+                          if($versionPOA>0){
+                          ?>
+                          <tr>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($planificadoMesV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($ejecutadoMesV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($porcentajeV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($planificadoMesAcumV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($ejecutadoMesAcumV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($porcentajeAcumV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($planificadoGestionV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($ejecutadoGestionV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($porcentajeGestionV);?></td>
+                          </tr>
+                          <?php
+                          }
+                          ?>
                         </thead>
                         <tbody>
                           
@@ -222,6 +268,22 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $porcentajeAcum=($ejecutadoMesAcum/$planificadoMesAcum)*100;
                 }
 
+                if($versionPOA>0){
+                  $planificadoMesV=presupuestoIngresosMesVersion($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,0,0,$versionPOA);
+                  $ejecutadoMesV=ejecutadoIngresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,0,0);
+                  $porcentajeV=0;
+                  if($planificadoMesV>0){
+                    $porcentajeV=($ejecutadoMesV/$planificadoMesV)*100;
+                  }
+
+                  $planificadoMesAcumV=presupuestoIngresosMesVersion($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,1,0,$versionPOA);
+                  $ejecutadoMesAcumV=ejecutadoIngresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,1,0);
+                  $porcentajeAcumV=0;
+                  if($planificadoMesAcumV>0){
+                    $porcentajeAcumV=($ejecutadoMesAcumV/$planificadoMesAcumV)*100;
+                  }
+                }
+
               ?>
               <div class="row">
                 <div class="col-md-6">
@@ -256,6 +318,20 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             <td class="text-right"><?=formatNumberInt($ejecutadoMesAcum);?></td>
                             <td class="text-right"><?=formatNumberInt($porcentajeAcum);?></td>
                           </tr>
+                          <?php
+                          if($versionPOA>0){
+                          ?>
+                          <tr>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($planificadoMesV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($ejecutadoMesV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($porcentajeV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($planificadoMesAcumV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($ejecutadoMesAcumV);?></td>
+                            <td class="text-right" bgcolor="#FBB1E9"><?=formatNumberInt($porcentajeAcumV);?></td>
+                          </tr>
+                          <?php
+                          }
+                          ?>
                         </thead>
                         <tbody>
                           
@@ -277,7 +353,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                       <?php
                       $codFondoX=$codFondo;
                       $codOrganismoX=$codOrganismo;
-                      require("chartIngresosParam.php");
+                      $codVersionX=$versionPOA;
+                      if($versionPOA>0){
+                        require("chartIngresosParamVersion.php");
+                      }else{
+                        require("chartIngresosParam.php");
+                      }  
                       ?>
                     </div>
                   </div>

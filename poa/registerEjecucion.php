@@ -225,7 +225,7 @@ $moduleName="Registro de Ejecucion POA";
 	                    			<input type="hidden" name="ejsistema|<?=$codigo;?>|<?=$i;?>" value="<?=$valorEjSis;?>">
 	                    		</td>
 	                    		<td class="text-center table-success"> 
-	                    			<input class="form-control" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="ejecutado" value="<?=($valorEj=='')?'0':formatNumberDec($valorEj);?>" onChange="calcularTotalEj();" OnKeyUp="calcularTotalEj();" step="0.01" required>
+	                    			<input class="form-control" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="ejecutado" value="<?=($valorEj=='')?'0':$valorEj;?>" onChange="calcularTotalEj();" OnKeyUp="calcularTotalEj();" step="0.01" required>
 	                    		</td>
 	                    		<td class="text-center">
 	                    			<textarea class="form-control input-sm" type="text" name="explicacion|<?=$codigo;?>|<?=$i;?>" rows="1"><?=$descripcionEj;?></textarea>

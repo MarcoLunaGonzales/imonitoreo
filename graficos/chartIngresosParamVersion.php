@@ -1,11 +1,10 @@
 <?php
-
-$aleatorio=rand(200,2000);
-$codAreaX=$codAreaX;
-$codUnidadX=$codUnidadX;
+$aleatorio=rand(2000,4000);
+$codFondoX=$codFondoX;
+$codOrganismoX=$codOrganismoX;
 $codVersionX=$codVersionX;
-
 ?>
+
 <style type="text/css">
 
 #chart-container<?=$aleatorio;?> {
@@ -31,28 +30,24 @@ $codVersionX=$codVersionX;
         function showGraph<?=$aleatorio;?>()
         {
             {
-                //console.log("antes de los datos pOA;");
-                console.log("variablesPOA: "+<?=$codAreaX?>+" "+<?=$codUnidadX;?>);
-                $.get("dataPOAVersion.php",
-				{codAreaX:<?=$codAreaX;?>,codUnidadX:<?=$codUnidadX;?>,codVersionX:<?=$codVersionX;?>},
-                function (data){
+                console.log("variablesIngresos: "+<?=$codFondoX?>+" "+<?=$codOrganismoX;?>);
+                $.get("dataIngresosParamVersion.php",
+                {codFondoX:"<?=$codFondoX;?>",codOrganismoX:"<?=$codOrganismoX;?>",codVersionX:"<?=$codVersionX;?>"},
+                function (data,status){
                     //console.log("data POA:"+data);
                     var mes = [];
                     var presupuesto = [];
+                    var ejecutado = [];
                     var presupuestoversion = [];
-					var ejecutado = [];						
-                    var area = [];
-                    var unidad = [] ;
+                    console.log("estado...: "+status);                     
                     for (var i in data) {
-						mes.push(data[i].mes);
-                        //console.log(data[i].area+" "+data[i].unidad+" "+data[i].mes+" "+data[i].presupuesto);
+                        mes.push(data[i].mes);
+                        console.log(data[i].mes+" "+data[i].presupuesto);
                         presupuesto.push(data[i].presupuesto);
+                        ejecutado.push(data[i].ejecutado); 
                         presupuestoversion.push(data[i].presupuestoversion);
-                        ejecutado.push(data[i].ejecutado);   
-                        area.push(data[i].area);
-                        unidad.push(data[i].unidad);
                     }
-					//alert(labs);
+                    //alert(labs);
                     var chartdata = {
                         labels: mes,
                         datasets: [
@@ -85,7 +80,7 @@ $codVersionX=$codVersionX;
                     var barGraph = new Chart(graphTarget, {
                         type: 'line',
                         data: chartdata,
-						options: {
+                        options: {
                             scales: {
                                 yAxes: [{
                                     ticks: {

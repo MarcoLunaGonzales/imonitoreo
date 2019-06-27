@@ -37,6 +37,8 @@ where f.fecha_inicio<='$fechaActual' and f.fecha_fin>='$fechaActual'";
 //echo $sqlFechaEjecucion;
 $stmt = $dbh->prepare($sqlFechaEjecucion);
 $stmt->execute();
+$codMesX=0;
+$fechaFinRegistroX="";
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   $codMesX=$row['mes'];
   $codAnioX=$row['anio'];

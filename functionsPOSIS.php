@@ -33,6 +33,37 @@ function presupuestoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, $
    return($montoIngreso);
 }
 
+function presupuestoIngresosMesVersion($agencia, $anio, $mes, $organismo, $acumulado, $cuenta, $codVersion){
+   $dbh = new Conexion();
+   $agencia=str_replace('|', ',', $agencia);
+   if($acumulado==1){
+     $sql="SELECT sum(p.monto)as monto from po_presupuesto_version p where p.cod_ano='$anio' and p.cod_mes<='$mes' and p.cod_fondo in ($agencia) and p.cod_cuenta like '4%' and p.cod_version=$codVersion";
+     if($organismo!=0){
+       $sql.=" and p.cod_organismo in ($organismo) ";
+     }
+     if($cuenta!=0){
+        $sql.=" and p.cod_cuenta='$cuenta' ";
+     }
+   }else{
+     $sql="SELECT sum(p.monto)as monto from po_presupuesto_version p where p.cod_ano='$anio' and p.cod_mes='$mes' and p.cod_fondo in ($agencia) and p.cod_cuenta like '4%' and p.cod_version=$codVersion";
+     if($organismo!=0){
+       $sql.=" and p.cod_organismo in ($organismo)";
+     }
+      if($cuenta!=0){
+        $sql.=" and p.cod_cuenta='$cuenta' ";
+     }
+   } 
+//  echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $flagSuccess2=$stmt->execute();
+
+   $montoIngreso=0;
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $montoIngreso=$row['monto'];
+   }
+   return($montoIngreso);
+}
+
 function ejecutadoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cuenta){
   $dbh = new Conexion();
   $agencia=str_replace('|', ',', $agencia);

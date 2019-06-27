@@ -1029,7 +1029,7 @@ function obtieneActRetrasadas($codigoActividad,$anio,$mes,$codIndicador,$unidad,
       $totalPlani=$row['planificado'];
       $totalEj=$row['ejecutado'];
     }
-    if($totalEj>=$totalPlani){
+    if($totalEj>=$totalPlani && $totalPlani>0){
       $observacion="<a href='graficos/detalleActividadPOA.php?codIndicador=$codIndicador&unidad=$unidad&area=$area&codActividad=$codigoActividad' target='_blank'><i class='material-icons' style='color:#37F95D' title='Completed'>check_circle</i></a>";
     }
   }
@@ -1111,6 +1111,45 @@ function obtenerResponsableSIS($codigoComponente){
       $personal="Responsable: (".$row['nombre'].")";
   }
   return($personal);  
+}
+
+function calcularClientesPeriodo($unidad,$area,$mes,$anio){
+  $dbh = new Conexion();
+  $fechaFin=$anio."-".$mes."-01";
+  $fechaIni=date('Y-m-d',strtotime($fechaFin.'-11 month'));
+  $fechaFin=date('Y-m-d',strtotime($fechaFin.'+1 month'));
+  $fechaFin=date('Y-m-d',strtotime($fechaFin.'-1 day'));
+
+  $sql="SELECT count(distinct(e.id_cliente))as cantidad FROM ext_servicios e where e.id_area in($area) and e.id_oficina in ($unidad) and e.fecha_factura BETWEEN '$fechaIni' and '$fechaFin'";
+  //echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidad=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidad=$row['cantidad'];
+  }
+  return($cantidad);    
+}
+
+function calcularClientesRetenidos($unidad,$area,$mes,$anio){
+  $dbh = new Conexion();
+  $fechaFin=$anio."-".$mes."-01";
+  $fechaIni=date('Y-m-d',strtotime($fechaFin.'-11 month'));
+  $fechaFin=date('Y-m-d',strtotime($fechaFin.'+1 month'));
+  $fechaFin=date('Y-m-d',strtotime($fechaFin.'-1 day'));
+
+  $fechaIniAnt=date('Y-m-d',strtotime($fechaIni.'-1 year'));
+  $fechaFinAnt=date('Y-m-d',strtotime($fechaFin.'-1 year'));
+
+  $sql="SELECT count(distinct(ee.id_cliente))as cantidad from ext_servicios ee where ee.id_area in ($area) and ee.id_oficina in ($unidad) and ee.fecha_factura BETWEEN '$fechaIni' and '$fechaFin' and ee.id_cliente in (select distinct(e.id_cliente) from ext_servicios e where e.id_area in ($area) and e.id_oficina in ($unidad) and e.fecha_factura BETWEEN '$fechaIniAnt' and '$fechaFinAnt')";
+  //echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidad=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidad=$row['cantidad'];
+  }
+  return($cantidad);    
 }
 
 ?>
