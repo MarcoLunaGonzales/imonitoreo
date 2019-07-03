@@ -71,6 +71,19 @@ function nameCuenta($codigo){
    return($nombreX);
 }
 
+function nameIAF($codigo){
+   $dbh = new Conexion();
+   $stmt = $dbh->prepare("SELECT nombre FROM iaf where abreviatura=:codigo");
+   $stmt->bindParam(':codigo',$codigo);
+   $stmt->execute();
+   $nombreX="";
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $nombreX=$row['nombre'];
+   }
+   return($nombreX);
+}
+
+
 function estadoPOAGestion($codigo){
    $dbh = new Conexion();
    $stmt = $dbh->prepare("SELECT cod_estadopoa FROM gestiones_datosadicionales where cod_gestion=:codigo");
@@ -1152,5 +1165,130 @@ function calcularClientesRetenidos($unidad,$area,$mes,$anio){
   return($cantidad);    
 }
 
-?>
+function obtenerCantEmpresasCertificados($unidad,$anioTemporal,$mesTemporal,$area1,$area2,$ambos,$acumulado)//AMBOS=1 SACAR LOS CERTIFICADOS EN AMBOS TCP Y TCS
+{
+  $dbh = new Conexion();
+  $sql="SELECT count(distinct(e.idcliente))as cantidad from ext_certificados e where YEAR(e.fechaemision)='$anioTemporal' and e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  if($acumulado==0){
+    $sql.=" and MONTH(e.fechaemision)='$mesTemporal' ";
+  }else{
+    $sql.=" and MONTH(e.fechaemision)<='$mesTemporal' ";
+  }
+  if($unidad>0){
+    $sql.=" and e.idoficina in ($unidad) ";
+  } 
+  $sql.=" and e.idcliente ";
+  if($ambos==1){
+    $sql.=" in ";
+  }else{
+    $sql.=" not in ";
+  } 
+  $sql.=" (select ee.idcliente from ext_certificados ee where YEAR(ee.fechaemision)='$anioTemporal' and ee.idestado not in (646, 860, 475, 1118) ";
+  if($acumulado==0){
+    $sql.=" and MONTH(ee.fechaemision)='$mesTemporal' ";
+  }else{
+    $sql.=" and MONTH(ee.fechaemision)<='$mesTemporal' ";
+  }
+  if($unidad>0){
+    $sql.=" and ee.idoficina in ($unidad) ";
+  } 
+  $sql.=" and ee.idarea=$area2)";
+  
+  //echo $sql;
+  
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidad=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidad=$row['cantidad'];
+  }
+  return($cantidad);      
+}
 
+
+function obtenerCantCertificados($unidad,$anioTemporal,$mesTemporal,$area1,$ambos,$acumulado)
+{
+  $dbh = new Conexion();
+  $sql="SELECT count(*)as cantidad from ext_certificados e where YEAR(e.fechaemision)='$anioTemporal' and e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  if($acumulado==0){
+    $sql.=" and MONTH(e.fechaemision)='$mesTemporal' ";
+  }else{
+    $sql.=" and MONTH(e.fechaemision)<='$mesTemporal' ";
+  }
+  if($unidad>0){
+    $sql.=" and e.idoficina in ($unidad) ";
+  } 
+  //echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidad=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidad=$row['cantidad'];
+  }
+  return($cantidad);      
+}
+
+
+function obtenerCantCertificadosNorma($unidad,$anioTemporal,$mesTemporal,$area1,$norma,$acumulado)
+{
+  $dbh = new Conexion();
+  $sql="SELECT count(*)as cantidad from ext_certificados e where YEAR(e.fechaemision)='$anioTemporal' and e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  if($norma==""){
+    $sql.=" and e.norma in (SELECT ee.norma from ext_certificados ee where ee.norma not in ('N/A') and YEAR(ee.fechaemision)=$anioTemporal and ee.idarea='$area1') ";
+  }else{
+    $sql.=" and e.norma='$norma' ";
+  }
+  if($acumulado==0){
+    $sql.=" and MONTH(e.fechaemision)='$mesTemporal' ";
+  }else{
+    $sql.=" and MONTH(e.fechaemision)<='$mesTemporal' ";
+  }
+  if($unidad>0){
+    $sql.=" and e.idoficina in ($unidad) ";
+  } 
+  
+  //echo $sql;
+  
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidad=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidad=$row['cantidad'];
+  }
+  return($cantidad);      
+}
+
+
+
+
+function obtenerCantCertificadosIAF($unidad,$anioTemporal,$mesTemporal,$area1,$iaf,$acumulado)
+{
+  $dbh = new Conexion();
+  $sql="SELECT count(*)as cantidad from ext_certificados e where YEAR(e.fechaemision)='$anioTemporal' and e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  if($iaf==0){
+    $sql.=" and e.iaf in (SELECT ee.iaf from ext_certificados ee where ee.iaf not in ('0') and YEAR(ee.fechaemision)=$anioTemporal and ee.idarea='$area1') ";
+  }else{
+    $sql.=" and e.iaf='$iaf' ";
+  }
+  if($acumulado==0){
+    $sql.=" and MONTH(e.fechaemision)='$mesTemporal' ";
+  }else{
+    $sql.=" and MONTH(e.fechaemision)<='$mesTemporal' ";
+  }
+  if($unidad>0){
+    $sql.=" and e.idoficina in ($unidad) ";
+  } 
+  
+  //echo $sql;
+  
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidad=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidad=$row['cantidad'];
+  }
+  return($cantidad);      
+}
+
+
+?>

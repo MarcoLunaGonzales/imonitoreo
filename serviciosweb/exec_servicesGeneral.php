@@ -280,6 +280,32 @@ foreach ($detalle as $objDet){
 echo "ok servicios tcs<br>";
 
 
+//IAF
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"755");
+$url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
+$tableInsert="iaf";
+$json=callService($parametros, $url);
+$obj=json_decode($json);
+
+$stmtDel=$dbh->prepare("DELETE FROM $tableInsert");
+$flagDel=$stmtDel->execute();
+
+$detalle=$obj->lista;
+foreach ($detalle as $objDet){
+	$codigoX=$objDet->IdClasificador;
+	$nombreX=strtoupper(clean_string($objDet->Descripcion));
+	$abreviaturaX=strtoupper($objDet->Abrev);
+	$estadoX="1";
+
+	$stmt = $dbh->prepare("INSERT INTO $tableInsert (codigo, nombre, abreviatura, cod_estado) VALUES (:codigo, :nombre, :abreviatura, :cod_estado)");
+	$stmt->bindParam(':codigo', $codigoX);
+	$stmt->bindParam(':nombre', $nombreX);
+	$stmt->bindParam(':abreviatura', $abreviaturaX);
+	$stmt->bindParam(':cod_estado', $estadoX);
+	$flagSuccess=$stmt->execute();
+}
+echo "ok IAF<br>";
+
 
 //CLIENTES
 $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"Clientes"); 
