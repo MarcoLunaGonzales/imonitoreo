@@ -1291,4 +1291,54 @@ function obtenerCantCertificadosIAF($unidad,$anioTemporal,$mesTemporal,$area1,$i
 }
 
 
+function obtenerCantEmpresasOrganismo($unidad,$anioTemporal,$mesTemporal,$area1,$organismoCert,$acumulado){
+  $dbh = new Conexion();
+  $sql="SELECT count(distinct(e.idcliente))as cantidad from ext_certificados e where YEAR(e.fechaemision)='$anioTemporal' and e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  if($acumulado==0){
+    $sql.=" and MONTH(e.fechaemision)='$mesTemporal' ";
+  }else{
+    $sql.=" and MONTH(e.fechaemision)<='$mesTemporal' ";
+  }
+  if($unidad>0){
+    $sql.=" and e.idoficina in ($unidad) ";
+  } 
+  if($organismoCert>0){
+    $sql.=" and e.idcertificadorexterno in ($organismoCert) ";
+  }
+  //echo $sql;  
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidad=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidad=$row['cantidad'];
+  }
+  return($cantidad);      
+}
+
+
+function obtenerCantCertificadosOrganismo($unidad,$anioTemporal,$mesTemporal,$area1,$organismoCert,$acumulado){
+  $dbh = new Conexion();
+  $sql="SELECT count(*)as cantidad from ext_certificados e where YEAR(e.fechaemision)='$anioTemporal' and e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  if($acumulado==0){
+    $sql.=" and MONTH(e.fechaemision)='$mesTemporal' ";
+  }else{
+    $sql.=" and MONTH(e.fechaemision)<='$mesTemporal' ";
+  }
+  if($unidad>0){
+    $sql.=" and e.idoficina in ($unidad) ";
+  } 
+  if($organismoCert>0){
+    $sql.=" and e.idcertificadorexterno in ($organismoCert) ";
+  }
+  //echo $sql;  
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidad=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidad=$row['cantidad'];
+  }
+  return($cantidad);      
+}
+
+
 ?>

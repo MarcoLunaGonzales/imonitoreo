@@ -57,7 +57,10 @@ while ($resp = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		$codigoIAF=$arrayiaf[0];
 	}
 
-
+	if($idcertificadorexterno==0){
+		$idCertificadorExterno=804;
+		$dcertificadorExt="IBNORCA";			
+	}
 	$insert_str .= "('$IdCertificadoServicios','$IdServicio','$IdTipoCertificado','$idCliente','$Norma','$Descripcion','$NumeroAnterior','$FechaEmision','$FechaValido','$FechaEntrega','$FechaRegistro','$ProductoServicio','$Observaciones','$idCabeceraFormInspeccion','$NroHoja','$decliente','$TipoCertificado','$idCertificadorExterno','$Codigo','$idestado','$estado','$dcertificadorExt','$stipo','$idarea','$idTipoEstado','$idoficina','$idDocumentoBase','$idFormularioCertificado','$idTipoServicio','$codigoIAF'),";	
 
 	if($indice%10==0){

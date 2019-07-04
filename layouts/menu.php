@@ -664,6 +664,13 @@ if($globalPerfilX==2){
                   </a>
                 </li> 
 
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroRevisionPORegionArea">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO por Area y Regional </span>
+                  </a>
+                </li> 
+
               </ul>
             </div>
           </li>
