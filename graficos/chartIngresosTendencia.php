@@ -38,25 +38,44 @@
                     var montoPresIngreso = [];
 					var montoEjIngreso = [];						
 
+                    var montoPresIngresoAnt = [];
+                    var montoEjIngresoAnt = [];                        
+
                     for (var i in data) {
 						mes.push(data[i].mes);
                         console.log(data[i].mes);
                         montoPresIngreso.push(data[i].montoPresIngreso);
-                        montoEjIngreso.push(data[i].montoEjIngreso);                        
+                        montoEjIngreso.push(data[i].montoEjIngreso);   
+                        montoPresIngresoAnt.push(data[i].montoPresIngresoAnt);
+                        montoEjIngresoAnt.push(data[i].montoEjIngresoAnt);   
                     }
 					//alert(labs);
                     var chartdata = {
                         labels: mes,
                         datasets: [
                             {
-                                label: 'PresIng.',
+                                label: 'Presupuesto GA',
+                                backgroundColor: "rgba(241, 227, 17, 0.2)",
+                                borderColor: "rgb(241, 227, 17)",
+                                borderWidth:2,
+                                data: montoPresIngresoAnt
+                            },
+                            {
+                                label: 'Ejecutado GA',
+                                backgroundColor: "rgba(16, 242, 47, 0.2)",
+                                borderColor: "rgb(16, 242, 47)",
+                                borderWidth:2,
+                                data: montoEjIngresoAnt
+                            },
+                            {
+                                label: 'Presupuesto',
                                 backgroundColor: "rgba(255, 99, 132, 0.2)",
                                 borderColor: "rgb(255, 99, 132)",
                                 borderWidth:2,
                                 data: montoPresIngreso
                             },
                             {
-                                label: 'EjIngreso.',
+                                label: 'Ejecutado',
                                 backgroundColor: "rgba(75, 192, 192, 0.2)",
                                 borderColor: "rgb(75, 192, 192)",
                                 borderWidth:2,

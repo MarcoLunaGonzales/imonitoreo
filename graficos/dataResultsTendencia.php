@@ -51,14 +51,22 @@ require_once '../styles.php';
 	for($i=1;$i<=12;$i++){
 	  	$montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$i,$organismoTemporal,0,0));
 		$montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$i,$organismoTemporal,0,0));
-		
 		$montoPresEgreso1=round(presupuestoEgresosMes($fondo1,$anioTemporal,$i,$organismoTemporal,0,0));
 		$montoEjEgreso1=round(ejecutadoEgresosMes($fondo1,$anioTemporal,$i,$organismoTemporal,0,0));
 		
 		$montoResultadoPresupuesto=$montoPresIngreso1-$montoPresEgreso1;
 		$montoResultadoEjecutado=$montoEjIngreso1-$montoEjEgreso1;
 
-		$emparray[]=array("mes"=>$i, "montoPres"=>$montoResultadoPresupuesto, "montoEj"=>$montoResultadoEjecutado);
+
+	  	$montoPresIngreso2=round(presupuestoIngresosMes($fondo1,$anioTemporal-1,$i,$organismoTemporal,0,0));
+		$montoEjIngreso2=round(ejecutadoIngresosMes($fondo1,$anioTemporal-1,$i,$organismoTemporal,0,0));
+		$montoPresEgreso2=round(presupuestoEgresosMes($fondo1,$anioTemporal-1,$i,$organismoTemporal,0,0));
+		$montoEjEgreso2=round(ejecutadoEgresosMes($fondo1,$anioTemporal-1,$i,$organismoTemporal,0,0));
+		
+		$montoResultadoPresupuesto2=$montoPresIngreso2-$montoPresEgreso2;
+		$montoResultadoEjecutado2=$montoEjIngreso2-$montoEjEgreso2;
+
+		$emparray[]=array("mes"=>$i, "montoPres"=>$montoResultadoPresupuesto, "montoEj"=>$montoResultadoEjecutado, "montoPres2"=>$montoResultadoPresupuesto2, "montoEj2"=>$montoResultadoEjecutado2);
 	}
 
 array_splice($emparray, 0,1);

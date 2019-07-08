@@ -196,6 +196,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-left">
                     <a href="seguimientoPOxCuenta.php?gestion=<?=$gestion;?>&mes=<?=$mes;?>&fondo[]=<?=$codFondo;?>&organismo[]=<?=$codOrganismoX;?>&resumen=" target="_blank"><?=$nombreFondo;?>
                     </a>
+
+                    <a href="../graficos/chartTendencias.php?codigosFondo=<?=$codFondo;?>&nombreFondo=<?=$nombreFondo;?>&mes=<?=$mes;?>&anio=<?=$anio;?>&organismo=<?=$codOrganismoX;?>" target="_blank" title="Ver Reporte de Tendencias">
+                      <i class="material-icons icon-red">bar_chart</i>
+                    </a>
+
                   </td>
                   <td class="text-right table-warning"><?=formatNumberInt($montoPresIng);?></td>
                   <td class="text-right table-warning"><?=formatNumberInt($montoEjIng);?></td>
@@ -254,6 +259,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-left">
                     <a href="seguimientoPOxCuenta.php?gestion=<?=$gestion;?>&mes=<?=$mes;?>&fondo[]=<?=$codFondo;?>&organismo[]=<?=$codOrganismoX;?>&resumen=" target="_blank">
                       <?=$nombreFondo;?>
+                    </a>
+
+                    <a href="../graficos/chartTendencias.php?codigosFondo=<?=$codFondo;?>&nombreFondo=<?=$nombreFondo;?>&mes=<?=$mes;?>&anio=<?=$anio;?>&organismo=<?=$codOrganismoX;?>" target="_blank" title="Ver Reporte de Tendencias">
+                      <i class="material-icons icon-green">bar_chart</i>
                     </a>
                   </td>
                   <td class="text-right table-info"><?=formatNumberInt($montoPresEg);?></td>

@@ -2,6 +2,7 @@
 
 //DEFINIMOS EL COLOR DE TARJETA  Y LOS COLORES DE BOTONES USADOS
 $colorCard="card-header-rose";
+$colorCard2="card-header-success";
 $button="btn";
 $buttonCeleste="btn btn-info";
 $buttonMorado="btn btn-primary";

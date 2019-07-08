@@ -62,7 +62,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">list</i>
               </div>
-              <h4 class="card-title">Empresas Certificadas
+              <h4 class="card-title">Empresas
               </h4>
             </div>
             
@@ -268,7 +268,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title">Empresas Certificadas</h5>
+              <h5 class="card-title">Empresas</h5>
             </div>
             <div class="card-body">
               <?php
@@ -294,7 +294,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">list</i>
               </div>
-              <h4 class="card-title">Certificados Emitidos
+              <h4 class="card-title">Certificados
               </h4>
             </div>
             
@@ -467,7 +467,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title">Certificados Emitidos</h5>
+              <h5 class="card-title">Certificados</h5>
             </div>
             <div class="card-body">
               <?php
@@ -493,7 +493,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title">Historico Certificados Emitidos</h5>
+              <h5 class="card-title">Historico Certificados</h5>
             </div>
             <div class="card-body">
               <?php

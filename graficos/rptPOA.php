@@ -40,29 +40,24 @@ $_SESSION['codIndicador']=$codIndicador;
 
 $dbh = new Conexion();
 
-$stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=8");
-$stmt->execute();
-$codIndicadorIngresos=0;
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-  $codIndicadorIngresos=$row['valor_configuracion'];
-}
+
+$codIndicadorIngresos=obtieneValorConfig(8);
 $arrayCodIngresos=explode(",", $codIndicadorIngresos);
 $indiceBuscador=in_array($codIndicador,$arrayCodIngresos);
 
+$codIndicadoresExcepcion=obtieneValorConfig(9);
+$codIndicadorTotalPOA=obtieneValorConfig(10);
 
-$stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=9");
-$stmt->execute();
-$codIndicadoresExcepcion=0;
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-  $codIndicadoresExcepcion=$row['valor_configuracion'];
-}
+$indiceBuscadorClientes=false;
+$codIndicadorClientesExcepcion=obtieneValorConfig(21);
+$arrayCodClientes=explode(",", $codIndicadorClientesExcepcion);
+$indiceBuscadorClientes=in_array($codIndicador,$arrayCodClientes);
 
-$stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=10");
-$stmt->execute();
-$codIndicadorTotalPOA=0;
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-  $codIndicadorTotalPOA=$row['valor_configuracion'];
-}
+$codIndicadorIncrementoClientes=obtieneValorConfig(23);
+$codIndicadorRetencionClientes=obtieneValorConfig(24);
+
+//echo $codIndicadorClientesExcepcion." array: ".$arrayCodClientes." indiceBus: ".$indiceBuscadorClientes;
+//echo $indiceBuscadorClientes;
 
 //echo "indicadodrTotal: ".$codIndicadorTotalPOA." indicadornoraml: ".$codIndicador;
 
@@ -88,7 +83,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 
             <?php
-            if($codIndicadorTotalPOA!=$codIndicador){ 
+            if($codIndicadorTotalPOA!=$codIndicador && $indiceBuscadorClientes==false){
 
               $sql="SELECT iua.cod_area, iua.cod_unidadorganizacional FROM objetivos o, indicadores i, indicadores_unidadesareas iua WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and i.codigo in ($codIndicador) and o.cod_gestion='$codGestion' and i.codigo=iua.cod_indicador";
               if($globalAdmin==0){
@@ -369,30 +364,31 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               }//FIN DEL IF PARA INDICADORES EXCEPCION
             }
           }
-          else{
-          //ESTA ES LA PARTE PARA EL INDICADOR DE ACTIVIDADES TOTALES POR UNIDAD
-          $sql="SELECT iua.cod_unidadorganizacional FROM objetivos o, indicadores i, indicadores_unidadesareas iua WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and i.codigo in ($codIndicador) and o.cod_gestion='$codGestion' and i.codigo=iua.cod_indicador";
-          /*if($globalAdmin==0){
-            $sql.=" and iua.cod_area in ($globalArea) and iua.cod_unidadorganizacional in ($globalUnidad) ";
-          }*/
-          $sql.=" group by iua.cod_unidadorganizacional";
-          //echo $sql;
-          $stmt = $dbh->prepare($sql);
-          $stmt->execute();
-          $stmt->bindColumn('cod_unidadorganizacional', $codUnidadX);
-          
-          while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
-            $abrevUnidad=abrevUnidad($codUnidadX);
 
-            $sqlArea="SELECT iua.cod_area FROM objetivos o, indicadores i, indicadores_unidadesareas iua WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and i.codigo in ($codIndicador) and o.cod_gestion='$codGestion' and iua.cod_unidadorganizacional in ($codUnidadX) and i.codigo=iua.cod_indicador";
+          if($codIndicadorTotalPOA==$codIndicador){
+            //ESTA ES LA PARTE PARA EL INDICADOR DE ACTIVIDADES TOTALES POR UNIDAD
+            $sql="SELECT iua.cod_unidadorganizacional FROM objetivos o, indicadores i, indicadores_unidadesareas iua WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and i.codigo in ($codIndicador) and o.cod_gestion='$codGestion' and i.codigo=iua.cod_indicador";
             /*if($globalAdmin==0){
               $sql.=" and iua.cod_area in ($globalArea) and iua.cod_unidadorganizacional in ($globalUnidad) ";
-             }*/
-            $sqlArea.=" group by iua.cod_area";
-            //echo $sqlArea;
-            $stmtArea = $dbh->prepare($sqlArea);
-            $stmtArea->execute();
-            $stmtArea->bindColumn('cod_area', $codAreaX);
+            }*/
+            $sql.=" group by iua.cod_unidadorganizacional";
+            //echo $sql;
+            $stmt = $dbh->prepare($sql);
+            $stmt->execute();
+            $stmt->bindColumn('cod_unidadorganizacional', $codUnidadX);
+            
+            while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+              $abrevUnidad=abrevUnidad($codUnidadX);
+
+              $sqlArea="SELECT iua.cod_area FROM objetivos o, indicadores i, indicadores_unidadesareas iua WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and i.codigo in ($codIndicador) and o.cod_gestion='$codGestion' and iua.cod_unidadorganizacional in ($codUnidadX) and i.codigo=iua.cod_indicador";
+              /*if($globalAdmin==0){
+                $sql.=" and iua.cod_area in ($globalArea) and iua.cod_unidadorganizacional in ($globalUnidad) ";
+               }*/
+              $sqlArea.=" group by iua.cod_area";
+              //echo $sqlArea;
+              $stmtArea = $dbh->prepare($sqlArea);
+              $stmtArea->execute();
+              $stmtArea->bindColumn('cod_area', $codAreaX);
           ?>
           <div class="row">
             <div class="col-md-6">
@@ -466,9 +462,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                       }
                       ?>
                     </thead>
-                    <tbody>
-                      
-                    </tbody>
                   </table>
                 </div>
               </div>
@@ -495,6 +488,175 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
           }
         }
           ?>
+
+      <div class="row">
+          <?php
+          if($indiceBuscadorClientes==true && $codIndicador==$codIndicadorIncrementoClientes){
+            
+            $cadenaAreas=obtieneValorConfig(22);
+            $cadenaUnidades=obtieneValorConfig(11);
+
+            $sqlAreas="SELECT codigo, abreviatura from areas where codigo in ($cadenaAreas) order by 2";
+            $stmtArea = $dbh->prepare($sqlAreas);
+            $stmtArea->execute();
+            $stmtArea->bindColumn('codigo', $codAreaX);
+            $stmtArea->bindColumn('abreviatura', $nombreAreaX);
+            while($rowArea = $stmtArea -> fetch(PDO::FETCH_BOUND)){
+          ?>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-primary">
+              <div class="card-icon">
+                <i class="material-icons">list</i>
+              </div>
+              <h4 class="card-title">Incremento de Clientes <?=$nombreAreaX;?>
+              </h4>
+            </div>
+            
+            <div class="card-body">
+              <table width="100%" class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th class="text-center font-weight-bold">Unidad</th>
+                    <th class="text-center font-weight-bold"><?=$mesTemporal;?>.<?=$anioTemporal-1;?></th>
+                    <th class="text-center font-weight-bold"><?=$mesTemporal;?>.<?=$anioTemporal;?></th>
+                    <th class="text-center font-weight-bold">% Incremento</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  $sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
+                  $stmtU = $dbh->prepare($sqlU);
+                  $stmtU->execute();
+                  $stmtU->bindColumn('codigo', $codigoX);
+                  $stmtU->bindColumn('abreviatura', $abrevX);
+                  $totalClientesAnt=0;
+                  $totalClientes=0;
+                  while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
+                    $cantidadClientesAnt=calcularClientesPeriodo($codigoX,$codAreaX,$mesTemporal,$anioTemporal-1);
+                    $cantidadClientes=calcularClientesPeriodo($codigoX,$codAreaX,$mesTemporal,$anioTemporal);
+                    $porcentajeCrec=0;
+                    if($cantidadClientesAnt>0){
+                      $porcentajeCrec=(($cantidadClientes-$cantidadClientesAnt)/$cantidadClientesAnt)*100;
+                    }
+                    $totalClientesAnt+=$cantidadClientesAnt;
+                    $totalClientes+=$cantidadClientes;
+                  ?>
+                  <tr>
+                    <td class="text-left"><?=$abrevX;?></td>
+                    <td class="text-right"><a href="../rpt_indicadores/rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codAreaX;?>" target="_blank"><?=formatNumberInt($cantidadClientesAnt);?></a></td>
+                    <td class="text-right"><a href="../rpt_indicadores/rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codAreaX;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
+                    <td class="text-center font-weight-bold text-primary"><?=formatNumberInt($porcentajeCrec);?> %</td>
+                  </tr>
+                  <?php
+                  }
+                  $porcentajeCrecTotal=0;
+                  if($totalClientesAnt>0){
+                    $porcentajeCrecTotal=(($totalClientes-$totalClientesAnt)/$totalClientesAnt)*100;
+                  }
+                  ?>                  
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td class="text-left font-weight-bold">Totales</td>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientesAnt);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientes);?></td>
+                    <td class="text-center font-weight-bold"><?=formatNumberInt($porcentajeCrecTotal);?> %</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+        <?php
+          }
+        }
+        ?>
+
+        <?php
+          if($indiceBuscadorClientes==true && $codIndicador==$codIndicadorRetencionClientes){
+            
+            $cadenaAreas=obtieneValorConfig(22);
+            $cadenaUnidades=obtieneValorConfig(11);
+
+            $sqlAreas="SELECT codigo, abreviatura from areas where codigo in ($cadenaAreas) order by 2";
+            $stmtArea = $dbh->prepare($sqlAreas);
+            $stmtArea->execute();
+            $stmtArea->bindColumn('codigo', $codAreaX);
+            $stmtArea->bindColumn('abreviatura', $nombreAreaX);
+            while($rowArea = $stmtArea -> fetch(PDO::FETCH_BOUND)){
+          ?>
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-primary">
+              <div class="card-icon">
+                <i class="material-icons">list</i>
+              </div>
+              <h4 class="card-title">Retencion de Clientes <?=$nombreAreaX;?>
+              </h4>
+            </div>
+            
+            <div class="card-body">
+              <table width="100%" class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th class="text-center font-weight-bold">Unidad</th>
+                    <th class="text-center font-weight-bold"><?=$mesTemporal;?>.<?=$anioTemporal;?></th>
+                    <th class="text-center font-weight-bold">Clientes Retenidos</th>
+                    <th class="text-center font-weight-bold">% Retencion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  $sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
+                  $stmtU = $dbh->prepare($sqlU);
+                  $stmtU->execute();
+                  $stmtU->bindColumn('codigo', $codigoX);
+                  $stmtU->bindColumn('abreviatura', $abrevX);
+                  $totalClientesRetenidos=0;
+                  $totalClientes=0;
+                  while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
+                    $cantidadClientes=calcularClientesPeriodo($codigoX,$codAreaX,$mesTemporal,$anioTemporal);
+                    $cantidadRetenidos=calcularClientesRetenidos($codigoX,$codAreaX,$mesTemporal,$anioTemporal);
+                    $porcentajeCrec=0;
+                    if($cantidadClientes>0){
+                      $porcentajeCrec=($cantidadRetenidos/$cantidadClientes)*100;
+                    }
+                    $totalClientesRetenidos+=$cantidadRetenidos;
+                    $totalClientes+=$cantidadClientes;
+                  ?>
+                  <tr>
+                    <td class="text-left"><?=$abrevX;?></td>
+                    <td class="text-right"><a href="../rpt_indicadores/rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codAreaX;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
+                    <td class="text-right"><a href="../rpt_indicadores/rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codAreaX;?>" target="_blank"><?=formatNumberInt($cantidadRetenidos);?></a></td>
+                    <td class="text-center font-weight-bold text-primary"><?=formatNumberInt($porcentajeCrec);?> %</td>
+                  </tr>
+                  <?php
+                  }
+                  $porcentajeCrecTotal=0;
+                  if($totalClientes>0){
+                    $porcentajeCrecTotal=($totalClientesRetenidos/$totalClientes)*100;
+                  }
+                  ?>                  
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td class="text-left font-weight-bold">Totales</td>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientes);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientesRetenidos);?></td>
+                    <td class="text-center font-weight-bold"><?=formatNumberInt($porcentajeCrecTotal);?> %</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+        <?php
+          }
+        }
+        ?>
+
+
 
         </div>
       </div>

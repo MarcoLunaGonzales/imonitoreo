@@ -54,8 +54,8 @@ require_once '../styles.php';
 
 
 for($i=2015;$i<=$anioTemporal;$i++){
-	$certificadosTCP=obtenerCantCertificados(0,$i,12,39,0,1,$vista);
-	$certificadosTCS=obtenerCantCertificados(0,$i,12,38,0,1,$vista);
+	$certificadosTCP=obtenerCantCertificados(0,$i,$mesTemporal,39,0,1,$vista);
+	$certificadosTCS=obtenerCantCertificados(0,$i,$mesTemporal,38,0,1,$vista);
 
 	$emparray[]=array("anio"=>$i, "tcp"=>$certificadosTCP, "tcs"=>$certificadosTCS);
 

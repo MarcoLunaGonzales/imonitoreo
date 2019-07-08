@@ -435,8 +435,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   ?>
                   <tr>
                     <td class="text-left"><?=$abrevX;?></td>
-                    <td class="text-right"><?=formatNumberInt($cantidadClientesAnt);?></td>
-                    <td class="text-right"><?=formatNumberInt($cantidadClientes);?></td>
+                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientesAnt);?></a></td>
+                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
                     <td class="text-center font-weight-bold text-primary"><?=formatNumberInt($porcentajeCrec);?> %</td>
                   </tr>
                   <?php
@@ -499,8 +499,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   ?>
                   <tr>
                     <td class="text-left"><?=$abrevX;?></td>
-                    <td class="text-right"><?=formatNumberInt($cantidadClientes);?></td>
-                    <td class="text-right"><?=formatNumberInt($cantidadRetenidos);?></td>
+                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
+                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadRetenidos);?></a></td>
                     <td class="text-center font-weight-bold text-primary"><?=formatNumberInt($porcentajeCrec);?> %</td>
                   </tr>
                   <?php

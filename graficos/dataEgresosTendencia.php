@@ -51,8 +51,11 @@ require_once '../styles.php';
 	for($i=1;$i<=12;$i++){
 	  	$montoPresIngreso1=round(presupuestoEgresosMes($fondo1,$anioTemporal,$i,$organismoTemporal,0,0));
 		$montoEjIngreso1=round(ejecutadoEgresosMes($fondo1,$anioTemporal,$i,$organismoTemporal,0,0));
+
+	  	$montoPresIngreso2=round(presupuestoEgresosMes($fondo1,$anioTemporal-1,$i,$organismoTemporal,0,0));
+		$montoEjIngreso2=round(ejecutadoEgresosMes($fondo1,$anioTemporal-1,$i,$organismoTemporal,0,0));
 		
-		$emparray[]=array("mes"=>$i, "montoPres"=>$montoPresIngreso1, "montoEj"=>$montoEjIngreso1);
+		$emparray[]=array("mes"=>$i, "montoPres"=>$montoPresIngreso1, "montoEj"=>$montoEjIngreso1, "montoPres2"=>$montoPresIngreso2, "montoEj2"=>$montoEjIngreso2);
 	}
 
 array_splice($emparray, 0,1);

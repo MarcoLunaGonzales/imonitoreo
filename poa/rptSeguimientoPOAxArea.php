@@ -193,13 +193,13 @@ $nombreArea=nameArea($codArea);
                   
                   <div class="card-icon">
                     <a href="../rpt_indicadores/rptCertificados.php?gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>&vista=1" target="_BLANK">
-                      <i class="material-icons">blur_on</i>
+                      <i class="material-icons" title="Ver Certificados Emitidos">blur_on</i>
                     </a>
                   </div>
 
                   <div class="card-icon">
                     <a href="../rpt_indicadores/rptCertificados.php?gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>&vista=2" target="_BLANK">
-                      <i class="material-icons">drag_indicator</i>
+                      <i class="material-icons"  title="Ver Certificados Vigentes">drag_indicator</i>
                     </a>
                   </div>
 
