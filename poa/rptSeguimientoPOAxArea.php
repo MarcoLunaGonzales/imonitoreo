@@ -190,11 +190,19 @@ $nombreArea=nameArea($codArea);
             <div class="col-lg-4 col-md-4 col-sm-4">
               <div class="card card-stats">
                 <div class="card-header <?=$colorCard;?> card-header-icon">
+                  
                   <div class="card-icon">
-                    <a href="../rpt_indicadores/rptCertificados.php?gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>" target="_BLANK">
+                    <a href="../rpt_indicadores/rptCertificados.php?gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>&vista=1" target="_BLANK">
                       <i class="material-icons">blur_on</i>
                     </a>
                   </div>
+
+                  <div class="card-icon">
+                    <a href="../rpt_indicadores/rptCertificados.php?gestion=<?=$gestionX;?>&anio=<?=$anio;?>&mes=<?=$mes;?>&vista=2" target="_BLANK">
+                      <i class="material-icons">drag_indicator</i>
+                    </a>
+                  </div>
+
                   <p class="card-category">Otros</p>
                   <h3 class="card-title">Reporte de Certificaciones</h3>
                 </div>

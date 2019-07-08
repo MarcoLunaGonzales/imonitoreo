@@ -16,7 +16,14 @@ $mesTemporal=$_GET["mes"];
 $nombreMes=nameMes($mesTemporal);
 $anioTemporal=$_GET["anio"];
 $codGestion=$_GET["gestion"];
+$vista=$_GET["vista"];//VISTA ==1 EMITIDOS ==2 VIGENTES
 
+$nombreVista="";
+if($vista==1){
+  $nombreVista="CERTIFICADOS EMITIDOS";
+}else{
+  $nombreVista="CERTIFICADOS VIGENTES";
+}
 
 $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
@@ -43,7 +50,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <div class="container-fluid">
       <div class="header text-center">
         <h3 class="title">Reporte de Certificaciones</h3>
-        <h3>Año: <?=$anioTemporal;?> Mes: <?=$mesTemporal;?></h3s>
+        <h3 class="title"><?=$nombreVista;?></h3>
+        <h3>Año: <?=$anioTemporal;?> Mes: <?=$mesTemporal;?></h3>
       </div>
 
 
@@ -104,14 +112,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $totalMesUnidadX=0;
                   $totalAcumUnidadX=0;
 
-                  $cantEmpresasTCP=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,39,38,0,0);
-                  $cantEmpresasTCPAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,39,38,0,1);
+                  $cantEmpresasTCP=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,39,38,0,0,$vista);
+                  $cantEmpresasTCPAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,39,38,0,1,$vista);
 
-                  $cantEmpresasTCS=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,0,0);
-                  $cantEmpresasTCSAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,0,1);
+                  $cantEmpresasTCS=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,0,0,$vista);
+                  $cantEmpresasTCSAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,0,1,$vista);
 
-                  $cantEmpresasAmbos=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,1,0);
-                  $cantEmpresasAmbosAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,1,1);
+                  $cantEmpresasAmbos=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,1,0,$vista);
+                  $cantEmpresasAmbosAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,1,1,$vista);
 
                   $totalMesUnidadX=$cantEmpresasTCP+$cantEmpresasTCS+$cantEmpresasAmbos;
                   $totalAcumUnidadX=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum+$cantEmpresasAmbosAcum;
@@ -121,14 +129,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $totalMesUnidad=0;
                     $totalAcumUnidad=0;
 
-                    $cantEmpresasTCP=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,39,38,0,0);
-                    $cantEmpresasTCPAcum=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,39,38,0,1);
+                    $cantEmpresasTCP=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,39,38,0,0,$vista);
+                    $cantEmpresasTCPAcum=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,39,38,0,1,$vista);
 
-                    $cantEmpresasTCS=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,38,39,0,0);
-                    $cantEmpresasTCSAcum=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,38,39,0,1);
+                    $cantEmpresasTCS=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,38,39,0,0,$vista);
+                    $cantEmpresasTCSAcum=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,38,39,0,1,$vista);
 
-                    $cantEmpresasAmbos=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,38,39,1,0);
-                    $cantEmpresasAmbosAcum=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,38,39,1,1);
+                    $cantEmpresasAmbos=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,38,39,1,0,$vista);
+                    $cantEmpresasAmbosAcum=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,38,39,1,1,$vista);
                     
                     $totalMes=$cantEmpresasTCP+$cantEmpresasTCS+$cantEmpresasAmbos;
                     $totalAcumulado=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum+$cantEmpresasAmbosAcum;
@@ -156,7 +164,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $porcentajeMes=($totalMesUnidad/$totalMesUnidadX)*100;
                     $porcentajeAcum=($totalAcumUnidad/$totalAcumUnidadX)*100;
 
-                    $urlDetalle="rptCertificadosDetalle.php?codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&certificador=0";
+                    $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&certificador=0";
 
                   ?>
                   <tr>
@@ -187,14 +195,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $totalMesUnidad=0;
                   $totalAcumUnidad=0;
 
-                  $cantEmpresasTCP=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,39,38,0,0);
-                  $cantEmpresasTCPAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,39,38,0,1);
+                  $cantEmpresasTCP=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,39,38,0,0,$vista);
+                  $cantEmpresasTCPAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,39,38,0,1,$vista);
 
-                  $cantEmpresasTCS=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,0,0);
-                  $cantEmpresasTCSAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,0,1);
+                  $cantEmpresasTCS=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,0,0,$vista);
+                  $cantEmpresasTCSAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,0,1,$vista);
 
-                  $cantEmpresasAmbos=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,1,0);
-                  $cantEmpresasAmbosAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,1,1);
+                  $cantEmpresasAmbos=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,1,0,$vista);
+                  $cantEmpresasAmbosAcum=obtenerCantEmpresasCertificados(0,$anioTemporal,$mesTemporal,38,39,1,1,$vista);
                   
                   $totalMes=$cantEmpresasTCP+$cantEmpresasTCS+$cantEmpresasAmbos;
                   $totalAcumulado=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum+$cantEmpresasAmbosAcum;
@@ -219,7 +227,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $partAcumTCS=($cantEmpresasTCSAcum/$totalAcumulado)*100;                    
                     $partAcumAmbos=($cantEmpresasAmbosAcum/$totalAcumulado)*100;                    
                   }
-                  $urlDetalle="rptCertificadosDetalle.php?codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&certificador=0";
+                  $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&certificador=0";
                   ?>
                 </tbody>
                 <tfoot>
@@ -266,6 +274,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <?php
               $anioX=$anioTemporal;
               $mesX=$mesTemporal;
+              $vistaX=$vista;
               require("chartEmpresasCertificadas.php");
               ?>
             </div>
@@ -329,11 +338,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $totalMesUnidadX=0;
                   $totalAcumUnidadX=0;
 
-                  $cantEmpresasTCP=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,0);
-                  $cantEmpresasTCPAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,1);
+                  $cantEmpresasTCP=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,0,$vista);
+                  $cantEmpresasTCPAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,1,$vista);
 
-                  $cantEmpresasTCS=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,0);
-                  $cantEmpresasTCSAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,1);
+                  $cantEmpresasTCS=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,0,$vista);
+                  $cantEmpresasTCSAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
 
                   $totalMesUnidadX=$cantEmpresasTCP+$cantEmpresasTCS;
                   $totalAcumUnidadX=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum;
@@ -343,11 +352,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $totalMesUnidad=0;
                     $totalAcumUnidad=0;
 
-                    $cantEmpresasTCP=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,39,0,0);
-                    $cantEmpresasTCPAcum=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,39,0,1);
+                    $cantEmpresasTCP=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,39,0,0,$vista);
+                    $cantEmpresasTCPAcum=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,39,0,1,$vista);
 
-                    $cantEmpresasTCS=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,38,0,0);
-                    $cantEmpresasTCSAcum=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,38,0,1);
+                    $cantEmpresasTCS=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,38,0,0,$vista);
+                    $cantEmpresasTCSAcum=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,38,0,1,$vista);
                     
                     $totalMes=$cantEmpresasTCP+$cantEmpresasTCS;
                     $totalAcumulado=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum;
@@ -371,7 +380,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $porcentajeMes=($totalMesUnidad/$totalMesUnidadX)*100;
                     $porcentajeAcum=($totalAcumUnidad/$totalAcumUnidadX)*100;
 
-                    $urlDetalle="rptCertificadosDetalle.php?codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&certificador=0";
+                    $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&certificador=0";
                   ?>
                   <tr>
                     <td class="text-center"><?=$abrevX;?></td>
@@ -396,11 +405,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $totalMesUnidad=0;
                   $totalAcumUnidad=0;
 
-                  $cantEmpresasTCP=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,0);
-                  $cantEmpresasTCPAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,1);
+                  $cantEmpresasTCP=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,0,$vista);
+                  $cantEmpresasTCPAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,1,$vista);
 
-                  $cantEmpresasTCS=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,0);
-                  $cantEmpresasTCSAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,1);
+                  $cantEmpresasTCS=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,0,$vista);
+                  $cantEmpresasTCSAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
                   
                   $totalMes=$cantEmpresasTCP+$cantEmpresasTCS;
                   $totalAcumulado=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum;
@@ -422,7 +431,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $partAcumTCS=($cantEmpresasTCSAcum/$totalAcumulado)*100;                    
                   }
 
-                  $urlDetalle="rptCertificadosDetalle.php?codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&certificador=0";
+                  $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&certificador=0";
                   ?>
                 </tbody>
                 <tfoot>
@@ -464,6 +473,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <?php
               $anioX=$anioTemporal;
               $mesX=$mesTemporal;
+              $vistaX=$vista;
               require("chartCertificadosEmitidos.php");
               ?>
             </div>
@@ -489,6 +499,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <?php
               $anioX=$anioTemporal;
               $mesX=$mesTemporal;
+              $vistaX=$vista;
               require("chartCertificadosHistorico.php");
               ?>
             </div>
@@ -505,7 +516,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">list</i>
               </div>
-              <h4 class="card-title">TCS - Certificados Emitidos Por Norma
+              <h4 class="card-title">TCS - Certificados Por Norma
               </h4>
             </div>
             
@@ -549,7 +560,18 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </thead>
                 <tbody>
                   <?php
-                  $sqlN="SELECT e.norma, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A') and YEAR(e.fechaemision)=$anioTemporal and e.idarea=38 group by e.norma order by 2 desc";
+                    $fechaVistaIni=$anioTemporal."-".$mesTemporal."-01";
+                    $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
+                    $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
+
+                  $sqlN="SELECT e.norma, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A') ";
+                  if($vista==1){
+                    $sqlN.=" and YEAR(e.fechaemision)=$anioTemporal ";
+                  }else{
+                    $sqlN.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";
+                  }
+
+                  $sqlN.=" and e.idarea=38 group by e.norma order by 2 desc";
                   $stmtN = $dbh->prepare($sqlN);
                   $stmtN->execute();
                   $stmtN->bindColumn('norma', $nombreNorma);
@@ -564,23 +586,23 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtU->bindColumn('codigo', $codigoX);
                     $stmtU->bindColumn('abreviatura', $abrevX);
                     while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                      $cantCertificadosUnidad=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,'',1);
-                      $cantCertificados=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,$nombreNorma,1);
+                      $cantCertificadosUnidad=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,'',1,$vista);
+                      $cantCertificados=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,$nombreNorma,1,$vista);
                       $participacionNorma=0;
                       if($cantCertificadosUnidad>0){
                         $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
                       }
-                      $urlDetalle="rptCertificadosDetalle.php?codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&iaf=0&certificador=0&acumulado=1&codArea=38";
+                      $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&iaf=0&certificador=0&acumulado=1&codArea=38";
 
                     ?>
                     <td class="table-warning text-center"><a href="<?=$urlDetalle;?>&norma=<?=$nombreNorma;?>" target="_blank"><?=($cantCertificados==0)?"-":formatNumberInt($cantCertificados);?></a></td>
                     <td class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberInt($participacionNorma);?></td>
                     <?php
                     }
-                    $urlDetalle="rptCertificadosDetalle.php?codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&iaf=0&certificador=0&acumulado=1&codArea=38";
+                    $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&iaf=0&certificador=0&acumulado=1&codArea=38";
 
-                    $cantCertificadosUnidad=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,'',1);
-                    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,$nombreNorma,1);
+                    $cantCertificadosUnidad=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,'',1,$vista);
+                    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,$nombreNorma,1,$vista);
                     $participacionNorma=0;
                     if($cantCertificadosUnidad>0){
                       $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
@@ -601,8 +623,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtU->bindColumn('codigo', $codigoX);
                     $stmtU->bindColumn('abreviatura', $abrevX);
                     while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                      $cantCertificadosUnidad=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,'',1);
-                      $cantCertificados=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,'',1);
+                      $cantCertificadosUnidad=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,'',1,$vista);
+                      $cantCertificados=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,'',1,$vista);
                       $participacionNorma=0;
                       if($cantCertificadosUnidad>0){
                         $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
@@ -612,8 +634,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <th class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberInt(100);?></th>
                     <?php
                     }
-                    $cantCertificadosUnidad=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,'',1);
-                    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,'',1);
+                    $cantCertificadosUnidad=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,'',1,$vista);
+                    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,'',1,$vista);
                     $participacionNorma=0;
                     if($cantCertificadosUnidad>0){
                       $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
@@ -637,12 +659,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title">TCS - Certificados Emitidos por Norma</h5>
+              <h5 class="card-title">TCS - Certificados por Norma</h5>
             </div>
             <div class="card-body">
               <?php
               $anioX=$anioTemporal;
               $mesX=$mesTemporal;
+              $vistaX=$vista;
               require("chartCertificadosNorma.php");
               ?>
             </div>
@@ -659,7 +682,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">list</i>
               </div>
-              <h4 class="card-title">TCS - Certificados Emitidos Por Sector IAF
+              <h4 class="card-title">TCS - Certificados Por Sector IAF
               </h4>
             </div>
             
@@ -704,7 +727,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </thead>
                 <tbody>
                   <?php
-                  $sqlN="SELECT e.iaf, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A') and YEAR(e.fechaemision)=$anioTemporal and e.idarea=38 and e.iaf<>'0' group by e.iaf order by 2 desc";
+                  $sqlN="SELECT e.iaf, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A') ";
+                  if($vista==1){
+                    $sqlN.=" and YEAR(e.fechaemision)=$anioTemporal ";
+                  }else{
+                    $sqlN.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";
+                  }
+                  $sqlN.=" and e.idarea=38 and e.iaf<>'0' group by e.iaf order by 2 desc ";
                   $stmtN = $dbh->prepare($sqlN);
                   $stmtN->execute();
                   $stmtN->bindColumn('iaf', $codigoIAF);
@@ -721,27 +750,27 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtU->bindColumn('codigo', $codigoX);
                     $stmtU->bindColumn('abreviatura', $abrevX);
                     while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,0,1);
-                      $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,$codigoIAF,1);
+                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,0,1,$vista);
+                      $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,$codigoIAF,1,$vista);
                       $participacionNorma=0;
                       if($cantCertificadosUnidad>0){
                         $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
                       }
 
-                      $urlDetalle="rptCertificadosDetalle.php?codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&certificador=0&acumulado=1&codArea=38";
+                      $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&certificador=0&acumulado=1&codArea=38";
 
                     ?>
                     <td class="table-warning text-center"><a href="<?=$urlDetalle;?>&iaf=<?=$codigoIAF;?>" target="_blank"><?=($cantCertificados==0)?"-":formatNumberInt($cantCertificados);?></a></td>
                     <td class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberInt($participacionNorma);?></td>
                     <?php
                     }
-                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,0,1);
-                    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,$codigoIAF,1);
+                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
+                    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,$codigoIAF,1,$vista);
                     $participacionNorma=0;
                     if($cantCertificadosUnidad>0){
                       $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
                     } 
-                    $urlDetalle="rptCertificadosDetalle.php?codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&norma=&certificador=0&acumulado=1&codArea=38";
+                    $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&norma=&certificador=0&acumulado=1&codArea=38";
                     ?>
                     <th class="table-warning text-center"><a href="<?=$urlDetalle;?>&iaf=<?=$codigoIAF;?>" target="_blank"><?=($cantCertificados==0)?"-":formatNumberInt($cantCertificados);?></a></th>
                     <th class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberDec($participacionNorma);?></th>
@@ -758,8 +787,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtU->bindColumn('codigo', $codigoX);
                     $stmtU->bindColumn('abreviatura', $abrevX);
                     while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,0,1);
-                      $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,0,1);
+                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,0,1,$vista);
+                      $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,0,1,$vista);
                       $participacionNorma=0;
                       if($cantCertificadosUnidad>0){
                         $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
@@ -769,8 +798,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <th class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberInt(100);?></th>
                     <?php
                     }
-                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,0,1);
-                    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,0,1);
+                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
+                    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
                     $participacionNorma=0;
                     if($cantCertificadosUnidad>0){
                       $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
@@ -794,12 +823,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title">TCS - Certificados Emitidos Por Sector IAF</h5>
+              <h5 class="card-title">TCS - Certificados Por Sector IAF</h5>
             </div>
             <div class="card-body">
               <?php
               $anioX=$anioTemporal;
               $mesX=$mesTemporal;
+              $vistaX=$vista;
               require("chartCertificadosIAF.php");
               ?>
             </div>
@@ -852,34 +882,34 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $stmtU->bindColumn('abreviatura', $abrevX);
 
                   while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                    $cantEmpresasOrg=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoExtCert,1);
-                    $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1);
+                    $cantEmpresasOrg=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
+                    $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
                     $porcentajeEmpresas=0;
                     if($cantEmpresasOrgTotal>0){
                       $porcentajeEmpresas=($cantEmpresasOrg/$cantEmpresasOrgTotal)*100;
                     }
 
-                    $cantCertificadosOrg=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoExtCert,1);
-                    $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1);
+                    $cantCertificadosOrg=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
+                    $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
                     $porcentajeCertificados=0;
                     if($cantEmpresasOrgTotal>0){
                       $porcentajeCertificados=($cantCertificadosOrg/$cantCertificadosOrgTotal)*100;
                     }
 
-                    $cantEmpresasOrg1=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoCert,1);
-                    $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1);
+                    $cantEmpresasOrg1=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
+                    $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
                     $porcentajeEmpresas1=0;
                     if($cantEmpresasOrgTotal1>0){
                       $porcentajeEmpresas1=($cantEmpresasOrg1/$cantEmpresasOrgTotal1)*100;
                     }
 
-                    $cantCertificadosOrg1=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoCert,1);
-                    $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1);
+                    $cantCertificadosOrg1=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
+                    $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
                     $porcentajeCertificados1=0;
                     if($cantEmpresasOrgTotal1>0){
                       $porcentajeCertificados1=($cantCertificadosOrg1/$cantCertificadosOrgTotal1)*100;
                     }
-                    $urlDetalle="rptCertificadosDetalle.php?codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&acumulado=1&codArea=38";
+                    $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&acumulado=1&codArea=38";
                   ?>
                   <tr>
                     <td class="text-center"><?=$abrevX;?></td>
@@ -895,14 +925,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   </tr>
                   <?php
                   }
-                  $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1);
+                  $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
                   $porcentajeEmpresas=100;
-                  $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1);
+                  $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
                   $porcentajeCertificados=100;
 
-                  $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1);
+                  $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
                   $porcentajeEmpresas1=100;
-                  $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1);
+                  $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
                   $porcentajeCertificados1=100;
                   ?>
                 </tbody>

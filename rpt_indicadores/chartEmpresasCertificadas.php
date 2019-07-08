@@ -4,6 +4,7 @@ $aleatorio=rand(200,2000);
 
 $anioX=$anioX;
 $mesX=$mesX;
+$vistaX=$vistaX;
 
 ?>
 <style type="text/css">
@@ -33,7 +34,7 @@ $mesX=$mesX;
             {
                 console.log("variablesEmpresasCerti: "+<?=$mesX;?>);
                 $.get("dataEmpresasCertificadas.php",
-				{anioX:<?=$anioX;?>,mesX:<?=$mesX?>},
+				{anioX:<?=$anioX;?>,mesX:<?=$mesX?>,vistaX:<?=$vistaX;?>},
                 function (data){
                     var area = [];
                     var resultado = [];

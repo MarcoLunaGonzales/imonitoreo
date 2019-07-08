@@ -11,15 +11,16 @@ $dbh = new Conexion();
 
 session_start();
 
-/*
+
 $mesTemporal=$_GET["mesX"];
 $anioTemporal=$_GET["anioX"];
-*/
+$vista=$_GET["vistaX"];
 
 
-$mesTemporal=6;
+
+/*$mesTemporal=6;
 $anioTemporal=2019;
-
+*/
 
 require_once '../conexion.php';
 require_once '../functions.php';
@@ -53,8 +54,8 @@ require_once '../styles.php';
 
 
 for($i=2015;$i<=$anioTemporal;$i++){
-	$certificadosTCP=obtenerCantCertificados(0,$i,12,39,0,1);
-	$certificadosTCS=obtenerCantCertificados(0,$i,12,38,0,1);
+	$certificadosTCP=obtenerCantCertificados(0,$i,12,39,0,1,$vista);
+	$certificadosTCS=obtenerCantCertificados(0,$i,12,38,0,1,$vista);
 
 	$emparray[]=array("anio"=>$i, "tcp"=>$certificadosTCP, "tcs"=>$certificadosTCS);
 

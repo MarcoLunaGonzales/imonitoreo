@@ -25,6 +25,14 @@ $iaf=$_GET["iaf"];
 $norma=$_GET["norma"];
 $acumulado=$_GET["acumulado"];
 $certificador=$_GET["certificador"];
+$vista=$_GET["vista"];
+
+$nombreVista="";
+if($vista==1){
+  $nombreVista="CERTIFICADOS EMITIDOS";
+}else{
+  $nombreVista="CERTIFICADOS VIGENTES";
+}
 
 $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
@@ -45,6 +53,9 @@ if($codUnidad==0){
   $codUnidad=$cadenaUnidades;
 }
 
+$fechaVistaIni=$anioTemporal."-".$mesTemporal."-01";
+$fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
+$fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
 
 ?>
 
@@ -53,6 +64,7 @@ if($codUnidad==0){
     <div class="container-fluid">
       <div class="header text-center">
         <h3 class="title">Detalle Certificaciones <?=$nombreArea;?></h3>
+        <h3 class="title"><?=$nombreVista;?></h3>
         <h6>Año: <?=$anioTemporal;?> Mes: <?=$mesTemporal;?></h6>
       </div>
 
@@ -90,12 +102,17 @@ if($codUnidad==0){
                 </thead>
                 <tbody>
                   <?php
-                  $sql="SELECT (select u.nombre from unidades_organizacionales u where u.codigo=e.idoficina)as unidad, (select a.nombre from areas a where a.codigo=e.idarea)as area, (select c.nombre from clientes c where c.codigo=e.idcliente)as cliente, e.norma, e.descripcion, e.fechaemision, e.fechavalido, e.fechaentrega, e.stipo, e.codigo, e.estado,  e.dcertificadorext, (select i.nombre from iaf i where i.abreviatura=e.iaf)as iaf from ext_certificados e where e.idarea in ($codArea) and e.idoficina in ($codUnidad) and YEAR(e.fechaemision)='$anioTemporal' ";
-                  if($acumulado==0){
-                    $sql.=" and MONTH(e.fechaemision)=$mesTemporal ";
+                  $sql="SELECT (select u.nombre from unidades_organizacionales u where u.codigo=e.idoficina)as unidad, (select a.nombre from areas a where a.codigo=e.idarea)as area, (select c.nombre from clientes c where c.codigo=e.idcliente)as cliente, e.norma, e.descripcion, e.fechaemision, e.fechavalido, e.fechaentrega, e.stipo, e.codigo, e.estado,  e.dcertificadorext, (select i.nombre from iaf i where i.abreviatura=e.iaf)as iaf from ext_certificados e where e.idarea in ($codArea) and e.idoficina in ($codUnidad) ";
+                  if($vista==1){
+                    if($acumulado==0){
+                      $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)=$mesTemporal ";
+                    }else{
+                      $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)<=$mesTemporal ";
+                    }                    
                   }else{
-                    $sql.=" and MONTH(e.fechaemision)<=$mesTemporal ";
+                    $sql.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";
                   }
+
                   if($norma!=""){
                     $sql.=" and e.norma='$norma' ";
                   }

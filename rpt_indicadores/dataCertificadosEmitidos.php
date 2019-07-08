@@ -14,6 +14,7 @@ session_start();
 
 $mesTemporal=$_GET["mesX"];
 $anioTemporal=$_GET["anioX"];
+$vista=$_GET["vistaX"];
 
 
 /*$mesTemporal=5;
@@ -50,11 +51,11 @@ require_once '../styles.php';
 	
 	$emparray[] = array();
 
-	$cantEmpresasTCP=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,0);
-	$cantEmpresasTCPAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,1);
+	$cantEmpresasTCP=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,0,$vista);
+	$cantEmpresasTCPAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,1,$vista);
 
-	$cantEmpresasTCS=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,0);
-	$cantEmpresasTCSAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,1);
+	$cantEmpresasTCS=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,0,$vista);
+	$cantEmpresasTCSAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
 
 	$totalMes=$cantEmpresasTCP+$cantEmpresasTCS;
 	$totalAcumulado=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum;
