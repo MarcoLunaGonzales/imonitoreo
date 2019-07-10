@@ -384,7 +384,7 @@ function montoEjecucionComponente($anio, $mes, $componente, $nivel){
   //$sql="SELECT sum(m.monto)as monto from po_mayores m where m.anio='$anio' and m.mes<='$mes' and m.ml_partida in ($codigosX) and m.fondo=2001";
   $monto=0;
   if($codigosX!=''){
-    $sql="SELECT sum(m.monto)as monto from po_mayores m where m.anio='$anio' and m.mes<='$mes' and m.ml_partida in ($codigosX) and m.fondo=2001";
+    $sql="SELECT sum(m.monto)as monto from po_mayores m where m.anio='$anio' and m.mes<='$mes' and m.ml_partida in ($codigosX) and m.fondo=2001 and m.cuenta like '5%'";
     //echo $sql;
     $stmt = $dbh->prepare($sql);
     $stmt->execute();

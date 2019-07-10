@@ -88,12 +88,13 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					(SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador, a.cod_unidadorganizacional, a.cod_area
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1";
 					if($globalAdmin==0){
-						$sqlLista.=" and a.cod_area='$globalArea' and a.cod_unidadorganizacional='$globalUnidad'";
+						$sqlLista.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) ";
 					}
 					if($codEstadoPOAGestion==3){
 						$sqlLista.=" and a.actividad_extra=1 ";
 					}
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+					//echo $sqlLista;
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();
@@ -153,6 +154,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 								$valueBooleano=0;
 								while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
 									$valueNumero=$rowRec['value_numerico'];
+									$valueNumero=round($valueNumero,2);
 									$valueString=$rowRec['value_string'];
 									$valueBooleano=$rowRec['value_booleano'];
 								}
@@ -160,7 +162,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 	                    		if($codTipoDato==1){
 	                    	?>
 	                    		<td>
-	                    			<input class="form-control input-sm" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" step="0.1" required>
+	                    			<input class="form-control input-lg" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" step="0.01" required>
 	                    		</td>
 	                    	<?php	
 	                    		}

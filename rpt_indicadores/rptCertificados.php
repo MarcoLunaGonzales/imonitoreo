@@ -508,7 +508,17 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       </div><!--ACA TERMINA ROW-->
 
 
+      <?php
+      
+      $arrayAreas = array(38,39);
+      $longitud = count($arrayAreas);
 
+      for($i=0; $i<$longitud; $i++){
+
+      $areaCertificacion=$arrayAreas[$i];
+      $nameAreaCertificacion=abrevArea($areaCertificacion);
+
+      ?>
       <div class="row">
         <div class="col-md-12">
           <div class="card">
@@ -516,7 +526,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">list</i>
               </div>
-              <h4 class="card-title">TCS - Certificados Por Norma
+              <h4 class="card-title"><?=$nameAreaCertificacion;?> - Certificados Por Norma
               </h4>
             </div>
             
@@ -526,6 +536,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <tr>
                     <th class="text-center font-weight-bold">Norma</th>
                     <?php
+
                     $sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
                     $stmtU = $dbh->prepare($sqlU);
                     $stmtU->execute();
@@ -571,7 +582,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $sqlN.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";
                   }
 
-                  $sqlN.=" and e.idarea=38 group by e.norma order by 2 desc";
+                  $sqlN.=" and e.idarea='$areaCertificacion' group by e.norma order by 2 desc";
                   $stmtN = $dbh->prepare($sqlN);
                   $stmtN->execute();
                   $stmtN->bindColumn('norma', $nombreNorma);
@@ -586,13 +597,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtU->bindColumn('codigo', $codigoX);
                     $stmtU->bindColumn('abreviatura', $abrevX);
                     while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                      $cantCertificadosUnidad=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,'',1,$vista);
-                      $cantCertificados=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,$nombreNorma,1,$vista);
+                      $cantCertificadosUnidad=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,'',1,$vista);
+                      $cantCertificados=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$nombreNorma,1,$vista);
                       $participacionNorma=0;
                       if($cantCertificadosUnidad>0){
                         $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
                       }
-                      $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&iaf=0&certificador=0&acumulado=1&codArea=38";
+                      $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&iaf=0&certificador=0&acumulado=1&codArea=$areaCertificacion";
 
                     ?>
                     <td class="table-warning text-center"><a href="<?=$urlDetalle;?>&norma=<?=$nombreNorma;?>" target="_blank"><?=($cantCertificados==0)?"-":formatNumberInt($cantCertificados);?></a></td>
@@ -601,8 +612,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     }
                     $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&iaf=0&certificador=0&acumulado=1&codArea=38";
 
-                    $cantCertificadosUnidad=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,'',1,$vista);
-                    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,$nombreNorma,1,$vista);
+                    $cantCertificadosUnidad=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,$areaCertificacion,'',1,$vista);
+                    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,$areaCertificacion,$nombreNorma,1,$vista);
                     $participacionNorma=0;
                     if($cantCertificadosUnidad>0){
                       $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
@@ -623,8 +634,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtU->bindColumn('codigo', $codigoX);
                     $stmtU->bindColumn('abreviatura', $abrevX);
                     while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                      $cantCertificadosUnidad=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,'',1,$vista);
-                      $cantCertificados=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,38,'',1,$vista);
+                      $cantCertificadosUnidad=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,'',1,$vista);
+                      $cantCertificados=obtenerCantCertificadosNorma($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,'',1,$vista);
                       $participacionNorma=0;
                       if($cantCertificadosUnidad>0){
                         $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
@@ -666,6 +677,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               $anioX=$anioTemporal;
               $mesX=$mesTemporal;
               $vistaX=$vista;
+              $codAreaX=$areaCertificacion;
               require("chartCertificadosNorma.php");
               ?>
             </div>
@@ -682,7 +694,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">list</i>
               </div>
-              <h4 class="card-title">TCS - Certificados Por Sector IAF
+              <h4 class="card-title"><?=$nameAreaCertificacion;?> - Certificados Por Sector IAF
               </h4>
             </div>
             
@@ -733,7 +745,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   }else{
                     $sqlN.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";
                   }
-                  $sqlN.=" and e.idarea=38 and e.iaf<>'0' group by e.iaf order by 2 desc ";
+                  $sqlN.=" and e.idarea='$areaCertificacion' and e.iaf<>'0' group by e.iaf order by 2 desc ";
                   $stmtN = $dbh->prepare($sqlN);
                   $stmtN->execute();
                   $stmtN->bindColumn('iaf', $codigoIAF);
@@ -750,27 +762,27 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtU->bindColumn('codigo', $codigoX);
                     $stmtU->bindColumn('abreviatura', $abrevX);
                     while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,0,1,$vista);
-                      $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,$codigoIAF,1,$vista);
+                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
+                      $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$codigoIAF,1,$vista);
                       $participacionNorma=0;
                       if($cantCertificadosUnidad>0){
                         $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
                       }
 
-                      $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&certificador=0&acumulado=1&codArea=38";
+                      $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&certificador=0&acumulado=1&codArea=$areaCertificacion";
 
                     ?>
                     <td class="table-warning text-center"><a href="<?=$urlDetalle;?>&iaf=<?=$codigoIAF;?>" target="_blank"><?=($cantCertificados==0)?"-":formatNumberInt($cantCertificados);?></a></td>
                     <td class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberInt($participacionNorma);?></td>
                     <?php
                     }
-                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
-                    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,$codigoIAF,1,$vista);
+                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
+                    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,$codigoIAF,1,$vista);
                     $participacionNorma=0;
                     if($cantCertificadosUnidad>0){
                       $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
                     } 
-                    $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&norma=&certificador=0&acumulado=1&codArea=38";
+                    $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=0&mes=$mesTemporal&anio=$anioTemporal&norma=&certificador=0&acumulado=1&codArea=$areaCertificacion";
                     ?>
                     <th class="table-warning text-center"><a href="<?=$urlDetalle;?>&iaf=<?=$codigoIAF;?>" target="_blank"><?=($cantCertificados==0)?"-":formatNumberInt($cantCertificados);?></a></th>
                     <th class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberDec($participacionNorma);?></th>
@@ -787,8 +799,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtU->bindColumn('codigo', $codigoX);
                     $stmtU->bindColumn('abreviatura', $abrevX);
                     while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,0,1,$vista);
-                      $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,38,0,1,$vista);
+                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
+                      $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
                       $participacionNorma=0;
                       if($cantCertificadosUnidad>0){
                         $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
@@ -798,8 +810,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <th class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberInt(100);?></th>
                     <?php
                     }
-                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
-                    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
+                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
+                    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
                     $participacionNorma=0;
                     if($cantCertificadosUnidad>0){
                       $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
@@ -823,13 +835,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title">TCS - Certificados Por Sector IAF</h5>
+              <h5 class="card-title"><?=$nameAreaCertificacion;?> - Certificados Por Sector IAF</h5>
             </div>
             <div class="card-body">
               <?php
               $anioX=$anioTemporal;
               $mesX=$mesTemporal;
               $vistaX=$vista;
+              $codAreaX=$areaCertificacion;
               require("chartCertificadosIAF.php");
               ?>
             </div>
@@ -846,7 +859,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">list</i>
               </div>
-              <h4 class="card-title">TCS - Certificiones por Certificador
+              <h4 class="card-title"><?=$nameAreaCertificacion;?> - Certificados por Certificador
               </h4>
             </div>
             
@@ -882,34 +895,34 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $stmtU->bindColumn('abreviatura', $abrevX);
 
                   while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                    $cantEmpresasOrg=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
-                    $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
+                    $cantEmpresasOrg=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
+                    $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
                     $porcentajeEmpresas=0;
                     if($cantEmpresasOrgTotal>0){
                       $porcentajeEmpresas=($cantEmpresasOrg/$cantEmpresasOrgTotal)*100;
                     }
 
-                    $cantCertificadosOrg=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
-                    $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
+                    $cantCertificadosOrg=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
+                    $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
                     $porcentajeCertificados=0;
                     if($cantEmpresasOrgTotal>0){
                       $porcentajeCertificados=($cantCertificadosOrg/$cantCertificadosOrgTotal)*100;
                     }
 
-                    $cantEmpresasOrg1=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
-                    $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
+                    $cantEmpresasOrg1=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
+                    $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
                     $porcentajeEmpresas1=0;
                     if($cantEmpresasOrgTotal1>0){
                       $porcentajeEmpresas1=($cantEmpresasOrg1/$cantEmpresasOrgTotal1)*100;
                     }
 
-                    $cantCertificadosOrg1=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
-                    $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
+                    $cantCertificadosOrg1=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
+                    $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
                     $porcentajeCertificados1=0;
                     if($cantEmpresasOrgTotal1>0){
                       $porcentajeCertificados1=($cantCertificadosOrg1/$cantCertificadosOrgTotal1)*100;
                     }
-                    $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&acumulado=1&codArea=38";
+                    $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&acumulado=1&codArea=$areaCertificacion";
                   ?>
                   <tr>
                     <td class="text-center"><?=$abrevX;?></td>
@@ -925,14 +938,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   </tr>
                   <?php
                   }
-                  $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
+                  $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
                   $porcentajeEmpresas=100;
-                  $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoExtCert,1,$vista);
+                  $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
                   $porcentajeCertificados=100;
 
-                  $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
+                  $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
                   $porcentajeEmpresas1=100;
-                  $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,38,$organismoCert,1,$vista);
+                  $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
                   $porcentajeCertificados1=100;
                   ?>
                 </tbody>
@@ -957,7 +970,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
       </div><!--ACA TERMINA ROW-->
 
-
+      <?php
+      }
+      ?>
 
 
     </div>

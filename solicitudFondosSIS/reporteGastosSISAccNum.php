@@ -26,7 +26,7 @@ $globalUsuario=$_SESSION["globalUser"];
 
 
 $sqlDetalleX="SELECT pc.codigo, m.glosa_detalle, m.fecha, m.monto, m.fondo, m.organismo, m.ml_partida, 
-(select c.abreviatura from componentessis c where c.partida=m.ml_partida)as codigoact from po_mayores m, po_plancuentas pc where pc.codigo=m.cuenta and m.fondo=2001 and YEAR(m.fecha)='$anio' and m.ml_partida<>''";
+(select c.abreviatura from componentessis c where c.partida=m.ml_partida)as codigoact from po_mayores m, po_plancuentas pc where pc.codigo=m.cuenta and m.fondo=2001 and YEAR(m.fecha)='$anio' and m.ml_partida<>'' and m.cuenta like '5%' ";
 if($tiporeporte==0){
   $sqlDetalleX.=" and MONTH(m.fecha)='$mes' order by m.fecha;";  
 }else if($tiporeporte==1){
@@ -107,7 +107,7 @@ $stmtDetalleX->bindColumn('codigoact', $codigoActividad);
                         <td class="text-center table-success small"><?=$abrevAccX;?></td>
                         <td class="text-left table-success small"><?=$nombreAccX;?></td>
                         <td class="text-left small"><?=$glosa;?></td>
-                        <td class="text-right"><?=formatNumberInt($monto);?></td>
+                        <td class="text-right"><?=formatNumberDec($monto);?></td>
                         <td class="text-center"></td>
                       </tr>  
                       <?php
@@ -119,7 +119,7 @@ $stmtDetalleX->bindColumn('codigoact', $codigoActividad);
                         <tr>
                           <th>-</th>
                           <th colspan="5" class="text-right">TOTALES</th>
-                          <th class="text-right"><?=formatNumberInt($totalGastos);?></th>
+                          <th class="text-right"><?=formatNumberDec($totalGastos);?></th>
                         </tr>
                       </tfoot>
                     </table>

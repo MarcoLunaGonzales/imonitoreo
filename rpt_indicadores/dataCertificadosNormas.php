@@ -15,7 +15,7 @@ session_start();
 $mesTemporal=$_GET["mesX"];
 $anioTemporal=$_GET["anioX"];
 $vista=$_GET["vistaX"];
-
+$codAreaX=$_GET["codAreaX"];
 
 /*$mesTemporal=5;
 $anioTemporal=2019;*/
@@ -56,9 +56,9 @@ require_once '../styles.php';
 	$fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
 
 	if($vista==1){
-		$sqlN="SELECT e.norma, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A') and YEAR(e.fechaemision)=$anioTemporal and e.idarea=38 group by e.norma order by 2 desc";
+		$sqlN="SELECT e.norma, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A') and YEAR(e.fechaemision)=$anioTemporal and e.idarea=$codAreaX group by e.norma order by 2 desc";
 	}else{
-		$sqlN="SELECT e.norma, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A') and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' and e.idarea=38 group by e.norma order by 2 desc";
+		$sqlN="SELECT e.norma, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A') and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' and e.idarea=$codAreaX group by e.norma order by 2 desc";
 	}
 	$stmtN = $dbh->prepare($sqlN);
 	$stmtN->execute();
@@ -66,8 +66,8 @@ require_once '../styles.php';
 	$stmtN->bindColumn('cantidad', $cantidadNorma);
 
 	while($rowN = $stmtN -> fetch(PDO::FETCH_BOUND)){
-	    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,$nombreNorma,1,$vista);
-	    $cantCertificadosTotal=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,'',1,$vista);
+	    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,$codAreaX,$nombreNorma,1,$vista);
+	    $cantCertificadosTotal=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,$codAreaX,'',1,$vista);
 	    $porcentaje=0;
 	    if($cantCertificadosTotal>0){
 	    	$porcentaje=($cantCertificados/$cantCertificadosTotal)*100;

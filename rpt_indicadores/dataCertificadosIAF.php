@@ -15,6 +15,7 @@ session_start();
 $mesTemporal=$_GET["mesX"];
 $anioTemporal=$_GET["anioX"];
 $vista=$_GET["vistaX"];
+$codArea=$_GET["codAreaX"];
 
 /*
 $mesTemporal=5;
@@ -57,9 +58,9 @@ require_once '../styles.php';
 
 
 	if($vista==1){
-		$sqlN="SELECT e.iaf, count(*)as cantidad from ext_certificados e where e.iaf not in ('0') and YEAR(e.fechaemision)=$anioTemporal and e.idarea=38 group by e.iaf order by 2 desc limit 0,10";		
+		$sqlN="SELECT e.iaf, count(*)as cantidad from ext_certificados e where e.iaf not in ('0') and YEAR(e.fechaemision)=$anioTemporal and e.idarea='$codArea' group by e.iaf order by 2 desc limit 0,10";		
 	}else{
-		$sqlN="SELECT e.iaf, count(*)as cantidad from ext_certificados e where e.iaf not in ('0') and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' and e.idarea=38 group by e.iaf order by 2 desc limit 0,10";
+		$sqlN="SELECT e.iaf, count(*)as cantidad from ext_certificados e where e.iaf not in ('0') and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' and e.idarea='$codArea' group by e.iaf order by 2 desc limit 0,10";
 	}
 
 	$stmtN = $dbh->prepare($sqlN);
@@ -69,8 +70,8 @@ require_once '../styles.php';
 
 	while($rowN = $stmtN -> fetch(PDO::FETCH_BOUND)){
 	    $nombreIAF=nameIAF($codigoIAF);
-	    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,38,$codigoIAF,1,$vista);
-	    $cantCertificadosTotal=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
+	    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$codArea,$codigoIAF,1,$vista);
+	    $cantCertificadosTotal=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,$codArea,0,1,$vista);
 	    $porcentaje=0;
 	    if($cantCertificadosTotal>0){
 	    	$porcentaje=($cantCertificados/$cantCertificadosTotal)*100;

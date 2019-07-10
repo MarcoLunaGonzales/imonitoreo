@@ -95,7 +95,9 @@ $stmtDetalleX->bindColumn('codigoact', $codigoActividad);
                         <td class="text-center small"><?=$index;?></td>
                         <td class="text-center small"><?=$fecha;?></td>
                         <td class="text-center small"><?=$codigoActividad;?></td>
+                        
                         <td class="text-left small"><?=$glosa;?></td>
+                        
                         <td class="text-right"><?=formatNumberInt($monto);?></td>
                         <td class="text-center">
                           <div class="form-group">
