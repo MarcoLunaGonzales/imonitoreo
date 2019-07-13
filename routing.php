@@ -234,6 +234,9 @@
 		if ($_GET['opcion']=='descargarDatosConta') {
 			require_once('utilitarios/descargarDatosConta.php');
 		}
+		if ($_GET['opcion']=='descargarDatosPOA') {
+			require_once('utilitarios/descargarDatosPOA.php');
+		}
 		if ($_GET['opcion']=='sincronizacionDatos') {
 			require_once('utilitarios/sincronizacionDatos.php');
 		}

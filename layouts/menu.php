@@ -466,6 +466,13 @@ if($globalPerfilX==1){
                 </li> 
 
                 <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=descargarDatosPOA">
+                    <span class="sidebar-mini"> DP </span>
+                    <span class="sidebar-normal"> Datos POA </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=sincronizacionDatos">
                     <span class="sidebar-mini"> SD </span>
                     <span class="sidebar-normal"> Sincronizacion de Datos </span>

@@ -73,7 +73,7 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-condensed table-striped">
                       <thead>
                         <tr>
                           <th class="text-center">-</th>

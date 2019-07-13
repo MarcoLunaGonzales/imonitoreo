@@ -57,7 +57,7 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-condensed table-striped">
                       <thead>
                         <tr>
                           <th class="text-center">-</th>
@@ -80,8 +80,8 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                           //SACAMOS LA PLANIFICACION
                           $cantidadPlanificada=0;
                           $cantidadEjecutada=0;
-                          $cantidadPlanificada=planificacionPorIndicador($codigoIndicador, $codArea, $codUnidad, $codMesX);  
-                          $cantidadEjecutada=ejecucionPorIndicador($codigoIndicador, $codArea, $codUnidad, $codMesX);
+                          $cantidadPlanificada=planificacionPorIndicador($codigoIndicador, $codArea, $codUnidad, $codMesX, 0);  
+                          $cantidadEjecutada=ejecucionPorIndicador($codigoIndicador, $codArea, $codUnidad, $codMesX, 0);
                       ?>
                         <tr>
                           <td class="text-center"><?=$index;?></td>
@@ -90,8 +90,8 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                           <td><?=$nombreObjetivo;?></td>
                           <td><?=$nombreIndicador;?></td>
                           <td><?=$abrevArea."-".$abrevUnidad;?></td>
-                          <td class="text-right"><?=$cantidadPlanificada;?></td>
-                          <td class="text-right"><?=$cantidadEjecutada;?></td>
+                          <td class="text-right"><?=formatNumberDec($cantidadPlanificada);?></td>
+                          <td class="text-right"><?=formatNumberDec($cantidadEjecutada);?></td>
                         </tr>
             <?php
             							$index++;
