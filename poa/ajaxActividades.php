@@ -22,7 +22,7 @@ $codArea=$_GET['cod_area'];
 
 $codUnidadHijosX=buscarHijosUO($codUnidad);
 
-$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
+$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
 
 ?>
 <div class="col-md-12">

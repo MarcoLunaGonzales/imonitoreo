@@ -143,7 +143,7 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                           $abrevArea=abrevArea($codArea);
                           $abrevUnidad=abrevUnidad($codUnidad);
 
-                          $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
+                          $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
                           $nombreDatoClasificador=obtieneDatoClasificador($datoClasificador,$nombreTablaClasificador);
 
                           if($actividadCMI==1){

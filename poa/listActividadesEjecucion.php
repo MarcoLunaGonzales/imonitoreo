@@ -167,8 +167,8 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                           $abrevArea=abrevArea($codArea);
                           $abrevUnidad=abrevUnidad($codUnidad);
 
-                          $codigoTablaClasificador=obtieneCodigoClasificador($codigoIndicador,$codArea);
-                          $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
+                          $codigoTablaClasificador=obtieneCodigoClasificador($codigoIndicador,$codUnidad,$codArea);
+                          $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
                           $nombreDatoClasificador=obtieneDatoClasificador($codigodetalleclasificador,$nombreTablaClasificador);
 
 

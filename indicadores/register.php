@@ -46,7 +46,7 @@ $moduleName="Indicador Estrategico";
 					</div>
 				  </div>
 				</div>
-				<div class="row">
+				<!--div class="row">
 				  <label class="col-sm-2 col-form-label">Periodicidad</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
@@ -66,7 +66,7 @@ $moduleName="Indicador Estrategico";
 					  </select>
 					</div>
 				  </div>
-				</div>
+				</div-->
 
 				<div class="row">
 				  <label class="col-sm-2 col-form-label">Lineamiento</label>
@@ -86,7 +86,7 @@ $moduleName="Indicador Estrategico";
 				  </div>
 				</div>
 
-				<div class="row">
+				<!--div class="row">
 				  <label class="col-sm-2 col-form-label">Tipo de Calculo</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
@@ -106,7 +106,7 @@ $moduleName="Indicador Estrategico";
 					  </select>
 					</div>
 				  </div>
-				</div>
+				</div-->
 
 				<div class="row">
 				  <label class="col-sm-2 col-form-label">Tipo de Resultado</label>
@@ -115,7 +115,7 @@ $moduleName="Indicador Estrategico";
 					  <select class="selectpicker" title="Seleccione una opcion" name="tipo_resultado" id="tipo_resultado" data-style="<?=$comboColor;?>" required>
 					  	<option disabled selected value=""></option>
 					  	<?php
-					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM tipos_resultado order by 1");
+					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM tipos_resultado where codigo=1 order by 1");
 						$stmt->execute();
 						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 							$codigoX=$row['codigo'];
@@ -152,7 +152,7 @@ $moduleName="Indicador Estrategico";
 				  </div>
 				</div>
 
-				<div class="row">
+				<!--div class="row">
 				  <label class="col-sm-2 col-form-label">Clasificador Relacionado</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
@@ -172,7 +172,7 @@ $moduleName="Indicador Estrategico";
 					  </select>
 					</div>
 				  </div>
-				</div>
+				</div-->
 
 
           <div class="row">
@@ -224,7 +224,7 @@ $moduleName="Indicador Estrategico";
 
 								if($contadorVerifica>0){
 							?>
-								<td>
+								<td class="text-center">
 									<div class="form-check">
 		                                <label class="form-check-label">
 		                                  <input class="form-check-input" type="checkbox" name="propiedad_indicador[]" value="<?=$codigoU?>|<?=$codigoA?>" value="">
@@ -233,6 +233,21 @@ $moduleName="Indicador Estrategico";
 		                                  </span>
 		                                </label>
 		                             </div>
+		                             <div class="form-group">
+										<select class="selectpicker" data-style="<?=$comboColor;?>" data-width="fit" name="combo|<?=$codigoU?>|<?=$codigoA?>" id="clasificador" required>
+											<?php
+											$stmt = $dbh->prepare("SELECT codigo, abreviatura FROM clasificadores order by 1");
+											$stmt->execute();
+											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+												$codigoX=$row['codigo'];
+												$nombreX=$row['abreviatura'];
+											?>
+											<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+											<?php	
+											}
+											?>
+										</select>
+									</div>
 								</td>
 							<?php	
 								}else{

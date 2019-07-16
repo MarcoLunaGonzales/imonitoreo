@@ -135,7 +135,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 			                        $index=1;
 			                      	while ($rowLista = $stmtLista->fetch(PDO::FETCH_BOUND)) {
               							//echo $codUnidad." ----- ".$codArea." ".$norma;
-              							$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
+              							$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
 
 			                    ?>
 						<div id="div<?=$index;?>">	

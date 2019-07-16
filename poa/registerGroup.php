@@ -139,7 +139,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 			                      	while ($rowLista = $stmtLista->fetch(PDO::FETCH_BOUND)) {
               							//echo $codUnidad." ----- ".$codArea." ".$norma;
               							//SACAMOS LA TABLA RELACIONADA
-              							$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codArea);
+              							$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
 
 			                    ?>
 						<div id="div<?=$index;?>">	

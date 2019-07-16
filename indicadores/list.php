@@ -55,10 +55,8 @@ $stmt->bindColumn('tiporesultado', $tipoResultado);
                         <tr>
                           <th class="text-center">#</th>
                           <th>Nombre</th>
-                          <th>Periodicidad</th>
                           <th>Lineamiento</th>
                           <th>Desc. Calculo</th>
-                          <th>Tipo Calculo</th>
                           <th>Tipo Resultado</th>
                           <th class="text-center">Configuración Propiedad</th>
                           <th class="text-center">Metas</th>
@@ -73,10 +71,8 @@ $stmt->bindColumn('tiporesultado', $tipoResultado);
                         <tr>
                           <td align="center"><?=$index;?></td>
                           <td><?=$nombre;?></td>
-                          <td><?=$periodo;?></td>
                           <td><?=$lineamiento;?></td>
                           <td><?=$descripcionCalculo;?></td>
-                          <td><?=$tipoCalculo;?></td>
                           <td><?=$tipoResultado;?></td>
                           <td class="text-center">
                             <button class="<?=$buttonDetail;?>" data-toggle="modal" data-target="#myModal" onClick="ajaxPropiedad(<?=$codigoObjetivo?>,<?=$codigo?>);" title="Ver Configuracion de Propiedad"> 

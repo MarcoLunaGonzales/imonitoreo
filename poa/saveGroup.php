@@ -8,6 +8,13 @@ require_once '../functions.php';
 
 $dbh = new Conexion();
 
+$stmt = $dbh->prepare("ALTER TABLE actividades_poaejecucion DROP FOREIGN KEY actividades_poaejecucion_fk1;");
+$stmt->execute();
+$stmt = $dbh->prepare("ALTER TABLE `actividades_poaplanificacion` DROP FOREIGN KEY `actividades_poaplanificacion_fk1`;");
+$stmt->execute();
+
+
+
 //SACAMOS LA CONFIGURACION PARA REDIRECCIONAR EL PON
 $stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=6");
 $stmt->execute();
@@ -71,6 +78,9 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		//BORRAMOS LA TABLA
 		$sqlDelete="";
 		$sqlDelete="DELETE from $table where codigo='$codigoPOA'";
+
+		//echo $sqlDelete;
+
 		$stmtDel = $dbh->prepare($sqlDelete);
 		$flagSuccess=$stmtDel->execute();
 
@@ -82,32 +92,45 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		if($codEstadoPOAGestion==3){
 			$actividadExtra=1;
 		}
-		$stmt = $dbh->prepare("INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_tiporesultado, cod_datoclasificador, actividad_extra, observaciones, cod_hito, clave_indicador) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_normapriorizada, :cod_norma, :cod_tiposeguimiento, :producto_esperado, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_tiporesultado, :cod_datoclasificador, :actividad_extra,:observaciones,:cod_hito,:clave_indicador)");
+		$sql="INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_tiporesultado, cod_datoclasificador, actividad_extra, observaciones, cod_hito, clave_indicador) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_normapriorizada, :cod_norma, :cod_tiposeguimiento, :producto_esperado, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_tiporesultado, :cod_datoclasificador, :actividad_extra,:observaciones,:cod_hito,:clave_indicador)";
+		$stmt = $dbh->prepare($sql);
 		// Bind
-		$stmt->bindParam(':codigo', $codigoPOA);
-		$stmt->bindParam(':orden', $ordenPOA);
-		$stmt->bindParam(':nombre', $nombre);
-		$stmt->bindParam(':cod_gestion', $globalGestion);
-		$stmt->bindParam(':cod_normapriorizada', $normaPriorizada);
-		$stmt->bindParam(':cod_norma', $norma);
-		$stmt->bindParam(':cod_tiposeguimiento', $tipoSeguimiento);
-		$stmt->bindParam(':producto_esperado', $productoEsperado);
-		$stmt->bindParam(':cod_indicador', $codigoIndicador);
-		$stmt->bindParam(':cod_unidadorganizacional', $codigoUnidad);
-		$stmt->bindParam(':cod_area', $codigoArea);
-		$stmt->bindParam(':cod_estado', $codEstado);
-		$stmt->bindParam(':created_at', $fechaHoraActual);
-		$stmt->bindParam(':created_by', $globalUser);
-		$stmt->bindParam(':cod_tiporesultado', $tipoResultado);
-		$stmt->bindParam(':cod_datoclasificador', $datoClasificador);
-		$stmt->bindParam(':actividad_extra', $actividadExtra);
-		$stmt->bindParam(':observaciones', $observaciones);
-		$stmt->bindParam(':cod_hito', $hito);
-		$stmt->bindParam(':clave_indicador', $claveIndicador);
-		
-		$flagSuccess=$stmt->execute();	
+ 		
+ 		$values = array(':codigo'=>$codigoPOA,
+		':orden'=> $ordenPOA,
+		':nombre'=> $nombre,
+		':cod_gestion'=> $globalGestion,
+		':cod_normapriorizada'=> $normaPriorizada,
+		':cod_norma'=> $norma,
+		':cod_tiposeguimiento'=> $tipoSeguimiento,
+		':producto_esperado'=> $productoEsperado,
+		':cod_indicador'=> $codigoIndicador,
+		':cod_unidadorganizacional'=> $codigoUnidad,
+		':cod_area'=> $codigoArea,
+		':cod_estado'=> $codEstado,
+		':created_at'=> $fechaHoraActual,
+		':created_by'=> $globalUser,
+		':cod_tiporesultado'=> $tipoResultado,
+		':cod_datoclasificador'=> $datoClasificador,
+		':actividad_extra'=> $actividadExtra,
+		':observaciones'=> $observaciones,
+		':cod_hito'=> $hito,
+		':clave_indicador'=> $claveIndicador
+    	);
+
+    	$exQuery=str_replace(array_keys($values), array_values($values), $sql);
+    	//echo $exQuery;
+
+		$flagSuccess=$stmt->execute($values);	
 	}
 } 
+
+
+$stmt = $dbh->prepare("ALTER TABLE `actividades_poaejecucion` ADD CONSTRAINT `actividades_poaejecucion_fk1` FOREIGN KEY (`cod_actividad`) REFERENCES `actividades_poa` (`codigo`);");
+$stmt->execute();
+$stmt = $dbh->prepare("ALTER TABLE `actividades_poaplanificacion` ADD CONSTRAINT `actividades_poaplanificacion_fk1` FOREIGN KEY (`cod_actividad`) REFERENCES `actividades_poa` (`codigo`);");
+$stmt->execute();
+
 
 
 if($flagSuccess==true){

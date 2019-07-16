@@ -68,7 +68,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					</div>
 				  </div>
 				</div>
-				<div class="row">
+				
+				<!--div class="row">
 				  <label class="col-sm-2 col-form-label">Periodicidad</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
@@ -88,7 +89,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					  </select>
 					</div>
 				  </div>
-				</div>
+				</div-->
 
 				<div class="row">
 				  <label class="col-sm-2 col-form-label">Lineamiento</label>
@@ -108,7 +109,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 				  </div>
 				</div>
 
-				<div class="row">
+				<!--div class="row">
 				  <label class="col-sm-2 col-form-label">Tipo de Calculo</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
@@ -128,7 +129,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					  </select>
 					</div>
 				  </div>
-				</div>
+				</div-->
 
 				<div class="row">
 				  <label class="col-sm-2 col-form-label">Tipo de Resultado</label>
@@ -137,7 +138,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					  <select class="selectpicker" title="Seleccione una opcion" name="tipo_resultado" id="tipo_resultado" data-style="<?=$comboColor;?>" required>
 					  	<option disabled selected value=""></option>
 					  	<?php
-					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM tipos_resultado order by 1");
+					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM tipos_resultado where codigo=1 order by 1");
 						$stmt->execute();
 						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 							$codigoX=$row['codigo'];
@@ -174,7 +175,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 				  </div>
 				</div>
 
-				<div class="row">
+				<!--div class="row">
 				  <label class="col-sm-2 col-form-label">Clasificador Relacionado</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
@@ -194,7 +195,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 					  </select>
 					</div>
 				  </div>
-				</div>
+				</div-->
 
 
           <div class="row">
@@ -245,11 +246,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 								}
 
 								if($contadorVerifica>0){
-									$sqlVeriCheck="SELECT count(*)contador from indicadores_unidadesareas iua where cod_indicador='$codigoIndicador' and cod_unidadorganizacional='$codigoU' and cod_area='$codigoA'";
+									$sqlVeriCheck="SELECT count(*)contador, cod_clasificador from indicadores_unidadesareas iua where cod_indicador='$codigoIndicador' and cod_unidadorganizacional='$codigoU' and cod_area='$codigoA'";
 									$stmtVeriCheck = $dbh->prepare($sqlVeriCheck);
 									$stmtVeriCheck->execute();
 									while ($rowRevisa = $stmtVeriCheck->fetch(PDO::FETCH_ASSOC)) {
 										$contadorVerifica=$rowRevisa['contador'];
+										$codClasificador=$rowRevisa['cod_clasificador'];
 									}
 
 							?>
@@ -262,6 +264,22 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		                                  </span>
 		                                </label>
 		                             </div>
+
+		                             <div class="form-group">
+										<select class="selectpicker" data-style="<?=$comboColor;?>" data-width="fit" name="combo|<?=$codigoU?>|<?=$codigoA?>" id="clasificador" required>
+											<?php
+											$stmt = $dbh->prepare("SELECT codigo, abreviatura FROM clasificadores order by 1");
+											$stmt->execute();
+											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+												$codigoX=$row['codigo'];
+												$nombreX=$row['abreviatura'];
+											?>
+											<option value="<?=$codigoX;?>" <?=($codClasificador==$codigoX)?"selected":"";?> ><?=$nombreX;?></option>
+											<?php	
+											}
+											?>
+										</select>
+									</div>
 								</td>
 							<?php	
 								}else{

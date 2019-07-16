@@ -924,30 +924,18 @@ function obtieneValorConfig($codigo){
 }
 
 
-function obtieneTablaClasificador($indicador, $area){
+
+function obtieneTablaClasificador($indicador, $unidad, $area){
   $dbh = new Conexion();
-  $sqlClasificador="SELECT IFNULL(i.cod_clasificador,0)as clasificador FROM indicadores i where i.codigo='$indicador'";
+  $sqlClasificador="SELECT IFNULL(i.cod_clasificador,0)as clasificador FROM indicadores_unidadesareas i where i.cod_indicador='$indicador' and i.cod_unidadorganizacional='$unidad' and i.cod_area='$area'";
+//  echo $sqlClasificador;
   $stmtClasificador = $dbh->prepare($sqlClasificador);
   $stmtClasificador->execute();
   $codClasificador=0;
   while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
     $codClasificador=$rowClasificador['clasificador'];
   }
-  $codigoTabla=0;
-  if($codClasificador>0){
-    if($area==11){
-      $codigoTabla=2;
-    }
-    if($area==13){
-      $codigoTabla=3;
-    }
-    if($area==38 || $area==39){
-      $codigoTabla=1;
-    }
-    if($area==40){
-      $codigoTabla=4;
-    }
-  }
+  $codigoTabla=$codClasificador;
   //sacamos el nombre de la tabla
   $sqlClasificador="SELECT c.tabla FROM clasificadores c where c.codigo=$codigoTabla";
   //echo $sqlClasificador;
@@ -960,31 +948,20 @@ function obtieneTablaClasificador($indicador, $area){
   return $nombreTablaClasificador;
 }
 
-function obtieneCodigoClasificador($indicador, $area){
+
+
+function obtieneCodigoClasificador($indicador, $unidad, $area){
   $dbh = new Conexion();
   //echo "indicador-".$indicador." area.".$area;
-  $sqlClasificador="SELECT IFNULL(i.cod_clasificador,0)as clasificador FROM indicadores i where i.codigo='$indicador'";
+  $sqlClasificador="SELECT IFNULL(i.cod_clasificador,0)as clasificador FROM indicadores_unidadesareas i where i.cod_indicador='$indicador' and i.cod_unidadorganizacional='$unidad' and i.cod_area='$area'";
+//  echo $sqlClasificador;
   $stmtClasificador = $dbh->prepare($sqlClasificador);
   $stmtClasificador->execute();
   $codClasificador=0;
   while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
     $codClasificador=$rowClasificador['clasificador'];
   }
-  $codigoTabla=0;
-  if($codClasificador>0){
-    if($area==11){
-      $codigoTabla=2;
-    }
-    if($area==38 || $area==39){
-      $codigoTabla=1;
-    }
-    if($area==13){
-      $codigoTabla=3;
-    }
-    if($area==40){
-      $codigoTabla=4;
-    }
-  }
+  $codigoTabla=$codClasificador;
   return $codigoTabla;
 }
 

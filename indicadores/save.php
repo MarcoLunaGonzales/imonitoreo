@@ -15,10 +15,10 @@ $cod_objetivo=$_POST["cod_objetivo"];
 $urlRedirect="../index.php?opcion=listIndicadores&codigo=$cod_objetivo";
 
 $nombre=$_POST["nombre"];
-$periodo=$_POST["periodo"];
+//$periodo=$_POST["periodo"];
 $descripcion=$_POST["descripcion"];
 $lineamiento=$_POST["lineamiento"];
-$tipo_calculo=$_POST["tipo_calculo"]; 
+//$tipo_calculo=$_POST["tipo_calculo"]; 
 $codEstado="1";
 $codTipoObjetivo="1";
 $tipo_resultado=$_POST["tipo_resultado"];
@@ -27,24 +27,21 @@ $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
 $fechaHoraActual=date("Y-m-d H:i:s");
 $propiedad_indicador=$_POST["propiedad_indicador"];
-$clasificador=$_POST["clasificador"];
+//$clasificador=$_POST["clasificador"];
 
 
 // Prepare
-$stmt = $dbh->prepare("INSERT INTO $table (nombre, cod_objetivo, cod_periodo, descripcion_calculo, lineamiento, cod_tipocalculo, cod_gestion, cod_estado, cod_tiporesultado, cod_tiporesultadometa, cod_tipoobjetivo, cod_clasificador, created_at, created_by) VALUES (:nombre, :cod_objetivo, :cod_periodo, :descripcion_calculo, :lineamiento, :cod_tipocalculo, :cod_gestion, :cod_estado, :cod_tiporesultado, :cod_tiporesultadometa, :cod_tipoobjetivo, :cod_clasificador, :created_at, :created_by)");
+$stmt = $dbh->prepare("INSERT INTO $table (nombre, cod_objetivo, descripcion_calculo, lineamiento, cod_gestion, cod_estado, cod_tiporesultado, cod_tiporesultadometa, cod_tipoobjetivo, created_at, created_by) VALUES (:nombre, :cod_objetivo, :descripcion_calculo, :lineamiento, :cod_gestion, :cod_estado, :cod_tiporesultado, :cod_tiporesultadometa, :cod_tipoobjetivo, :created_at, :created_by)");
 // Bind
 $stmt->bindParam(':nombre', $nombre);
 $stmt->bindParam(':cod_objetivo', $cod_objetivo);
-$stmt->bindParam(':cod_periodo', $periodo);
 $stmt->bindParam(':descripcion_calculo', $descripcion);
 $stmt->bindParam(':lineamiento', $lineamiento);
-$stmt->bindParam(':cod_tipocalculo', $tipo_calculo);
 $stmt->bindParam(':cod_gestion', $globalGestion);
 $stmt->bindParam(':cod_estado', $codEstado);
 $stmt->bindParam(':cod_tiporesultado', $tipo_resultado);
 $stmt->bindParam(':cod_tiporesultadometa', $tipo_resultadoMeta);
 $stmt->bindParam(':cod_tipoobjetivo', $codTipoObjetivo);
-$stmt->bindParam(':cod_clasificador', $clasificador);
 $stmt->bindParam(':created_at', $fechaHoraActual);
 $stmt->bindParam(':created_by', $globalUser);
 
@@ -55,10 +52,12 @@ $flagSuccessDetail=true;
 
 for ($i=0;$i<count($propiedad_indicador);$i++){ 	    
 	list($codUnidad, $codArea)=explode("|",$propiedad_indicador[$i]);
-	$stmt = $dbh->prepare("INSERT INTO indicadores_unidadesareas (cod_indicador, cod_unidadorganizacional, cod_area) VALUES (:cod_indicador, :cod_unidad, :cod_area)");
+	$codClasificador=$_POST["combo|".$codUnidad."|".$codArea];
+	$stmt = $dbh->prepare("INSERT INTO indicadores_unidadesareas (cod_indicador, cod_unidadorganizacional, cod_area, cod_clasificador) VALUES (:cod_indicador, :cod_unidad, :cod_area, :cod_clasificador)");
 	$stmt->bindParam(':cod_indicador', $lastId);
 	$stmt->bindParam(':cod_unidad', $codUnidad);
 	$stmt->bindParam(':cod_area', $codArea);
+	$stmt->bindParam(':cod_clasificador', $codClasificador);
 
 	$flagSuccess2=$stmt->execute();
 	if($flagSuccess2==false){
