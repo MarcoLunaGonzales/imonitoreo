@@ -26,7 +26,7 @@ i.nombre as nombreIndicador, a.codigo as codActividad, a.nombre as nombreActivid
 (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
 (SELECT t.abreviatura from tipos_seguimiento t where t.codigo=a.cod_tiposeguimiento)as tipodato, 
-a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, (select u.nombre from unidades_organizacionales u where u.codigo=a.cod_unidadorganizacional)as unidad, (select aa.nombre from areas aa where aa.codigo=a.cod_area)as area
+a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, (select u.nombre from unidades_organizacionales u where u.codigo=a.cod_unidadorganizacional)as unidad, (select aa.nombre from areas aa where aa.codigo=a.cod_area)as area, a.cod_hito, (select h.nombre from hitos h where h.codigo=a.cod_hito)as hito, a.cod_datoclasificador
 from actividades_poa a, indicadores i, objetivos o, perspectivas p where a.cod_estado=1 and 
  a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva and a.cod_gestion='$gestion' ";
 // echo $sql;
@@ -50,8 +50,11 @@ $stmt->bindColumn('cod_unidadorganizacional', $cod_unidadorganizacional);
 $stmt->bindColumn('cod_area', $cod_area);
 $stmt->bindColumn('unidad', $unidad);
 $stmt->bindColumn('area', $area);
+$stmt->bindColumn('cod_hito', $codHito);
+$stmt->bindColumn('hito', $hito);
+$stmt->bindColumn('cod_datoclasificador', $codDatoClasificador);
 
-echo "perspectiva;codObjetivo;abrevObjetivo;nombreObjetivo;codIndicador;nombreIndicador;codActividad;nombreActividad;normapriorizada;sectorpriorizado;norma;sector;tipodato;producto_esperado;cod_unidadorganizacional;cod_area;unidad;area;eneP;eneE;eneDesc;febP;febE;febDesc;marP;marE;marDesc;abrP;abrE;abrDesc;mayP;mayE;mayDesc;junP;junE;junDesc;julP;julE;julDesc;agoP;agoE;agoDesc;sepP;sepE;sepDesc;octP;octE;octDesc;novP;novE;novDesc;dicP;dicE;dicDesc";	
+echo "perspectiva;codObjetivo;abrevObjetivo;nombreObjetivo;codIndicador;nombreIndicador;codActividad;nombreActividad;normapriorizada;sectorpriorizado;norma;sector;tipodato;producto_esperado;cod_unidadorganizacional;cod_area;unidad;area;cod_hito;hito;codDatoClas;nombreClasificador;eneP;eneE;eneDesc;febP;febE;febDesc;marP;marE;marDesc;abrP;abrE;abrDesc;mayP;mayE;mayDesc;junP;junE;junDesc;julP;julE;julDesc;agoP;agoE;agoDesc;sepP;sepE;sepDesc;octP;octE;octDesc;novP;novE;novDesc;dicP;dicE;dicDesc";	
 echo "\r\n";
 
 while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
@@ -62,9 +65,13 @@ while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
     $reemplazar=array("", "", "", "");
     $nombreActividad=str_ireplace($buscar,$reemplazar,$nombreActividad);
 
+    $nombreDatoClasificador="";
+    if($codDatoClasificador>0){
+		$nombreTablaClasificador=obtieneTablaClasificador($codIndicador,$cod_unidadorganizacional,$cod_area);
+		$nombreDatoClasificador=obtieneDatoClasificador($codDatoClasificador,$nombreTablaClasificador);    	
+    }
 
-
-	$txt="$perspectiva;$codObjetivo;$abrevObjetivo;$nombreObjetivo;$codIndicador;$nombreIndicador;$codActividad;$nombreActividad;$normapriorizada;$sectorpriorizado;$norma;$sector;$tipodato;$producto_esperado;$cod_unidadorganizacional;$cod_area;$unidad;$area;";	
+	$txt="$perspectiva;$codObjetivo;$abrevObjetivo;$nombreObjetivo;$codIndicador;$nombreIndicador;$codActividad;$nombreActividad;$normapriorizada;$sectorpriorizado;$norma;$sector;$tipodato;$producto_esperado;$cod_unidadorganizacional;$cod_area;$unidad;$area;$codHito;$hito;$codDatoClasificador;$nombreDatoClasificador;";	
 	for($i=1;$i<=12;$i++){
 		$sqlRecupera="SELECT value_numerico from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
 		$stmtRecupera = $dbh->prepare($sqlRecupera);

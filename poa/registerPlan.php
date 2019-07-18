@@ -108,27 +108,30 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					$stmtLista->bindColumn('cod_unidadorganizacional', $codUnidad);
 					$stmtLista->bindColumn('cod_area', $codArea);
 
+					$anchoColumna="100px";
+	
 					?>
 
+
               		<div class="table-responsive">
-		                <table class="table table-striped">
+		                <table class="table table-striped table-condensed" id="tablePaginatorFixed" width="100%">
 		                  <thead>
 		                    <tr>
 		                      <th class="text-center">#</th>
 		                      <th class="text-center">Area</th>
 		                      <th>Nombre</th>
-		                      <th>Ene</th>
-		                      <th>Feb</th>
-		                      <th>Mar</th>
-		                      <th>Abr</th>
-		                      <th>May</th>
-		                      <th>Jun</th>
-		                      <th>Jul</th>
-		                      <th>Ago</th>
-		                      <th>Sep</th>
-		                      <th>Oct</th>
-		                      <th>Nov</th>
-		                      <th>Dic</th>
+		                      <th width="<?=$anchoColumna;?>">Ene</th>
+		                      <th width="<?=$anchoColumna;?>">Feb</th>
+		                      <th width="<?=$anchoColumna;?>">Mar</th>
+		                      <th width="<?=$anchoColumna;?>">Abr</th>
+		                      <th width="<?=$anchoColumna;?>">May</th>
+		                      <th width="<?=$anchoColumna;?>">Jun</th>
+		                      <th width="<?=$anchoColumna;?>">Jul</th>
+		                      <th width="<?=$anchoColumna;?>">Ago</th>
+		                      <th width="<?=$anchoColumna;?>">Sep</th>
+		                      <th width="<?=$anchoColumna;?>">Oct</th>
+		                      <th width="<?=$anchoColumna;?>">Nov</th>
+		                      <th width="<?=$anchoColumna;?>">Dic</th>
 		                    </tr>
 		                  </thead>
 		                  <tbody>
@@ -141,7 +144,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                    <tr>
 		                      <td class="text-center"><?=$index;?></td>
 		                      <td class="text-center font-weight-bold"><h6><p class="text-danger"><?=$abrevUnidad;?>-<?=$abrevArea;?></p></h6></td>
-		                      <td class="font-weight-bold"><?=$nombre;?></td>
+		                      <td class="text-left font-weight-bold small"><?=$nombre;?></td>
 		                    <?php
 	                    	for($i=1;$i<=12;$i++){
 	                    		$sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
@@ -162,7 +165,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 	                    		if($codTipoDato==1){
 	                    	?>
 	                    		<td>
-	                    			<input class="form-control input-lg" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" step="0.01" required>
+	                    			<input class="form-control" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" step="0.01" required>
 	                    		</td>
 	                    	<?php	
 	                    		}

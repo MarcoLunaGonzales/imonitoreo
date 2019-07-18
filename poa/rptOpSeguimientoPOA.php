@@ -9,6 +9,7 @@ $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 $globalNombreUnidad=$_SESSION["globalNombreUnidad"];
 $globalNombreArea=$_SESSION["globalNombreArea"];
+$globalAdmin=$_SESSION["globalAdmin"];
 
 $globalUnidadesReports=$_SESSION["globalUnidadesReports"];
 $globalFondosReports=$_SESSION["globalFondosReports"];
@@ -77,6 +78,63 @@ $dbh = new Conexion();
 					</div>
 				  </div>
 				</div>
+
+
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Unidad Organizacional</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <select class="selectpicker form-control" title="Seleccione una opcion" name="unidad_organizacional[]" id="unidad_organizacional" data-style="select-with-transition" multiple required>
+					  	<option disabled selected value=""></option>
+					  	<?php
+					  	$sql="SELECT u.codigo, u.nombre FROM unidades_organizacionales u, unidadesorganizacionales_poa up where u.codigo=up.cod_unidadorganizacional ";
+			  			if($globalAdmin==0){
+				  			$sql.=" and u.codigo in ($globalUnidadesReports) ";
+			  			}
+					  	$sql.=" order by 2";
+					  	$stmt = $dbh->prepare($sql);
+						$stmt->execute();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+							$codigoX=$row['codigo'];
+							$nombreX=$row['nombre'];
+						?>
+						<option value="<?=$codigoX;?>" selected><?=$nombreX;?></option>
+						<?php	
+						}
+					  	?>
+					  </select>
+					</div>
+				  </div>
+				</div>
+
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Area</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <select class="selectpicker form-control" title="Seleccione una opcion" name="areas[]" id="areas" data-style="select-with-transition" multiple="" required>
+					  	<option disabled selected value=""></option>
+					  	<?php
+					  	$sql="SELECT a.codigo, a.nombre FROM areas a, areas_poa ap where a.codigo=ap.cod_area ";
+					  	if($globalAdmin==0){
+					  		$sql.=" and a.codigo in ($globalAreasReports) ";
+				  		}
+				  		$sql.=" order by 2";
+					  	$stmt = $dbh->prepare($sql);
+						$stmt->execute();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+							$codigoX=$row['codigo'];
+							$nombreX=$row['nombre'];
+						?>
+						<option value="<?=$codigoX;?>"  selected><?=$nombreX;?></option>
+						<?php	
+						}
+					  	?>
+					  </select>
+					</div>
+				  </div>
+				</div>
+
+
 
 
 				<div class="row">

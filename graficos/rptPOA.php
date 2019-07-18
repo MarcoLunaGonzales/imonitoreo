@@ -86,9 +86,9 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
             if($codIndicadorTotalPOA!=$codIndicador && $indiceBuscadorClientes==false){
 
               $sql="SELECT iua.cod_area, iua.cod_unidadorganizacional FROM objetivos o, indicadores i, indicadores_unidadesareas iua WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and i.codigo in ($codIndicador) and o.cod_gestion='$codGestion' and i.codigo=iua.cod_indicador";
-              if($globalAdmin==0){
+//              if($globalAdmin==0){
                 $sql.=" and iua.cod_area in ($globalAreasReports) and iua.cod_unidadorganizacional in ($globalUnidadesReports) ";
-              }
+//              }
               $sql.=" group by iua.cod_area, iua.cod_unidadorganizacional";
 
               $stmt = $dbh->prepare($sql);

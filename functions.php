@@ -159,7 +159,7 @@ function abrevAccNum($codigo){
 
 function abrevArea($codigo){
    $dbh = new Conexion();
-   $sql="SELECT abreviatura FROM areas where codigo in ($codigo)";
+   $sql="SELECT distinct(abreviatura) FROM areas where codigo in ($codigo)";
    $stmt = $dbh->prepare($sql);
    //echo $sql;
    $stmt->execute();

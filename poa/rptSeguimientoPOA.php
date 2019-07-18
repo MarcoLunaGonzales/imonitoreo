@@ -35,6 +35,9 @@ $globalArea=$_SESSION["globalArea"];
 $globalUnidadesReports=$_SESSION["globalUnidadesReports"];
 $globalAreasReports=$_SESSION["globalAreasReports"];
 
+$nameUnidades=abrevUnidad($globalUnidadesReports);
+$nameAreas=abrevArea($globalAreasReports);
+
 $globalAdmin=$_SESSION["globalAdmin"];
 $globalUserPON=$_SESSION["globalUserPON"];
 
@@ -42,13 +45,9 @@ $globalUserPON=$_SESSION["globalUserPON"];
 $sql="SELECT (select p.nombre from perspectivas p where p.codigo=o.cod_perspectiva)as perspectiva, o.codigo, o.abreviatura, o.descripcion, (SELECT g.nombre from gestiones g WHERE g.codigo=o.cod_gestion) as gestion, i.nombre as nombreindicador, i.codigo as codigoindicador
     FROM objetivos o, indicadores i, indicadores_unidadesareas iua
   WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and o.cod_perspectiva in ($perspectiva)";
-if($globalAdmin==0){
+//if($globalAdmin==0){
   $sql.=" and iua.cod_area in ($globalAreasReports) and iua.cod_unidadorganizacional in ($globalUnidadesReports) ";
-}
-if($globalUserPON==1){
-  $sql.=" union SELECT (select p.nombre from perspectivas p where p.codigo=o.cod_perspectiva)as perspectiva, o.codigo, o.abreviatura, o.descripcion, (SELECT g.nombre from gestiones g WHERE g.codigo=o.cod_gestion) as gestion, i.nombre as nombreindicador, i.codigo as codigoindicador FROM objetivos o, indicadores i, indicadores_unidadesareas iua WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' 
-    and i.codigo=iua.cod_indicador and i.codigo='$codigoIndicadorPON' ";
-}
+//}
 $sql.=" group by i.codigo ORDER BY perspectiva, abreviatura, i.nombre";
 
 //echo $sql;
@@ -80,6 +79,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
               <i class="material-icons">assignment</i>
             </div>
             <h4 class="card-title"><?=$moduleName?></h4>
+            <h6 class="card-title">Unidad: <?=$nameUnidades;?> Area: <?=$nameAreas;?></h6>
           </div>
           <div class="card-body">
             <div class="table-responsive">

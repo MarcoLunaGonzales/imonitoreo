@@ -11,7 +11,15 @@ session_start();
 
 $gestionX=$_POST["gestion"];
 $mes=$_POST["mes"];
+$unidadOrganizacionalArray=$_POST["unidad_organizacional"];
+$areasArray=$_POST["areas"];
 $version=$_POST["version"];
+
+$unidadOrganizacionalArray=implode(",", $unidadOrganizacionalArray);
+$areasArray=implode(",", $areasArray);
+
+$nameUnidades=abrevUnidad($unidadOrganizacionalArray);
+$nameAreas=abrevArea($areasArray);
 
 $anio=nameGestion($gestionX);
 
@@ -25,13 +33,20 @@ $_SESSION['mesTemporal']=$mes;
 $_SESSION['versionTemporal']=$version;
 
 
+
 $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 
-$globalUnidadesReports=$_SESSION["globalUnidadesReports"];
-$globalAreasReports=$_SESSION["globalAreasReports"];
+//$globalUnidadesReports=$_SESSION["globalUnidadesReports"];
+//$globalAreasReports=$_SESSION["globalAreasReports"];
+
+$globalUnidadesReports=$unidadOrganizacionalArray;
+$globalAreasReports=$areasArray;
+
+$_SESSION["globalUnidadesReports"]=$unidadOrganizacionalArray;
+$_SESSION["globalAreasReports"]=$areasArray;
 
 $globalAdmin=$_SESSION["globalAdmin"];
 $globalUserPON=$_SESSION["globalUserPON"];
@@ -80,6 +95,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <i class="material-icons">assignment</i>
             </div>
             <h4 class="card-title"><?=$moduleName?></h4>
+            <h6 class="card-title">Unidad: <?=$nameUnidades;?> Area: <?=$nameAreas;?></h6>
+
           </div>
 
 
