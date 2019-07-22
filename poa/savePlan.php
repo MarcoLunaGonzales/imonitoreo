@@ -58,9 +58,9 @@ foreach($_POST as $nombre_campo => $valor){
 }
 
 if($flagSuccessDetail==true){
-	showAlertSuccessError(true,$urlRedirect);	
+	showAlertSuccessError2(true,$urlRedirect);	
 }else{
-	showAlertSuccessError(false,$urlRedirect);
+	showAlertSuccessError2(false,$urlRedirect);
 }
 
 ?>

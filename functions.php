@@ -8,9 +8,23 @@ function showAlertSuccessError($bandera, $url){
       echo "<script>
          alerts.showSwal('success-message','$url');
       </script>";
-   }else{
+   }
+   if ($bandera==false){
       echo "<script>
          alerts.showSwal('error-message','$url');
+      </script>";
+   }
+}
+
+function showAlertSuccessError2($bandera, $url){
+   if($bandera==true){
+      echo "<script>
+         alerts.showSwal('success-message2','$url');
+      </script>";
+   }
+   if ($bandera==false){
+      echo "<script>
+         alerts.showSwal('error-message2','$url');
       </script>";
    }
 }

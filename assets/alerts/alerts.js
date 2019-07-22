@@ -5,13 +5,22 @@ alerts = {
           .then((value) => {
           location.href=url;
       });
-
+    }else if (type == 'success-message2') {
+      swal("Correcto!", "El proceso se completo correctamente!", "success")
+          .then((value) => {
+          window.close();
+      });
     }else if (type == 'error-message') {
       swal("Error!", "El proceso tuvo un problema!. Contacte con el administrador!", "error")
           .then((value) => {
           location.href=url;
       });
-
+    }
+    else if (type == 'error-message2') {
+      swal("Error!", "El proceso tuvo un problema!. Contacte con el administrador!", "error")
+          .then((value) => {
+          window.close();
+      });
     }
     else if (type == 'warning-message-and-confirmation') {
       swal({
@@ -52,6 +61,6 @@ alerts = {
             return(false);
           }
         })
-    } 
+    }
   },
 }

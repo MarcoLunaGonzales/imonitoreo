@@ -1,8 +1,10 @@
 <?php
+require_once '../layouts/bodylogin2.php';
+require_once '../conexion.php';
+require_once '../functions.php';
+require_once '../styles.php';
 
-require_once 'conexion.php';
-require_once 'styles.php';
-require_once 'functions.php';
+session_start();
 
 $globalNombreGestion=$_SESSION["globalNombreGestion"];
 $globalUser=$_SESSION["globalUser"];
@@ -11,7 +13,8 @@ $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 $globalAdmin=$_SESSION["globalAdmin"];
 
-$codigoIndicador=$codigo;
+$codigoIndicador=$_GET['codigo'];
+
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
 
@@ -61,7 +64,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 <div class="content">
 	<div class="container-fluid">
 
-		  <form id="form1" class="form-horizontal" action="poa/savePlan.php" method="post">
+		  <form id="form1" class="form-horizontal" action="savePlan.php" method="post">
 			<input type="hidden" name="cod_indicador" id="cod_indicador" value="<?=$codigoIndicador;?>">
 
 			<div class="card">
@@ -73,6 +76,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					  <h6 class="card-title">Periodicidad:<?=$nombrePeriodo;?></h6>
 					</div>
 				</div>
+				<span class="text-center font-weight-bold text-primary">Nota: Los montos de ejecucion se visualizan debajo de la caja de texto en color morado.</span>
 				<div class="card-body ">
 					<div class="row">
 					  <label class="col-sm-2 col-form-label">Gestion</label>
@@ -132,6 +136,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                      <th width="<?=$anchoColumna;?>">Oct</th>
 		                      <th width="<?=$anchoColumna;?>">Nov</th>
 		                      <th width="<?=$anchoColumna;?>">Dic</th>
+		                      <th width="<?=$anchoColumna;?>">Total</th>
 		                    </tr>
 		                  </thead>
 		                  <tbody>
@@ -146,6 +151,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                      <td class="text-center font-weight-bold"><h6><p class="text-danger"><?=$abrevUnidad;?>-<?=$abrevArea;?></p></h6></td>
 		                      <td class="text-left font-weight-bold small"><?=$nombre;?></td>
 		                    <?php
+		                    $totalPlanificado=0;
 	                    	for($i=1;$i<=12;$i++){
 	                    		$sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
 	                    		$stmtRecupera = $dbh->prepare($sqlRecupera);
@@ -161,38 +167,31 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 									$valueString=$rowRec['value_string'];
 									$valueBooleano=$rowRec['value_booleano'];
 								}
-
+								$totalPlanificado=$totalPlanificado+$valueNumero;
+								//OBTENEMOS LA EJECUCION
+								$valorEj=0;
+								$descripcionEj="";
+								$sqlRecupera="SELECT a.value_numerico, a.descripcion from actividades_poaejecucion a where a.cod_actividad='$codigo' and a.mes='$i'";
+	                          	$stmtRecupera = $dbh->prepare($sqlRecupera);
+	                          	$stmtRecupera->execute();
+	                          	$estadoPonEj="";
+	                          	while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
+	                            	$valorEj=$rowRec['value_numerico'];
+		                            $descripcionEj=$rowRec['descripcion'];
+	                          	}
+	                          	//FIN EJECUCION
 	                    		if($codTipoDato==1){
 	                    	?>
 	                    		<td>
-	                    			<input class="form-control" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" step="0.01" required>
-	                    		</td>
-	                    	<?php	
-	                    		}
-	                    		if($codTipoDato==3){
-	                    	?>
-	                    		<td>
-	                    			<input class="form-control input-sm" value="<?=$valueString;?>" type="text" name="plan|<?=$codigo;?>|<?=$i;?>">
-	                    		</td>
-	                    	<?php	
-	                    		}
-	                    		if($codTipoDato==2){
-	                    	?>
-	                    		<td>
-	                    			<div class="form-check">
-		                                <label class="form-check-label">
-		                                	<input class="form-check-input" type="checkbox" name="plan|<?=$codigo;?>|<?=$i;?>" <?=($valueBooleano==1)?"checked":"";?>>
-	                                  <span class="form-check-sign">
-	                                    <span class="check"></span>
-	                                  </span>
-	                                  </label>
-		                             </div>
+	                    			<input class="form-control" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="planificado<?=$index;?>" onChange="calcularTotalPlanificado(<?=$index;?>);" OnKeyUp="calcularTotalPlanificado(<?=$index;?>);" step="0.01" required>
+	                    			<span class="text-center font-weight-bold text-primary" title="<?=$descripcionEj?>"><?=($valorEj)>0?formatNumberInt($valorEj):"-";?></span>
 	                    		</td>
 	                    	<?php	
 	                    		}
 	                    	}
 		                    ?>
 		                    <input type="hidden" name="tipo_dato|<?=$codigo;?>" id="tipo_dato|<?=$codigo;?>|<?=$i;?>" value="<?=$codTipoDato;?>">
+		                    	<td><input type="text" class="form-control" name="totalPlani<?=$index;?>" id="totalPlani<?=$index;?>" value="<?=formatNumberDec($totalPlanificado);?>" readonly="true"></td>
 		                    </tr>
 					        <?php
     							$index++;
@@ -206,7 +205,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 	            
 				  <div class="card-footer ml-auto mr-auto">
 					<button type="submit" class="<?=$button;?>">Guardar</button>
-					<a href="?opcion=listActividadesPOA&codigo=<?=$codigoIndicador;?>&codigoPON=<?=$codigoIndicadorPON?>&unidad=0&area=0" class="<?=$buttonCancel;?>">Cancelar</a>
+					<a href="#" onclick="javascript:window.close();" class="<?=$buttonCancel;?>">Cancelar</a>
 				  </div>
 			</div>
 		  </form>

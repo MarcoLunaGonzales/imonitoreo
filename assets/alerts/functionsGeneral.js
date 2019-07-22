@@ -597,6 +597,20 @@ function calcularTotalEj(){
   document.getElementById("totalEj").value=suma;  
 }
 
+
+function calcularTotalPlanificado(indice){
+  var suma=0;
+  var formulariop = document.getElementById("form1");
+  for (var i=0;i<formulariop.elements.length;i++){
+    //if (formulariop.elements[i].id.indexOf("planificado"+indice) !== -1 ){        
+    if (formulariop.elements[i].id==("planificado"+indice)){        
+      suma += (formulariop.elements[i].value) * 1;
+      console.log(formulariop.elements[i].name+" "+formulariop.elements[i].id+" "+formulariop.elements[i].value);
+    }
+  }  
+  document.getElementById("totalPlani"+indice).value=suma;  
+}
+
 //CON ESTE PROCESO ENVIAMSO LOS ARCHIVOS AJAX A LA LIBRERIA DEL ING. WILLY
     $(function(){
         $("#formuploadajaxsis").on("submit", function(e){
