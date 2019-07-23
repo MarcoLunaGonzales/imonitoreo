@@ -57,6 +57,25 @@
 	
   </script>
 
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+        $('#tablePaginatorFixed').DataTable({
+            "paging":   false,
+            "ordering": false,
+            "info":     false,
+            "searching": false,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.19/i18n/Spanish.json"
+            },
+            fixedHeader: {
+              header: true,
+              footer: true
+            }
+        } );
+    } );
+  </script>
+  
   <script type="text/javascript">
     $(document).ready(function() {
         $('#tablePaginatorReport').DataTable({

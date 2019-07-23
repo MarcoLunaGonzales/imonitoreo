@@ -195,7 +195,7 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                     <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAActInd&codigo=<?=$codigoIndicador?>'">Registrar</button-->
                     <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAGroup&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Registrar</button>
 
-                    <a href="#" onclick="javascript:window.open('poa/registerPlan.php?codigo=<?=$codigoIndicador?>')" class="<?=$button;?>">Planificar</a>  
+                    <a href="#" onclick="javascript:window.open('poa/registerPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>')" class="<?=$button;?>">Planificar</a>  
 
                     <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOA&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar Personal</button>
 

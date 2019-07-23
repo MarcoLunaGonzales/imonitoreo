@@ -103,7 +103,9 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado, a.cod_norma,
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.clave_indicador, a.observaciones, a.cod_hito
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional='$codUnidadX' and a.cod_area='$codAreaX' ";
-					if($codEstadoPOAGestion==3){
+
+
+					if($codEstadoPOAGestion==3 || $codEstadoPOAGestion==1){
 						$sqlLista.=" and a.actividad_extra=1 ";
 					}
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";

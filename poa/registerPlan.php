@@ -14,6 +14,8 @@ $globalArea=$_SESSION["globalArea"];
 $globalAdmin=$_SESSION["globalAdmin"];
 
 $codigoIndicador=$_GET['codigo'];
+$areaIndicador=$_GET['area'];
+$unidadIndicador=$_GET['unidad'];
 
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
@@ -94,7 +96,10 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					if($globalAdmin==0){
 						$sqlLista.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) ";
 					}
-					if($codEstadoPOAGestion==3){
+					if($areaIndicador!=0 && $unidadIndicador!=0){
+						$sqlLista.=" and a.cod_area in ($areaIndicador) and a.cod_unidadorganizacional in ($unidadIndicador) ";	
+					}
+					if($codEstadoPOAGestion==3 && $codEstadoPOAGestion==1){
 						$sqlLista.=" and a.actividad_extra=1 ";
 					}
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";

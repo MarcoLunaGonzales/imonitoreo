@@ -24,8 +24,17 @@ $dbh = new Conexion();
                 <div class="card-body">
 
                   <div class="row">
-                    <label class="col-sm-2 col-form-label">Datos Contabilidad</label>
-                    <div class="col-sm-7">
+                    <label class="col-sm-6 col-form-label">Datos Generales (Clientes, Servicios, Personal, etc.)</label>
+                    <div class="col-sm-6">
+                    <div class="form-group">
+                      <a href="sp_calls/ejecutarSincroDatosGenerales.php" class="<?=$button;?>" target="_blank">Sincronizar</a>
+                    </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <label class="col-sm-6 col-form-label">Datos Contabilidad</label>
+                    <div class="col-sm-6">
                     <div class="form-group">
                       <a href="sp_calls/ejecutarSincroConta.php" class="<?=$button;?>" target="_blank">Sincronizar</a>
                     </div>

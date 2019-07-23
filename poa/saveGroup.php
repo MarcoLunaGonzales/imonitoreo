@@ -89,7 +89,7 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		//SACAMOS EL ESTADO DEL POA PARA LA GESTION
 		$actividadExtra=0;
 		$codEstadoPOAGestion=estadoPOAGestion($globalGestion);
-		if($codEstadoPOAGestion==3){
+		if($codEstadoPOAGestion==3 || $codEstadoPOAGestion==1){
 			$actividadExtra=1;
 		}
 		$sql="INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_tiporesultado, cod_datoclasificador, actividad_extra, observaciones, cod_hito, clave_indicador) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_normapriorizada, :cod_norma, :cod_tiposeguimiento, :producto_esperado, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_tiporesultado, :cod_datoclasificador, :actividad_extra,:observaciones,:cod_hito,:clave_indicador)";
