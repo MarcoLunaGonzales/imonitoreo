@@ -37,6 +37,23 @@ function nuevoAjax()
   }
   return xmlhttp;
 }
+
+
+
+function ajaxIndicadoresReport(perspectiva){
+  var contenedor;
+  contenedor = document.getElementById('divIndicador');
+  ajax=nuevoAjax();
+  perspectiva=perspectiva.value;
+  ajax.open('GET', 'reportes/ajaxIndicadores.php?cod_perspectiva='+perspectiva,true);
+  ajax.onreadystatechange=function() {
+    if (ajax.readyState==4) {
+      contenedor.innerHTML = ajax.responseText
+    }
+  }
+  ajax.send(null)
+}
+
 //INDICADORES DETALLE PROPIEDAD
 function ajaxPropiedad(objetivo, indicador){
   var contenedor;
@@ -571,6 +588,36 @@ function totalesDetallePOA(){
       }else{
         main.rows[numFilas-1].cells[j].className='text-right'; 
       }
+      main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
+  }   
+}
+
+
+function totalesPlanificacion(){
+   var main=document.getElementById('tablePaginatorFixed');   
+   var numFilas=main.rows.length;
+   var numCols=main.rows[2].cells.length;
+   
+   for(var j=4; j<=numCols-1; j++){
+    var subtotal=0;
+      for(var i=2; i<=numFilas-2; i++){
+            var datoS=main.rows[i].cells[j].innerHTML;
+            datoS=datoS.trim();
+            console.log(datoS+" "+typeof(datoS));
+            if(datoS=="-"){
+              datoS="0";
+            }
+            datoS=datoS.replace(/,/g,'');
+            console.log(datoS);
+            var dato=parseFloat(datoS);
+            //console.log(dato);
+            subtotal=subtotal+dato;
+            var subtotalF=number_format(subtotal,0); 
+            console.log("subtotal: "+subtotalF);
+      }
+      var fila=document.createElement('TH');
+      main.rows[numFilas-1].appendChild(fila);
+      main.rows[numFilas-1].cells[j].className='text-right'; 
       main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
   }   
 }

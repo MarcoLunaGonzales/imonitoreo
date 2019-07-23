@@ -17,12 +17,19 @@ $nameGestion=nameGestion($gestion);
 $perspectiva=$_POST["perspectiva"];
 $unidadOrganizacional=$_POST["unidad_organizacional"];
 $areas=$_POST["areas"];
+$version=$_POST["version"];
+$codIndicador=$_POST["cod_indicador"];
+$nameIndicador=nameIndicador($codIndicador);
+
+$nameVersion=nameVersion($version);
 
 $perspectivaString=implode(",", $perspectiva);
 $unidadOrgString=implode(",", $unidadOrganizacional);
 $areaString=implode(",", $areas);
 
-$sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
+
+if($version==0){
+  $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,
 (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
@@ -30,8 +37,23 @@ $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n wh
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado,
 i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre as nombreperspectiva
  from actividades_poa a, indicadores i, objetivos o, perspectivas p where a.cod_area in ($areaString) and a.cod_unidadorganizacional in ($unidadOrgString) and o.cod_perspectiva in ($perspectivaString) and a.cod_estado=1 and 
- a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva
+ a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva and i.codigo='$codIndicador'
+ order by nombreperspectiva, nombreobjetivo, nombreindicador, a.orden";  
+}else{
+  $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
+(SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,
+(SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma,
+(SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
+(SELECT t.abreviatura from tipos_seguimiento t where t.codigo=a.cod_tiposeguimiento)as tipodato, 
+a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado,
+i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre as nombreperspectiva
+ from actividades_poa_version a, indicadores i, objetivos o, perspectivas p where a.cod_area in ($areaString) and a.cod_unidadorganizacional in ($unidadOrgString) and o.cod_perspectiva in ($perspectivaString) and a.cod_estado=1 and 
+ a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva and a.cod_version='$version' and i.codigo='$codIndicador'
  order by nombreperspectiva, nombreobjetivo, nombreindicador, a.orden";
+}
+
+//echo $sql;
+
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 
@@ -65,22 +87,19 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                     <i class="material-icons">assignment</i>
                   </div>
                   <h4 class="card-title">Reporte de Planificacion POA</h4>
-                  <h6 class="card-title">Gestion: <?=$nameGestion;?></h6>
+                  <h6 class="card-title">Gestion: <?=$nameGestion;?> Version: <?=$nameVersion;?></h6>
+                  <h6 class="card-title">Indicador: <?=$nameIndicador;?></h6>
 
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-condensed table-striped">
+                    <table class="table table-condensed" id="tablePaginatorFixed">
                       <thead>
                         <tr>
                           <th class="text-center">-</th>
-                          <th class="font-weight-bold">Perspectiva</th>
-                          <th class="font-weight-bold">Abreviatura</th>
-                          <th class="font-weight-bold">Objetivo</th>
-                          <th class="font-weight-bold">Indicador</th>
+                          <th class="text-center">Cod</th>
                           <th class="font-weight-bold">Area</th>
                           <th class="font-weight-bold">Actividad</th>
-                          <th class="font-weight-bold">Producto Esperado</th>
                           <th class="font-weight-bold">Ene</th>
                           <th class="font-weight-bold">Feb</th>
                           <th class="font-weight-bold">Mar</th>
@@ -93,6 +112,7 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                           <th class="font-weight-bold">Oct</th>
                           <th class="font-weight-bold">Nov</th>
                           <th class="font-weight-bold">Dic</th>
+                          <th class="font-weight-bold">Total</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -103,11 +123,22 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                           $abrevUnidad=abrevUnidad($codUnidad);
 
                           //SACAMOS LA PLANIFICACION
-                          $sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
-                          $stmtRecupera = $dbh->prepare($sqlRecupera);
-                          $stmtRecupera->bindParam(':cod_actividad',$codigo);
-                          $stmtRecupera->bindParam(':cod_mes',$codMesX);
-                          $stmtRecupera->execute();
+                          if($version==0){
+                            $sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";                            
+                                                      $stmtRecupera = $dbh->prepare($sqlRecupera);
+                            $stmtRecupera->bindParam(':cod_actividad',$codigo);
+                            $stmtRecupera->bindParam(':cod_mes',$codMesX);
+                            $stmtRecupera->execute();
+
+                          }else{
+                            $sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion_version where cod_actividad=:cod_actividad and mes=:cod_mes and   cod_version=:cod_version";
+                            $stmtRecupera = $dbh->prepare($sqlRecupera);
+                            $stmtRecupera->bindParam(':cod_actividad',$codigo);
+                            $stmtRecupera->bindParam(':cod_mes',$codMesX);
+                            $stmtRecupera->bindParam(':cod_version',$version);
+                            $stmtRecupera->execute();
+                          }
+
                           $valueNumero=0;
                           $valueString="";
                           $valueBooleano=0;
@@ -134,18 +165,16 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                             $descripcionLogroEj=$rowRec['descripcion'];
                             $archivoEj=$rowRec['archivo'];
                           }
+
                           //FIN PLANIFICACION
                       ?>
                         <tr>
-                          <td class="text-center"><?=$index;?></td>
-                          <td><?=$nombrePerspectiva;?></td>
-                          <td><?=$abreviatura;?></td>
-                          <td><?=$nombreObjetivo;?></td>
-                          <td><?=$nombreIndicador;?></td>
-                          <td><?=$abrevArea."-".$abrevUnidad;?></td>
-                          <td><?=$nombre;?></td>
-                          <td><?=$productoEsperado;?></td>
+                          <td class="text-center small"><?=$index;?></td>
+                          <td class="text-center small"><?=$codigo;?></td>
+                          <td class="text-center small"><?=$abrevUnidad."-".$abrevArea;?></td>
+                          <td class="text-left small"><?=$nombre;?></td>
                           <?php
+                          $totalActividad=0;
                           for($i=1;$i<=12;$i++){
                           $sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
                           $stmtRecupera = $dbh->prepare($sqlRecupera);
@@ -157,22 +186,28 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                           $valueBooleano=0;
                           while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
                             $valueNumero=$rowRec['value_numerico'];
-                            $valueString=$rowRec['value_string'];
-                            $valueBooleano=$rowRec['value_booleano'];
+                            $totalActividad=$totalActividad+$valueNumero;
                           }
-                          if($codTipoDato==1){
                           ?>
-                          <td><?=($valueNumero==0)?"-":"$valueNumero";?></td>
+                          <td class="text-right small"><?=($valueNumero==0)?"-":formatNumberDec($valueNumero);?></td>
                           <?php 
-                          }
                         }
                         ?>
+                          <td class="text-right small"><?=($totalActividad==0)?"-":formatNumberDec($totalActividad);?></td>
                         </tr>
             <?php
             							$index++;
             						}
             ?>
                       </tbody>
+                      <tfoot>
+                        <tr>
+                          <th>-</th>
+                          <th>-</th>
+                          <th>-</th>
+                          <th>TOTALES</th>
+                        </tr>
+                      </tfoot>
                     </table>
                   </div>
                 </div>
@@ -181,3 +216,8 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
           </div>  
         </div>
     </div>
+
+
+<script type="text/javascript">
+  totalesPlanificacion();
+</script>

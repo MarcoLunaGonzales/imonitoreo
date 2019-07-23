@@ -63,6 +63,18 @@ function nameGestion($codigo){
    return($nombreX);
 }
 
+function nameVersion($codigo){
+   $dbh = new Conexion();
+   $stmt = $dbh->prepare("SELECT abreviatura FROM versiones_poa where codigo=:codigo");
+   $stmt->bindParam(':codigo',$codigo);
+   $stmt->execute();
+   $nombreX="";
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $nombreX=$row['abreviatura'];
+   }
+   return($nombreX);
+}
+
 function nameCargo($codigo){
    $dbh = new Conexion();
    $stmt = $dbh->prepare("SELECT nombre FROM cargos where codigo=:codigo");
