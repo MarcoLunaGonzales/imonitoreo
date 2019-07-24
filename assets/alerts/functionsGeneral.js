@@ -600,7 +600,7 @@ function totalesPlanificacion(){
    
    for(var j=4; j<=numCols-1; j++){
     var subtotal=0;
-      for(var i=2; i<=numFilas-2; i++){
+      for(var i=1; i<=numFilas-2; i++){
             var datoS=main.rows[i].cells[j].innerHTML;
             datoS=datoS.trim();
             console.log(datoS+" "+typeof(datoS));

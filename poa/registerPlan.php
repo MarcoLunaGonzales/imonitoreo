@@ -102,7 +102,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					if($codEstadoPOAGestion==3 && $codEstadoPOAGestion==1){
 						$sqlLista.=" and a.actividad_extra=1 ";
 					}
-					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre";
 					//echo $sqlLista;
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
@@ -189,7 +189,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 	                    	?>
 	                    		<td>
 	                    			<input class="form-control" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="planificado<?=$index;?>" onChange="calcularTotalPlanificado(<?=$index;?>);" OnKeyUp="calcularTotalPlanificado(<?=$index;?>);" step="0.01" required>
-	                    			<span class="text-center font-weight-bold text-primary" title="<?=$descripcionEj?>"><?=($valorEj)>0?formatNumberInt($valorEj):"-";?></span>
+	                    			<span class="text-center font-weight-bold text-primary" title="<?=$descripcionEj?>"><?=($valorEj)>0?formatNumberDec($valorEj):"-";?></span>
 	                    		</td>
 	                    	<?php	
 	                    		}

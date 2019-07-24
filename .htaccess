@@ -1,0 +1,2 @@
+php_value post_max_size 30M
+php_value max_input_vars 20000

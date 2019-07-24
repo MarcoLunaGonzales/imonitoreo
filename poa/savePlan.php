@@ -1,5 +1,6 @@
 <?php
 set_time_limit(0);
+
 require_once '../layouts/bodylogin.php';
 require_once '../conexion.php';
 require_once '../functions.php';
@@ -29,6 +30,7 @@ $fechaHoraActual=date("Y-m-d H:i:s");
 $flagSuccessDetail=true;
 foreach($_POST as $nombre_campo => $valor){ 
    	$asignacion = "\$" . $nombre_campo . "='" . $valor . "';"; 
+   	//echo $asignacion;
    
 	$cadenaBuscar='plan';
 	$posicion = strpos($nombre_campo, $cadenaBuscar);
@@ -47,8 +49,8 @@ foreach($_POST as $nombre_campo => $valor){
         ':valor' => $valor
     	);
 
-		/*$exQuery=str_replace(array_keys($values), array_values($values), $sql);
-		echo $exQuery.";<br>";*/
+		$exQuery=str_replace(array_keys($values), array_values($values), $sql);
+		//echo $exQuery.";<br>";
 
 		$flagSuccess2=$stmt->execute($values);
 		if($flagSuccess2==false){
