@@ -4,6 +4,9 @@ require_once 'conexion.php';
 require_once 'styles.php';
 require_once 'functions.php';
 
+$dbh = new Conexion();
+
+
 $globalNombreGestion=$_SESSION["globalNombreGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
@@ -15,8 +18,11 @@ $globalFondosReports=$_SESSION["globalFondosReports"];
 $globalAreasReports=$_SESSION["globalAreasReports"];
 $globalOrganismosReports=$_SESSION["globalOrganismosReports"];
 
-//echo $globalFondosReports;
-$dbh = new Conexion();
+//VALORES POR DEFAULT
+$codGestionDefault=gestionDefaultReport();
+$codMesDefault=mesDefaultReport();
+
+
 
 ?>
 
@@ -47,7 +53,7 @@ $dbh = new Conexion();
 							$codigoX=$row['codigo'];
 							$nombreX=$row['nombre'];
 						?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<option value="<?=$codigoX;?>"  <?=($codigoX==$codGestionDefault)?"selected":"";?> ><?=$nombreX;?></option>
 						<?php	
 						}
 					  	?>
@@ -69,7 +75,7 @@ $dbh = new Conexion();
 							$codigoX=$row['codigo'];
 							$nombreX=$row['nombre'];
 						?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<option value="<?=$codigoX;?>"  <?=($codigoX==$codMesDefault)?"selected":"";?> ><?=$nombreX;?></option>
 						<?php	
 						}
 					  	?>

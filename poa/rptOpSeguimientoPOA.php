@@ -19,6 +19,10 @@ $globalOrganismosReports=$_SESSION["globalOrganismosReports"];
 //echo $globalFondosReports;
 $dbh = new Conexion();
 
+//VALORES POR DEFAULT
+$codGestionDefault=gestionDefaultReport();
+$codMesDefault=mesDefaultReport();
+
 ?>
 
 <div class="content">
@@ -48,7 +52,7 @@ $dbh = new Conexion();
 							$codigoX=$row['codigo'];
 							$nombreX=$row['nombre'];
 						?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<option value="<?=$codigoX;?>" <?=($codigoX==$codGestionDefault)?"selected":"";?> ><?=$nombreX;?></option>
 						<?php	
 						}
 					  	?>
@@ -70,7 +74,7 @@ $dbh = new Conexion();
 							$codigoX=$row['codigo'];
 							$nombreX=$row['nombre'];
 						?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<option value="<?=$codigoX;?>" <?=($codigoX==$codMesDefault)?"selected":"";?> ><?=$nombreX;?></option>
 						<?php	
 						}
 					  	?>
@@ -138,7 +142,7 @@ $dbh = new Conexion();
 
 
 				<div class="row">
-				  <label class="col-sm-2 col-form-label">Incluir Planificacion Version</label>
+				  <label class="col-sm-2 col-form-label">Incluir Version</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
 					  <select class="selectpicker" title="Seleccione una opcion" name="version" id="version" data-style="<?=$comboColor;?>">

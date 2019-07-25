@@ -1813,3 +1813,131 @@ if($globalPerfilX==6){
 <?php
 }
 ?>
+
+
+<?php
+if($globalPerfilX==7){
+?>
+<div class="sidebar" data-color="azure" data-background-color="black" data-image="assets/img/sidebar-1.jpg">
+      <div class="logo">
+        <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+          <img src="assets/img/logoibnorca.fw.png" width="30" />
+        </a>
+        <a href="http://www.creative-tim.com" class="simple-text logo-normal">
+          SIMC IBNORCA
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <div class="user">
+          <div class="photo">
+            <img src="assets/img/faces/persona1.png" />
+          </div>
+          <div class="user-info">
+            <a data-toggle="collapse" href="#collapseExample" class="username">
+              <span>
+                <?=$globalNameUserX;?>
+                <!--b class="caret"></b-->
+              </span>
+            </a>
+          </div>
+        </div>
+
+
+
+        <ul class="nav">
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#proyectosis">
+              <i class="material-icons">linear_scale</i>
+              <p> Proyecto SIS
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="proyectosis">
+              <ul class="nav">
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoAnualSIS2">
+                    <span class="sidebar-mini"> SS </span>
+                    <span class="sidebar-normal">Seguimiento</br>SIS</span>
+                  </a>
+                </li>                
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoAnualSIS">
+                    <span class="sidebar-mini"> SDS </span>
+                    <span class="sidebar-normal">Seguimiento</br>Detallado SIS</span>
+                  </a>
+                </li>                
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpDetalleGastosSIS">
+                    <span class="sidebar-mini"> DGS </span>
+                    <span class="sidebar-normal">Detalle Gastos SIS</span>
+                  </a>
+                </li>    
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpRelacionGastosAcc">
+                    <span class="sidebar-mini"> DGAN </span>
+                    <span class="sidebar-normal">Detalle Gastos con AccNum</span>
+                  </a>
+                </li>                            
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpBalanceCuentasSIS">
+                    <span class="sidebar-mini"> BC </span>
+                    <span class="sidebar-normal">Balance de Cuentas</span>
+                  </a>
+                </li>                                
+
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportes">
+              <i class="material-icons">assessment</i>
+              <p> Reportes
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportes">
+              <ul class="nav"> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOA">
+                    <span class="sidebar-mini"> SPOA </span>
+                    <span class="sidebar-normal">Seguimiento POA</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
+                    <span class="sidebar-mini"> IxA </span>
+                    <span class="sidebar-normal">Indicadores x Area</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroRevisionPORegionArea">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO por Area y Regional </span>
+                  </a>
+                </li>
+
+
+              </ul>
+            </div>
+          </li>
+
+
+        </ul>
+      </div>
+    </div>
+<?php
+}
+?>
+
+
+

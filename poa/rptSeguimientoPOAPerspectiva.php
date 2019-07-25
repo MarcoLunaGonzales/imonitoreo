@@ -106,12 +106,39 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card card-stats">
                 <div class="card-header card-header-warning card-header-icon">
                   <div class="card-icon">
-                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=3" target="_BLANK">
-                      <i class="material-icons">person_pin</i>
-                    </a>
+                    <!--a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=3" target="_BLANK">
+                    </a-->
+                    <i class="material-icons">person_pin</i>
                   </div>
                   <p class="card-category">Perspectiva</p>
                   <h3 class="card-title">Clientes</h3>
+                </div>
+                <div class="card-body">
+                  <ol>
+                  <?php
+                  $codigoPerspectiva=3;
+                  $sql="SELECT i.nombre as nombreindicador, i.codigo as codigoindicador, o.abreviatura
+                      FROM objetivos o, indicadores i, indicadores_unidadesareas iua
+                    WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and o.cod_perspectiva in ($codigoPerspectiva)";
+                  $sql.=" and iua.cod_area in ($areasArray) and iua.cod_unidadorganizacional in ($unidadOrganizacionalArray) ";
+                  $sql.=" group by i.codigo ORDER BY o.abreviatura, i.nombre";
+                  //echo $sql;
+                  $stmt = $dbh->prepare($sql);
+                  $stmt->execute();
+                  $stmt->bindColumn('nombreindicador', $nombreIndicador);
+                  $stmt->bindColumn('codigoindicador', $codigoIndicador);
+                  $stmt->bindColumn('abreviatura', $abreviaturaObj);
+                  while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+                    $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva";
+
+                  ?>
+                    <li class="text-left small"><a href='<?=$url;?>' rel="tooltip" target="_BLANK">
+                      <?=$abreviaturaObj." - ".$nombreIndicador." (".$codigoIndicador.")";?>
+                      </a></li>                
+                  <?php
+                  }
+                  ?>
+                  </ol>
                 </div>
                 <div class="card-footer">
                   <div class="card-category">
@@ -121,17 +148,49 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </div>
               </div>
             </div>
+
+
             <div class="col-lg-5 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-rose card-header-icon">
                   <div class="card-icon">
-                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=4" target="_BLANK">
-                      <i class="material-icons">attach_money</i>
-                    </a>
+                    <!--a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=4" target="_BLANK">
+                      
+                    </a-->
+                    <i class="material-icons">attach_money</i>
                   </div>
                   <p class="card-category">Perspectiva</p>
                   <h3 class="card-title">Financiera</h3>
                 </div>
+
+                <div class="card-body">
+                  <ol>
+                  <?php
+                  $codigoPerspectiva=4;
+                  $sql="SELECT i.nombre as nombreindicador, i.codigo as codigoindicador, o.abreviatura
+                      FROM objetivos o, indicadores i, indicadores_unidadesareas iua
+                    WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and o.cod_perspectiva in ($codigoPerspectiva)";
+                  $sql.=" and iua.cod_area in ($areasArray) and iua.cod_unidadorganizacional in ($unidadOrganizacionalArray) ";
+                  $sql.=" group by i.codigo ORDER BY o.abreviatura, i.nombre";
+                  //echo $sql;
+                  $stmt = $dbh->prepare($sql);
+                  $stmt->execute();
+                  $stmt->bindColumn('nombreindicador', $nombreIndicador);
+                  $stmt->bindColumn('codigoindicador', $codigoIndicador);
+                  $stmt->bindColumn('abreviatura', $abreviaturaObj);
+                  while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+                    $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva";
+                  ?>
+                    <li class="text-left small"><a href='<?=$url;?>' rel="tooltip" target="_BLANK">
+                      <?=$abreviaturaObj." - ".$nombreIndicador." (".$codigoIndicador.")";?>
+                      </a></li>                
+                  <?php
+                  }
+                  ?>
+                  </ol>
+                </div>
+
+
                 <div class="card-footer">
                   <div class="card-category">
                     <i class="material-icons">apps</i>
@@ -140,17 +199,49 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </div>
               </div>
             </div>
+
+
             <div class="col-lg-5 col-md-6 col-sm-6">
               <div class="card card-stats">
                 <div class="card-header card-header-success card-header-icon">
                   <div class="card-icon">
-                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=1" target="_BLANK">
-                      <i class="material-icons">store</i>
-                    </a>
+                    <!--a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=1" target="_BLANK">
+                    </a-->
+                    <i class="material-icons">store</i>
                   </div>
                   <p class="card-category">Perspectiva</p>
                   <h3 class="card-title">Institucional</h3>
                 </div>
+
+                <div class="card-body">
+                  <ol>
+                  <?php
+                  $codigoPerspectiva=1;
+
+                  $sql="SELECT i.nombre as nombreindicador, i.codigo as codigoindicador, o.abreviatura
+                      FROM objetivos o, indicadores i, indicadores_unidadesareas iua
+                    WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and o.cod_perspectiva in ($codigoPerspectiva)";
+                  $sql.=" and iua.cod_area in ($areasArray) and iua.cod_unidadorganizacional in ($unidadOrganizacionalArray) ";
+                  $sql.=" group by i.codigo ORDER BY o.abreviatura, i.nombre";
+                  //echo $sql;
+                  $stmt = $dbh->prepare($sql);
+                  $stmt->execute();
+                  $stmt->bindColumn('nombreindicador', $nombreIndicador);
+                  $stmt->bindColumn('codigoindicador', $codigoIndicador);
+                  $stmt->bindColumn('abreviatura', $abreviaturaObj);
+                  while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+                    $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva";
+
+                  ?>
+                    <li class="text-left small"><a href='<?=$url;?>' rel="tooltip" target="_BLANK">
+                      <?=$abreviaturaObj." - ".$nombreIndicador." (".$codigoIndicador.")";?>
+                      </a></li>                
+                  <?php
+                  }
+                  ?>
+                  </ol>
+                </div>
+
                 <div class="card-footer">
                   <div class="card-category">
                     <i class="material-icons">apps</i>
@@ -163,13 +254,41 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card card-stats">
                 <div class="card-header card-header-info card-header-icon">
                   <div class="card-icon">
-                    <a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=2" target="_BLANK">
-                      <i class="material-icons">blur_on</i>
-                    </a>
+                    <!--a href="rptSeguimientoPOA.php?gestion=<?=$gestionX;?>&mes=<?=$mes;?>&version=<?=$version;?>&perspectiva=2" target="_BLANK">
+                    </a-->
+                    <i class="material-icons">blur_on</i>
                   </div>
                   <p class="card-category">Perspectivas</p>
                   <h3 class="card-title">Procesos Internos</h3>
                 </div>
+
+                <div class="card-body">
+                  <ol>
+                  <?php
+                  $codigoPerspectiva=2;
+                  $sql="SELECT i.nombre as nombreindicador, i.codigo as codigoindicador, o.abreviatura
+                      FROM objetivos o, indicadores i, indicadores_unidadesareas iua
+                    WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and o.cod_perspectiva in ($codigoPerspectiva)";
+                  $sql.=" and iua.cod_area in ($areasArray) and iua.cod_unidadorganizacional in ($unidadOrganizacionalArray) ";
+                  $sql.=" group by i.codigo ORDER BY o.abreviatura, i.nombre";
+                  //echo $sql;
+                  $stmt = $dbh->prepare($sql);
+                  $stmt->execute();
+                  $stmt->bindColumn('nombreindicador', $nombreIndicador);
+                  $stmt->bindColumn('codigoindicador', $codigoIndicador);
+                  $stmt->bindColumn('abreviatura', $abreviaturaObj);
+                  while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+                  $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva";
+                  ?>
+                    <li class="text-left small"><a href='<?=$url;?>' rel="tooltip" target="_BLANK">
+                      <?=$abreviaturaObj." - ".$nombreIndicador." (".$codigoIndicador.")";?>
+                      </a></li>                
+                  <?php
+                  }
+                  ?>
+                  </ol>
+                </div>
+
                 <div class="card-footer">
                   <div class="card-category">
                     <i class="material-icons">blur_on</i>

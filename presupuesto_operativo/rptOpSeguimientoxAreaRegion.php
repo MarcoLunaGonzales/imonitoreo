@@ -4,6 +4,10 @@ require_once 'conexion.php';
 require_once 'styles.php';
 require_once 'functions.php';
 
+
+$dbh = new Conexion();
+
+
 $globalNombreGestion=$_SESSION["globalNombreGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
@@ -15,8 +19,19 @@ $globalFondosReports=$_SESSION["globalFondosReports"];
 $globalAreasReports=$_SESSION["globalAreasReports"];
 $globalOrganismosReports=$_SESSION["globalOrganismosReports"];
 
-$dbh = new Conexion();
+//VALORES POR DEFAULT
+$codGestionDefault=gestionDefaultReport();
+$codMesDefault=mesDefaultReport();
 
+//OBTENEMOS LAS AREAS DE SERVICIOS
+$codAreaServicios="";
+$codAreaServicios=obtieneValorConfig(22);
+$arrayAreaServicios = explode(",", $codAreaServicios);
+
+/*for($i=0; $i<count($arrayAreaServicios); $i++){
+	  echo $arrayAreaServicios[$i];
+	  echo "<br>";
+}*/
 ?>
 
 <div class="content">
@@ -46,7 +61,7 @@ $dbh = new Conexion();
 							$codigoX=$row['codigo'];
 							$nombreX=$row['nombre'];
 						?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<option value="<?=$codigoX;?>"  <?=($codigoX==$codGestionDefault)?"selected":"";?> ><?=$nombreX;?></option>
 						<?php	
 						}
 					  	?>
@@ -68,7 +83,7 @@ $dbh = new Conexion();
 							$codigoX=$row['codigo'];
 							$nombreX=$row['nombre'];
 						?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<option value="<?=$codigoX;?>"  <?=($codigoX==$codMesDefault)?"selected":"";?> ><?=$nombreX;?></option>
 						<?php	
 						}
 					  	?>
@@ -82,7 +97,7 @@ $dbh = new Conexion();
 				  <div class="col-sm-7">
 					<div class="form-group">
 					<?php
-				  	$sql="SELECT codigo, nombre FROM po_organismos ";
+				  	$sql="SELECT codigo, nombre, cod_area FROM po_organismos ";
 			  		$sql.=" where codigo in ($globalOrganismosReports) ";
 				  	$sql.=" order by 2";
 				  	$stmt = $dbh->prepare($sql);
@@ -94,8 +109,9 @@ $dbh = new Conexion();
 						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 							$codigoX=$row['codigo'];
 							$nombreX=$row['nombre'];
+							$codAreaX=$row['cod_area'];
 						?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<option value="<?=$codigoX;?>" <?=(in_array($codAreaX, $arrayAreaServicios))?"selected":"";?>  ><?=$nombreX;?></option>
 						<?php	
 						}
 					  	?>

@@ -6,6 +6,11 @@ require_once 'functions.php';
 
 $dbh = new Conexion();
 
+
+//VALORES POR DEFAULT
+$codGestionDefault=gestionDefaultReport();
+$codMesDefault=mesDefaultReport();
+
 ?>
 
 <div class="content">

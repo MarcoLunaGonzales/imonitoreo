@@ -49,7 +49,7 @@ $codOrganismoX=$codOrganismoX;
                         labels: mes,
                         datasets: [
                             {
-                                label: 'Presupuesto.',
+                                label: 'Presupuestado.',
                                 backgroundColor: "rgba(255, 99, 132, 0.2)",
                                 borderColor: "rgb(255, 99, 132)",
                                 borderWidth:2,

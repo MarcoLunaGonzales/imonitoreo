@@ -52,6 +52,25 @@ function abrevMes($month){
   if($month==12){    return ("Dic");  }             
 }
 
+
+function gestionDefaultReport(){
+   $dbh = new Conexion();
+   $stmt = $dbh->prepare("SELECT g.cod_gestion from gestiones_datosadicionales g where g.cod_estado=1");
+   $stmt->execute();
+   $nombreX=0;
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $nombreX=$row['cod_gestion'];
+   }
+   return($nombreX);
+}
+
+function mesDefaultReport(){
+   $dbh = new Conexion();
+   $mes=date("m");
+   return($mes);
+}
+
+
 function nameGestion($codigo){
    $dbh = new Conexion();
    $stmt = $dbh->prepare("SELECT nombre FROM gestiones where codigo=:codigo");

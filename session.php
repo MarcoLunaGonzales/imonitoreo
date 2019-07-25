@@ -66,7 +66,7 @@ while ($rowDetalle = $stmt->fetch(PDO::FETCH_BOUND)) {
 		$_SESSION['globalAdmin']=0;	
 	}
 	
-	if($perfil==1 || $perfil==2){
+	if($perfil==1 || $perfil==2 || $perfil==7){
 		$arrayUnidadesReports=obtenerUnidadesReport(0);
 		$arrayAreasReports=obtenerAreasReport(0);
 		$arrayFondosReports=obtenerFondosReport(0);

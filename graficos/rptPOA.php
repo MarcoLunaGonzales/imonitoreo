@@ -18,7 +18,7 @@ $anioTemporal=$_GET["anio"];
 $codIndicador=$_GET["codigo"];
 $codGestion=$_GET["gestion"];
 $versionPOA=$_GET["version"];
-
+$codigoPerspectiva=$_GET["perspectiva"];
 
 $nombreObjetivo=nameObjetivoxIndicador($codIndicador);
 $nombreIndicador=nameIndicador($codIndicador);
@@ -27,6 +27,7 @@ $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
+$globalPerfil=$_SESSION["globalPerfil"];
 
 $globalUnidadesReports=$_SESSION["globalUnidadesReports"];
 $globalAreasReports=$_SESSION["globalAreasReports"];
@@ -53,6 +54,12 @@ $codIndicadorClientesExcepcion=obtieneValorConfig(21);
 $arrayCodClientes=explode(",", $codIndicadorClientesExcepcion);
 $indiceBuscadorClientes=in_array($codIndicador,$arrayCodClientes);
 
+$codAreasServicio="";
+$codAreasServicio=obtieneValorConfig(22);
+
+$codUnidadesServicio="";
+$codUnidadesServicio=obtieneValorConfig(25);
+
 $codIndicadorIncrementoClientes=obtieneValorConfig(23);
 $codIndicadorRetencionClientes=obtieneValorConfig(24);
 
@@ -73,7 +80,7 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
               <h6>Año: <?=$anioTemporal;?> Mes: <?=$mesTemporal;?></h6>
               
               <h6 class="text-left">
-              <table><tr><td bgcolor="#FBB1E9">Nota: En las tablas la fila coloreada contiene la información de la programacion Inicial</td></tr></table>
+              <table><tr><td bgcolor="#FBB1E9">Nota: En las tablas la fila coloreada contiene la información de la version anterior.</td></tr></table>
               </h6>
 
 
@@ -86,10 +93,13 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
             if($codIndicadorTotalPOA!=$codIndicador && $indiceBuscadorClientes==false){
 
               $sql="SELECT iua.cod_area, iua.cod_unidadorganizacional FROM objetivos o, indicadores i, indicadores_unidadesareas iua WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and i.codigo in ($codIndicador) and o.cod_gestion='$codGestion' and i.codigo=iua.cod_indicador";
-//              if($globalAdmin==0){
-                $sql.=" and iua.cod_area in ($globalAreasReports) and iua.cod_unidadorganizacional in ($globalUnidadesReports) ";
-//              }
-              $sql.=" group by iua.cod_area, iua.cod_unidadorganizacional";
+                //PARA DIRECTOR NACIONAL EN CLIENTES Y PROCESOS INTERNOS SOLO AREAS DE SERVICIO
+                if( $globalPerfil==7 && ($codigoPerspectiva==2 || $codigoPerspectiva==4) ){
+                  $sql.=" and iua.cod_area in ($codAreasServicio) and iua.cod_unidadorganizacional in ($codUnidadesServicio)";
+                }else{
+                  $sql.=" and iua.cod_area in ($globalAreasReports) and iua.cod_unidadorganizacional in ($globalUnidadesReports) ";
+                }
+              $sql.=" group by iua.cod_area, iua.cod_unidadorganizacional ";
 
               $stmt = $dbh->prepare($sql);
               $stmt->execute();
@@ -99,6 +109,7 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
               while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
                 $abrevArea=abrevArea($codAreaX);
                 $abrevUnidad=abrevUnidad($codUnidadX);
+                $nameUnidad=nameUnidad($codUnidadX);
 
                 $planificadoMes=planificacionPorIndicador($codIndicador,$codAreaX,$codUnidadX,$mesTemporal,0);
                 $ejecutadoMes=ejecucionPorIndicador($codIndicador,$codAreaX,$codUnidadX,$mesTemporal,0);
@@ -155,7 +166,7 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
                           <i class="material-icons">list</i>
                         </a>
                       </div>
-                      <h4 class="card-title">Datos POA: <?=$abrevUnidad;?> - <?=$abrevArea;?>
+                      <h4 class="card-title">Datos POA: <?=$nameUnidad;?> - <?=$abrevArea;?>
                       </h4>
                     </div>
                     <div class="card-body">
@@ -220,7 +231,7 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
                       <div class="card-icon">
                         <i class="material-icons">timeline</i>
                       </div>
-                      <h5 class="card-title">Grafica POA: <?=$abrevUnidad;?> - <?=$abrevArea;?></h5>
+                      <h5 class="card-title">Grafica POA: <?=$nameUnidad;?> - <?=$abrevArea;?></h5>
                     </div>
                     <div class="card-body">
                       <?php
@@ -287,7 +298,7 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
                       <div class="card-icon">
                         <i class="material-icons">bar_chart</i>
                       </div>
-                      <h4 class="card-title">DatosPO: <?=$abrevUnidad;?> - <?=$abrevArea;?>
+                      <h4 class="card-title">DatosPO: <?=$nameUnidad;?> - <?=$abrevArea;?>
                       </h4>
                     </div>
                     <div class="card-body">
@@ -342,7 +353,7 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
                       <div class="card-icon">
                         <i class="material-icons">bar_chart</i>
                       </div>
-                      <h5 class="card-title">GraficaPO: <?=$abrevUnidad;?> - <?=$abrevArea;?></h5>
+                      <h5 class="card-title">GraficaPO: <?=$nameUnidad;?> - <?=$abrevArea;?></h5>
                     </div>
                     <div class="card-body">
                       <?php
@@ -397,7 +408,7 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
                   <div class="card-icon">
                     <i class="material-icons">list</i>
                   </div>
-                  <h4 class="card-title">Datos POA: <?=$abrevUnidad;?>
+                  <h4 class="card-title">Datos POA: <?=$nameUnidad;?>
                   </h4>
                 </div>
                 <div class="card-body">
@@ -473,7 +484,7 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
                   <div class="card-icon">
                     <i class="material-icons">timeline</i>
                   </div>
-                  <h5 class="card-title">Grafica POA: <?=$abrevUnidad;?></h5>
+                  <h5 class="card-title">Grafica POA: <?=$nameUnidad;?></h5>
                 </div>
                 <div class="card-body">
                   <?php

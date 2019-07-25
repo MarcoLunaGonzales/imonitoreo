@@ -57,7 +57,7 @@ $codVersionX=$codVersionX;
                         labels: mes,
                         datasets: [
                             {
-                                label: 'Programado',
+                                label: 'Planificado',
                                 backgroundColor: "rgba(192, 0, 145, 0.2)",
                                 borderColor: "rgb(192, 0, 145)",
                                 borderWidth:2,
