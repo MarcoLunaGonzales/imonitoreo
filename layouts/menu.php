@@ -190,6 +190,20 @@ if($globalPerfilX==1){
                 </li> 
 
                 <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listPOAI">
+                    <span class="sidebar-mini"> POAI </span>
+                    <span class="sidebar-normal">POAI Programacion</span>
+                  </a>
+                </li>                
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listPOAIEjecucion">
+                    <span class="sidebar-mini"> POAIE </span>
+                    <span class="sidebar-normal">POAI Ejecucion</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=seguimientoPOA">
                     <span class="sidebar-mini"> SPOA </span>
                     <span class="sidebar-normal">Seguimiento POA</span>
@@ -895,19 +909,19 @@ if($globalPerfilX==3){
                   </a>
                 </li> 
 
-                <!--li class="nav-item ">
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAI">
                     <span class="sidebar-mini"> POAI </span>
                     <span class="sidebar-normal">POAI Programacion</span>
                   </a>
-                </li-->  
+                </li>  
 
-                <!--li class="nav-item ">
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAIEjecucion">
                     <span class="sidebar-mini"> POAIE </span>
                     <span class="sidebar-normal">POAI Ejecucion</span>
                   </a>
-                </li-->               
+                </li>               
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=seguimientoPOA">

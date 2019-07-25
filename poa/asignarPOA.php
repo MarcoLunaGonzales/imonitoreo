@@ -73,7 +73,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 <div class="content">
 	<div class="container-fluid">
 
-		<form id="form1" class="form-horizontal" action="poa/saveAsignarPOAI.php" method="post">
+		<form id="form1" class="form-horizontal" action="poai/saveAsignarPOAI.php" method="post">
 			<input type="hidden" name="cod_indicador" id="cod_indicador" value="<?=$codigoIndicador?>">
 			<input type="hidden" name="cantidad_filas" id="cantidad_filas" value="<?=$contadorRegistros;?>">
 			<input type="hidden" name="codigoUnidad" id="codigoUnidad" value="<?=$codUnidadX;?>">

@@ -54,7 +54,7 @@ a.producto_esperado, a.cod_unidadorganizacional, a.cod_area,
 (SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador, 
 (select p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, a.poai,
 (select t.nombre from tipos_actividadpoa t where t.codigo=a.cod_tipoactividad) as tipo_actividad,
-(select p.nombre from periodos p where p.codigo=a.cod_periodo) as periodo
+(select p.nombre from periodos p where p.codigo=a.cod_periodo) as periodo, a.cod_funcion, (select cf.nombre_funcion from cargos_funciones cf where cf.cod_funcion=a.cod_funcion)as funcion
  from actividades_poa a where a.cod_personal='$globalUser' and a.cod_indicador='$codigoIndicador' and a.cod_estado=1 "; 
 if($globalAdmin==0){
   $sql.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad)";
@@ -67,7 +67,7 @@ if($unidadIndicador!=0){
 } 
 $sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
 
-echo $sql;
+//echo $sql;
 
 $stmt = $dbh->prepare($sql);
 // Ejecutamos
@@ -90,6 +90,8 @@ $stmt->bindColumn('personal', $personal);
 $stmt->bindColumn('poai', $poai);
 $stmt->bindColumn('tipo_actividad', $tipoActividad);
 $stmt->bindColumn('periodo', $periodo);
+$stmt->bindColumn('cod_funcion', $codFuncion);
+$stmt->bindColumn('funcion', $nombreFuncion);
 
 ?>
 
@@ -120,13 +122,10 @@ $stmt->bindColumn('periodo', $periodo);
                           <th class="text-center">-</th>
                           <th>Area</th>
                           <th>Actividad</th>
-                          <th>Sector/Norma Priorizado</th>
-                          <th>Sector/Norma</th>
                           <th>Producto Esperado</th>
                           <th>Clasificador</th>
                           <th>Personal POAI</th>
-                          <th>Tipo Actividad</th>
-                          <th>Periodicidad</th>
+                          <th>Funcion</th>
                           <th data-orderable="false">Actions</th>
                         </tr>
                       </thead>
@@ -141,13 +140,10 @@ $stmt->bindColumn('periodo', $periodo);
                           <td class="text-center"><?=$index;?></td>
                           <td><?=$abrevUnidad."-".$abrevArea;?></td>
                           <td><?=$nombre;?></td>
-                          <td><?=$sectorPriorizado." ".$normaPriorizada;?></td>
-                          <td><?=$sector." ".$norma;?></td>
                           <td><?=$productoEsperado;?></td>
                           <td><?=$datoClasificador;?></td>
                           <td><?=$personal;?></td>
-                          <td><?=$tipoActividad;?></td>
-                          <td><?=$periodo;?></td>
+                          <td><?=$nombreFuncion;?></td>
                           <?php
                           if($poai==1){
                           ?>
@@ -174,7 +170,8 @@ $stmt->bindColumn('periodo', $periodo);
         				<div class="card-body">
                     <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAI&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Registrar</button>
 
-                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAIPlan&codigo=<?=$codigoIndicador?>'">Planificar</button>  
+                    <a href="#" onclick="javascript:window.open('poaI/registerPOAIPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>')" class="<?=$button;?>">Planificar</a>  
+
 
                     <a href="?opcion=listPOAI" class="<?=$buttonCancel;?>">Cancelar</a> 
                 </div>

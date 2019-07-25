@@ -953,7 +953,7 @@ function obtieneValorConfig($codigo){
 
 function obtieneTablaClasificador($indicador, $unidad, $area){
   $dbh = new Conexion();
-  $sqlClasificador="SELECT IFNULL(i.cod_clasificador,0)as clasificador FROM indicadores_unidadesareas i where i.cod_indicador='$indicador' and i.cod_unidadorganizacional='$unidad' and i.cod_area='$area'";
+  $sqlClasificador="SELECT IFNULL(i.cod_clasificador,0)as clasificador FROM indicadores_unidadesareas i where i.cod_indicador='$indicador' and i.cod_unidadorganizacional in ($unidad) and i.cod_area in ($area)";
 //  echo $sqlClasificador;
   $stmtClasificador = $dbh->prepare($sqlClasificador);
   $stmtClasificador->execute();

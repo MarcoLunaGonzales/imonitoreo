@@ -44,11 +44,14 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		$codigo=$_POST["codigo".$i];
 		$nombre=$_POST["actividad".$i];
 		$personal=$_POST["personal".$i];
+		$funcion=$_POST["funcion".$i];
 
 		$codigoPOA=$codigo;
 
-		$sqlUpd="UPDATE $table SET cod_personal='$personal' where codigo='$codigo'";
+		$sqlUpd="UPDATE $table SET cod_personal='$personal', cod_funcion='$funcion' where codigo='$codigo'";
+		
 		//echo $sqlUpd;
+		
 		$stmt = $dbh->prepare($sqlUpd);
 		$flagSuccess=$stmt->execute();	
 	}

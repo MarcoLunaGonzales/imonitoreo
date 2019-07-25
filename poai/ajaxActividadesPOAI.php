@@ -5,8 +5,14 @@ require_once '../styles.php';
 
 $dbh = new Conexion();
 
+$sqlX="SET NAMES 'utf8'";
+$stmtX = $dbh->prepare($sqlX);
+$stmtX->execute();
+
+
 session_start();
 $globalAdmin=$_SESSION["globalAdmin"];
+$globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
@@ -14,18 +20,14 @@ $globalArea=$_SESSION["globalArea"];
 $codigo=$_GET['codigo'];
 $codigoIndicador=$_GET['cod_indicador'];
 $codUnidad=$_GET['cod_unidad'];
+$codArea=$_GET['cod_area'];
+
 
 $codUnidadHijosX=buscarHijosUO($codUnidad);
 
 
-//SACAMOS LA TABLA RELACIONADA
-$sqlClasificador="SELECT c.tabla FROM indicadores i, clasificadores c where i.codigo='$codigoIndicador' and i.cod_clasificador=c.codigo";
-$stmtClasificador = $dbh->prepare($sqlClasificador);
-$stmtClasificador->execute();
-$nombreTablaClasificador="";
-while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
-	$nombreTablaClasificador=$rowClasificador['tabla'];
-}
+$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
+
 
 ?>
 <div class="col-md-12">
@@ -151,8 +153,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 	    <div class="col-sm-8">
 		    <div class="form-group">
           		<label for="actividad<?=$codigo;?>" class="bmd-label-floating">Actividad</label>
-				<textarea class="form-control" name="actividad<?=$codigo;?>" id="actividad<?=$codigo;?>" required="true" rows="1">
-				</textarea>
+				<textarea class="form-control" name="actividad<?=$codigo;?>" id="actividad<?=$codigo;?>" required="true" rows="1"></textarea>
 			</div>
 		</div>
 
@@ -173,7 +174,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 
 <div class="col-md-12">
 	<div class="row">	
-		<div class="col-sm-5">
+		<div class="col-sm-3">
 	        <div class="form-group">
 				<select class="selectpicker" name="tipo_actividad<?=$codigo;?>" id="tipo_actividad<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 				  	<option value="">Tipo de Actividad</option>
@@ -192,7 +193,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 			</div>
 	    </div>
 
-		<div class="col-sm-5">
+		<div class="col-sm-3">
 	        <div class="form-group">
 				<select class="selectpicker" name="periodo<?=$codigo;?>" id="periodo<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 				  	<option value="">Periodicidad</option>
@@ -210,6 +211,29 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 				</select>
 			</div>
 	    </div>	
+
+		<div class="col-sm-6">
+	        <div class="form-group">
+				<select class="selectpicker form-control" name="funcion<?=$codigo;?>" id="funcion<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+				  	<option value="">Funcion Asociada a la Actividad</option>
+				  	<?php
+				  	$stmt = $dbh->prepare("SELECT cf.cod_funcion, cf.nombre_funcion from personal_datosadicionales p, cargos_funciones cf where p.cod_personal='$globalUser' and p.cod_cargo=cf.cod_cargo;");
+					$stmt->execute();
+					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+						$codigoX=$row['cod_funcion'];
+						$nombreX=$row['nombre_funcion'];
+						$nombreX=substr($nombreX, 0,100)."...";
+					?>
+						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>	
+					<?php	
+					}
+				  	?>
+				</select>
+			</div>
+	    </div>	
+
+
+
 	</div>
 </div>
 

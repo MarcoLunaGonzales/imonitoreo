@@ -8,20 +8,16 @@ require_once '../functions.php';
 
 $dbh = new Conexion();
 
-//SACAMOS LA CONFIGURACION PARA REDIRECCIONAR EL PON
-$stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=6");
+$stmt = $dbh->prepare("ALTER TABLE actividades_poaejecucion DROP FOREIGN KEY actividades_poaejecucion_fk1;");
 $stmt->execute();
-$codigoIndicadorPON=0;
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-  $codigoIndicadorPON=$row['valor_configuracion'];
-}
+$stmt = $dbh->prepare("ALTER TABLE `actividades_poaplanificacion` DROP FOREIGN KEY `actividades_poaplanificacion_fk1`;");
+$stmt->execute();
 
 $codigoIndicador=$_POST["cod_indicador"];
 $cantidadFilas=$_POST["cantidad_filas"];
 
 $codigoUnidad=$_POST["codigoUnidad"];
 $codigoArea=$_POST["codigoArea"];
-
 
 $table="actividades_poa";
 $urlRedirect="../index.php?opcion=listActividadesPOAI&codigo=$codigoIndicador&area=0&unidad=0";
@@ -40,10 +36,10 @@ $fechaHoraActual=date("Y-m-d H:i:s");
 
 for ($i=1;$i<=$cantidadFilas;$i++){ 	    	
 	// Prepare
-	$tipoSeguimiento=$_POST["tipo_seguimiento".$i];
+	$nombre=$_POST["actividad".$i];
 	//echo $i." area: ".$area." <br>";
 
-	if($tipoSeguimiento!=0 || $tipoSeguimiento!=""){
+	if($nombre!=0 || $nombre!=""){
 		$codigo=$_POST["codigo".$i];
 		$nombre=$_POST["actividad".$i];
 		$normaPriorizada=$_POST["norma_priorizada".$i];
@@ -54,13 +50,7 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		$datoClasificador=$_POST["clasificador".$i];
 		$tipoActividad=$_POST["tipo_actividad".$i];
 		$periodo=$_POST["periodo".$i];
-
-		//BORRAMOS EL CAMPO
-		$sqlDelete="";
-		$sqlDelete="DELETE from $table where codigo=:codigo";
-		$stmtDel = $dbh->prepare($sqlDelete);
-		$stmtDel->bindParam(':codigo', $codigo);
-		$flagSuccess=$stmtDel->execute();
+		$funcion=$_POST["funcion".$i];
 
 		$codigoPOA=0;
 		if($codigo==0){
@@ -73,9 +63,13 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 			$codigoPOA=$codigo;
 		}
 
+		//BORRAMOS LA TABLA
+		$sqlDelete="";
+		$sqlDelete="DELETE from $table where codigo='$codigoPOA'";
+
 		$poai=1;
 
-		$stmt = $dbh->prepare("INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_personal, cod_tiporesultado, cod_datoclasificador, poai, cod_tipoactividad, cod_periodo) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_normapriorizada, :cod_norma, :cod_tiposeguimiento, :producto_esperado, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_personal, :cod_tiporesultado, :cod_datoclasificador, :poai, :cod_tipoactividad, :cod_periodo)");
+		$stmt = $dbh->prepare("INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_personal, cod_tiporesultado, cod_datoclasificador, poai, cod_tipoactividad, cod_periodo, cod_funcion) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_normapriorizada, :cod_norma, :cod_tiposeguimiento, :producto_esperado, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_personal, :cod_tiporesultado, :cod_datoclasificador, :poai, :cod_tipoactividad, :cod_periodo, :cod_funcion)");
 		// Bind
 		$stmt->bindParam(':codigo', $codigoPOA);
 		$stmt->bindParam(':orden', $i);
@@ -97,12 +91,17 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		$stmt->bindParam(':poai', $poai);
 		$stmt->bindParam(':cod_tipoactividad', $tipoActividad);
 		$stmt->bindParam(':cod_periodo', $periodo);
-
+		$stmt->bindParam(':cod_funcion', $funcion);
 
 		$flagSuccess=$stmt->execute();	
 	}
 } 
 
+
+$stmt = $dbh->prepare("ALTER TABLE `actividades_poaejecucion` ADD CONSTRAINT `actividades_poaejecucion_fk1` FOREIGN KEY (`cod_actividad`) REFERENCES `actividades_poa` (`codigo`);");
+$stmt->execute();
+$stmt = $dbh->prepare("ALTER TABLE `actividades_poaplanificacion` ADD CONSTRAINT `actividades_poaplanificacion_fk1` FOREIGN KEY (`cod_actividad`) REFERENCES `actividades_poa` (`codigo`);");
+$stmt->execute();
 
 
 if($flagSuccess==true){

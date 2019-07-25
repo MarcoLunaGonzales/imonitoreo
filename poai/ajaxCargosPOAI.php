@@ -4,6 +4,11 @@
 	require_once '../styles.php';
 
 	$dbh = new Conexion();
+	
+
+	$sqlX="SET NAMES 'utf8'";
+	$stmtX = $dbh->prepare($sqlX);
+	$stmtX->execute();
 
 	$codIndicador=$_GET["codigo_indicador"];
 

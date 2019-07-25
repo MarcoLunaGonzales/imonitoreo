@@ -1,8 +1,11 @@
 <?php
 
-require_once 'conexion.php';
-require_once 'styles.php';
-require_once 'functions.php';
+require_once '../layouts/bodylogin2.php';
+require_once '../conexion.php';
+require_once '../functions.php';
+require_once '../styles.php';
+
+session_start();
 
 $globalNombreGestion=$_SESSION["globalNombreGestion"];
 $globalUser=$_SESSION["globalUser"];
@@ -11,12 +14,16 @@ $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 $globalAdmin=$_SESSION["globalAdmin"];
 
-$codigoIndicador=$codigo;
+echo $globalUnidad." ".$globalArea;
+
+$codigoIndicador=$_GET['codigo'];
+$codAreaIndicador=$_GET['area'];
+$codUnidadIndicador=$_GET['unidad'];
+
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
 
 $dbh = new Conexion();
-
 
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
@@ -35,22 +42,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 	$nombrePeriodo=$row['periodo'];
 }
 
-//SACAMOS LA TABLA RELACIONADA
-$sqlClasificador="SELECT c.tabla FROM indicadores i, clasificadores c where i.codigo='$codigoIndicador' and i.cod_clasificador=c.codigo";
-$stmtClasificador = $dbh->prepare($sqlClasificador);
-$stmtClasificador->execute();
-$nombreTablaClasificador="";
-while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
-  $nombreTablaClasificador=$rowClasificador['tabla'];
-}
-if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA QUE NO DE ERROR
+$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$globalUnidad,$globalArea);
 
 ?>
 
 <div class="content">
 	<div class="container-fluid">
 
-		  <form id="form1" class="form-horizontal" action="poa/savePOAIPlan.php" method="post">
+		  <form id="form1" class="form-horizontal" action="savePOAIPlan.php" method="post">
 			<input type="hidden" name="cod_indicador" id="cod_indicador" value="<?=$codigoIndicador;?>">
 
 			<div class="card">
@@ -77,9 +76,15 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					(SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador, a.cod_unidadorganizacional, a.cod_area, a.cod_periodo, a.poai
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1";
 					if($globalAdmin==0){
-						$sqlLista.=" and a.cod_area='$globalArea' and a.cod_unidadorganizacional='$globalUnidad' and a.cod_personal='$globalUser'";
+						$sqlLista.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) and a.cod_personal='$globalUser'";
 					}
-					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+					if($codAreaIndicador!=0 && $codUnidadIndicador!=0){
+						$sqlLista.=" and a.cod_area in ($codAreaIndicador) and a.cod_unidadorganizacional in ($codUnidadIndicador) ";	
+					}
+					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre";
+					
+					//echo $sqlLista;
+					
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();
@@ -98,7 +103,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					?>
 
               		<div class="table-responsive">
-		                <table class="table table-striped">
+		                <table class="table table-condensed table-striped" id="tablePaginatorFixed">
 		                  <thead>
 		                    <tr>
 		                      <th class="text-center">#</th>
@@ -116,6 +121,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                      <th>Oct</th>
 		                      <th>Nov</th>
 		                      <th>Dic</th>
+		                      <th>Total</th>
 		                    </tr>
 		                  </thead>
 		                  <tbody>
@@ -126,9 +132,9 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
                           		$abrevUnidad=abrevUnidad($codUnidad);
 		                  ?>
 		                    <tr>
-		                      <td class="text-center"><?=$orden;?></td>
-		                      <td class="text-center"><h6><p class="text-danger"><?=$abrevUnidad;?>-<?=$abrevArea;?></p></h6></td>
-		                      <td><?=$nombre;?></td>
+		                      <td class="text-center small"><?=$orden;?></td>
+		                      <td class="text-left small"><h6><p class="text-danger"><?=$abrevUnidad;?>-<?=$abrevArea;?></p></h6></td>
+		                      <td class="text-left font-weight-bold small"><?=$nombre;?></td>
 		                    <?php
 		                    if($codPeriodo==0 && $poai==1){
 	                    		$sqlRecupera="SELECT value_numerico, fecha_planificacion from actividades_poaplanificacion where cod_actividad='$codigo' and mes=0";
@@ -147,8 +153,10 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 	                    			<input value="1" type="hidden" name="plan|<?=$codigo;?>|0" required>
 	                    			<input class="form-control input-sm" value="<?=$fechaPlanificada;?>"  type="date" name="plandate|<?=$codigo;?>|0" required>
 	                    		</td>
+	                    		<td><input type="text" class="form-control" value="-" readonly="true"></td>
 	                    	<?php
 		                    }else{
+		                    	$totalPlanificado=0;
 		                    	for($i=1;$i<=12;$i++){
 		                    		$sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
 		                    		$stmtRecupera = $dbh->prepare($sqlRecupera);
@@ -160,18 +168,21 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 									$valueBooleano=0;
 									while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
 										$valueNumero=$rowRec['value_numerico'];
-										$valueString=$rowRec['value_string'];
-										$valueBooleano=$rowRec['value_booleano'];
+										$valueNumero=round($valueNumero,2);
+										$totalPlanificado+=$valueNumero;
 									}
 	                    	?>
 	                    		<td>
-	                    			<input class="form-control input-sm" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" step="0.1" required>
+	                    			<input class="form-control input-sm" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="planificado<?=$index;?>" step="0.001" onChange="calcularTotalPlanificado(<?=$index;?>);" OnKeyUp="calcularTotalPlanificado(<?=$index;?>);" required>
 	                    		</td>
 	                    	<?php	
                     			}
+                    		?>
+	                    		<td><input type="text" class="form-control" name="totalPlani<?=$index;?>" id="totalPlani<?=$index;?>" value="<?=formatNumberDec($totalPlanificado);?>"  readonly="true"></td>
+                    		<?php
 	                    	}
 		                    ?>
-		                    <input type="hidden" name="tipo_dato|<?=$codigo;?>" id="tipo_dato|<?=$codigo;?>|<?=$i;?>" value="<?=$codTipoDato;?>">
+			                    <input type="hidden" name="tipo_dato|<?=$codigo;?>" id="tipo_dato|<?=$codigo;?>|<?=$i;?>" value="<?=$codTipoDato;?>">
 		                    </tr>
 					        <?php
     							$index++;

@@ -54,6 +54,21 @@ function ajaxIndicadoresReport(perspectiva){
   ajax.send(null)
 }
 
+
+function ajaxFuncionesCargos(combo, index){
+  var contenedor;
+  contenedor = document.getElementById('divcontenedor'+index);
+  ajax=nuevoAjax();
+  var personal=combo.value;
+  ajax.open('GET', 'poai/ajaxFuncionesCargos.php?cod_personal='+personal+"&index="+index,true);
+  ajax.onreadystatechange=function() {
+    if (ajax.readyState==4) {
+      contenedor.innerHTML = ajax.responseText
+    }
+  }
+  ajax.send(null)
+}
+
 //INDICADORES DETALLE PROPIEDAD
 function ajaxPropiedad(objetivo, indicador){
   var contenedor;
@@ -203,7 +218,7 @@ function addActividad(obj, cod_indicador, cod_unidad, cod_area) {
       ajax.send(null);
 }
 
-function addActividadPOAI(obj, cod_indicador, cod_unidad) {
+function addActividadPOAI(obj,cod_indicador,cod_unidad,cod_area) {
       numFilas++;
       cantidadItems++;
       
@@ -218,7 +233,7 @@ function addActividadPOAI(obj, cod_indicador, cod_unidad) {
       var divDetalle;
       divDetalle=document.getElementById("div"+numFilas);
       ajax=nuevoAjax();
-      ajax.open("GET","poa/ajaxActividadesPOAI.php?cod_indicador="+cod_indicador+"&cod_unidad="+cod_unidad+"&codigo="+numFilas,true);
+      ajax.open("GET","poai/ajaxActividadesPOAI.php?cod_indicador="+cod_indicador+"&cod_unidad="+cod_unidad+"&cod_area="+cod_area+"&codigo="+numFilas,true);
       ajax.onreadystatechange=function(){
         if (ajax.readyState==4) {
           divDetalle.innerHTML=ajax.responseText;

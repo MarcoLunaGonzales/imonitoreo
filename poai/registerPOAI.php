@@ -43,9 +43,9 @@ $moduleName="Actividades POAI";
 
 $sqlCount="";
 if($globalAdmin==1){
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador='$codigoIndicador' and cod_estado=1 and poai=1";	
+	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_estado=1 and poai=1";	
 }else{
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador='$codigoIndicador' and cod_area='$globalArea' and cod_unidadorganizacional='$globalUnidad' and cod_estado=1 and poai=1";	
+	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_area in ($globalArea) and cod_unidadorganizacional in ($globalUnidad) and cod_estado=1 and poai=1";	
 }
 $stmtX = $dbh->prepare($sqlCount);
 $stmtX->execute();
@@ -53,14 +53,8 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 	$contadorRegistros=$row['nro_registros'];
 }
 
-//SACAMOS LA TABLA RELACIONADA
-$sqlClasificador="SELECT c.tabla FROM indicadores i, clasificadores c where i.codigo='$codigoIndicador' and i.cod_clasificador=c.codigo";
-$stmtClasificador = $dbh->prepare($sqlClasificador);
-$stmtClasificador->execute();
-$nombreTablaClasificador="";
-while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
-	$nombreTablaClasificador=$rowClasificador['tabla'];
-}
+$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$codAreaX);
+
 
 ?>
 <script>
@@ -73,7 +67,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 <div class="content">
 	<div class="container-fluid">
 
-		<form id="form1" class="form-horizontal" action="poa/savePOAI.php" method="post">
+		<form id="form1" class="form-horizontal" action="poai/savePOAI.php" method="post">
 			<input type="hidden" name="cod_indicador" id="cod_indicador" value="<?=$codigoIndicador?>">
 			<input type="hidden" name="cantidad_filas" id="cantidad_filas" value="<?=$contadorRegistros;?>">
 			<input type="hidden" name="codigoUnidad" id="codigoUnidad" value="<?=$codUnidadX;?>">
@@ -107,8 +101,8 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 					<?php
 					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_normapriorizada,
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado, a.cod_norma,
-					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.cod_tipoactividad, a.cod_periodo 
-					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional='$codUnidadX' and a.cod_area='$codAreaX' and a.poai=1";
+					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.cod_tipoactividad, a.cod_periodo, a.cod_funcion
+					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional in ($codUnidadX) and a.cod_area in ($codAreaX) and a.poai=1";
 
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
 					//echo $sql;
@@ -132,12 +126,13 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 					$stmtLista->bindColumn('cod_datoclasificador',$codDatoClasificador);
 					$stmtLista->bindColumn('cod_tipoactividad',$codTipoActividad);
 					$stmtLista->bindColumn('cod_periodo',$codPeriodo);
+					$stmtLista->bindColumn('cod_funcion',$codFuncion);
 
 
 					?>
 
 					<fieldset id="fiel" style="width:100%;border:0;">
-						<button type="button" name="add" value="add" class="btn btn-danger btn-round btn-fab" onClick="addActividadPOAI(this,<?=$codigoIndicador;?>,<?=$codUnidadX;?>)" accesskey="a">
+						<button type="button" name="add" value="add" class="btn btn-danger btn-round btn-fab" onClick="addActividadPOAI(this,<?=$codigoIndicador;?>,<?=$codUnidadX;?>,<?=$codAreaX;?>)" accesskey="a">
 		                              <i class="material-icons">add</i>
 		                </button>						
 					        	<?php
@@ -295,7 +290,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 
 			            	<div class="col-md-12">
 								<div class="row">	
-									<div class="col-sm-5">
+									<div class="col-sm-3">
 								        <div class="form-group">
 											<select class="selectpicker" name="tipo_actividad<?=$index;?>" id="tipo_actividad<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 											  	<option value="">Tipo de Actividad</option>
@@ -314,7 +309,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 										</div>
 								    </div>
 
-									<div class="col-sm-5">
+									<div class="col-sm-3">
 								        <div class="form-group">
 											<select class="selectpicker" name="periodo<?=$index;?>" id="periodo<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 											  	<option value="">Periodicidad</option>
@@ -331,7 +326,28 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 											  	?>
 											</select>
 										</div>
-								    </div>	
+								    </div>
+
+									<div class="col-sm-6">
+								        <div class="form-group">
+											<select class="selectpicker form-control" name="funcion<?=$index;?>" id="funcion<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+											  	<option value="">Funcion Asociada a la Actividad</option>
+											  	<?php
+											  	$stmt = $dbh->prepare("SELECT cf.cod_funcion, cf.nombre_funcion from personal_datosadicionales p, cargos_funciones cf where p.cod_personal='$globalUser' and p.cod_cargo=cf.cod_cargo;");
+												$stmt->execute();
+												while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+													$codigoX=$row['cod_funcion'];
+													$nombreX=$row['nombre_funcion'];
+													$nombreX=substr($nombreX, 0,100)."...";
+												?>
+													<option value="<?=$codigoX;?>"  <?=($codigoX==$codFuncion)?"selected":"";?> ><?=$nombreX;?></option>	
+												<?php	
+												}
+											  	?>
+											</select>
+										</div>
+								    </div>
+
 								</div>
 							</div>
 							
@@ -376,9 +392,9 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 	  	<select class="selectpicker" name="areaModal" id="areaModal" data-style="<?=$comboColor;?>" required>
 		  	<option disabled selected value="">Area</option>
 		  	<?php
-		  	$sqlAreas="SELECT i.cod_indicador, u.codigo as codigoUnidad, u.nombre as nombreUnidad, u.abreviatura as abrevUnidad, a.codigo as codigoArea, a.nombre as nombreArea, a.abreviatura as abrevArea from indicadores_unidadesareas i, unidades_organizacionales u, areas a where i.cod_indicador='$codigoIndicador' and i.cod_area=a.codigo and i.cod_unidadorganizacional=u.codigo";
+		  	$sqlAreas="SELECT i.cod_indicador, u.codigo as codigoUnidad, u.nombre as nombreUnidad, u.abreviatura as abrevUnidad, a.codigo as codigoArea, a.nombre as nombreArea, a.abreviatura as abrevArea from indicadores_unidadesareas i, unidades_organizacionales u, areas a where i.cod_indicador in ($codigoIndicador) and i.cod_area=a.codigo and i.cod_unidadorganizacional=u.codigo";
 		  	if($globalAdmin==0){
-		  		$sqlAreas.=" and i.cod_unidadorganizacional='$globalUnidad' and i.cod_area='$globalArea' ";
+		  		$sqlAreas.=" and i.cod_unidadorganizacional in ($globalUnidad) and i.cod_area in ($globalArea) ";
 		  	}
 		  	$sqlAreas.=" order by 3,6";
 		  	echo $sqlAreas;

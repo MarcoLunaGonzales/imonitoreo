@@ -63,7 +63,7 @@ $moduleName="Registro de Ejecucion POAI";
 <div class="content">
 	<div class="container-fluid">
 
-		  <form id="form1" enctype="multipart/form-data" class="form-horizontal" action="poa/savePOAIEjecucion.php" method="post">
+		  <form id="form1" enctype="multipart/form-data" class="form-horizontal" action="poai/savePOAIEjecucion.php" method="post">
 			<input type="hidden" name="cod_indicador" id="cod_indicador" value="<?=$codigoIndicador;?>">
 			
 			<div class="card">
@@ -89,10 +89,12 @@ $moduleName="Registro de Ejecucion POAI";
 					(SELECT c.codigo from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as codigodetalleclasificador, IFNULL(a.cod_periodo,-1)as cod_periodo, a.poai
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
 					if($globalAdmin==0){
-						$sqlLista.=" and a.cod_area='$globalArea' and a.cod_unidadorganizacional='$globalUnidad' and a.cod_personal='$globalUser' ";
+						$sqlLista.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) and a.cod_personal='$globalUser' ";
 					}
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+					
 					//echo $sqlLista;
+					
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();
@@ -112,7 +114,7 @@ $moduleName="Registro de Ejecucion POAI";
 					?>
 
               		<div class="table-responsive">
-		                <table class="table table-bordered">
+		                <table class="table table-bordered" id="tablePaginatorFixed">
 		                  <thead>
 		                    <tr>
 		                      <th class="text-center"></th>
@@ -139,9 +141,21 @@ $moduleName="Registro de Ejecucion POAI";
 		                  <tbody>
 		                  <?php
 		                    $index=1;
+		                    $totalEjecutado=0;
 		                  	while ($row = $stmtLista->fetch(PDO::FETCH_BOUND)) {
                   				$abrevArea=abrevArea($codArea);
                           		$abrevUnidad=abrevUnidad($codUnidad);
+
+                          		$idRegistroEjecucion=verificaRegistroEjecucion($codigo,$codAnioX,$codMesX);
+
+              					$banderaArchivo=verificaArchivoEjecucion($idRegistroEjecucion);
+
+                  				$abrevArea=abrevArea($codArea);
+                          		$abrevUnidad=abrevUnidad($codUnidad);
+
+                          		$codigoTablaClasificador=obtieneCodigoClasificador($codigoIndicador,$codUnidad,$codArea);
+                          		$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
+	                         	$nombreDatoClasificador=obtieneDatoClasificador($codigodetalleclasificador,$nombreTablaClasificador);
 
 		                  ?>
 		                    <tr>
@@ -166,7 +180,25 @@ $moduleName="Registro de Ejecucion POAI";
 									$valueNumero=$rowRec['value_numerico'];
 									$fechaPlanificacion=$rowRec['fecha_planificacion'];
 								}
-								$valueEjecutadoSistema=0;
+
+								$valorEj=0;
+								$descripcionEj="";
+								$sqlRecupera="SELECT a.value_numerico, a.descripcion from actividades_poaejecucion a where a.cod_actividad='$codigo' and a.mes='$codMesX'";
+	                          	$stmtRecupera = $dbh->prepare($sqlRecupera);
+	                          	$stmtRecupera->execute();
+	                          	$estadoPonEj="";
+	                          	while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
+	                            	$valorEj=$rowRec['value_numerico'];
+		                            $descripcionEj=$rowRec['descripcion'];
+	                          	}
+	                          	$valorEjSis=0;
+	                          	if($valorEj==0){
+									if($codigoTablaClasificador!=0){
+										$valorEjSis=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
+									}
+	                          	}
+	                          	$totalEjecutado+=$valorEj;
+
 								if($codigoClasificador!=0){
 									$valueEjecutadoSistema=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
 								}
@@ -187,8 +219,8 @@ $moduleName="Registro de Ejecucion POAI";
 								}
 								?>
 	                    		<td class="text-center table-success font-weight-bold">
-	                    			<?=($valueEjecutadoSistema==0)?"-":formatNumberDec($valueEjecutadoSistema);?>
-	                    			<input type="hidden" name="ejsistema|<?=$codigo;?>|<?=$i;?>" value="<?=$valueEjecutadoSistema;?>">
+	                    			<?=($valueEjecutadoSistema==0)?"-":formatNumberDec($valorEj);?>
+	                    			<input type="hidden" name="ejsistema|<?=$codigo;?>|<?=$i;?>" value="<?=$valorEj;?>">
 	                    		</td>
 	                    		
 	                    		<?php
@@ -222,10 +254,29 @@ $moduleName="Registro de Ejecucion POAI";
 								}
 								?>
 	                    		<td class="text-center">
-	                    			<input class="form-control input-sm" type="text" name="explicacion|<?=$codigo;?>|<?=$i;?>">
+	                    			<textarea class="form-control input-sm" type="text" name="explicacion|<?=$codigo;?>|<?=$i;?>" rows="1"><?=$descripcionEj;?></textarea>
 	                    		</td>
-	                    		<td class="text-center">
-	                    			<input class="form-control-file" type="file" name="file|<?=$codigo;?>|<?=$i;?>">
+	                    		<td class="td-actions text-center">
+	                    			<div id="divArchivo<?=$i;?>">
+	                    			<?php
+			                          if($banderaArchivo>0){
+	                          		?>
+			                            <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$banderaArchivo;?>' rel="tooltip" class="" target="_blank">
+			                              <i class="material-icons">attachment</i>
+			                            </a>
+			                            <a href="#" class="<?=$buttonCancel;?> btn-round" onClick="alerts.showSwal('warning-message-and-confirmation','javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$banderaArchivo?>\',\'divArchivo<?=$i;?>\',13,\'<?=$idRegistroEjecucion;?>\');')">
+			                                <i class="material-icons">delete_forever</i>
+			                            </a>
+		                          	<?php
+		                          	}else{
+		                          	?>
+		                    			<a href="#" class="<?=$buttonMorado;?> btn-round" data-toggle="modal" data-target="#myModal" onClick="ajaxArchivosEj('<?=$nombre;?>',<?=$idRegistroEjecucion?>,'divArchivo<?=$i;?>');">
+    	    		                    	<i class="material-icons">cloud_upload</i>
+			                          	</a>
+		                          	<?php
+		                          	}
+		                          	?>
+		                          </div>
 	                    		</td>
 	                    	<?php
 	                    	}

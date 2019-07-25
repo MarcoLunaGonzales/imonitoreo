@@ -43,10 +43,12 @@ $sql="SELECT (select p.nombre from perspectivas p where p.codigo=o.cod_perspecti
   FROM objetivos o, indicadores i, indicadores_unidadesareas iua
 WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador ";
 if($globalAdmin==0){
-  $sql.=" and iua.cod_area='$globalArea' and iua.cod_unidadorganizacional='$globalUnidad'";
+  $sql.=" and iua.cod_area in ($globalArea) and iua.cod_unidadorganizacional in ($globalUnidad)";
 }
 $sql.=" GROUP BY i.codigo ORDER BY perspectiva, abreviatura";
+
 //echo $sql;
+
 $stmt = $dbh->prepare($sql);
 // Ejecutamos
 $stmt->execute();

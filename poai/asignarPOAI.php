@@ -43,10 +43,11 @@ $moduleName="Asignar POAI";
 
 $sqlCount="";
 if($globalAdmin==1){
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador='$codigoIndicador' and cod_estado=1";	
+	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_estado=1";	
 }else{
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador='$codigoIndicador' and cod_area='$globalArea' and cod_unidadorganizacional='$globalUnidad' and cod_estado=1";	
+	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_area in ($globalArea) and cod_unidadorganizacional in ($globalUnidad) and cod_estado=1";	
 }
+//echo $sqlCount;
 $stmtX = $dbh->prepare($sqlCount);
 $stmtX->execute();
 while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
@@ -107,8 +108,8 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 					<?php
 					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_normapriorizada,
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado, a.cod_norma,
-					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.cod_personal
-					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional='$codUnidadX' and a.cod_area='$codAreaX' ";
+					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.cod_personal, a.cod_funcion, (select cf.nombre_funcion from cargos_funciones cf where cf.cod_funcion=a.cod_funcion)as funcion
+					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional in ($codUnidadX) and a.cod_area in ($codAreaX) ";
 
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
 					
@@ -133,6 +134,9 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 					$stmtLista->bindColumn('cod_area', $codArea);
 					$stmtLista->bindColumn('cod_datoclasificador',$codDatoClasificador);
 					$stmtLista->bindColumn('cod_personal',$codPersonal);
+					$stmtLista->bindColumn('cod_funcion',$codFuncion);
+					$stmtLista->bindColumn('funcion',$nombreFuncion);
+
 					?>
 					<fieldset id="fiel" style="width:100%;border:0;">
 				    	<?php
@@ -144,7 +148,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 					<div id="div<?=$index;?>">	           
 						<div class="col-md-12">
 							<div class="row">
-								<div class="col-sm-8">
+								<div class="col-sm-4">
 				                    <div class="form-group">
 				                    <label for="actividad<?=$index;?>" class="bmd-label-floating">Actividad</label>			
 		                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();" readonly="true"><?=$nombre;?></textarea>	
@@ -154,7 +158,7 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 								<div class="col-sm-3">
 			                        <div class="form-group">
 		                        	<input type="hidden" name="codigo<?=$index;?>" id="codigo<?=$index;?>" value="<?=$codigo;?>">
-			                        <select class="selectpicker" name="personal<?=$index;?>" id="personal<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+			                        <select class="selectpicker" name="personal<?=$index;?>" id="personal<?=$index;?>" data-style="<?=$comboColor;?>" onChange="ajaxFuncionesCargos(this,<?=$index;?>);" data-live-search="true">
 			                        	<?php
 									  	$sql="SELECT p.codigo, p.nombre, (select c.nombre from cargos c where c.codigo=pd.cod_cargo)as cargo from personal2 p, personal_datosadicionales pd, personal_unidadesorganizacionales pu where p.codigo=pd.cod_personal and p.codigo=pu.cod_personal and pu.cod_unidad='$codUnidadHijosX' and pd.cod_cargo in (select i.cod_cargo from indicadores_areascargos i where i.cod_indicador='$codigoIndicador' and i.cod_area='$codAreaX') order by 1,2;2";
 									  	?>
@@ -174,6 +178,17 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
 									</select>
 									</div>
 		                        </div>
+
+								<div class="col-sm-5">
+			                        <div class="form-group" id="divcontenedor<?=$index;?>">
+										<label for="Nfuncion<?=$index;?>" class="bmd-label-floating">Funcion</label>			
+		                          		<input type="hidden" name="funcion<?=$index;?>" value="<?=$codFuncion;?>">
+		                          		<textarea class="form-control" type="text" name="Nfuncion<?=$index;?>" id="Nfuncion<?=$index;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();" readonly="true"><?=$nombreFuncion;?></textarea>
+									</div>
+		                        </div>
+
+
+
 			            	</div>
 		            	</div>
 							

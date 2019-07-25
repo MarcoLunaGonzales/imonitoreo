@@ -150,7 +150,11 @@
 		if ($_GET['opcion']=='listFunciones') {
 			$codigo=$_GET['codigo'];
 			require_once('cargos/listFunciones.php');
-		}	
+		}
+		if ($_GET['opcion']=='registerFuncionCargo') {
+			$codigo=$_GET['codigo'];
+			require_once('cargos/registerFuncionCargo.php');
+		}		
 
 
 		//ESTADOS PON
@@ -371,14 +375,9 @@
 		}
 		if ($_GET['opcion']=='listActividadesPOA') {
 			$codigo=$_GET['codigo'];
-			$codigoPON=$_GET['codigoPON'];
 			$area=$_GET['area'];
 			$unidad=$_GET['unidad'];
-			if($codigo==$codigoPON){
-				require_once('poa/listActividadesPON.php');
-			}else{
-				require_once('poa/listActividades.php');
-			}
+			require_once('poa/listActividades.php');
 
 		}
 		if ($_GET['opcion']=='listActividadesPOAEjecucion') {

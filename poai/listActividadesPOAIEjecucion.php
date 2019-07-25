@@ -46,18 +46,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 $nombreMes=nameMes($codMesX);
 //FIN FECHAS
 
-//SACAMOS LA TABLA RELACIONADA
-$sqlClasificador="SELECT c.codigo, c.tabla FROM indicadores i, clasificadores c where i.codigo='$codigoIndicador' and i.cod_clasificador=c.codigo";
-$stmtClasificador = $dbh->prepare($sqlClasificador);
-$stmtClasificador->execute();
-$nombreTablaClasificador="";
-$codigoClasificador=0;
-while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
-  $codigoClasificador=$rowClasificador['codigo'];
-  $nombreTablaClasificador=$rowClasificador['tabla'];
-}
-if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA QUE NO DE ERROR
-
+$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$globalUnidad,$globalArea);
 
 
 // Preparamos
@@ -70,10 +59,12 @@ a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado
           (SELECT c.codigo from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as codigodetalleclasificador, a.cod_periodo, a.poai
  from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
 if($globalAdmin==0){
-  $sql.=" and a.cod_area='$globalArea' and a.cod_unidadorganizacional='$globalUnidad' and a.cod_personal='$globalUser' ";
+  $sql.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) and a.cod_personal='$globalUser' ";
 }
 $sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+
 //echo $sql;
+
 $stmt = $dbh->prepare($sql);
 // Ejecutamos
 $stmt->execute();
@@ -116,7 +107,7 @@ $stmt->bindColumn('poai', $poai);
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-striped">
+                    <table class="table table-condensed table-striped" id="tablePaginatorFixed">
                       <thead>
                         <tr>
                           <th class="text-center">-</th>
@@ -151,6 +142,11 @@ $stmt->bindColumn('poai', $poai);
                           $abrevArea=abrevArea($codArea);
                           $abrevUnidad=abrevUnidad($codUnidad);
 
+                          $codigoTablaClasificador=obtieneCodigoClasificador($codigoIndicador,$codUnidad,$codArea);
+                          $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
+                          $nombreDatoClasificador=obtieneDatoClasificador($codigodetalleclasificador,$nombreTablaClasificador);
+
+
                           //SACAMOS LA PLANIFICACION
                           if($codPeriodo==0){
                             $sqlRecupera="SELECT value_numerico, fecha_planificacion from actividades_poaplanificacion where cod_actividad='$codigo' and mes='0'";                            
@@ -175,6 +171,7 @@ $stmt->bindColumn('poai', $poai);
                           $valueNumeroEj=0;
                           $descripcionLogroEj="";
                           $archivoEj="";
+                          $fechaEjecucion="";
                           while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
                             $valueNumeroEj=$rowRec['value_numerico'];
                             $descripcionLogroEj=$rowRec['descripcion'];
@@ -185,30 +182,30 @@ $stmt->bindColumn('poai', $poai);
                           //FIN PLANIFICACION
 
                           $valueEjecutadoSistema=0;
-                          if($codigoClasificador!=0){
-                            $valueEjecutadoSistema=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
+                          if($codigoTablaClasificador!=0){
+                            $valueEjecutadoSistema=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
                           }
                       ?>
                         <tr>
                           <td class="text-center"><?=$index;?></td>
-                          <td><?=$abrevArea."-".$abrevUnidad;?></td>
-                          <td><?=$nombre;?></td>
-                          <td><?=$productoEsperado;?></td>
-                          <td><?=$tipoDato;?></td>
-                          <td><?=$datoclasificador;?>(<?=$codigodetalleclasificador;?>)</td>
+                          <td class="text-left small"><?=$abrevArea."-".$abrevUnidad;?></td>
+                          <td class="text-left font-weight-bold small"><?=$nombre;?></td>
+                          <td class="text-left small"><?=$productoEsperado;?></td>
+                          <td class="text-left small"><?=$tipoDato;?></td>
+                          <td class="text-left small"><?=$datoclasificador;?>(<?=$codigodetalleclasificador;?>)</td>
                           <?php
                           if($codPeriodo==0 && $poai==1){
                             $nombreEstadoPOA=nameEstadoPOA($valueNumero);
                           ?>
-                          <td class="text-center table-warning font-weight-bold">
+                          <td class="text-left table-warning font-weight-bold">
                             <?=$nombreEstadoPOA;?>
-                            <?=$fechaEjecucion;?>
+                            <?=$fechaPlanificacion;?>
                           </td>
                           <?php
                           }else{
                           ?>
                           <td class="text-center table-warning font-weight-bold">
-                            <?=formatNumberDec($valueNumero);?>
+                            <?=($valueNumero==0)?"-":formatNumberDec($valueNumero);?>
                           </td>
                           <?php
                           }
@@ -228,7 +225,7 @@ $stmt->bindColumn('poai', $poai);
                             }else{
                             ?>
                             <td class="text-center table-success font-weight-bold"">
-                              <?=formatNumberDec($valueNumeroEj);?>
+                              <?=($valueNumeroEj==0)?"-":formatNumberDec($valueNumeroEj);?>
                             </td>
                             <?php
                             }
