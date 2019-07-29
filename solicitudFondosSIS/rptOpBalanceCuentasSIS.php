@@ -6,6 +6,10 @@ require_once 'functions.php';
 
 $dbh = new Conexion();
 
+//VALORES POR DEFAULT
+$codGestionDefault=gestionDefaultReport();
+$codMesDefault=mesDefaultReport();
+
 ?>
 
 <div class="content">
@@ -34,7 +38,7 @@ $dbh = new Conexion();
               $codigoX=$row['codigo'];
               $nombreX=$row['nombre'];
             ?>
-            <option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+            <option value="<?=$codigoX;?>"  <?=($codigoX==$codGestionDefault)?"selected":"";?> ><?=$nombreX;?></option>
             <?php 
             }
               ?>
@@ -57,7 +61,7 @@ $dbh = new Conexion();
               $codigoX=$row['codigo'];
               $nombreX=$row['nombre'];
             ?>
-            <option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+            <option value="<?=$codigoX;?>"  <?=($codigoX==$codMesDefault)?"selected":"";?> ><?=$nombreX;?></option>
             <?php 
             }
               ?>

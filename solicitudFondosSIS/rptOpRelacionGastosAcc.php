@@ -6,6 +6,11 @@ require_once 'functions.php';
 
 $dbh = new Conexion();
 
+//VALORES POR DEFAULT
+$codGestionDefault=gestionDefaultReport();
+$codMesDefault=mesDefaultReport();
+
+
 ?>
 
 <div class="content">
@@ -34,7 +39,7 @@ $dbh = new Conexion();
               $codigoX=$row['codigo'];
               $nombreX=$row['nombre'];
             ?>
-            <option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+            <option value="<?=$codigoX;?>" <?=($codigoX==$codGestionDefault)?"selected":"";?> ><?=$nombreX;?></option>
             <?php 
             }
               ?>
@@ -56,7 +61,7 @@ $dbh = new Conexion();
               $codigoX=$row['codigo'];
               $nombreX=$row['nombre'];
             ?>
-            <option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+            <option value="<?=$codigoX;?>" <?=($codigoX==$codMesDefault)?"selected":"";?> ><?=$nombreX;?></option>
             <?php 
             }
               ?>
@@ -73,7 +78,7 @@ $dbh = new Conexion();
             <select class="selectpicker" title="Seleccionar" name="tiporeporte" id="tiporeporte" data-style="<?=$comboColor;?>" required>
               <option disabled selected value=""></option>
                <option value="0">Mes</option>
-               <option value="1">Acumulado</option>
+               <option value="1" selected>Acumulado</option>
             </select>
           </div>
           </div>

@@ -487,6 +487,7 @@ function planificacionPorIndicador($indicador, $area, $unidad, $mes, $acumulado)
   if($acumulado==1){
     $sql.=" and ap.mes<='$mes' ";  
   }
+//  echo $sql;
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
   $cantidadPlanificada=0;

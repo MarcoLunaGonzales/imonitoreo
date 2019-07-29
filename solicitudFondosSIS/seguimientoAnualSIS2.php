@@ -39,7 +39,7 @@ $codMesDefault=mesDefaultReport();
               $codigoX=$row['codigo'];
               $nombreX=$row['nombre'];
             ?>
-            <option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+            <option value="<?=$codigoX;?>"  <?=($codigoX==$codGestionDefault)?"selected":"";?> ><?=$nombreX;?></option>
             <?php 
             }
               ?>
@@ -61,7 +61,7 @@ $codMesDefault=mesDefaultReport();
               $codigoX=$row['codigo'];
               $nombreX=$row['nombre'];
             ?>
-            <option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+            <option value="<?=$codigoX;?>"  <?=($codigoX==$codMesDefault)?"selected":"";?> ><?=$nombreX;?></option>
             <?php 
             }
               ?>

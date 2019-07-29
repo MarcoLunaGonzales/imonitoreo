@@ -125,7 +125,9 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
                   $porcentajeAcum=($ejecutadoMesAcum/$planificadoMesAcum)*100;
                 }
 
+
                 $planificadoGestion=planificacionPorIndicador($codIndicador,$codAreaX,$codUnidadX,$mesTemporal,2);
+
                 $ejecutadoGestion=ejecucionPorIndicador($codIndicador,$codAreaX,$codUnidadX,$mesTemporal,2);
                 $porcentajeGestion=0;
                 if($planificadoGestion>0){

@@ -1847,55 +1847,6 @@ if($globalPerfilX==7){
         <ul class="nav">
 
           <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#proyectosis">
-              <i class="material-icons">linear_scale</i>
-              <p> Proyecto SIS
-                <b class="caret"></b>
-              </p>
-            </a>
-            <div class="collapse" id="proyectosis">
-              <ul class="nav">
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=seguimientoAnualSIS2">
-                    <span class="sidebar-mini"> SS </span>
-                    <span class="sidebar-normal">Seguimiento</br>SIS</span>
-                  </a>
-                </li>                
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=seguimientoAnualSIS">
-                    <span class="sidebar-mini"> SDS </span>
-                    <span class="sidebar-normal">Seguimiento</br>Detallado SIS</span>
-                  </a>
-                </li>                
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=rptOpDetalleGastosSIS">
-                    <span class="sidebar-mini"> DGS </span>
-                    <span class="sidebar-normal">Detalle Gastos SIS</span>
-                  </a>
-                </li>    
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=rptOpRelacionGastosAcc">
-                    <span class="sidebar-mini"> DGAN </span>
-                    <span class="sidebar-normal">Detalle Gastos con AccNum</span>
-                  </a>
-                </li>                            
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=rptOpBalanceCuentasSIS">
-                    <span class="sidebar-mini"> BC </span>
-                    <span class="sidebar-normal">Balance de Cuentas</span>
-                  </a>
-                </li>                                
-
-              </ul>
-            </div>
-          </li>
-
-          <li class="nav-item ">
             <a class="nav-link" data-toggle="collapse" href="#reportes">
               <i class="material-icons">assessment</i>
               <p> Reportes
@@ -1926,6 +1877,41 @@ if($globalPerfilX==7){
                   </a>
                 </li>
 
+
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#proyectosis">
+              <i class="material-icons">linear_scale</i>
+              <p> Proyecto SIS
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="proyectosis">
+              <ul class="nav">
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoAnualSIS2">
+                    <span class="sidebar-mini"> SS </span>
+                    <span class="sidebar-normal">Seguimiento</br>SIS</span>
+                  </a>
+                </li>                
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoAnualSIS">
+                    <span class="sidebar-mini"> SDS </span>
+                    <span class="sidebar-normal">Seguimiento</br>Detallado SIS</span>
+                  </a>
+                </li>                
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpDetalleGastosSIS">
+                    <span class="sidebar-mini"> DGS </span>
+                    <span class="sidebar-normal">Detalle Gastos SIS</span>
+                  </a>
+                </li>    
 
               </ul>
             </div>

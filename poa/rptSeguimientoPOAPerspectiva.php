@@ -38,6 +38,7 @@ $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
+$globalPerfil=$_SESSION["globalPerfil"];
 
 //$globalUnidadesReports=$_SESSION["globalUnidadesReports"];
 //$globalAreasReports=$_SESSION["globalAreasReports"];
@@ -50,6 +51,8 @@ $_SESSION["globalAreasReports"]=$areasArray;
 
 $globalAdmin=$_SESSION["globalAdmin"];
 $globalUserPON=$_SESSION["globalUserPON"];
+
+$indicadoresOmitir=obtieneValorConfig(26);
 
 
 $sql="SELECT count(distinct(i.codigo))as contador, o.cod_perspectiva
@@ -121,6 +124,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                       FROM objetivos o, indicadores i, indicadores_unidadesareas iua
                     WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and o.cod_perspectiva in ($codigoPerspectiva)";
                   $sql.=" and iua.cod_area in ($areasArray) and iua.cod_unidadorganizacional in ($unidadOrganizacionalArray) ";
+                  if($globalPerfil==7){
+                    $sql.=" and i.codigo not in ($indicadoresOmitir)";
+                  }
                   $sql.=" group by i.codigo ORDER BY o.abreviatura, i.nombre";
                   //echo $sql;
                   $stmt = $dbh->prepare($sql);
@@ -171,6 +177,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                       FROM objetivos o, indicadores i, indicadores_unidadesareas iua
                     WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and o.cod_perspectiva in ($codigoPerspectiva)";
                   $sql.=" and iua.cod_area in ($areasArray) and iua.cod_unidadorganizacional in ($unidadOrganizacionalArray) ";
+                  if($globalPerfil==7){
+                    $sql.=" and i.codigo not in ($indicadoresOmitir)";
+                  }
                   $sql.=" group by i.codigo ORDER BY o.abreviatura, i.nombre";
                   //echo $sql;
                   $stmt = $dbh->prepare($sql);
@@ -222,6 +231,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                       FROM objetivos o, indicadores i, indicadores_unidadesareas iua
                     WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and o.cod_perspectiva in ($codigoPerspectiva)";
                   $sql.=" and iua.cod_area in ($areasArray) and iua.cod_unidadorganizacional in ($unidadOrganizacionalArray) ";
+                  if($globalPerfil==7){
+                    $sql.=" and i.codigo not in ($indicadoresOmitir)";
+                  }
                   $sql.=" group by i.codigo ORDER BY o.abreviatura, i.nombre";
                   //echo $sql;
                   $stmt = $dbh->prepare($sql);
@@ -270,6 +282,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                       FROM objetivos o, indicadores i, indicadores_unidadesareas iua
                     WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and o.cod_perspectiva in ($codigoPerspectiva)";
                   $sql.=" and iua.cod_area in ($areasArray) and iua.cod_unidadorganizacional in ($unidadOrganizacionalArray) ";
+                  if($globalPerfil==7){
+                    $sql.=" and i.codigo not in ($indicadoresOmitir)";
+                  }
                   $sql.=" group by i.codigo ORDER BY o.abreviatura, i.nombre";
                   //echo $sql;
                   $stmt = $dbh->prepare($sql);

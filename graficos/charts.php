@@ -19,7 +19,8 @@ $arrayOrganismos=$_SESSION["globalOrganismosReports"];
 //$nameFondo3=abrevFondo($fondo3);
 
 $anioTemporal=date("Y");
-$mesTemporal=date("m")-1;
+//$mesTemporal=date("m")-1;
+$mesTemporal=date("m");
 
 //SACAMOS LA CONFIGURACION PARA REDIRECCIONAR EL PON
 $stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=2");
