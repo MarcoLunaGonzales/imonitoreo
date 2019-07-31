@@ -516,6 +516,10 @@
 		if ($_GET['opcion']=='rptOpPlanAudi') {
 			require_once('reportes/rptOpPlanAudi.php');
 		}
+		if ($_GET['opcion']=='rptActividadesHitos') {
+			require_once('reportes/rptOpActividadesHitos.php');
+		}
+
 		
 		//COMPONENTES SIS
 		if ($_GET['opcion']=='listComponentesSIS') {

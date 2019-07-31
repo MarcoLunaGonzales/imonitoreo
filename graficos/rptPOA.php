@@ -164,7 +164,7 @@ $codIndicadorRetencionClientes=obtieneValorConfig(24);
                   <div class="card">
                     <div class="card-header card-header-icon card-header-info">
                       <div class="card-icon">
-                        <a href="detalleActividadPOA.php?codIndicador=<?=$codIndicador?>&area=<?=$codAreaX?>&unidad=<?=$codUnidadX;?>" target="_BLANK">
+                        <a href="detalleActividadPOA.php?codIndicador=<?=$codIndicador?>&area=<?=$codAreaX?>&unidad=<?=$codUnidadX;?>&codActividad=0" target="_BLANK">
                           <i class="material-icons">list</i>
                         </a>
                       </div>

@@ -1,0 +1,141 @@
+<?php
+
+require_once 'conexion.php';
+require_once 'styles.php';
+require_once 'functions.php';
+
+$globalNombreGestion=$_SESSION["globalNombreGestion"];
+$globalUnidad=$_SESSION["globalUnidad"];
+$globalArea=$_SESSION["globalArea"];
+$globalNombreUnidad=$_SESSION["globalNombreUnidad"];
+$globalNombreArea=$_SESSION["globalNombreArea"];
+
+$globalUnidadesReports=$_SESSION["globalUnidadesReports"];
+$globalFondosReports=$_SESSION["globalFondosReports"];
+$globalAreasReports=$_SESSION["globalAreasReports"];
+$globalOrganismosReports=$_SESSION["globalOrganismosReports"];
+
+$dbh = new Conexion();
+
+$sqlX="SET NAMES 'utf8'";
+$stmtX = $dbh->prepare($sqlX);
+$stmtX->execute();
+
+?>
+
+<div class="content">
+	<div class="container-fluid">
+
+		<div class="col-md-12">
+		  <form id="form1" class="form-horizontal" action="reportes/rptActividadesHitos.php" method="get" target="_blank">
+			<div class="card ">
+			  <div class="card-header <?=$colorCard;?> card-header-text">
+				<div class="card-text">
+				  <h4 class="card-title">Reporte Actividades POA por Hito</h4>
+				</div>
+			  </div>
+			  <div class="card-body ">
+
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Gestion</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <select class="selectpicker" title="Seleccione una opcion" name="gestion" id="gestion" data-style="<?=$comboColor;?>" required>
+					  	<option disabled selected value=""></option>
+					  	<?php
+					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM gestiones order by 2 desc");
+						$stmt->execute();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+							$codigoX=$row['codigo'];
+							$nombreX=$row['nombre'];
+						?>
+						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<?php	
+						}
+					  	?>
+					  </select>
+					</div>
+				  </div>
+				</div>
+
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Unidad Organizacional</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <select class="selectpicker form-control" name="unidad_organizacional[]" id="unidad_organizacional" data-style="select-with-transition" multiple required>
+					  	<option disabled selected value=""></option>
+					  	<?php
+					  	$sql="SELECT u.codigo, u.nombre FROM unidades_organizacionales u, unidadesorganizacionales_poa up where u.codigo=up.cod_unidadorganizacional ";
+			  			$sql.=" and u.codigo in ($globalUnidadesReports) ";
+					  	$sql.=" order by 2";
+					  	$stmt = $dbh->prepare($sql);
+						$stmt->execute();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+							$codigoX=$row['codigo'];
+							$nombreX=$row['nombre'];
+						?>
+						<option value="<?=$codigoX;?>" selected><?=$nombreX;?></option>
+						<?php	
+						}
+					  	?>
+					  </select>
+					</div>
+				  </div>
+				</div>
+
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Area</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <select class="selectpicker form-control" name="area[]" id="area" data-style="select-with-transition" multiple required>
+					  	<option disabled selected value=""></option>
+					  	<?php
+					  	$stmt = $dbh->prepare("SELECT codigo, abreviatura from areas a order by 2");
+						$stmt->execute();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+							$codigoX=$row['codigo'];
+							$nombreX=$row['abreviatura'];
+						?>
+						<option value="<?=$codigoX;?>" selected><?=$nombreX;?></option>
+						<?php	
+						}
+					  	?>
+					  </select>
+					</div>
+				  </div>
+				</div>
+
+
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Hitos</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <select class="selectpicker form-control" name="hito[]" id="hito" data-style="select-with-transition" multiple required>
+					  	<option disabled selected value=""></option>
+					  	<?php
+					  	$stmt = $dbh->prepare("SELECT codigo, nombre from hitos h order by 2");
+						$stmt->execute();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+							$codigoX=$row['codigo'];
+							$nombreX=$row['nombre'];
+						?>
+						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+						<?php	
+						}
+					  	?>
+					  </select>
+					</div>
+				  </div>
+				</div>
+
+			  </div>
+			  <div class="card-footer ml-auto mr-auto">
+				<button type="submit" class="<?=$button;?>">Ver Reporte</button>
+				<a href="?opcion=listObjetivos" class="<?=$buttonCancel;?>">Cancelar</a>
+			  </div>
+			</div>
+		  </form>
+		</div>
+	
+	</div>
+</div>

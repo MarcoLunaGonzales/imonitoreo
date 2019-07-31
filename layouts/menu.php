@@ -361,6 +361,13 @@ if($globalPerfilX==1){
               <ul class="nav">
 
                 <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptActividadesHitos">
+                    <span class="sidebar-mini"> AH </span>
+                    <span class="sidebar-normal"> Actividades por Hito </span>
+                  </a>
+                </li>  
+
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpCursos">
                     <span class="sidebar-mini"> Cu </span>
                     <span class="sidebar-normal"> Cursos </span>
@@ -765,6 +772,14 @@ if($globalPerfilX==2){
               <ul class="nav">
                 
                 <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpActividadesHitos">
+                    <span class="sidebar-mini"> AH </span>
+                    <span class="sidebar-normal"> Actividades por Hito </span>
+                  </a>
+                </li>  
+
+
+                <li class="nav-item ">
                   <a class="nav-link" href="reportes/rptObjConf.php" target="_blank">
                     <span class="sidebar-mini"> RO </span>
                     <span class="sidebar-normal"> Reporte Obj. Estrategicos</span>
@@ -979,6 +994,14 @@ if($globalPerfilX==3){
             <div class="collapse" id="reportes">
               <ul class="nav">
                 
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpActividadesHitos">
+                    <span class="sidebar-mini"> AH </span>
+                    <span class="sidebar-normal"> Actividades por Hito </span>
+                  </a>
+                </li>  
+
+
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpCursos">
                     <span class="sidebar-mini"> Cu </span>
@@ -1474,6 +1497,14 @@ if($globalPerfilX==5){
             </a>
             <div class="collapse" id="reportes">
               <ul class="nav">
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpActividadesHitos">
+                    <span class="sidebar-mini"> AH </span>
+                    <span class="sidebar-normal"> Actividades por Hito </span>
+                  </a>
+                </li>  
+
                 <li class="nav-item ">
                   <a class="nav-link" href="reportes/rptPlanCuentas.php" target="_blank">
                     <span class="sidebar-mini"> PC </span>
@@ -1731,6 +1762,14 @@ if($globalPerfilX==6){
             <div class="collapse" id="reportes">
               <ul class="nav">
                 
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpActividadesHitos">
+                    <span class="sidebar-mini"> AH </span>
+                    <span class="sidebar-normal"> Actividades por Hito </span>
+                  </a>
+                </li>  
+
+
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpCursos">
                     <span class="sidebar-mini"> Cu </span>

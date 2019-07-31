@@ -410,6 +410,141 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       </div><!--ACA TERMINA ROW-->  
 
 
+
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-primary">
+              <div class="card-icon">
+                <i class="material-icons">list</i>
+              </div>
+              <h4 class="card-title">Incremento de Clientes (# Alumnos)
+              </h4>
+            </div>
+            
+            <div class="card-body">
+              <table width="100%" class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th class="text-center font-weight-bold">Unidad</th>
+                    <th class="text-center font-weight-bold"><?=$mesTemporal;?>.<?=$anioTemporal-1;?></th>
+                    <th class="text-center font-weight-bold"><?=$mesTemporal;?>.<?=$anioTemporal;?></th>
+                    <th class="text-center font-weight-bold">% Incremento</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  $sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
+                  $stmtU = $dbh->prepare($sqlU);
+                  $stmtU->execute();
+                  $stmtU->bindColumn('codigo', $codigoX);
+                  $stmtU->bindColumn('abreviatura', $abrevX);
+                  $totalClientesAnt=0;
+                  $totalClientes=0;
+                  while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
+                    $cantidadClientesAnt=calcularClientesSECPeriodo($codigoX,$codArea,$mesTemporal,$anioTemporal-1);
+                    $cantidadClientes=calcularClientesSECPeriodo($codigoX,$codArea,$mesTemporal,$anioTemporal);
+                    $porcentajeCrec=0;
+                    if($cantidadClientesAnt>0){
+                      $porcentajeCrec=(($cantidadClientes-$cantidadClientesAnt)/$cantidadClientesAnt)*100;
+                    }
+                    $totalClientesAnt+=$cantidadClientesAnt;
+                    $totalClientes+=$cantidadClientes;
+                  ?>
+                  <tr>
+                    <td class="text-left"><?=$abrevX;?></td>
+                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientesAnt);?></a></td>
+                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
+                    <td class="text-center font-weight-bold text-primary"><?=formatNumberInt($porcentajeCrec);?> %</td>
+                  </tr>
+                  <?php
+                  }
+                  $porcentajeCrecTotal=0;
+                  if($totalClientesAnt>0){
+                    $porcentajeCrecTotal=(($totalClientes-$totalClientesAnt)/$totalClientesAnt)*100;
+                  }
+                  ?>                  
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td class="text-left font-weight-bold">Totales</td>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientesAnt);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientes);?></td>
+                    <td class="text-center font-weight-bold"><?=formatNumberInt($porcentajeCrecTotal);?> %</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-info">
+              <div class="card-icon">
+                <i class="material-icons">timeline</i>
+              </div>
+              <h5 class="card-title">Retencion de Clientes (# Alumnos)</h5>
+            </div>
+            <div class="card-body">
+              <table width="100%" class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th class="text-center font-weight-bold">Unidad</th>
+                    <th class="text-center font-weight-bold"><?=$mesTemporal;?>.<?=$anioTemporal;?></th>
+                    <th class="text-center font-weight-bold">Clientes Retenidos</th>
+                    <th class="text-center font-weight-bold">% Retencion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  $sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
+                  $stmtU = $dbh->prepare($sqlU);
+                  $stmtU->execute();
+                  $stmtU->bindColumn('codigo', $codigoX);
+                  $stmtU->bindColumn('abreviatura', $abrevX);
+                  $totalClientesRetenidos=0;
+                  $totalClientes=0;
+                  while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
+                    $cantidadClientes=calcularClientesSECPeriodo($codigoX,$codArea,$mesTemporal,$anioTemporal);
+                    $cantidadRetenidos=calcularClientesSECRetenidos($codigoX,$codArea,$mesTemporal,$anioTemporal);
+                    $porcentajeCrec=0;
+                    if($cantidadClientes>0){
+                      $porcentajeCrec=($cantidadRetenidos/$cantidadClientes)*100;
+                    }
+                    $totalClientesRetenidos+=$cantidadRetenidos;
+                    $totalClientes+=$cantidadClientes;
+                  ?>
+                  <tr>
+                    <td class="text-left"><?=$abrevX;?></td>
+                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
+                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadRetenidos);?></a></td>
+                    <td class="text-center font-weight-bold text-primary"><?=formatNumberInt($porcentajeCrec);?> %</td>
+                  </tr>
+                  <?php
+                  }
+                  $porcentajeCrecTotal=0;
+                  if($totalClientes>0){
+                    $porcentajeCrecTotal=($totalClientesRetenidos/$totalClientes)*100;
+                  }
+                  ?>                  
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td class="text-left font-weight-bold">Totales</td>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientes);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientesRetenidos);?></td>
+                    <td class="text-center font-weight-bold"><?=formatNumberInt($porcentajeCrecTotal);?> %</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div><!--ACA TERMINA ROW-->  
+
+
     </div>
   </div>
 </div>

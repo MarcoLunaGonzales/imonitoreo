@@ -29,6 +29,9 @@ $stmtDel=$dbh->prepare("DELETE FROM servicios_tcp_detalle");
 $flagDel=$stmtDel->execute();
 
 
+$stmtDel=$dbh->prepare("DELETE FROM servicios_tcs_detalle");
+$flagDel=$stmtDel->execute();
+
 $detalle=$obj->listaNivel1;
 foreach ($detalle as $objDet){
 	$codigoX=$objDet->IdClasificador;

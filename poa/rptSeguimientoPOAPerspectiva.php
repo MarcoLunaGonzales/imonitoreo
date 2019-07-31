@@ -135,7 +135,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $stmt->bindColumn('codigoindicador', $codigoIndicador);
                   $stmt->bindColumn('abreviatura', $abreviaturaObj);
                   while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
-                    $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva";
+                    $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva&codActividad=0";
 
                   ?>
                     <li class="text-left small"><a href='<?=$url;?>' rel="tooltip" target="_BLANK">
@@ -188,7 +188,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $stmt->bindColumn('codigoindicador', $codigoIndicador);
                   $stmt->bindColumn('abreviatura', $abreviaturaObj);
                   while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
-                    $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva";
+                    $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva&codActividad=0";
                   ?>
                     <li class="text-left small"><a href='<?=$url;?>' rel="tooltip" target="_BLANK">
                       <?=$abreviaturaObj." - ".$nombreIndicador." (".$codigoIndicador.")";?>
@@ -242,7 +242,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $stmt->bindColumn('codigoindicador', $codigoIndicador);
                   $stmt->bindColumn('abreviatura', $abreviaturaObj);
                   while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
-                    $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva";
+                    $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva&codActividad=0";
 
                   ?>
                     <li class="text-left small"><a href='<?=$url;?>' rel="tooltip" target="_BLANK">
@@ -293,7 +293,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $stmt->bindColumn('codigoindicador', $codigoIndicador);
                   $stmt->bindColumn('abreviatura', $abreviaturaObj);
                   while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
-                  $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva";
+                  $url="../graficos/rptPOA.php?tipo=1&codigo=$codigoIndicador&gestion=$gestionX&anio=$anio&mes=$mes&version=$version&perspectiva=$codigoPerspectiva&codActividad=0";
                   ?>
                     <li class="text-left small"><a href='<?=$url;?>' rel="tooltip" target="_BLANK">
                       <?=$abreviaturaObj." - ".$nombreIndicador." (".$codigoIndicador.")";?>

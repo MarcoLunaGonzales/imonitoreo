@@ -24,7 +24,7 @@ $dbh = new Conexion();
                 <div class="card-body">
 
                   <div class="row">
-                    <label class="col-sm-6 col-form-label">Datos Generales (Clientes, Servicios, Personal, etc.)</label>
+                    <label class="col-sm-6 col-form-label">Datos Generales (Clientes, Servicios, Personal, Servicios, etc.)</label>
                     <div class="col-sm-6">
                     <div class="form-group">
                       <a href="sp_calls/ejecutarSincroDatosGenerales.php" class="<?=$button;?>" target="_blank">Sincronizar</a>
