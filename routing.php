@@ -136,6 +136,9 @@
 		if ($_GET['opcion']=='listCargos') {
 			require_once('cargos/list.php');
 		}
+		if ($_GET['opcion']=='listCargosInactivos') {
+			require_once('cargos/listInactivos.php');
+		}
 		if ($_GET['opcion']=='registerCargo') {
 			require_once('cargos/register.php');
 		}
@@ -147,6 +150,11 @@
 			$codigo=$_GET['codigo'];
 			require_once('cargos/saveDelete.php');
 		}
+		if ($_GET['opcion']=='restartCargo') {
+			$codigo=$_GET['codigo'];
+			require_once('cargos/saveRestart.php');
+		}
+
 		if ($_GET['opcion']=='listFunciones') {
 			$codigo=$_GET['codigo'];
 			require_once('cargos/listFunciones.php');
@@ -154,6 +162,14 @@
 		if ($_GET['opcion']=='registerFuncionCargo') {
 			$codigo=$_GET['codigo'];
 			require_once('cargos/registerFuncionCargo.php');
+		}		
+		if ($_GET['opcion']=='editFuncionCargo') {
+			$codigo=$_GET['codigo'];
+			require_once('cargos/editFuncionCargo.php');
+		}		
+		if ($_GET['opcion']=='deleteFuncionCargo') {
+			$codigo=$_GET['codigo'];
+			require_once('cargos/saveDeleteFuncionCargo.php');
 		}		
 
 

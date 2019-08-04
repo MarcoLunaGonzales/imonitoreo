@@ -13,7 +13,7 @@ $moduleName="Cargos";
 $globalAdmin=$_SESSION["globalAdmin"];
 
 // Preparamos
-$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM $table where cod_estado=1");
+$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM $table where cod_estado=2");
 // Ejecutamos
 $stmt->execute();
 // bindColumn
@@ -32,9 +32,9 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                   <div class="card-icon">
                     <i class="material-icons">assignment</i>
                   </div>
-                  <h4 class="card-title"><?=$moduleName?></h4>
-                  <a href="index.php?opcion=listCargosInactivos" class="<?=$buttonCeleste;?> btn-round" title="Ver Cargos Inactivos">
-                        <i class="material-icons">bookmark_border</i>
+                  <h4 class="card-title"><?=$moduleName?> Inactivos</h4>
+                  <a href="index.php?opcion=listCargos" class="<?=$buttonCeleste;?> btn-round" title="Ver Cargos Activos">
+                        <i class="material-icons">bookmark</i>
                   </a>
                 </div>
                 <div class="card-body">
@@ -74,12 +74,9 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                             <?php
                             if($globalAdmin==1){
                             ?>
-                            <a href='index.php?opcion=editCargo&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success">
-                              <i class="material-icons">edit</i>
+                            <a href='index.php?opcion=restartCargo&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success">
+                              <i class="material-icons">restore_page</i>
                             </a>
-                            <button rel="tooltip" class="btn btn-danger" onclick="alerts.showSwal('warning-message-and-confirmation','index.php?opcion=deleteCargo&codigo=<?=$codigo;?>')">
-                              <i class="material-icons">close</i>
-                            </button>
                             <?php
                             }
                             ?>

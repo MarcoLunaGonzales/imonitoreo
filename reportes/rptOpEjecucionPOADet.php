@@ -55,49 +55,6 @@ $dbh = new Conexion();
 				  </div>
 				</div>
 
-				<div class="row">
-				  <label class="col-sm-2 col-form-label">Mes</label>
-				  <div class="col-sm-7">
-					<div class="form-group">
-					  <select class="selectpicker" title="Seleccione una opcion" name="mes" id="mes" data-style="<?=$comboColor;?>" required>
-					  	<option disabled selected value=""></option>
-					  	<?php
-					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM meses order by 1");
-						$stmt->execute();
-						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-							$codigoX=$row['codigo'];
-							$nombreX=$row['nombre'];
-						?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
-						<?php	
-						}
-					  	?>
-					  </select>
-					</div>
-				  </div>
-				</div>
-
-				<div class="row">
-				  <label class="col-sm-2 col-form-label">Perspectiva</label>
-				  <div class="col-sm-7">
-					<div class="form-group">
-					  <select class="selectpicker form-control" name="perspectiva[]" id="perspectiva" data-style="select-with-transition" title="Seleccione una opcion" multiple required>
-					  	<option disabled selected value=""></option>
-					  	<?php
-					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM perspectivas order by 2 desc");
-						$stmt->execute();
-						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-							$codigoX=$row['codigo'];
-							$nombreX=$row['nombre'];
-						?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
-						<?php	
-						}
-					  	?>
-					  </select>
-					</div>
-				  </div>
-				</div>
 
 				<div class="row">
 				  <label class="col-sm-2 col-form-label">Unidad Organizacional</label>

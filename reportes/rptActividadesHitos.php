@@ -31,6 +31,8 @@ $codHitoArray=implode(",", $hitoX);
 
 $nameHito=nameHito($codHitoArray);
 
+
+
 $codActividad=0;
 
 
@@ -62,12 +64,12 @@ $moduleName="Detalle de Actividades por Hito";
 					<?php
 					$sqlLista="SELECT distinct(a.codigo)as codigo, a.orden, a.nombre, a.cod_tiporesultado,
 					a.cod_unidadorganizacional, a.cod_area, (SELECT h.nombre from hitos h where h.codigo=a.cod_hito)as hito, 
-					(SELECT i.nombre from indicadores i where i.codigo=a.cod_indicador)as indicador 
+					(SELECT i.nombre from indicadores i where i.codigo=a.cod_indicador)as indicador, a.cod_indicador
 					 from actividades_poa a where  a.cod_estado=1 and a.cod_area in ($codAreaArray) and a.cod_unidadorganizacional in ($codUnidadArray) and a.cod_hito in ($codHitoArray) ";
 					if($codActividad>0){
 						$sqlLista.=" and a.codigo in ($codActividad) ";
 					}
-					$sqlLista.=" order by hito, a.cod_unidadorganizacional, a.cod_area, a.nombre";
+					$sqlLista.=" order by hito, a.cod_unidadorganizacional, a.cod_area, indicador, a.nombre";
 					
 					//echo $sqlLista;
 					
@@ -84,6 +86,7 @@ $moduleName="Detalle de Actividades por Hito";
 					$stmtLista->bindColumn('cod_area', $codArea);
 					$stmtLista->bindColumn('hito', $nombreHitoActividad);
 					$stmtLista->bindColumn('indicador', $nombreIndicadorActividad);
+					$stmtLista->bindColumn('cod_indicador', $codIndicador);
 
 					?>
 
@@ -93,6 +96,7 @@ $moduleName="Detalle de Actividades por Hito";
 		                    <tr>
 		                      <th class="text-center">#</th>
 		                      <th class="text-center">Area</th>
+		                      <th class="text-center">Objetivo</th>
 		                      <th class="text-center">Indicador</th>
 		                      <th class="text-center">Hito</th>
 		                      <th class="text-center">Nombre</th>
@@ -111,6 +115,7 @@ $moduleName="Detalle de Actividades por Hito";
 		                      <th colspan="2" class="text-center">Total</th>
 		                    </tr>
 		                    <tr>
+		                      <th class="text-center">-</th>
 		                      <th class="text-center">-</th>
 		                      <th class="text-center">-</th>
 		                      <th class="text-center">-</th>
@@ -151,10 +156,13 @@ $moduleName="Detalle de Actividades por Hito";
 		                  	while ($row = $stmtLista->fetch(PDO::FETCH_BOUND)) {
 	                  			$abrevArea=abrevArea($codArea);
                           		$abrevUnidad=abrevUnidad($codUnidad);
+
+                          		$nombreObjetivo=nameObjetivoxIndicador($codIndicador);
 		                  ?>
 		                    <tr>
 		                      <td class="text-center"><?=$index;?></td>
 		                      <td class="text-center font-weight-bold small"><h6><p class="text-danger"><?=$abrevUnidad;?>-<?=$abrevArea;?></p></h6></td>
+		                      <td class="text-left font-weight-bold small"><?=$nombreObjetivo;?></td>
 		                      <td class="text-left font-weight-bold small"><?=$nombreIndicadorActividad;?></td>
 		                      <td class="text-left font-weight-bold small"><?=$nombreHitoActividad;?></td>
 		                      <td class="text-left font-weight-bold small"><?=$nombre;?></td>
@@ -208,6 +216,9 @@ $moduleName="Detalle de Actividades por Hito";
 	                        <tr>
 	                          <th>-</th>
 	                          <th>-</th>
+	                          <th>-</th>
+	                          <th>-</th>
+	                          <th>-</th>
 	                          <th>TOTALES</th>
 	                        </tr>
 	                      </tfoot>
@@ -222,5 +233,5 @@ $moduleName="Detalle de Actividades por Hito";
 <h6>Nota: Las celdas coloreadas contienen observaciones de la ejecucion registrada del mes.</h6>
 
 <script type="text/javascript">
-  totalesDetallePOA();
+  totalesDetallePOA2();
 </script>

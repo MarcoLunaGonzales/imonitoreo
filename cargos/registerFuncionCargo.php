@@ -26,18 +26,19 @@ $nameCargo=nameCargo($codCargo);
 			  </div>
 			  <div class="card-body ">
 				<div class="row">
-				  <label class="col-sm-2 col-form-label">Nombre</label>
+				  <label class="col-sm-2 col-form-label">Funcion</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
+						<input type="hidden" name="codigo" value="<?=$codCargo;?>">
 					  <input class="form-control" type="text" name="nombre" id="nombre" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();"/>
 					</div>
 				  </div>
 				</div>
 				<div class="row">
-				  <label class="col-sm-2 col-form-label">Abreviatura</label>
+				  <label class="col-sm-2 col-form-label">Peso</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
-					  <input class="form-control" type="text" name="abreviatura" id="abreviatura" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();"/>
+					  <input class="form-control" type="number" name="peso" id="peso" required="true" step="0.1"/>
 					</div>
 				  </div>
 				</div>

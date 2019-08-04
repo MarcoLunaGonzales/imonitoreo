@@ -1267,27 +1267,6 @@ function obtenerCantEmpresasCertificados($unidad,$anioTemporal,$mesTemporal,$are
   if($unidad>0){
     $sql.=" and e.idoficina in ($unidad) ";
   } 
-  $sql.=" and e.idcliente ";
-  if($ambos==1){
-    $sql.=" in ";
-  }else{
-    $sql.=" not in ";
-  } 
-  $sql.=" (select ee.idcliente from ext_certificados ee where ee.idestado not in (646, 860, 475, 1118) ";
-  if($vista==1){
-    if($acumulado==0){
-      $sql.=" and YEAR(ee.fechaemision)='$anioTemporal' and MONTH(ee.fechaemision)='$mesTemporal' ";
-    }else{
-      $sql.=" and YEAR(ee.fechaemision)='$anioTemporal' and MONTH(ee.fechaemision)<='$mesTemporal' ";
-    }    
-  }else{
-    $sql.=" and ee.fechaemision<='$fechaVistaIni' and ee.fechavalido>='$fechaVistaFin' ";
-  }
-  if($unidad>0){
-    $sql.=" and ee.idoficina in ($unidad) ";
-  } 
-  $sql.=" and ee.idarea=$area2)";
-  
   //echo $sql;
   
   $stmt = $dbh->prepare($sql);

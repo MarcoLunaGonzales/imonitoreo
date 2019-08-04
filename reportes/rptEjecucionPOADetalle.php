@@ -1,208 +1,231 @@
 <?php
 
+error_reporting(E_ALL);
+set_time_limit(0);
+
 require_once '../layouts/bodylogin2.php';
 require_once '../conexion.php';
 require_once '../functions.php';
+require_once '../functionsPOSIS.php';
 require_once '../styles.php';
 
+session_start();
+
 $dbh = new Conexion();
+
+$globalNombreGestion=$_SESSION["globalNombreGestion"];
+$globalUser=$_SESSION["globalUser"];
+$globalGestion=$_SESSION["globalGestion"];
+$globalUnidad=$_SESSION["globalUnidad"];
+$globalArea=$_SESSION["globalArea"];
+$globalAdmin=$_SESSION["globalAdmin"];
+
+$gestion=$_POST["gestion"];
+$codAreaX=$_POST["areas"];
+$codUnidadX=$_POST["unidad_organizacional"];
+
+$codUnidadArray=implode(",", $codUnidadX);
+$codAreaArray=implode(",", $codAreaX);
+
+
+$codActividad=0;
+
+
 
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
-$gestion=$_POST["gestion"];
-$codMesX=$_POST["mes"];
+//SACAMOS LA CONFIGURACION PARA REDIRECCIONAR EL PON
 
-$nameMes=nameMes($codMesX);
-$nameGestion=nameGestion($gestion);
-
-$perspectiva=$_POST["perspectiva"];
-$unidadOrganizacional=$_POST["unidad_organizacional"];
-$areas=$_POST["areas"];
-
-$perspectivaString=implode(",", $perspectiva);
-$unidadOrgString=implode(",", $unidadOrganizacional);
-$areaString=implode(",", $areas);
-
-$sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
-(SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,
-(SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma,
-(SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
-(SELECT t.abreviatura from tipos_seguimiento t where t.codigo=a.cod_tiposeguimiento)as tipodato, 
-a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado,
-i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre as nombreperspectiva
- from actividades_poa a, indicadores i, objetivos o, perspectivas p where a.cod_area in ($areaString) and a.cod_unidadorganizacional in ($unidadOrgString) and a.cod_estado=1 and 
- a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva
- order by nombreperspectiva, nombreobjetivo, nombreindicador, a.orden";
-$stmt = $dbh->prepare($sql);
-$stmt->execute();
-
-// bindColumn
-$stmt->bindColumn('codigo', $codigo);
-$stmt->bindColumn('orden', $orden);
-$stmt->bindColumn('nombre', $nombre);
-$stmt->bindColumn('normapriorizada', $normaPriorizada);
-$stmt->bindColumn('sectorpriorizado', $sectorPriorizado);
-$stmt->bindColumn('norma', $norma);
-$stmt->bindColumn('sector', $sector);
-$stmt->bindColumn('tipodato', $tipoDato);
-$stmt->bindColumn('producto_esperado', $productoEsperado);
-$stmt->bindColumn('cod_unidadorganizacional', $codUnidad);
-$stmt->bindColumn('cod_area', $codArea);
-$stmt->bindColumn('cod_tiporesultado', $codTipoDato);
-$stmt->bindColumn('nombreindicador', $nombreIndicador);
-$stmt->bindColumn('nombreobjetivo', $nombreObjetivo);
-$stmt->bindColumn('abreviatura', $abreviatura);
-$stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
+$table="actividades_poa";
+$moduleName="Ejecucion POA Detallado por Actividad";
 
 ?>
 
 <div class="content">
-	<div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-              <div class="card">
-                <div class="card-header <?=$colorCard;?> card-header-icon">
-                  <div class="card-icon">
-                    <i class="material-icons">assignment</i>
-                  </div>
-                  <h4 class="card-title">Reporte de Ejecucion POA Detallado por Actividad</h4>
-                  <h6 class="card-title">Gestion: <?=$nameGestion;?> Mes: <?=$nameMes;?></h6>
+  <div class="container-fluid">
 
-                </div>
-                <div class="card-body">
+      <form id="form1" class="form-horizontal" action="poa/savePlan.php" method="post">
+
+      <div class="card">
+        <div class="card-header card-header-rose card-header-text">
+          <div class="card-text">
+            <h4 class="card-title"><?=$moduleName;?></h4>
+          </div>
+        </div>
+        <div class="card-body ">
+          <?php
+          $sqlLista="SELECT distinct(a.codigo)as codigo, a.orden, a.nombre, a.cod_tiporesultado,
+          a.cod_unidadorganizacional, a.cod_area, (SELECT h.nombre from hitos h where h.codigo=a.cod_hito)as hito, 
+          (SELECT i.nombre from indicadores i where i.codigo=a.cod_indicador)as indicador, a.cod_indicador
+           from actividades_poa a where  a.cod_estado=1 and a.cod_area in ($codAreaArray) and a.cod_unidadorganizacional in ($codUnidadArray) ";
+          if($codActividad>0){
+            $sqlLista.=" and a.codigo in ($codActividad) ";
+          }
+          $sqlLista.=" order by hito, a.cod_unidadorganizacional, a.cod_area, indicador, a.nombre";
+          
+          //echo $sqlLista;
+          
+          $stmtLista = $dbh->prepare($sqlLista);
+          // Ejecutamos
+          $stmtLista->execute();
+
+          // bindColumn
+          $stmtLista->bindColumn('codigo', $codigo);
+          $stmtLista->bindColumn('orden', $orden);
+          $stmtLista->bindColumn('nombre', $nombre);
+          $stmtLista->bindColumn('cod_tiporesultado', $codTipoDato);
+          $stmtLista->bindColumn('cod_unidadorganizacional', $codUnidad);
+          $stmtLista->bindColumn('cod_area', $codArea);
+          $stmtLista->bindColumn('hito', $nombreHitoActividad);
+          $stmtLista->bindColumn('indicador', $nombreIndicadorActividad);
+          $stmtLista->bindColumn('cod_indicador', $codIndicador);
+
+          ?>
+
                   <div class="table-responsive">
-                    <table class="table table-condensed table-striped">
+                    <table class="table table-condensed" id="tablePaginatorReport">
                       <thead>
                         <tr>
-                          <th class="text-center">-</th>
-                          <th>Perspectiva</th>
-                          <th>Abreviatura</th>
-                          <th>Objetivo</th>
-                          <th>Indicador</th>
-                          <th>Area</th>
-                          <th>Actividad</th>
-                          <th>Producto Esperado</th>
-                          <th>Seg.</th>
-                          <th>Plan</th>
-                          <th>Eje</th>
-                          <th>Explicacion<br>Logro</th>
-                          <th>Archivo</th>
+                          <th class="text-center">#</th>
+                          <th class="text-center">Area</th>
+                          <th class="text-center">Objetivo</th>
+                          <th class="text-center">Indicador</th>
+                          <th class="text-center">Hito</th>
+                          <th class="text-center">Nombre</th>
+                          <th colspan="2" class="text-center">Ene</th>
+                          <th colspan="2" class="text-center">Feb</th>
+                          <th colspan="2" class="text-center">Mar</th>
+                          <th colspan="2" class="text-center">Abr</th>
+                          <th colspan="2" class="text-center">May</th>
+                          <th colspan="2" class="text-center">Jun</th>
+                          <th colspan="2" class="text-center">Jul</th>
+                          <th colspan="2" class="text-center">Ago</th>
+                          <th colspan="2" class="text-center">Sep</th>
+                          <th colspan="2" class="text-center">Oct</th>
+                          <th colspan="2" class="text-center">Nov</th>
+                          <th colspan="2" class="text-center">Dic</th>
+                          <th colspan="2" class="text-center">Total</th>
                         </tr>
+                        <tr>
+                          <th class="text-center">-</th>
+                          <th class="text-center">-</th>
+                          <th class="text-center">-</th>
+                          <th class="text-center">-</th>
+                          <th class="text-center">-</th>
+                          <th class="text-center">-</th>
+                          <th>P</th>
+                          <th>E</th>
+                          <th>P</th>
+                          <th>E</th>
+                          <th>P</th>
+                          <th>E</th>
+                          <th>P</th>
+                          <th>E</th>
+                            <th>P</th>
+                          <th>E</th>
+                          <th>P</th>
+                          <th>E</th>
+                          <th>P</th>
+                          <th>E</th>
+                          <th>P</th>
+                          <th>E</th>
+                          <th>P</th>
+                          <th>E</th>
+                          <th>P</th>
+                          <th>E</th>
+                            <th>P</th>
+                          <th>E</th>
+                          <th>P</th>
+                          <th>E</th>
+                            <th>Total P</th>
+                          <th>Total E</th>
+                          </tr>
+                        
                       </thead>
                       <tbody>
                       <?php
                         $index=1;
-                      	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+                        while ($row = $stmtLista->fetch(PDO::FETCH_BOUND)) {
                           $abrevArea=abrevArea($codArea);
-                          $abrevUnidad=abrevUnidad($codUnidad);
+                              $abrevUnidad=abrevUnidad($codUnidad);
 
-                          //SACAMOS LA PLANIFICACION
-                          $sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
-                          $stmtRecupera = $dbh->prepare($sqlRecupera);
-                          $stmtRecupera->bindParam(':cod_actividad',$codigo);
-                          $stmtRecupera->bindParam(':cod_mes',$codMesX);
-                          $stmtRecupera->execute();
-                          $valueNumero=0;
-                          $valueString="";
-                          $valueBooleano=0;
-                          while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
-                            $valueNumero=$rowRec['value_numerico'];
-                            $valueString=$rowRec['value_string'];
-                            $valueBooleano=$rowRec['value_booleano'];
-                          }
-
-                          $sqlRecupera="SELECT value_numerico, value_string, value_booleano, descripcion, archivo from actividades_poaejecucion where cod_actividad=:cod_actividad and mes=:cod_mes";
-                          $stmtRecupera = $dbh->prepare($sqlRecupera);
-                          $stmtRecupera->bindParam(':cod_actividad',$codigo);
-                          $stmtRecupera->bindParam(':cod_mes',$codMesX);
-                          $stmtRecupera->execute();
-                          $valueNumeroEj=0;
-                          $valueStringEj="";
-                          $valueBooleanoEj=0;
-                          $descripcionLogroEj="";
-                          $archivoEj="";
-                          while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
-                            $valueNumeroEj=$rowRec['value_numerico'];
-                            $valueStringEj=$rowRec['value_string'];
-                            $valueBooleanoEj=$rowRec['value_booleano'];
-                            $descripcionLogroEj=$rowRec['descripcion'];
-                            $archivoEj=$rowRec['archivo'];
-                          }
-                          //FIN PLANIFICACION
+                              $nombreObjetivo=nameObjetivoxIndicador($codIndicador);
                       ?>
                         <tr>
                           <td class="text-center"><?=$index;?></td>
-                          <td><?=$nombrePerspectiva;?></td>
-                          <td><?=$abreviatura;?></td>
-                          <td><?=$nombreObjetivo;?></td>
-                          <td><?=$nombreIndicador;?></td>
-                          <td><?=$abrevArea."-".$abrevUnidad;?></td>
-                          <td><?=$nombre;?></td>
-                          <td><?=$productoEsperado;?></td>
-                          <td><?=$tipoDato;?></td>
-                          <?php
-                          if($codTipoDato==1 || $codTipoDato==3){
-                          ?>
-                            <td class="text-center">
-                              <?=$valueNumero;?>
+                          <td class="text-center font-weight-bold small"><h6><p class="text-danger"><?=$abrevUnidad;?>-<?=$abrevArea;?></p></h6></td>
+                          <td class="text-left font-weight-bold small"><?=$nombreObjetivo;?></td>
+                          <td class="text-left font-weight-bold small"><?=$nombreIndicadorActividad;?></td>
+                          <td class="text-left font-weight-bold small"><?=$nombreHitoActividad;?></td>
+                          <td class="text-left font-weight-bold small"><?=$nombre;?></td>
+                        <?php
+                          $totalPlani=0;
+                          $totalEje=0;
+                          for($i=1;$i<=12;$i++){
+                            $sqlRecupera="SELECT value_numerico from actividades_poaplanificacion where cod_actividad=$codigo and mes=$i";
+                            $stmtRecupera = $dbh->prepare($sqlRecupera);
+                  $stmtRecupera->execute();
+                  $valueNumero=0;
+                  while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
+                    $valueNumero=$rowRec['value_numerico'];
+                  }
+
+                  $sqlRecuperaEj="SELECT value_numerico, descripcion from actividades_poaejecucion where cod_actividad=$codigo and mes=$i";
+                            $stmtRecupera = $dbh->prepare($sqlRecuperaEj);
+                  $stmtRecupera->execute();
+                  $valueEj=0;
+                  $descEj="";
+                  while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
+                    $valueEj=$rowRec['value_numerico'];
+                    $descEj=$rowRec['descripcion'];
+                  }
+                  $totalPlani+=$valueNumero;
+                  $totalEje+=$valueEj;
+
+                  ?>
+                            <td class="text-right small">
+                              <?=($valueNumero>0)?formatNumberInt($valueNumero):"-";?>
                             </td>
-                            <td class="text-center">
-                              <?=$valueNumeroEj;?>
+                            <td class="text-right text-primary small" title="<?=($descEj!='')?$descEj:'';?>" bgcolor="<?=($descEj!='')?'#f28972':'';?>">
+                              <?=($valueEj>0)?formatNumberInt($valueEj):"-";?>
                             </td>
-                          <?php 
-                            }
-                            if($codTipoDato==2){
-                              if($valueBooleano==1){
-                                $iconCheck="check_circle_outline";
-                              }else{
-                                $iconCheck="";
-                              }
-                              if($valueBooleanoEj==1){
-                                $iconCheckEj="check_circle_outline";
-                              }else{
-                                $iconCheckEj="";
-                              }
-                          ?>
-                            <td class="text-center">
-                              <div class="card-icon">
-                                <i class="material-icons"><?=$iconCheck;?></i>
-                              </div>
-                            </td>
-                            <td class="text-center">
-                              <div class="card-icon">
-                                <i class="material-icons"><?=$iconCheckEj;?></i>
-                              </div>
-                            </td>
-                          <?php
+                        <?php 
                           }
-                          ?>
-                            <td><?=$descripcionLogroEj?></td>
-                          <?php
-                            if($archivoEj!=""){
-                                $iconCheckFile="attach_file";
-                              }else{
-                                $iconCheckFile="";
-                              }
-                          ?>
-                            <td><div class="card-icon">
-                                <a href="filesApp/<?=$archivoEj;?>" target="_blank">
-                                  <i class="material-icons"><?=$iconCheckFile;?></i>
-                                </a>
-                              </div>
-                            </td>
+                        ?>
+                        <td class="text-right small">
+                              <?=($totalPlani>0)?formatNumberInt($totalPlani):"-";?>
+                        </td>
+                        <td class="text-right text-primary small">
+                          <?=($totalEje>0)?formatNumberInt($totalEje):"-";?>
+                        </td>
                         </tr>
-            <?php
-            							$index++;
-            						}
-            ?>
+                  <?php
+                  $index++;
+                }
+                  ?>
                       </tbody>
+                      <tfoot>
+                          <tr>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>-</th>
+                            <th>TOTALES</th>
+                          </tr>
+                        </tfoot>
                     </table>
                   </div>
-                </div>
-              </div>
             </div>
-          </div>  
-        </div>
-    </div>
+      </div>
+      </form>
+  </div>
+</div>
+
+<h6>Nota: Las celdas coloreadas contienen observaciones de la ejecucion registrada del mes.</h6>
+
+<script type="text/javascript">
+  totalesDetallePOA2();
+</script>

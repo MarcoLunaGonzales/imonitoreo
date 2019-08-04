@@ -6,6 +6,7 @@
   $globalNombreUnidadX=$_SESSION['globalNombreUnidad'];
   $globalNombreAreaX=$_SESSION['globalNombreArea'];
   $obj=$_SESSION['globalMenuJson'];
+//  echo $obj;
 ?>
 <div class="sidebar" data-color="azure" data-background-color="black" data-image="assets/img/sidebar-1.jpg">
       <div class="logo">
