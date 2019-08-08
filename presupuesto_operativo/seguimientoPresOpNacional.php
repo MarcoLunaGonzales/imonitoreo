@@ -93,7 +93,7 @@ $_SESSION['mesTemporal']=$mes;
                           //$porcEgresoAnt=(($montoEjEgresoAnt-$montoPresEgresoAnt)/$montoPresEgresoAnt)*100;
                           $porcEgresoAnt=($montoEjEgresoAnt/$montoPresEgresoAnt)*100;
                           //$porcEgreso=(($montoEjEgreso-$montoPresEgreso)/$montoPresEgresoAnt)*100;
-                          $porcEgreso=($montoEjEgreso/$montoPresEgresoAnt)*100;
+                          $porcEgreso=($montoEjEgreso/$montoPresEgreso)*100;
                           
                           $colorPorcEgAnt=colorPorcentajeEgreso($porcEgresoAnt);
                           $colorPorcEg=colorPorcentajeEgreso($porcEgreso);
@@ -206,7 +206,7 @@ $_SESSION['mesTemporal']=$mes;
                           //$porcEgresoAnt=(($montoEjEgresoAnt-$montoPresEgresoAnt)/$montoPresEgresoAnt)*100;
                           $porcEgresoAnt=($montoEjEgresoAnt/$montoPresEgresoAnt)*100;
                           //$porcEgreso=(($montoEjEgreso-$montoPresEgreso)/$montoPresEgresoAnt)*100;
-                          $porcEgreso=($montoEjEgreso/$montoPresEgresoAnt)*100;
+                          $porcEgreso=($montoEjEgreso/$montoPresEgreso)*100;
                           
                           $colorPorcEgAnt=colorPorcentajeEgreso($porcEgresoAnt);
                           $colorPorcEg=colorPorcentajeEgreso($porcEgreso);

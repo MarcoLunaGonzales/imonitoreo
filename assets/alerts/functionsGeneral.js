@@ -57,7 +57,7 @@ function ajaxIndicadoresReport(perspectiva){
 
 function ajaxFuncionesCargos(combo, index){
   var contenedor;
-  contenedor = document.getElementById('divcontenedor'+index);
+  contenedor = document.getElementById('divFuncion'+index);
   ajax=nuevoAjax();
   var personal=combo.value;
   ajax.open('GET', 'poai/ajaxFuncionesCargos.php?cod_personal='+personal+"&index="+index,true);
@@ -243,14 +243,15 @@ function addActividadPOAI(obj,cod_indicador,cod_unidad,cod_area) {
       ajax.send(null);
 }
 
-function addActividadPON(obj, cod_indicador, cod_unidad) {
+
+function addActividadPOAIAsignacion(codigoPadre, codUnidad, codArea, codIndicador, indice) {
       numFilas++;
       cantidadItems++;
       
       document.getElementById("cantidad_filas").value=numFilas;
 
       console.log("num: "+numFilas+" cantidadItems: "+cantidadItems);
-      fi = document.getElementById('fiel');
+      fi = document.getElementById('fiel'+indice);
       contenedor = document.createElement('div');
       contenedor.id = 'div'+numFilas;  
       fi.type="style";
@@ -258,7 +259,7 @@ function addActividadPON(obj, cod_indicador, cod_unidad) {
       var divDetalle;
       divDetalle=document.getElementById("div"+numFilas);
       ajax=nuevoAjax();
-      ajax.open("GET","poa/ajaxActividadesPON.php?cod_indicador="+cod_indicador+"&cod_unidad="+cod_unidad+"&codigo="+numFilas,true);
+      ajax.open("GET","poai/ajaxActividadesPOAIAsignacion.php?cod_indicador="+codIndicador+"&cod_unidad="+codUnidad+"&cod_area="+codArea+"&codActividad="+codigoPadre+"&codigo="+numFilas,true);
       ajax.onreadystatechange=function(){
         if (ajax.readyState==4) {
           divDetalle.innerHTML=ajax.responseText;
@@ -267,6 +268,7 @@ function addActividadPON(obj, cod_indicador, cod_unidad) {
       }   
       ajax.send(null);
 }
+
 function minusActividad(numero) {
   cantidadItems--;
   console.log("TOTAL ITEMS: "+numFilas);
@@ -277,6 +279,19 @@ function minusActividad(numero) {
   fi = document.getElementById('fiel');
   fi.removeChild(document.getElementById('div'+numero));
 
+  document.getElementById("cantidad_filas").value=numFilas;
+}
+
+
+function minusActividadPOAIAsignacion(numero) {
+  cantidadItems--;
+  console.log("TOTAL ITEMS: "+numFilas);
+  console.log("NUMERO A DISMINUIR: "+numero);
+  if(numero==numFilas){
+    numFilas=parseInt(numFilas)-1;
+  }
+  fi = document.getElementById('fiel'+numero);
+  fi.removeChild(document.getElementById('div'+numero));
   document.getElementById("cantidad_filas").value=numFilas;
 }
 

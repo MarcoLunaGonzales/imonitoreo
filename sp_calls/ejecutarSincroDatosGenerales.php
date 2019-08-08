@@ -455,13 +455,13 @@ foreach ($detalle as $objDet){
     foreach ($detalleNivel2 as $objDetN2){
       $codigoY=$objDetN2->IdClasificador;
       $nombreY=strtoupper(clean_string($objDetN2->Descripcion));
-      echo "detalle Nivel 2 ".$codigoY." ".$nombreY."<br>";
+      //echo "detalle Nivel 2 ".$codigoY." ".$nombreY."<br>";
       
       $detalleNivel3=$objDetN2->ListaNivel3;
       foreach($detalleNivel3 as $objDetN3){
         $codigoZ=$objDetN3->IdClaServicio;
         $nombreZ=$objDetN3->Descripcion;
-        echo "Nivel 3: ".$codigoZ." ".$nombreZ."<br>";
+        //echo "Nivel 3: ".$codigoZ." ".$nombreZ."<br>";
         
         $stmt = $dbh->prepare("INSERT INTO servicios_oi_detalle (codigo, nombre, cod_servicio) VALUES (:codigo, :nombre, :cod_serviciooi)");
         $stmt->bindParam(':codigo', $codigoZ);
@@ -478,13 +478,13 @@ foreach ($detalle as $objDet){
     foreach ($detalleNivel2 as $objDetN2){
       $codigoY=$objDetN2->IdClasificador;
       $nombreY=strtoupper(clean_string($objDetN2->Descripcion));
-      echo "detalle Nivel 2 ".$codigoY." ".$nombreY."<br>";
+      //echo "detalle Nivel 2 ".$codigoY." ".$nombreY."<br>";
       
       $detalleNivel3=$objDetN2->ListaNivel3;
       foreach($detalleNivel3 as $objDetN3){
         $codigoZ=$objDetN3->IdClaServicio;
         $nombreZ=$objDetN3->Descripcion;
-        echo "Nivel 3: ".$codigoZ." ".$nombreZ."<br>";
+        //echo "Nivel 3: ".$codigoZ." ".$nombreZ."<br>";
         
         $stmt = $dbh->prepare("INSERT INTO servicios_tlq_detalle (codigo, nombre, cod_servicio) VALUES (:codigo, :nombre, :cod_serviciooi)");
         $stmt->bindParam(':codigo', $codigoZ);
@@ -500,13 +500,13 @@ foreach ($detalle as $objDet){
     foreach ($detalleNivel2 as $objDetN2){
       $codigoY=$objDetN2->IdClasificador;
       $nombreY=strtoupper(clean_string($objDetN2->Descripcion));
-      echo "detalle Nivel 2 ".$codigoY." ".$nombreY."<br>";
+      //echo "detalle Nivel 2 ".$codigoY." ".$nombreY."<br>";
       
       $detalleNivel3=$objDetN2->ListaNivel3;
       foreach($detalleNivel3 as $objDetN3){
         $codigoZ=$objDetN3->IdClaServicio;
         $nombreZ=$objDetN3->Descripcion;
-        echo "Nivel 3: ".$codigoZ." ".$nombreZ."<br>";
+        //echo "Nivel 3: ".$codigoZ." ".$nombreZ."<br>";
         
         $stmt = $dbh->prepare("INSERT INTO servicios_tcp_detalle (codigo, nombre, cod_servicio) VALUES (:codigo, :nombre, :cod_serviciooi)");
         $stmt->bindParam(':codigo', $codigoZ);
@@ -522,13 +522,13 @@ foreach ($detalle as $objDet){
     foreach ($detalleNivel2 as $objDetN2){
       $codigoY=$objDetN2->IdClasificador;
       $nombreY=strtoupper(clean_string($objDetN2->Descripcion));
-      echo "detalle Nivel 2 ".$codigoY." ".$nombreY."<br>";
+      //echo "detalle Nivel 2 ".$codigoY." ".$nombreY."<br>";
       
       $detalleNivel3=$objDetN2->ListaNivel3;
       foreach($detalleNivel3 as $objDetN3){
         $codigoZ=$objDetN3->IdClaServicio;
         $nombreZ=$objDetN3->Descripcion;
-        echo "Nivel 3: ".$codigoZ." ".$nombreZ."<br>";
+        //echo "Nivel 3: ".$codigoZ." ".$nombreZ."<br>";
         
         $stmt = $dbh->prepare("INSERT INTO servicios_tcs_detalle (codigo, nombre, cod_servicio) VALUES (:codigo, :nombre, :cod_serviciooi)");
         $stmt->bindParam(':codigo', $codigoZ);

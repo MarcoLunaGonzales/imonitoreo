@@ -68,8 +68,10 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		$sqlDelete="DELETE from $table where codigo='$codigoPOA'";
 
 		$poai=1;
+		$metapoai=0;
+		$codActividadPadre=-1000;
 
-		$stmt = $dbh->prepare("INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_personal, cod_tiporesultado, cod_datoclasificador, poai, cod_tipoactividad, cod_periodo, cod_funcion) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_normapriorizada, :cod_norma, :cod_tiposeguimiento, :producto_esperado, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_personal, :cod_tiporesultado, :cod_datoclasificador, :poai, :cod_tipoactividad, :cod_periodo, :cod_funcion)");
+		$stmt = $dbh->prepare("INSERT INTO $table (codigo, orden, nombre, cod_gestion, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, created_at, created_by, cod_personal, cod_tiporesultado, cod_datoclasificador, poai, cod_tipoactividad, cod_periodo, cod_funcion, metapoai, cod_actividadpadre) VALUES (:codigo, :orden, :nombre, :cod_gestion, :cod_normapriorizada, :cod_norma, :cod_tiposeguimiento, :producto_esperado, :cod_indicador, :cod_unidadorganizacional, :cod_area, :cod_estado, :created_at, :created_by, :cod_personal, :cod_tiporesultado, :cod_datoclasificador, :poai, :cod_tipoactividad, :cod_periodo, :cod_funcion, :metapoai, :cod_actividadpadre)");
 		// Bind
 		$stmt->bindParam(':codigo', $codigoPOA);
 		$stmt->bindParam(':orden', $i);
@@ -92,6 +94,9 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		$stmt->bindParam(':cod_tipoactividad', $tipoActividad);
 		$stmt->bindParam(':cod_periodo', $periodo);
 		$stmt->bindParam(':cod_funcion', $funcion);
+		$stmt->bindParam(':metapoai', $metapoai);
+		$stmt->bindParam(':cod_actividadpadre', $codActividadPadre);
+
 
 		$flagSuccess=$stmt->execute();	
 	}

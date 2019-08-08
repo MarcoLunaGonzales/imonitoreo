@@ -36,30 +36,33 @@ $vistaX=$vistaX;
                 $.get("dataEmpresasCertificadas.php",
 				{anioX:<?=$anioX;?>,mesX:<?=$mesX?>,vistaX:<?=$vistaX;?>},
                 function (data){
-                    var area = [];
+                    var unidad = [];
                     var resultado = [];
 
                     for (var i in data) {
-                        area.push(data[i].area);
-                        console.log(data[i].area);
+                        unidad.push(data[i].unidad);
+                        console.log(data[i].unidad);
                         resultado.push(data[i].resultado);
                     }
                     //alert(labs);
                     var chartdata = {
-                        labels: area,
+                        labels: unidad,
                         datasets: [
                             {
-                                label: 'Area.',
+                                label: 'Unidad.',
                                 /*backgroundColor: "rgba(255, 99, 132, 0.2)",
                                 borderColor: "rgb(255, 99, 132)",
                                 borderWidth:2,*/
                                 data: resultado,
                                 backgroundColor: [
-                                    "#FF6384",
-                                    "#63FF84",
+                                    "#10EBF2",
+                                    "#F27310",
                                     "#8463FF",
                                     "#6384FF",
-                                    "#84FF63"
+                                    "#84FF63",
+                                    "#FFFF00",
+                                    "#FF00FF",
+                                    "#800080"
                                 ]
                             }
                         ]

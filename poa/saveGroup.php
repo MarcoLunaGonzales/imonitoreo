@@ -78,9 +78,6 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		//BORRAMOS LA TABLA
 		$sqlDelete="";
 		$sqlDelete="DELETE from $table where codigo='$codigoPOA'";
-
-		//echo $sqlDelete;
-
 		$stmtDel = $dbh->prepare($sqlDelete);
 		$flagSuccess=$stmtDel->execute();
 

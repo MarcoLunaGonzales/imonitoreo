@@ -83,16 +83,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
           </div>
         </div>
 
-        <div class="col-md-2">
-        </div>
           
-        <div class="col-md-8">
+        <div class="col-md-6">
           <div class="card">
             <div class="card-header card-header-icon card-header-info">
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title">Empresas</h5>
+              <h5 class="card-title">Empresas Certificadas (Participacion por UO)</h5>
             </div>
             <div class="card-body">
               <?php
@@ -100,6 +98,25 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               $mesX=$mesTemporal;
               $vistaX=$vista;
               require("chartEmpresasCertificadas.php");
+              ?>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-info">
+              <div class="card-icon">
+                <i class="material-icons">timeline</i>
+              </div>
+              <h5 class="card-title">Certificados (Participacion por UO)</h5>
+            </div>
+            <div class="card-body">
+              <?php
+              $anioX=$anioTemporal;
+              $mesX=$mesTemporal;
+              $vistaX=$vista;
+              require("chartCertificadosEmitidos.php");
               ?>
             </div>
           </div>
@@ -140,23 +157,23 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
           </div>
         </div>
 
-        <div class="col-md-2">
+        <div class="col-md-3">
         </div>
-          
-        <div class="col-md-8">
+
+        <div class="col-md-6">
           <div class="card">
             <div class="card-header card-header-icon card-header-info">
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title">Certificados</h5>
+              <h5 class="card-title"># Empresas y Certificados por UO</h5>
             </div>
             <div class="card-body">
               <?php
               $anioX=$anioTemporal;
               $mesX=$mesTemporal;
               $vistaX=$vista;
-              require("chartCertificadosEmitidos.php");
+              require("chartEmpresasCertificados.php");
               ?>
             </div>
           </div>
@@ -213,7 +230,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             </div>
             
             <div class="card-body">
-              <table width="100%" class="table table-condensed" id="main">
+              <table width="100%" class="table table-condensed" id="main<?=$areaCertificacion?>">
                 <thead>
                   <tr>
                     <th class="text-center font-weight-bold">Norma</th>
@@ -265,6 +282,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   }
 
                   $sqlN.=" and e.idarea='$areaCertificacion' group by e.norma order by 2 desc";
+                  //echo $sqlN;
                   $stmtN = $dbh->prepare($sqlN);
                   $stmtN->execute();
                   $stmtN->bindColumn('norma', $nombreNorma);
@@ -381,7 +399,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             </div>
             
             <div class="card-body">
-              <table width="100%" class="table table-condensed" id="main">
+              <table width="100%" class="table table-condensed" id="main<?=$areaCertificacion?>">
                 <thead>
                   <tr>
                     <th class="text-center font-weight-bold">Norma</th>
@@ -546,7 +564,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             </div>
             
             <div class="card-body">
-              <table width="100%" class="table table-condensed" id="main">
+              <table width="100%" class="table table-condensed" id="main<?=$areaCertificacion?>">
                 <thead>
                   <tr>
                     <th class="text-center font-weight-bold">Unidad O.</th>

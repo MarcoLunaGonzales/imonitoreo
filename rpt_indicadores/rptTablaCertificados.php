@@ -37,14 +37,14 @@
                   $totalMesUnidadX=0;
                   $totalAcumUnidadX=0;
 
-                  $cantEmpresasTCP=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,0,$vista);
-                  $cantEmpresasTCPAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,1,$vista);
+                  $cantEmpresasTCPTotal=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,0,$vista);
+                  $cantEmpresasTCPAcumTotal=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,1,$vista);
 
-                  $cantEmpresasTCS=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,0,$vista);
-                  $cantEmpresasTCSAcum=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
+                  $cantEmpresasTCSTotal=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,0,$vista);
+                  $cantEmpresasTCSAcumTotal=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
 
-                  $totalMesUnidadX=$cantEmpresasTCP+$cantEmpresasTCS;
-                  $totalAcumUnidadX=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum;
+                  $totalMesUnidadX=$cantEmpresasTCPTotal+$cantEmpresasTCSTotal;
+                  $totalAcumUnidadX=$cantEmpresasTCPAcumTotal+$cantEmpresasTCSAcumTotal;
                   /*FIN OBTENER LOS TOTALES*/
 
                   while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
@@ -65,17 +65,18 @@
 
                     $partMesTCP=0;
                     $partMesTCS=0;
-                    if($totalMes>0){
-                      $partMesTCP=($cantEmpresasTCP/$totalMes)*100;                    
-                      $partMesTCS=($cantEmpresasTCS/$totalMes)*100;                    
+                    if($cantEmpresasTCPTotal>0){
+                      $partMesTCP=($cantEmpresasTCP/$cantEmpresasTCPTotal)*100;                    
+                      $partMesTCS=($cantEmpresasTCS/$cantEmpresasTCSTotal)*100;                    
                     }
 
                     $partAcumTCP=0;
                     $partAcumTCS=0;
-                    if($totalAcumulado>0){
-                      $partAcumTCP=($cantEmpresasTCPAcum/$totalAcumulado)*100;                    
-                      $partAcumTCS=($cantEmpresasTCSAcum/$totalAcumulado)*100;                    
+                    if($cantEmpresasTCPAcumTotal>0){
+                      $partAcumTCP=($cantEmpresasTCPAcum/$cantEmpresasTCPAcumTotal)*100;                    
+                      $partAcumTCS=($cantEmpresasTCSAcum/$cantEmpresasTCSAcumTotal)*100;                    
                     }
+ 
                     $porcentajeMes=($totalMesUnidad/$totalMesUnidadX)*100;
                     $porcentajeAcum=($totalAcumUnidad/$totalAcumUnidadX)*100;
 
@@ -138,13 +139,13 @@
                     <th class="text-center">Totales</th>
                     <th class="table-warning text-center"><a href="<?=$urlDetalle;?>&codArea=39&acumulado=0" target="_blank"><?=($cantEmpresasTCP==0)?"-":formatNumberInt($cantEmpresasTCP);?></a></th>
                     <th class="table-primary text-center"><a href="<?=$urlDetalle;?>&codArea=39&acumulado=1" target="_blank"><?=($cantEmpresasTCPAcum==0)?"-":formatNumberInt($cantEmpresasTCPAcum);?></a></th>
-                    <th class="table-danger text-center"><?=($partMesTCP==0)?"-":formatNumberInt($partMesTCP);?></th>
-                    <th class="table-success text-center"><?=($partAcumTCP==0)?"-":formatNumberInt($partAcumTCP);?></th>
+                    <th class="table-danger text-center"><?=($partMesTCP==0)?"-":formatNumberInt(100);?></th>
+                    <th class="table-success text-center"><?=($partAcumTCP==0)?"-":formatNumberInt(100);?></th>
 
                     <th class="table-warning text-center"><a href="<?=$urlDetalle;?>&codArea=38&acumulado=0" target="_blank"><?=($cantEmpresasTCS==0)?"-":formatNumberInt($cantEmpresasTCS);?></a></th>
                     <th class="table-primary text-center"><a href="<?=$urlDetalle;?>&codArea=38&acumulado=1" target="_blank"><?=($cantEmpresasTCSAcum==0)?"-":formatNumberInt($cantEmpresasTCSAcum);?></a></th>
-                    <th class="table-danger text-center"><?=($partMesTCS==0)?"-":formatNumberInt($partMesTCS);?></th>
-                    <th class="table-success text-center"><?=($partAcumTCS==0)?"-":formatNumberInt($partAcumTCS);?></th>
+                    <th class="table-danger text-center"><?=($partMesTCS==0)?"-":formatNumberInt(100);?></th>
+                    <th class="table-success text-center"><?=($partAcumTCS==0)?"-":formatNumberInt(100);?></th>
 
                     <th class="table-warning text-center"><?=formatNumberInt($totalMesUnidad);?></th>
                     <th class="table-primary text-center"><?=formatNumberInt($totalAcumUnidad);?></th>

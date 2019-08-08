@@ -22,10 +22,7 @@ $mesTemporal=5;
 $anioTemporal=2019;
 */
 
-require_once '../conexion.php';
-require_once '../functions.php';
-require_once '../functionsPOSIS.php';
-require_once '../styles.php';
+$cantidadRegistrosMostrar=obtieneValorConfig(28);
 
 	function utf8json($inArray) { 
 	static $depth = 0; 
@@ -68,7 +65,9 @@ require_once '../styles.php';
 	$stmtN->bindColumn('iaf', $codigoIAF);
 	$stmtN->bindColumn('cantidad', $cantidadNorma);
 
-	while($rowN = $stmtN -> fetch(PDO::FETCH_BOUND)){
+	$contador=1;
+	$sumaPorcentaje=0;
+	while($rowN = $stmtN -> fetch(PDO::FETCH_BOUND) && $contador<=$cantidadRegistrosMostrar){
 	    $nombreIAF=nameIAF($codigoIAF);
 	    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$codArea,$codigoIAF,1,$vista);
 	    $cantCertificadosTotal=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,$codArea,0,1,$vista);
@@ -77,7 +76,12 @@ require_once '../styles.php';
 	    	$porcentaje=($cantCertificados/$cantCertificadosTotal)*100;
 	    }
 		$emparray[]=array("area"=>$nombreIAF, "resultado"=>$porcentaje);
+		$sumaPorcentaje+=$porcentaje;
+		$contador++;
 	}
+
+	$restoPorcentaje=100-$sumaPorcentaje;
+	$emparray[]=array("area"=>"Otros", "resultado"=>$restoPorcentaje);
 
 
 array_splice($emparray, 0,1);

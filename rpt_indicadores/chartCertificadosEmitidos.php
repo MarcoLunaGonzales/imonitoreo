@@ -55,11 +55,14 @@ $vistaX=$vistaX;
                                 borderWidth:2,*/
                                 data: resultado,
                                 backgroundColor: [
-                                    "#FF6384",
-                                    "#63FF84",
+                                    "#10EBF2",
+                                    "#F27310",
                                     "#8463FF",
                                     "#6384FF",
-                                    "#84FF63"
+                                    "#84FF63",
+                                    "#FFFF00",
+                                    "#FF00FF",
+                                    "#800080"
                                 ]
                             }
                         ]

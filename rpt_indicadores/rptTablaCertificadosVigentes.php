@@ -39,7 +39,7 @@
                   $cantEmpresasTCSAcumTotal=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
 
                   $totalMesUnidadX=$cantEmpresasTCP+$cantEmpresasTCS;
-                  $totalAcumUnidadX=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum;
+                  $totalAcumUnidadX=$cantEmpresasTCPAcumTotal+$cantEmpresasTCSAcumTotal;
                   /*FIN OBTENER LOS TOTALES*/
 
                   while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){

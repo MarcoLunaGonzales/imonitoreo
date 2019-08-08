@@ -43,9 +43,9 @@ $moduleName="Actividades POAI";
 
 $sqlCount="";
 if($globalAdmin==1){
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_estado=1 and poai=1";	
+	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_estado=1 and poai=1 and cod_actividadpadre>0";	
 }else{
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_area in ($globalArea) and cod_unidadorganizacional in ($globalUnidad) and cod_estado=1 and poai=1";	
+	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_area in ($globalArea) and cod_unidadorganizacional in ($globalUnidad) and cod_estado=1 and poai=1 and cod_actividadpadre>0";	
 }
 $stmtX = $dbh->prepare($sqlCount);
 $stmtX->execute();
@@ -102,10 +102,12 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_normapriorizada,
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado, a.cod_norma,
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.cod_tipoactividad, a.cod_periodo, a.cod_funcion
-					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional in ($codUnidadX) and a.cod_area in ($codAreaX) and a.poai=1";
+					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional in ($codUnidadX) and a.cod_area in ($codAreaX) and a.poai=1 and (cod_actividadpadre>0 or cod_actividadpadre=-1000 ) and cod_personal='$globalUser' ";
 
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
-					//echo $sql;
+					
+					//echo $sqlLista;
+					
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();

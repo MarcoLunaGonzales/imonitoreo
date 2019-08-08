@@ -55,7 +55,7 @@ a.producto_esperado, a.cod_unidadorganizacional, a.cod_area,
 (select p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, a.poai,
 (select t.nombre from tipos_actividadpoa t where t.codigo=a.cod_tipoactividad) as tipo_actividad,
 (select p.nombre from periodos p where p.codigo=a.cod_periodo) as periodo, a.cod_funcion, (select cf.nombre_funcion from cargos_funciones cf where cf.cod_funcion=a.cod_funcion)as funcion
- from actividades_poa a where a.cod_personal='$globalUser' and a.cod_indicador='$codigoIndicador' and a.cod_estado=1 "; 
+ from actividades_poa a where a.cod_personal='$globalUser' and a.cod_indicador='$codigoIndicador' and a.poai=1 and (a.cod_actividadpadre>0 or a.cod_actividadpadre=-1000) "; 
 if($globalAdmin==0){
   $sql.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad)";
 } 

@@ -133,7 +133,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 					$stmtLista->bindColumn('cod_hito',$codHito);
 					?>
 					<fieldset id="fiel" style="width:100%;border:0;">
-						<button type="button" name="add" value="add" class="btn btn-danger btn-round btn-fab" onClick="addActividad(this,<?=$codigoIndicador;?>,<?=$codUnidadX;?>,<?=$codAreaX;?>)" accesskey="a">
+						<button type="button" name="add" class="btn btn-danger btn-round btn-fab" onClick="addActividad(this,<?=$codigoIndicador;?>,<?=$codUnidadX;?>,<?=$codAreaX;?>)" accesskey="a">
 		                              <i class="material-icons">add</i>
 		                </button>						
 					        	<?php

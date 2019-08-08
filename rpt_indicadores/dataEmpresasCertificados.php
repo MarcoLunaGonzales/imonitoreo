@@ -17,8 +17,9 @@ $anioTemporal=$_GET["anioX"];
 $vista=$_GET["vistaX"];
 
 
-/*$mesTemporal=5;
-$anioTemporal=2019;*/
+/*$mesTemporal=6;
+$anioTemporal=2019;
+$vista=1;*/
 
 
 require_once '../conexion.php';
@@ -59,28 +60,18 @@ require_once '../styles.php';
 	$stmtU->bindColumn('codigo', $codigoX);
 	$stmtU->bindColumn('abreviatura', $abrevX);
 
-	$cantEmpresasTCPTotal=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,0,$vista);
-	$cantEmpresasTCPAcumTotal=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,39,0,1,$vista);
-
-	$cantEmpresasTCSTotal=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,0,$vista);
-	$cantEmpresasTCSAcumTotal=obtenerCantCertificados(0,$anioTemporal,$mesTemporal,38,0,1,$vista);
-
-	$totalMes=$cantEmpresasTCPTotal+$cantEmpresasTCSTotal;
-	$totalAcumulado=$cantEmpresasTCPAcumTotal+$cantEmpresasTCSAcumTotal;
-
-	$cantidadTotalCertificados=$cantEmpresasTCPAcumTotal+$cantEmpresasTCSAcumTotal;
-
 	while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-		$cantEmpresasTCPAcum=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,39,0,0,$vista);
-		$cantEmpresasTCSAcum=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,38,0,1,$vista);
 
-		$totalUnidad=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum;
+		$cantEmpresasTCPAcum=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,39,38,0,1,$vista);
+		$cantEmpresasTCSAcum=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,38,39,0,1,$vista);
+		$totalEmpresas=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum;
 
-		$participacionUnidad=0;
-		if($cantidadTotalCertificados>0){
-		$participacionUnidad=($totalUnidad/$cantidadTotalCertificados)*100;                    
-		}
-		$emparray[]=array("area"=>$abrevX, "resultado"=>$participacionUnidad);
+		$cantCertTCPAcum=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,39,0,1,$vista);
+		$cantCertTCSAcum=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,38,0,1,$vista);
+		$totalCertificados=$cantCertTCPAcum+$cantCertTCSAcum;
+
+		$emparray[]=array("unidad"=>$abrevX, "empresas"=>$totalEmpresas, "certificados"=>$totalCertificados);
+
 	}
 
 

@@ -20,11 +20,8 @@ $codAreaX=$_GET["codAreaX"];
 /*$mesTemporal=5;
 $anioTemporal=2019;*/
 
+$cantidadRegistrosMostrar=obtieneValorConfig(28);
 
-require_once '../conexion.php';
-require_once '../functions.php';
-require_once '../functionsPOSIS.php';
-require_once '../styles.php';
 
 	function utf8json($inArray) { 
 	static $depth = 0; 
@@ -65,7 +62,9 @@ require_once '../styles.php';
 	$stmtN->bindColumn('norma', $nombreNorma);
 	$stmtN->bindColumn('cantidad', $cantidadNorma);
 
-	while($rowN = $stmtN -> fetch(PDO::FETCH_BOUND)){
+	$contador=1;
+	$sumaPorcentaje=0;
+	while($rowN = $stmtN -> fetch(PDO::FETCH_BOUND) && $contador<=$cantidadRegistrosMostrar){
 	    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,$codAreaX,$nombreNorma,1,$vista);
 	    $cantCertificadosTotal=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,$codAreaX,'',1,$vista);
 	    $porcentaje=0;
@@ -73,8 +72,11 @@ require_once '../styles.php';
 	    	$porcentaje=($cantCertificados/$cantCertificadosTotal)*100;
 	    }
 		$emparray[]=array("area"=>$nombreNorma, "resultado"=>$porcentaje);
+		$sumaPorcentaje+=$porcentaje;
+		$contador++;
 	}
-
+	$restoPorcentaje=100-$sumaPorcentaje;
+	$emparray[]=array("area"=>"Otros", "resultado"=>$restoPorcentaje);
 
 array_splice($emparray, 0,1);
 echo json_encode($emparray);
