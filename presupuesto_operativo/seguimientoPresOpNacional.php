@@ -58,6 +58,8 @@ $_SESSION['mesTemporal']=$mes;
                           <th class="text-center font-weight-bold">Pres <?=$anioAnt;?></th>
                           <th class="text-center font-weight-bold">Eje <?=$anioAnt;?></th>
                           <th class="text-center font-weight-bold">%</th>
+                          <th class="text-center font-weight-bold"><?=$anio;?>/<?=$anioAnt?><br>Diferencia</th>
+                          <th class="text-center font-weight-bold"><?=$anio;?>/<?=$anioAnt?><br>%</th>
                           <th rowspan="4" class="text-middle">
                             <a href="seguimientoPOPorServicio.php?fondo=<?=$fondoArray?>&anio=<?=$anio;?>&mes=<?=$mes;?>" rel="tooltip" class="<?=$buttonDetail;?>" title="Ver Detalle Por Servicio" target="_blank"> 
                               <i class="material-icons">trending_up</i>
@@ -108,6 +110,15 @@ $_SESSION['mesTemporal']=$mes;
                           $porcResultadoAnt=(($resultadoEjAnt-$resultadoPresAnt)/$resultadoPresAnt)*100;
                           $porcResultado=(($resultadoEj-$resultadoPres)/$resultadoPres)*100;
 
+                          $diferenciaAniosIngresos=$montoEjIngreso-$montoEjIngresoAnt;
+                          $porcentajeAniosIngresos=($montoEjIngreso/$montoEjIngresoAnt)*100;
+
+                          $diferenciaAniosEgresos=$montoEjEgreso-$montoEjEgresoAnt;
+                          $porcentajeAniosEgresos=($montoEjEgreso/$montoEjEgresoAnt)*100;
+
+                          $diferenciaAniosResult=$resultadoEj-$resultadoEjAnt;
+                          $porcentajeAniosResult=($resultadoEj/$resultadoEjAnt)*100;
+
                       ?>
                         <tr>
                           <td class="text-left font-weight-bold"><?=$nombreFondo;?></td>
@@ -118,6 +129,8 @@ $_SESSION['mesTemporal']=$mes;
                           <td class="text-right"><?=formatNumberInt($montoPresIngresoAnt);?></td>
                           <td class="text-right"><?=formatNumberInt($montoEjIngresoAnt);?></td>
                           <td class="text-right <?=$colorPorcIngAnt;?>"><?=formatNumberInt($porcIngresoAnt);?></td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosIngresos);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosIngresos);?></td>
                         </tr>
 
                         <tr>
@@ -129,6 +142,8 @@ $_SESSION['mesTemporal']=$mes;
                           <td class="text-right"><?=formatNumberInt($montoPresEgresoAnt);?></td>
                           <td class="text-right"><?=formatNumberInt($montoEjEgresoAnt);?></td>
                           <td class="text-right <?=$colorPorcEgAnt;?>"><?=formatNumberInt($porcEgresoAnt);?></td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosEgresos);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosEgresos);?></td>
                         </tr>
 
                         <tr>
@@ -142,6 +157,8 @@ $_SESSION['mesTemporal']=$mes;
                           <td class="text-right"><?=formatNumberInt($resultadoEjAnt);?></td>
                           <!--td class="text-right"><?=formatNumberInt($porcResultadoAnt);?></td-->
                           <td class="text-right">-</td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosResult);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosResult);?></td>
                         </tr>
 
                       </tbody>
@@ -177,6 +194,9 @@ $_SESSION['mesTemporal']=$mes;
                           <th class="text-center font-weight-bold">Pres <?=$anioAnt;?></th>
                           <th class="text-center font-weight-bold">Eje <?=$anioAnt;?></th>
                           <th class="text-center font-weight-bold">%</th>
+                          <th class="text-center font-weight-bold"><?=$anio;?>/<?=$anioAnt?><br>Diferencia</th>
+                          <th class="text-center font-weight-bold"><?=$anio;?>/<?=$anioAnt?><br>%</th>
+
                         </tr>
                       </thead>
                       <tbody>
@@ -221,6 +241,16 @@ $_SESSION['mesTemporal']=$mes;
                           $porcResultadoAnt=(($resultadoEjAnt-$resultadoPresAnt)/$resultadoPresAnt)*100;
                           $porcResultado=(($resultadoEj-$resultadoPres)/$resultadoPres)*100;
 
+                          $diferenciaAniosIngresos=$montoEjIngreso-$montoEjIngresoAnt;
+                          $porcentajeAniosIngresos=($montoEjIngreso/$montoEjIngresoAnt)*100;
+
+                          $diferenciaAniosEgresos=$montoEjEgreso-$montoEjEgresoAnt;
+                          $porcentajeAniosEgresos=($montoEjEgreso/$montoEjEgresoAnt)*100;
+
+                          $diferenciaAniosResult=$resultadoEj-$resultadoEjAnt;
+                          $porcentajeAniosResult=($resultadoEj/$resultadoEjAnt)*100;
+
+
                       ?>
                         <tr>
                           <td class="text-left font-weight-bold"><?=$nombreFondo;?></td>
@@ -231,6 +261,8 @@ $_SESSION['mesTemporal']=$mes;
                           <td class="text-right"><?=formatNumberInt($montoPresIngresoAnt);?></td>
                           <td class="text-right"><?=formatNumberInt($montoEjIngresoAnt);?></td>
                           <td class="text-right <?=$colorPorcIngAnt;?>"><?=formatNumberInt($porcIngresoAnt);?></td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosIngresos);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosIngresos);?></td>
                         </tr>
 
                         <tr>
@@ -242,6 +274,8 @@ $_SESSION['mesTemporal']=$mes;
                           <td class="text-right"><?=formatNumberInt($montoPresEgresoAnt);?></td>
                           <td class="text-right"><?=formatNumberInt($montoEjEgresoAnt);?></td>
                           <td class="text-right <?=$colorPorcEgAnt;?>"><?=formatNumberInt($porcEgresoAnt);?></td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosEgresos);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosEgresos);?></td>
                         </tr>
 
                         <tr>
@@ -255,6 +289,8 @@ $_SESSION['mesTemporal']=$mes;
                           <td class="text-right"><?=formatNumberInt($resultadoEjAnt);?></td>
                           <!--td class="text-right"><?=formatNumberInt($porcResultadoAnt);?></td-->
                           <td class="text-right">-</td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosResult);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosResult);?></td>
                         </tr>
 
 

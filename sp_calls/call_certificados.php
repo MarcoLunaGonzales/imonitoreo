@@ -13,7 +13,7 @@ $sqlDelete = 'delete from ext_certificados';
 $stmtDelete = $dbh->prepare($sqlDelete);
 $flagSuccess=$stmtDelete->execute();
 
-$sql = "SELECT IdCertificadoServicios, IdServicio, IdTipoCertificado, idCliente, Norma, Descripcion, NumeroAnterior, FechaEmision, FechaValido, FechaEntrega, FechaRegistro, ProductoServicio, Observaciones, idCabeceraFormInspeccion, NroHoja, de_cliente, TipoCertificado, idCertificadorExterno, Codigo, idestado, estado, d_certificadorExt, stipo, idarea, idTipoEstado, idoficina, idDocumentoBase, idFormularioCertificado, idTipoServicio, iaf from vw_listacertificadosservicios where FechaEmision>='2015-01-01'";
+$sql = "SELECT IdCertificadoServicios, IdServicio, IdTipoCertificado, idCliente, Norma, Descripcion, NumeroAnterior, FechaEmision, FechaValido, FechaEntrega, FechaRegistro, FechaEstado, ProductoServicio, Observaciones, idCabeceraFormInspeccion, NroHoja, de_cliente, TipoCertificado, idCertificadorExterno, Codigo, idestado, estado, d_certificadorExt, stipo, idarea, idTipoEstado, idoficina, idDocumentoBase, idFormularioCertificado, idTipoServicio, iaf from vw_listacertificadosservicios where FechaEmision>='2015-01-01'";
 echo $sql;
 $stmt = $dbhExterno->prepare($sql);
 $stmt->execute();
@@ -31,6 +31,8 @@ while ($resp = $stmt->fetch(PDO::FETCH_ASSOC)) {
 	$FechaValido=$resp['FechaValido'];
 	$FechaEntrega=$resp['FechaEntrega'];
 	$FechaRegistro=$resp['FechaRegistro'];
+	$FechaEstado=$resp['FechaEstado'];
+
 	$ProductoServicio=$resp['ProductoServicio'];
 	$Observaciones=$resp['Observaciones'];
 	$idCabeceraFormInspeccion=$resp['idCabeceraFormInspeccion'];
@@ -62,12 +64,12 @@ while ($resp = $stmt->fetch(PDO::FETCH_ASSOC)) {
 		$dcertificadorExt="IBNORCA";			
 	}
 
-	$insert_str .= "('$IdCertificadoServicios','$IdServicio','$IdTipoCertificado','$idCliente','$Norma','$Descripcion','$NumeroAnterior','$FechaEmision','$FechaValido','$FechaEntrega','$FechaRegistro','$ProductoServicio','$Observaciones','$idCabeceraFormInspeccion','$NroHoja','$decliente','$TipoCertificado','$idCertificadorExterno','$Codigo','$idestado','$estado','$dcertificadorExt','$stipo','$idarea','$idTipoEstado','$idoficina','$idDocumentoBase','$idFormularioCertificado','$idTipoServicio','$codigoIAF'),";	
+	$insert_str .= "('$IdCertificadoServicios','$IdServicio','$IdTipoCertificado','$idCliente','$Norma','$Descripcion','$NumeroAnterior','$FechaEmision','$FechaValido','$FechaEntrega','$FechaRegistro','$FechaEstado','$ProductoServicio','$Observaciones','$idCabeceraFormInspeccion','$NroHoja','$decliente','$TipoCertificado','$idCertificadorExterno','$Codigo','$idestado','$estado','$dcertificadorExt','$stipo','$idarea','$idTipoEstado','$idoficina','$idDocumentoBase','$idFormularioCertificado','$idTipoServicio','$codigoIAF'),";	
 
 	if($indice%10==0){
 		$insert_str = substr_replace($insert_str, '', -1, 1);
 		$sqlInserta="INSERT INTO ext_certificados (idcertificadoservicios,idservicio,idtipocertificado,idcliente,norma,descripcion,
-  numeroanterior,fechaemision,fechavalido,fechaentrega,fecharegistro,productoservicio,observaciones,idcabeceraforminspeccion,nrohoja,decliente,tipocertificado,idcertificadorexterno,codigo,idestado,estado,dcertificadorext,stipo,idarea,idtipoestado,
+  numeroanterior,fechaemision,fechavalido,fechaentrega,fecharegistro,fechaestado,productoservicio,observaciones,idcabeceraforminspeccion,nrohoja,decliente,tipocertificado,idcertificadorexterno,codigo,idestado,estado,dcertificadorext,stipo,idarea,idtipoestado,
   idoficina,iddocumentobase,idformulariocertificado,idtiposervicio,iaf) values ".$insert_str.";";
 		echo $sqlInserta;
 		$stmtInsert=$dbh->prepare($sqlInserta);
@@ -87,7 +89,7 @@ while ($resp = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 $insert_str = substr_replace($insert_str, '', -1, 1);
 $sqlInserta="INSERT INTO ext_certificados (idcertificadoservicios,idservicio,idtipocertificado,idcliente,norma,descripcion,
-  numeroanterior,fechaemision,fechavalido,fechaentrega,fecharegistro,productoservicio,observaciones,idcabeceraforminspeccion,nrohoja,decliente,tipocertificado,idcertificadorexterno,codigo,idestado,estado,dcertificadorext,stipo,idarea,idtipoestado,
+  numeroanterior,fechaemision,fechavalido,fechaentrega,fecharegistro,fechaestado,productoservicio,observaciones,idcabeceraforminspeccion,nrohoja,decliente,tipocertificado,idcertificadorexterno,codigo,idestado,estado,dcertificadorext,stipo,idarea,idtipoestado,
   idoficina,iddocumentobase,idformulariocertificado,idtiposervicio,iaf) values ".$insert_str.";";
 //echo $sqlInserta;
 $stmtInsert=$dbh->prepare($sqlInserta);

@@ -2,6 +2,11 @@
 header('Content-Type: application/json');
 set_time_limit(0);
 
+require_once '../conexion.php';
+require_once '../functions.php';
+require_once '../functionsPOSIS.php';
+require_once '../styles.php';
+
 /*
 $fondoTemporal=$_GET['fondoTemporal'];
 $anioTemporal=$_GET['anioTemporal'];
@@ -18,10 +23,9 @@ $organismoTemporal=$_SESSION["organismoTemporal"];
 $fondo1=$fondoTemporal;
 $nameFondo1=$nombreFondo;
 
-require_once '../conexion.php';
-require_once '../functions.php';
-require_once '../functionsPOSIS.php';
-require_once '../styles.php';
+$areasValorConfig=0;
+$areasValorConfig=obtieneValorConfig(29);
+
 
 	function utf8json($inArray) { 
 	static $depth = 0; 
@@ -55,7 +59,14 @@ require_once '../styles.php';
 	  	$montoPresIngreso2=round(presupuestoEgresosMes($fondo1,$anioTemporal-1,$i,$organismoTemporal,0,0));
 		$montoEjIngreso2=round(ejecutadoEgresosMes($fondo1,$anioTemporal-1,$i,$organismoTemporal,0,0));
 		
-		$emparray[]=array("mes"=>$i, "montoPres"=>$montoPresIngreso1, "montoEj"=>$montoEjIngreso1, "montoPres2"=>$montoPresIngreso2, "montoEj2"=>$montoEjIngreso2);
+		$montoPresTotal=0;
+		$montoEjTotal=0;	
+		if($organismoTemporal==$areasValorConfig){
+			$montoPresTotal=round(presupuestoEgresosMes($fondo1,$anioTemporal,$i,0,0,0));
+			$montoEjTotal=round(ejecutadoEgresosMes($fondo1,$anioTemporal,$i,0,0,0));
+		}
+
+		$emparray[]=array("mes"=>$i, "montoPres"=>$montoPresIngreso1, "montoEj"=>$montoEjIngreso1, "montoPres2"=>$montoPresIngreso2, "montoEj2"=>$montoEjIngreso2, "montoPresRegional"=>$montoPresTotal,"montoEjRegional"=>$montoEjTotal);
 	}
 
 array_splice($emparray, 0,1);

@@ -85,7 +85,8 @@ require("chartPorServicio.php");
                           <th class="text-center font-weight-bold" width="12.5%">Pres.<?=$anioAnt;?></th>
                           <th class="text-center font-weight-bold" width="12.5%">Eje.<?=$anioAnt;?></th>
                           <th class="text-center font-weight-bold" width="12.5%">%</th>
-
+                          <th class="text-center font-weight-bold"><?=$anio;?>/<?=$anioAnt?><br>Diferencia</th>
+                          <th class="text-center font-weight-bold"><?=$anio;?>/<?=$anioAnt?><br>%</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -147,6 +148,25 @@ require("chartPorServicio.php");
                             $porcResultado=(($resultadoEj-$resultadoPres)/$resultadoPres)*100;
                           }
 
+                          $diferenciaAniosIngresos=$montoEjIngreso-$montoEjIngresoAnt;
+                          $porcentajeAniosIngresos=0;
+                          if($montoEjIngresoAnt>0){
+                            $porcentajeAniosIngresos=($montoEjIngreso/$montoEjIngresoAnt)*100;
+                          }
+
+                          $diferenciaAniosEgresos=$montoEjEgreso-$montoEjEgresoAnt;
+                          $porcentajeAniosEgresos=0;
+                          if($montoEjEgresoAnt>0){
+                            $porcentajeAniosEgresos=($montoEjEgreso/$montoEjEgresoAnt)*100;
+                          }
+
+                          $diferenciaAniosResult=$resultadoEj-$resultadoEjAnt;
+                          $porcentajeAniosResult=0;
+                          if($resultadoEjAnt>0){
+                            $porcentajeAniosResult=($resultadoEj/$resultadoEjAnt)*100;
+                          }
+
+
                       ?>
                         <tr>
                           <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
@@ -157,6 +177,8 @@ require("chartPorServicio.php");
                           <td class="text-right"><?=formatNumberInt($montoPresIngresoAnt);?></td>
                           <td class="text-right"><?=formatNumberInt($montoEjIngresoAnt);?></td>
                           <td class="text-right <?=$colorPorcIngAnt;?>"><?=formatNumberInt($porcIngresoAnt);?></td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosIngresos);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosIngresos);?></td>
                         </tr>
 
                         <tr>
@@ -168,6 +190,8 @@ require("chartPorServicio.php");
                           <td class="text-right"><?=formatNumberInt($montoPresEgresoAnt);?></td>
                           <td class="text-right"><?=formatNumberInt($montoEjEgresoAnt);?></td>
                           <td class="text-right <?=$colorPorcEgAnt;?>"><?=formatNumberInt($porcEgresoAnt);?></td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosEgresos);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosEgresos);?></td>
                         </tr>
 
                         <tr>
@@ -181,6 +205,8 @@ require("chartPorServicio.php");
                           <td class="text-right"><?=formatNumberInt($resultadoEjAnt);?></td>
                           <!--td class="text-right"><?=formatNumberInt($porcResultadoAnt);?></td-->
                           <td class="text-right">-</td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosResult);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosResult);?></td>
                         </tr>
 
                       </tbody>
@@ -232,7 +258,8 @@ require("chartPorServicio.php");
                           <th class="text-center font-weight-bold" width="12.5%">Pres.<?=$anioAnt;?></th>
                           <th class="text-center font-weight-bold" width="12.5%">Eje.<?=$anioAnt;?></th>
                           <th class="text-center font-weight-bold" width="12.5%">%</th>
-
+                          <th class="text-center font-weight-bold"><?=$anio;?>/<?=$anioAnt?><br>Diferencia</th>
+                          <th class="text-center font-weight-bold"><?=$anio;?>/<?=$anioAnt?><br>%</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -294,6 +321,25 @@ require("chartPorServicio.php");
                             $porcResultado=(($resultadoEj-$resultadoPres)/$resultadoPres)*100;
                           }
 
+                          $diferenciaAniosIngresos=$montoEjIngreso-$montoEjIngresoAnt;
+                          $porcentajeAniosIngresos=0;
+                          if($montoEjIngresoAnt>0){
+                            $porcentajeAniosIngresos=($montoEjIngreso/$montoEjIngresoAnt)*100;
+                          }
+
+                          $diferenciaAniosEgresos=$montoEjEgreso-$montoEjEgresoAnt;
+                          $porcentajeAniosEgresos=0;
+                          if($montoEjEgresoAnt>0){
+                            $porcentajeAniosEgresos=($montoEjEgreso/$montoEjEgresoAnt)*100;
+                          }
+
+                          $diferenciaAniosResult=$resultadoEj-$resultadoEjAnt;
+                          $porcentajeAniosResult=0;
+                          if($resultadoEjAnt>0){
+                            $porcentajeAniosResult=($resultadoEj/$resultadoEjAnt)*100;
+                          }
+
+
                       ?>
                         <tr>
                           <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
@@ -304,6 +350,8 @@ require("chartPorServicio.php");
                           <td class="text-right"><?=formatNumberInt($montoPresIngresoAnt);?></td>
                           <td class="text-right"><?=formatNumberInt($montoEjIngresoAnt);?></td>
                           <td class="text-right <?=$colorPorcIngAnt;?>"><?=formatNumberInt($porcIngresoAnt);?></td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosIngresos);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosIngresos);?></td>
                         </tr>
 
                         <tr>
@@ -315,6 +363,8 @@ require("chartPorServicio.php");
                           <td class="text-right"><?=formatNumberInt($montoPresEgresoAnt);?></td>
                           <td class="text-right"><?=formatNumberInt($montoEjEgresoAnt);?></td>
                           <td class="text-right <?=$colorPorcEgAnt;?>"><?=formatNumberInt($porcEgresoAnt);?></td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosEgresos);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosEgresos);?></td>
                         </tr>
 
                         <tr>
@@ -328,6 +378,8 @@ require("chartPorServicio.php");
                           <td class="text-right"><?=formatNumberInt($resultadoEjAnt);?></td>
                           <!--td class="text-right"><?=formatNumberInt($porcResultadoAnt);?></td-->
                           <td class="text-right">-</td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosResult);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosResult);?></td>
                         </tr>
 
                       </tbody>

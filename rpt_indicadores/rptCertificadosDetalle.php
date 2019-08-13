@@ -96,13 +96,14 @@ $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
                     <th class="text-center">Tipo</th>
                     <th class="text-center">Codigo</th>
                     <th class="text-center">Estado</th>
+                    <th class="text-center">F.Estado</th>
                     <th class="text-center">Certificador</th>
                     <th class="text-center">IAF</th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php
-                  $sql="SELECT (select u.nombre from unidades_organizacionales u where u.codigo=e.idoficina)as unidad, (select a.nombre from areas a where a.codigo=e.idarea)as area, (select c.nombre from clientes c where c.codigo=e.idcliente)as cliente, e.norma, e.descripcion, e.fechaemision, e.fechavalido, e.fechaentrega, e.stipo, e.codigo, e.estado,  e.dcertificadorext, (select i.nombre from iaf i where i.abreviatura=e.iaf)as iaf from ext_certificados e where e.idarea in ($codArea) and e.idoficina in ($codUnidad) ";
+                  $sql="SELECT (select u.nombre from unidades_organizacionales u where u.codigo=e.idoficina)as unidad, (select a.nombre from areas a where a.codigo=e.idarea)as area, (select c.nombre from clientes c where c.codigo=e.idcliente)as cliente, e.norma, e.descripcion, e.fechaemision, e.fechavalido, e.fechaentrega, e.stipo, e.codigo, e.estado,  e.dcertificadorext, (select i.nombre from iaf i where i.abreviatura=e.iaf)as iaf, e.fechaestado from ext_certificados e where e.idarea in ($codArea) and e.idoficina in ($codUnidad) ";
                   if($vista==1){
                     if($acumulado==0){
                       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)=$mesTemporal ";
@@ -119,7 +120,7 @@ $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
                   if($iaf>0){
                     $sql.=" and e.iaf='$iaf' ";
                   }
-                  $sql.=" and e.idestado not in (646, 860, 475, 1118) order by e.fechaemision, unidad, area, cliente ";
+                  $sql.=" and e.idestado not in (646, 860, 475, 1118) order by unidad, area, cliente ";
                   
                   //echo $sql;
                   
@@ -138,6 +139,8 @@ $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
                   $stmt->bindColumn('estado', $estadoX);
                   $stmt->bindColumn('dcertificadorext', $certificadorExtX);
                   $stmt->bindColumn('iaf', $iafX);
+                  $stmt->bindColumn('fechaestado', $fechaEstadoX);
+
 
                   $indice=1;
                   while($row = $stmt -> fetch(PDO::FETCH_BOUND)){
@@ -155,6 +158,7 @@ $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
                     <td class="text-left small"><?=$tipoCertificacionX;?></td>             
                     <td class="text-left small"><?=$codigoX;?></td>             
                     <td class="text-left small"><?=$estadoX;?></td>             
+                    <td class="text-left small"><?=$fechaEstadoX;?></td>             
                     <td class="text-left small"><?=$certificadorExtX;?></td>             
                     <td class="text-left small"><?=$iafX;?></td>             
                   </tr>

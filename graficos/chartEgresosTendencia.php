@@ -39,7 +39,11 @@
                     var montoEj = [];                       
 
                     var montoPres2 = [];
-                    var montoEj2 = [];                       
+                    var montoEj2 = [];  
+
+                    var montoPresRegional = [];
+                    var montoEjRegional = [];                        
+                     
 
                     for (var i in data) {
 						mes.push(data[i].mes);
@@ -47,7 +51,11 @@
                         montoPres.push(data[i].montoPres);
                         montoEj.push(data[i].montoEj);    
                         montoPres2.push(data[i].montoPres2);
-                        montoEj2.push(data[i].montoEj2);                        
+                        montoEj2.push(data[i].montoEj2);  
+
+                        montoPresRegional.push(data[i].montoPresRegional);
+                        montoEjRegional.push(data[i].montoEjRegional);
+                      
                     }
 					//alert(labs);
                     var chartdata = {
@@ -80,6 +88,20 @@
                                 borderColor: "rgb(75, 192, 192)",
                                 borderWidth:2,
                                 data: montoEj
+                            },
+                            {
+                                label: 'Pres.Regional',
+                                backgroundColor: "rgba(255, 69, 0, 0.2)",
+                                borderColor: "rgb(255, 69, 0)",
+                                borderWidth:2,
+                                data: montoPresRegional
+                            },
+                            {
+                                label: 'Ej.Regional',
+                                backgroundColor: "rgba(15, 20, 30, 0.2)",
+                                borderColor: "rgb(15, 20, 30)",
+                                borderWidth:2,
+                                data: montoEjRegional
                             }
                         ]
                     };

@@ -19,8 +19,8 @@
 	$claveuser=md5("rojas");	*/
 
 //Usuario operativo
-		$nombreuser="andrea.sandi@ibnorca.org";
-		$claveuser=md5("sandi");
+		$nombreuser="luis.rojas@ibnorca.org";
+		$claveuser=md5("rojasssss");
 	//*/
 	//preparar array de parametros	
 	/* descomentar	*/
@@ -34,8 +34,9 @@
 	******************************************/
 	// descomentar 
 
+	
 /*	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
-				 "operacion"=>"Menu", "IdUsuario"=>183);
+				 "operacion"=>"Menu", "IdUsuario"=>81);
 */
 	
 	$datos=json_encode($datos);

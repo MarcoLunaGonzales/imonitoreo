@@ -274,7 +274,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
                     $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
 
-                  $sqlN="SELECT e.norma, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A') ";
+                  $sqlN="SELECT e.norma, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A','') ";
                   if($vista==1){
                     $sqlN.=" and YEAR(e.fechaemision)=$anioTemporal ";
                   }else{
@@ -282,7 +282,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   }
 
                   $sqlN.=" and e.idarea='$areaCertificacion' group by e.norma order by 2 desc";
+                  
                   //echo $sqlN;
+                  
                   $stmtN = $dbh->prepare($sqlN);
                   $stmtN->execute();
                   $stmtN->bindColumn('norma', $nombreNorma);
@@ -664,6 +666,29 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   </tr>
                 </tfoot>
               </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2">
+        </div>
+          
+        <div class="col-md-8">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-info">
+              <div class="card-icon">
+                <i class="material-icons">timeline</i>
+              </div>
+              <h5 class="card-title"><?=$nameAreaCertificacion;?> - Certificados Por Certificador</h5>
+            </div>
+            <div class="card-body">
+              <?php
+              $anioX=$anioTemporal;
+              $mesX=$mesTemporal;
+              $vistaX=$vista;
+              $codAreaX=$areaCertificacion;
+              require("chartCertificadosCertificador.php");
+              ?>
             </div>
           </div>
         </div>
