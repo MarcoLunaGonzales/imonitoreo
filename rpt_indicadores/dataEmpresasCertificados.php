@@ -64,13 +64,13 @@ require_once '../styles.php';
 
 		$cantEmpresasTCPAcum=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,39,38,0,1,$vista);
 		$cantEmpresasTCSAcum=obtenerCantEmpresasCertificados($codigoX,$anioTemporal,$mesTemporal,38,39,0,1,$vista);
-		$totalEmpresas=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum;
+		//$totalEmpresas=$cantEmpresasTCPAcum+$cantEmpresasTCSAcum;
 
 		$cantCertTCPAcum=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,39,0,1,$vista);
 		$cantCertTCSAcum=obtenerCantCertificados($codigoX,$anioTemporal,$mesTemporal,38,0,1,$vista);
-		$totalCertificados=$cantCertTCPAcum+$cantCertTCSAcum;
+		//$totalCertificados=$cantCertTCPAcum+$cantCertTCSAcum;
 
-		$emparray[]=array("unidad"=>$abrevX, "empresas"=>$totalEmpresas, "certificados"=>$totalCertificados);
+		$emparray[]=array("unidad"=>$abrevX, "empresasTCP"=>$cantEmpresasTCPAcum, "certificadosTCP"=>$cantCertTCPAcum, "empresasTCS"=>$cantEmpresasTCSAcum, "certificadosTCS"=>$cantCertTCSAcum);
 
 	}
 

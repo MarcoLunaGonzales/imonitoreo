@@ -6,7 +6,7 @@ require_once 'styles.php';
 $dbh = new Conexion();
 
 $table="unidades_organizacionales";
-$moduleName="Oficinas";
+$moduleName="Unidades Organizacionales";
 
 $globalAdmin=$_SESSION["globalAdmin"];
 // Preparamos

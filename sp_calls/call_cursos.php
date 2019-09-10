@@ -1,8 +1,4 @@
 <?php
-
-error_reporting(E_ALL);
-ini_set('display_errors', '1');
-
 set_time_limit(0);
 require_once '../conexionExtIbnorca.php';
 require_once '../conexion.php';
@@ -46,7 +42,7 @@ while($resp = $query->fetch()){
 
 	$insert_str .= "('$indice','$gestion','$idOficina','$idPrograma','$sigla','$codigoCurso','$cargaHoraria','$tipo','$nombreCurso','$cantidadModulos','$estado','$costoModulo','$empresa','$nroModulo','$tema','$fechaInicio','$fechaFin','$dDocente','$alumnosModulo'),";	
 
-	if($indice%50==0){
+	if($indice%2==0){
 		$insert_str = substr_replace($insert_str, '', -1, 1);
 		$sqlInserta="INSERT INTO ext_cursos (codigo, gestion, id_oficina, id_programa, sigla, codigocurso, carga_horaria, tipo, nombre_curso, cantidad_modulos, estado, costo_modulo, empresa, nro_modulo, tema, fecha_inicio, fecha_fin, docente, alumnos_modulo) 
 			values ".$insert_str.";";

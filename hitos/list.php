@@ -3,6 +3,10 @@
 require_once 'conexion.php';
 $dbh = new Conexion();
 
+$sqlX="SET NAMES 'utf8'";
+$stmtX = $dbh->prepare($sqlX);
+$stmtX->execute();
+
 $table="hitos";
 $moduleName="Hitos";
 

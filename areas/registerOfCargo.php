@@ -4,10 +4,6 @@ require_once 'conexion.php';
 require_once 'functions.php';
 $dbh = new Conexion();
 
-$sqlX="SET NAMES 'utf8'";
-$stmtX = $dbh->prepare($sqlX);
-$stmtX->execute();
-
 $table="cargos";
 $moduleName="Registrar Cargos por Area";
 

@@ -5,11 +5,6 @@ require_once 'functions.php';
 require_once 'styles.php';
 $dbh = new Conexion();
 
-$sqlX="SET NAMES 'utf8'";
-$stmtX = $dbh->prepare($sqlX);
-$stmtX->execute();
-
-
 $table="personal_datosadicionales";
 $moduleName="Configurar Accesos";
 
@@ -73,7 +68,7 @@ if($codUnidadX>0){
 					  <select class="selectpicker" name="cargo" id="cargo" data-style="<?=$comboColor;?>" required>
 					  	<option disabled selected value=""></option>
 					  	<?php
-					  	$stmt2 = $dbh->prepare("SELECT codigo, nombre FROM cargos where cod_estado=1 order by 2");
+					  	$stmt2 = $dbh->prepare("SELECT codigo, nombre FROM cargos where cod_estado=1");
 						$stmt2->execute();
 						while ($row2 = $stmt2->fetch(PDO::FETCH_ASSOC)) {
 							$codigoY=$row2['codigo'];

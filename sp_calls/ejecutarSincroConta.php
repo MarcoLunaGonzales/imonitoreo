@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 set_time_limit(0);
 require_once '../layouts/bodylogin2.php';
@@ -30,6 +30,7 @@ echo "<h6>Hora Inicio Proceso: " . date("Y-m-d H:i:s")."</h6>";
 
 //conexion modificado IBNORCA- INGE
   $dsn = "conta"; 
+// $dsn = "DRIVER={SQL Server};SERVER=RLP-VMGDB\SQLEXPRESS ";
   //debe ser de sistema no de usuario
   $usuario = "consultadb";
   $clave="consultaibno1$";

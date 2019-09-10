@@ -100,11 +100,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $totalAlumnosAcum+=$numeroAlumnosAcum;
                   ?>
                   <tr>
-                    <td class="text-left"><a href="rptSECxUnidad.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=$abrevX;?></a></td>
+                    <td class="text-left"><a href="rptSECxUnidad.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=$abrevX;?></a>
+                    </td>
                     <td class="text-right"><?=formatNumberInt($numeroCursos);?></td>
                     <td class="text-right"><?=formatNumberInt($numeroAlumnos);?></td>
-                    <td class="text-right"><?=formatNumberInt($numeroCursosAcum);?></td>
-                    <td class="text-right"><?=formatNumberInt($numeroAlumnosAcum);?></td>
+                    <td class="text-right"><a href="rptSECDetalle.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=formatNumberInt($numeroCursosAcum);?></a></td>
+                    <td class="text-right"><a href="rptSECDetalle.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=formatNumberInt($numeroAlumnosAcum);?></a></td>
                   </tr>
                   <?php
                   }
@@ -543,6 +544,156 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
           </div>
         </div>
       </div><!--ACA TERMINA ROW-->  
+
+
+
+
+
+      <div class="row">
+        <div class="col-md-12">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-primary">
+              <div class="card-icon">
+                <i class="material-icons">list</i>
+              </div>
+              <h4 class="card-title">Alumnos por Grupo Etario
+              </h4>
+            </div>
+            
+            <div class="card-body">
+              <table width="100%" class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th class="text-center font-weight-bold">-</th>
+                    <th class="text-center font-weight-bold" colspan="14">Acum. <?=$nombreMes?></th>
+                  </tr>
+                  <tr>
+                    <th class="text-center font-weight-bold">Unidad</th>
+                  <?php
+                  $sqlGrupo="SELECT g.codigo, g.minimo, g.maximo FROM grupos_etarios g order by 1";
+                  $stmtGrupo = $dbh->prepare($sqlGrupo);
+                  $stmtGrupo->execute();
+                  $stmtGrupo->bindColumn('codigo', $codigoG);
+                  $stmtGrupo->bindColumn('minimo', $edadMinimo);
+                  $stmtGrupo->bindColumn('maximo', $edadMaximo);
+
+                  while($rowGrupo = $stmtGrupo -> fetch(PDO::FETCH_BOUND)){
+                  ?>
+                    <th class="text-center font-weight-bold" colspan="2"><?=$edadMinimo;?>-<?=$edadMaximo;?></th>
+                  <?php
+                  }
+                  ?>
+                    <th class="text-center font-weight-bold" colspan="2">Totales</th>
+                  </tr>
+
+                  <tr>
+                    <th class="text-center font-weight-bold">-</th>
+                  <?php
+                  $sqlGrupo="SELECT g.codigo, g.minimo, g.maximo FROM grupos_etarios g order by 1";
+                  $stmtGrupo = $dbh->prepare($sqlGrupo);
+                  $stmtGrupo->execute();
+                  $stmtGrupo->bindColumn('codigo', $codigoG);
+                  $stmtGrupo->bindColumn('minimo', $edadMinimo);
+                  $stmtGrupo->bindColumn('maximo', $edadMaximo);
+
+                  while($rowGrupo = $stmtGrupo -> fetch(PDO::FETCH_BOUND)){
+                  ?>
+                    <th class="text-center font-weight-bold">#</th>
+                    <th class="text-center font-weight-bold">%</th>
+                  <?php
+                  }
+                  ?>
+                    <th class="text-center font-weight-bold">#</th>
+                    <th class="text-center font-weight-bold">%</th>
+                  </tr>
+
+                </thead>
+                <tbody>
+                  <?php
+                  $sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
+                  $stmtU = $dbh->prepare($sqlU);
+                  $stmtU->execute();
+                  $stmtU->bindColumn('codigo', $codigoX);
+                  $stmtU->bindColumn('abreviatura', $abrevX);
+
+                  while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
+                    $cantidadAlumnosUnidad=alumnosPorUnidad($codigoX,$anioTemporal,$mesTemporal,1,'');
+                  ?>
+                  <tr>
+                    <td class="text-left"><?=$abrevX;?></td>
+                    <?php
+                    $sqlGrupo="SELECT g.codigo, g.minimo, g.maximo FROM grupos_etarios g order by 1";
+                    $stmtGrupo = $dbh->prepare($sqlGrupo);
+                    $stmtGrupo->execute();
+                    $stmtGrupo->bindColumn('codigo', $codigoG);
+                    $stmtGrupo->bindColumn('minimo', $edadMinimo);
+                    $stmtGrupo->bindColumn('maximo', $edadMaximo);
+                    while($rowGrupo = $stmtGrupo -> fetch(PDO::FETCH_BOUND)){
+                      $cantidadAlumnos=calcularAlumnosGrupoEtario($codigoX,$codArea,$mesTemporal,$anioTemporal,$edadMinimo,$edadMaximo);
+                      $porcentajeAlumnos=($cantidadAlumnos/$cantidadAlumnosUnidad)*100;
+                    ?>
+                    <td class="text-right"><?=formatNumberInt($cantidadAlumnos);?></td>
+                    <td class="text-right text-primary"><?=formatNumberDec($porcentajeAlumnos);?></td>
+                    <?php
+                    }
+                    ?> 
+                    <td class="text-right"><?=formatNumberInt($cantidadAlumnosUnidad);?></td>
+                    <td class="text-right text-primary"><?=formatNumberDec(100);?></td>                  
+                  </tr>
+                </tbody>
+                  <?php
+                  }
+                  ?>
+                <tfooter>
+                  <tr>
+                    <td class="text-left font-weight-bold">Totales</td>
+                    <?php
+                    $sqlGrupo="SELECT g.codigo, g.minimo, g.maximo FROM grupos_etarios g order by 1";
+                    $stmtGrupo = $dbh->prepare($sqlGrupo);
+                    $stmtGrupo->execute();
+                    $stmtGrupo->bindColumn('codigo', $codigoG);
+                    $stmtGrupo->bindColumn('minimo', $edadMinimo);
+                    $stmtGrupo->bindColumn('maximo', $edadMaximo);
+                    while($rowGrupo = $stmtGrupo -> fetch(PDO::FETCH_BOUND)){
+                      $cantidadAlumnosUnidad=alumnosPorUnidad(0,$anioTemporal,$mesTemporal,1,'');
+                      $cantidadAlumnos=calcularAlumnosGrupoEtario(0,$codArea,$mesTemporal,$anioTemporal,$edadMinimo,$edadMaximo);
+                      $porcentajeAlumnos=($cantidadAlumnos/$cantidadAlumnosUnidad)*100;                      
+                    ?>
+                    <th class="text-right"><?=formatNumberInt($cantidadAlumnos);?></th>
+                    <th class="text-right text-primary"><?=formatNumberDec($porcentajeAlumnos);?></th>
+                    <?php
+                    }
+                    ?>   
+                    <th class="text-right"><?=formatNumberInt($cantidadAlumnosUnidad);?></th>
+                    <th class="text-right text-primary"><?=formatNumberDec(100);?></th>
+                  </tr>
+                </tfooter>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!--div class="col-md-6">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-info">
+              <div class="card-icon">
+                <i class="material-icons">timeline</i>
+              </div>
+              <h5 class="card-title">Ingresos y Egresos</h5>
+            </div>
+            <div class="card-body">
+              <?php
+              $codAreaX=$codArea;
+              $anioX=$anioTemporal;
+              $mesX=$mesTemporal;
+              //require("chartIngEgSEC.php");
+              ?>
+            </div>
+          </div>
+        </div-->
+
+      </div><!--ACA TERMINA ROW-->  
+
 
 
     </div>

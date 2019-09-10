@@ -66,21 +66,6 @@ if($globalPerfilX==1){
                 </li>
 
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=listEstadosPON">
-                    <span class="sidebar-mini"> EP </span>
-                    <span class="sidebar-normal"> Estados PON </span>
-                  </a>
-                </li>
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=listModosGeneracionPON">
-                    <span class="sidebar-mini"> MGP </span>
-                    <span class="sidebar-normal"> Modos de Generacion PON </span>
-                  </a>
-                </li>
-
-
-                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listGestiones">
                     <span class="sidebar-mini"> G </span>
                     <span class="sidebar-normal"> Gestiones </span>
@@ -110,8 +95,8 @@ if($globalPerfilX==1){
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listUnidadOrg">
-                    <span class="sidebar-mini"> O </span>
-                    <span class="sidebar-normal"> Oficinas </span>
+                    <span class="sidebar-mini"> UO </span>
+                    <span class="sidebar-normal"> Unidades Organizacionales </span>
                   </a>
                 </li>
 

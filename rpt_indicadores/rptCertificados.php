@@ -90,7 +90,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title">Empresas Certificadas (Participacion por UO)</h5>
+              <h5 class="card-title">Empresas Certificadas (Participacion por Oficina Regional)</h5>
             </div>
             <div class="card-body">
               <?php
@@ -109,7 +109,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title">Certificados (Participacion por UO)</h5>
+              <h5 class="card-title">Certificados (Participacion por Oficina Regional)</h5>
             </div>
             <div class="card-body">
               <?php
@@ -166,7 +166,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">timeline</i>
               </div>
-              <h5 class="card-title"># Empresas y Certificados por UO</h5>
+              <h5 class="card-title"># Empresas y Certificados por Oficina Regional</h5>
             </div>
             <div class="card-body">
               <?php
@@ -554,148 +554,152 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 
       <!--CERTIFICADOS EMITIDOS POR ORGANISMO CERTIFICADOR-->
-      <div class="row">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header card-header-icon card-header-primary">
-              <div class="card-icon">
-                <i class="material-icons">list</i>
+      <?php
+        if($areaCertificacion==38){
+      ?>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header card-header-icon card-header-primary">
+                <div class="card-icon">
+                  <i class="material-icons">list</i>
+                </div>
+                <h4 class="card-title"><?=$nameAreaCertificacion;?> - Certificados por Certificador
+                </h4>
               </div>
-              <h4 class="card-title"><?=$nameAreaCertificacion;?> - Certificados por Certificador
-              </h4>
-            </div>
-            
-            <div class="card-body">
-              <table width="100%" class="table table-condensed" id="main<?=$areaCertificacion?>">
-                <thead>
-                  <tr>
-                    <th class="text-center font-weight-bold">Unidad O.</th>
-                    <th class="text-center font-weight-bold" colspan="4">AFNOR</th>
-                    <th class="text-center font-weight-bold" colspan="4">IBNORCA</th>
-                  </tr>
-                  <tr>
-                    <th class="text-center font-weight-bold">-</th>
-                    <th class="text-center font-weight-bold"># Emp</th>
-                    <th class="text-center font-weight-bold">% Emp</th>
-                    <th class="text-center font-weight-bold"># Cert</th>
-                    <th class="text-center font-weight-bold">% Cert</th>
+              
+              <div class="card-body">
+                <table width="100%" class="table table-condensed" id="main<?=$areaCertificacion?>">
+                  <thead>
+                    <tr>
+                      <th class="text-center font-weight-bold">Unidad O.</th>
+                      <th class="text-center font-weight-bold" colspan="4">AFNOR</th>
+                      <th class="text-center font-weight-bold" colspan="4">IBNORCA</th>
+                    </tr>
+                    <tr>
+                      <th class="text-center font-weight-bold">-</th>
+                      <th class="text-center font-weight-bold"># Emp</th>
+                      <th class="text-center font-weight-bold">% Emp</th>
+                      <th class="text-center font-weight-bold"># Cert</th>
+                      <th class="text-center font-weight-bold">% Cert</th>
 
-                    <th class="text-center font-weight-bold"># Emp</th>
-                    <th class="text-center font-weight-bold">% Emp</th>
-                    <th class="text-center font-weight-bold"># Cert</th>
-                    <th class="text-center font-weight-bold">% Cert</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php
-                  $organismoExtCert="641";//AFNOR
-                  $organismoCert="804";
-                  $sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
-                  $stmtU = $dbh->prepare($sqlU);
-                  $stmtU->execute();
-                  $stmtU->bindColumn('codigo', $codigoX);
-                  $stmtU->bindColumn('abreviatura', $abrevX);
+                      <th class="text-center font-weight-bold"># Emp</th>
+                      <th class="text-center font-weight-bold">% Emp</th>
+                      <th class="text-center font-weight-bold"># Cert</th>
+                      <th class="text-center font-weight-bold">% Cert</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php
+                    $organismoExtCert="641";//AFNOR
+                    $organismoCert="804";
+                    $sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
+                    $stmtU = $dbh->prepare($sqlU);
+                    $stmtU->execute();
+                    $stmtU->bindColumn('codigo', $codigoX);
+                    $stmtU->bindColumn('abreviatura', $abrevX);
 
-                  while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                    $cantEmpresasOrg=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
+                    while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
+                      $cantEmpresasOrg=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
+                      $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
+                      $porcentajeEmpresas=0;
+                      if($cantEmpresasOrgTotal>0){
+                        $porcentajeEmpresas=($cantEmpresasOrg/$cantEmpresasOrgTotal)*100;
+                      }
+
+                      $cantCertificadosOrg=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
+                      $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
+                      $porcentajeCertificados=0;
+                      if($cantEmpresasOrgTotal>0){
+                        $porcentajeCertificados=($cantCertificadosOrg/$cantCertificadosOrgTotal)*100;
+                      }
+
+                      $cantEmpresasOrg1=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
+                      $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
+                      $porcentajeEmpresas1=0;
+                      if($cantEmpresasOrgTotal1>0){
+                        $porcentajeEmpresas1=($cantEmpresasOrg1/$cantEmpresasOrgTotal1)*100;
+                      }
+
+                      $cantCertificadosOrg1=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
+                      $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
+                      $porcentajeCertificados1=0;
+                      if($cantEmpresasOrgTotal1>0){
+                        $porcentajeCertificados1=($cantCertificadosOrg1/$cantCertificadosOrgTotal1)*100;
+                      }
+                      $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&acumulado=1&codArea=$areaCertificacion";
+                    ?>
+                    <tr>
+                      <td class="text-center"><?=$abrevX;?></td>
+                      <td class="table-warning text-center"><a href="<?=$urlDetalle;?>&certificador=<?=$organismoExtCert;?>" target="_blank"><?=($cantEmpresasOrg==0)?"-":formatNumberInt($cantEmpresasOrg);?></a></td>
+                      <td class="table-primary text-center"><?=($porcentajeEmpresas==0)?"-":formatNumberInt($porcentajeEmpresas);?></td>
+                      <td class="table-danger text-center"><a href="<?=$urlDetalle;?>&certificador=<?=$organismoExtCert;?>" target="_blank"><?=($cantCertificadosOrg==0)?"-":formatNumberInt($cantCertificadosOrg);?></td>
+                      <td class="table-success text-center"><?=($porcentajeCertificados==0)?"-":formatNumberInt($porcentajeCertificados);?></a></td>
+
+                      <td class="table-warning text-center"><a href="<?=$urlDetalle;?>&certificador=<?=$organismoCert;?>" target="_blank"><?=($cantEmpresasOrg1==0)?"-":formatNumberInt($cantEmpresasOrg1);?></a></td>
+                      <td class="table-primary text-center"><?=($porcentajeEmpresas1==0)?"-":formatNumberInt($porcentajeEmpresas1);?></td>
+                      <td class="table-danger text-center"><a href="<?=$urlDetalle;?>&certificador=<?=$organismoCert;?>" target="_blank"><?=($cantCertificadosOrg1==0)?"-":formatNumberInt($cantCertificadosOrg1);?></a></td>
+                      <td class="table-success text-center"><?=($porcentajeCertificados1==0)?"-":formatNumberInt($porcentajeCertificados1);?></td>
+                    </tr>
+                    <?php
+                    }
                     $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
-                    $porcentajeEmpresas=0;
-                    if($cantEmpresasOrgTotal>0){
-                      $porcentajeEmpresas=($cantEmpresasOrg/$cantEmpresasOrgTotal)*100;
-                    }
-
-                    $cantCertificadosOrg=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
+                    $porcentajeEmpresas=100;
                     $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
-                    $porcentajeCertificados=0;
-                    if($cantEmpresasOrgTotal>0){
-                      $porcentajeCertificados=($cantCertificadosOrg/$cantCertificadosOrgTotal)*100;
-                    }
+                    $porcentajeCertificados=100;
 
-                    $cantEmpresasOrg1=obtenerCantEmpresasOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
                     $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
-                    $porcentajeEmpresas1=0;
-                    if($cantEmpresasOrgTotal1>0){
-                      $porcentajeEmpresas1=($cantEmpresasOrg1/$cantEmpresasOrgTotal1)*100;
-                    }
-
-                    $cantCertificadosOrg1=obtenerCantCertificadosOrganismo($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
+                    $porcentajeEmpresas1=100;
                     $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
-                    $porcentajeCertificados1=0;
-                    if($cantEmpresasOrgTotal1>0){
-                      $porcentajeCertificados1=($cantCertificadosOrg1/$cantCertificadosOrgTotal1)*100;
-                    }
-                    $urlDetalle="rptCertificadosDetalle.php?vista=$vista&codUnidad=$codigoX&mes=$mesTemporal&anio=$anioTemporal&norma=&iaf=0&acumulado=1&codArea=$areaCertificacion";
-                  ?>
-                  <tr>
-                    <td class="text-center"><?=$abrevX;?></td>
-                    <td class="table-warning text-center"><a href="<?=$urlDetalle;?>&certificador=<?=$organismoExtCert;?>" target="_blank"><?=($cantEmpresasOrg==0)?"-":formatNumberInt($cantEmpresasOrg);?></a></td>
-                    <td class="table-primary text-center"><?=($porcentajeEmpresas==0)?"-":formatNumberInt($porcentajeEmpresas);?></td>
-                    <td class="table-danger text-center"><a href="<?=$urlDetalle;?>&certificador=<?=$organismoExtCert;?>" target="_blank"><?=($cantCertificadosOrg==0)?"-":formatNumberInt($cantCertificadosOrg);?></td>
-                    <td class="table-success text-center"><?=($porcentajeCertificados==0)?"-":formatNumberInt($porcentajeCertificados);?></a></td>
+                    $porcentajeCertificados1=100;
+                    ?>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <th class="text-center">Totales</th>
+                      <th class="table-warning text-center"><?=($cantEmpresasOrgTotal==0)?"-":formatNumberInt($cantEmpresasOrgTotal);?></th>
+                      <th class="table-primary text-center"><?=formatNumberInt(100);?></th>
+                      <th class="table-danger text-center"><?=($cantCertificadosOrgTotal==0)?"-":formatNumberInt($cantCertificadosOrgTotal);?></th>
+                      <th class="table-success text-center"><?=formatNumberInt(100);?></th>
 
-                    <td class="table-warning text-center"><a href="<?=$urlDetalle;?>&certificador=<?=$organismoCert;?>" target="_blank"><?=($cantEmpresasOrg1==0)?"-":formatNumberInt($cantEmpresasOrg1);?></a></td>
-                    <td class="table-primary text-center"><?=($porcentajeEmpresas1==0)?"-":formatNumberInt($porcentajeEmpresas1);?></td>
-                    <td class="table-danger text-center"><a href="<?=$urlDetalle;?>&certificador=<?=$organismoCert;?>" target="_blank"><?=($cantCertificadosOrg1==0)?"-":formatNumberInt($cantCertificadosOrg1);?></a></td>
-                    <td class="table-success text-center"><?=($porcentajeCertificados1==0)?"-":formatNumberInt($porcentajeCertificados1);?></td>
-                  </tr>
-                  <?php
-                  }
-                  $cantEmpresasOrgTotal=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
-                  $porcentajeEmpresas=100;
-                  $cantCertificadosOrgTotal=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoExtCert,1,$vista);
-                  $porcentajeCertificados=100;
-
-                  $cantEmpresasOrgTotal1=obtenerCantEmpresasOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
-                  $porcentajeEmpresas1=100;
-                  $cantCertificadosOrgTotal1=obtenerCantCertificadosOrganismo(0,$anioTemporal,$mesTemporal,$areaCertificacion,$organismoCert,1,$vista);
-                  $porcentajeCertificados1=100;
-                  ?>
-                </tbody>
-                <tfoot>
-                  <tr>
-                    <th class="text-center">Totales</th>
-                    <th class="table-warning text-center"><?=($cantEmpresasOrgTotal==0)?"-":formatNumberInt($cantEmpresasOrgTotal);?></th>
-                    <th class="table-primary text-center"><?=formatNumberInt(100);?></th>
-                    <th class="table-danger text-center"><?=($cantCertificadosOrgTotal==0)?"-":formatNumberInt($cantCertificadosOrgTotal);?></th>
-                    <th class="table-success text-center"><?=formatNumberInt(100);?></th>
-
-                    <th class="table-warning text-center"><?=($cantEmpresasOrgTotal1==0)?"-":formatNumberInt($cantEmpresasOrgTotal1);?></th>
-                    <th class="table-primary text-center"><?=formatNumberInt(100);?></th>
-                    <th class="table-danger text-center"><?=($cantCertificadosOrgTotal1==0)?"-":formatNumberInt($cantCertificadosOrgTotal1);?></th>
-                    <th class="table-success text-center"><?=formatNumberInt(100);?></th>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-2">
-        </div>
-          
-        <div class="col-md-8">
-          <div class="card">
-            <div class="card-header card-header-icon card-header-info">
-              <div class="card-icon">
-                <i class="material-icons">timeline</i>
+                      <th class="table-warning text-center"><?=($cantEmpresasOrgTotal1==0)?"-":formatNumberInt($cantEmpresasOrgTotal1);?></th>
+                      <th class="table-primary text-center"><?=formatNumberInt(100);?></th>
+                      <th class="table-danger text-center"><?=($cantCertificadosOrgTotal1==0)?"-":formatNumberInt($cantCertificadosOrgTotal1);?></th>
+                      <th class="table-success text-center"><?=formatNumberInt(100);?></th>
+                    </tr>
+                  </tfoot>
+                </table>
               </div>
-              <h5 class="card-title"><?=$nameAreaCertificacion;?> - Certificados Por Certificador</h5>
-            </div>
-            <div class="card-body">
-              <?php
-              $anioX=$anioTemporal;
-              $mesX=$mesTemporal;
-              $vistaX=$vista;
-              $codAreaX=$areaCertificacion;
-              require("chartCertificadosCertificador.php");
-              ?>
             </div>
           </div>
-        </div>
 
-      </div><!--ACA TERMINA ROW-->
+          <div class="col-md-2">
+          </div>
+            
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-header card-header-icon card-header-info">
+                <div class="card-icon">
+                  <i class="material-icons">timeline</i>
+                </div>
+                <h5 class="card-title"><?=$nameAreaCertificacion;?> - Certificados Por Certificador</h5>
+              </div>
+              <div class="card-body">
+                <?php
+                $anioX=$anioTemporal;
+                $mesX=$mesTemporal;
+                $vistaX=$vista;
+                $codAreaX=$areaCertificacion;
+                require("chartCertificadosCertificador.php");
+                ?>
+              </div>
+            </div>
+          </div>
+
+        </div><!--ACA TERMINA ROW-->
 
       <?php
+        }
       }
       ?>
 

@@ -551,7 +551,7 @@ function ejecucionPorIndicador($indicador, $area, $unidad, $mes, $acumulado){
 function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   $dbh = new Conexion();
   $cadenaEstados=obtieneValorConfig(27);
-  $sql="SELECT count(*) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.estado in ($cadenaEstados) and c.id_oficina in ($unidad) ";
+  $sql="SELECT count(*) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.gestion='$anio' and c.estado in ($cadenaEstados) and c.id_oficina in ($unidad) ";
   if($acumulado==0){
     $sql.=" and MONTH(c.fecha_inicio)='$mes' ";
   }
@@ -574,7 +574,10 @@ function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
 function alumnosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   $dbh = new Conexion();
   $cadenaEstados=obtieneValorConfig(27);
-  $sql="SELECT sum(c.alumnos_modulo) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.estado in ($cadenaEstados) and c.id_oficina in ($unidad) ";
+  $sql="SELECT sum(c.alumnos_modulo) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.gestion='$anio' and c.estado in ($cadenaEstados) ";
+  if($unidad!=0){
+    $sql.=" and c.id_oficina in ($unidad) ";  
+  }
   if($acumulado==0){
     $sql.=" and MONTH(c.fecha_inicio)='$mes' ";
   }
@@ -889,7 +892,7 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
   //echo "clasificador:".$clasificador;
   
   if($clasificador==3){
-    $sql="SELECT count(*)as registros from ext_cursos e where e.id_oficina in ($unidadHijos) and MONTH(e.fecha_inicio)=$mes and YEAR(e.fecha_inicio)=$anio and e.id_programa='$codigoClasificador'";
+    $sql="SELECT count(*)as registros from ext_cursos e where e.id_oficina in ($unidadHijos) and MONTH(e.fecha_inicio)=$mes and YEAR(e.fecha_inicio)=$anio and e.gestion='$anio' and e.id_programa='$codigoClasificador'";
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -1217,6 +1220,30 @@ function calcularClientesSECRetenidos($unidad,$area,$mes,$anio){
 
   $sql="SELECT count(distinct(e.cialumno))as cantidad from ext_alumnos_cursos e where e.fechainicio BETWEEN '$fechaIni' and '$fechaFin' and e.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.id_oficina in ($unidad) and ec.estado in ($cadenaEstados)) and e.cialumno in (SELECT distinct(e.cialumno) from ext_alumnos_cursos e where e.fechainicio BETWEEN '$fechaIniAnt' and '$fechaFinAnt' and e.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.id_oficina in ($unidad) and ec.estado in ($cadenaEstados)))";
   //echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidad=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidad=$row['cantidad'];
+  }
+  return($cantidad);    
+}
+
+
+function calcularAlumnosGrupoEtario($unidad,$area,$mes,$anio,$edadmin,$edadmax){
+  $dbh = new Conexion();
+
+  $cadenaEstados=obtieneValorConfig(27);
+
+  $fechaActual=$anio."-".$mes."-01";
+
+  $sql="SELECT count(distinct(eac.cialumno))as cantidad from ext_alumnos_cursos eac where YEAR(eac.fechainicio)=$anio and  MONTH(eac.fechainicio)<='$mes' and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where  ec.estado in ($cadenaEstados) and c.gestion='$anio' ";
+  if($unidad!=0){
+    $sql.=" and ec.id_oficina in ($unidad) ";
+  }
+  $sql.=") and TIMESTAMPDIFF(YEAR, eac.fechanacimiento, '$fechaActual')>$edadmin and TIMESTAMPDIFF(YEAR, eac.fechanacimiento, '$fechaActual')<=$edadmax ";
+  
+//  echo $sql;
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
   $cantidad=0;

@@ -88,7 +88,8 @@ $stmt->bindColumn('nombre', $nombreFondo);
                           <td><?=$nombreOrganismo;?></td>
                       <?php
                         for($i=1;$i<=12;$i++){
-                          $sqlDatos="SELECT sum(p.monto)as monto from po_presupuesto p where p.cod_ano='$anio' and p.cod_mes='$i' and p.cod_fondo='$codFondo' and p.cod_organismo='$codOrganismo'";
+                          $sqlDatos="SELECT sum(p.monto)as monto from po_presupuesto p where p.cod_ano='$anio' and p.cod_mes='$i' and p.cod_fondo='$codFondo' and p.cod_organismo='$codOrganismo' and 
+                          p.cod_cuenta like '4%'";
                           $stmtDatos = $dbh->prepare($sqlDatos);
                           $stmtDatos->execute();
                           $stmtDatos->bindColumn('monto', $monto);
@@ -162,7 +163,8 @@ $stmt->bindColumn('nombre', $nombreFondo);
                           <td><?=$nombreOrganismo;?></td>
                       <?php
                         for($i=1;$i<=12;$i++){
-                          $sqlDatos="SELECT sum(p.monto)as monto from po_presupuesto p where p.cod_ano='$anio' and p.cod_mes='$i' and p.cod_fondo='$codFondo' and p.cod_organismo='$codOrganismo'";
+                          $sqlDatos="SELECT sum(p.monto)as monto from po_presupuesto p where p.cod_ano='$anio' and p.cod_mes='$i' and p.cod_fondo='$codFondo' and p.cod_organismo='$codOrganismo' and 
+                          p.cod_cuenta like '5%'";
                           $stmtDatos = $dbh->prepare($sqlDatos);
                           $stmtDatos->execute();
                           $stmtDatos->bindColumn('monto', $monto);

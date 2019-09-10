@@ -42,32 +42,50 @@ $vistaX=$vistaX;
                 function (data){
                     console.log("aqui mostramos los datos:"+data);
                     var unidad = [];
-                    var empresas = [];
-                    var certificados = [];                        
+                    var empresasTCP = [];
+                    var certificadosTCP = [];                        
+                    var empresasTCS = [];
+                    var certificadosTCS = [];                        
 
                     for (var i in data) {
                         unidad.push(data[i].unidad);
                         console.log(data[i].unidad);
-                        empresas.push(data[i].empresas);
-                        certificados.push(data[i].certificados);                        
+                        empresasTCP.push(data[i].empresasTCP);
+                        certificadosTCP.push(data[i].certificadosTCP);                       
+                        empresasTCS.push(data[i].empresasTCS);
+                        certificadosTCS.push(data[i].certificadosTCS);                        
                     }
                     //alert(labs);
                     var chartdata = {
                         labels: unidad,
                         datasets: [
                             {
-                                label: '# Empresas.',
+                                label: '# EmpresasTCP',
                                 backgroundColor: "rgba(255, 99, 132, 0.2)",
                                 borderColor: "rgb(255, 99, 132)",
                                 borderWidth:2,
-                                data: empresas
+                                data: empresasTCP
                             },
                             {
-                                label: '# Certificados.',
+                                label: '# Cert.TCP',
                                 backgroundColor: "rgba(75, 192, 192, 0.2)",
                                 borderColor: "rgb(75, 192, 192)",
                                 borderWidth:2,
-                                data: certificados
+                                data: certificadosTCP
+                            },
+                            {
+                                label: '# EmpresasTCS',
+                                backgroundColor: "rgba(55, 243, 18, 0.2)",
+                                borderColor: "rgb(55, 243, 18)",
+                                borderWidth:2,
+                                data: empresasTCS
+                            },
+                            {
+                                label: '# Cert.TCP',
+                                backgroundColor: "rgba(243, 219, 18, 0.2)",
+                                borderColor: "rgb(243, 219, 18)",
+                                borderWidth:2,
+                                data: certificadosTCS
                             }
                         ]
                     };
