@@ -208,7 +208,10 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
 
                           $valueEjecutadoSistema=0;
                           if($codigoTablaClasificador!=0){
-                            $valueEjecutadoSistema=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
+                            if($codigodetalleclasificador>0){
+                              $valueEjecutadoSistema=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);                              
+                            }
+
                           }
 
                           $totalPlanificado+=$valueNumero;
@@ -220,9 +223,11 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                             $url="reportes/rptCursosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoPrograma=$codigodetalleclasificador";
                           }
                           if($codReporteServicios==$codigoIndicador){
-                            $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador&area=$codArea";
+                            $url="reportes/rptServiciosPOAOI.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador&area=$codArea";
                           }
-                          if($codReporteServicios2==$codigoIndicador){
+                          if($codReporteServicios2==$codigoIndicador && $codArea==11){
+                            $url="reportes/rptServiciosPOAOI.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador&area=$codArea";
+                          }else{
                             $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador&area=$codArea";
                           }
                           if($codReporteServicios3==$codigoIndicador){

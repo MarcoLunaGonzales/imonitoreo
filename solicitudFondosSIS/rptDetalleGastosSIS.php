@@ -90,7 +90,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
 
                           <td><p class="<?=$styleText;?>"><?=$nombreComponente;?></p></td>
 
-                          <td class="text-right font-weight-bold"><?=formatNumberInt($montoEjecucionComponente);?></td>
+                          <td class="text-right font-weight-bold"><?=formatNumberDec($montoEjecucionComponente);?></td>
                         </tr>
                       <?php
                           }
@@ -146,7 +146,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                                   <tr>
                                     <td><?=$fecha;?></td>
                                     <td class="text-left small"><?=$glosa;?></td>
-                                    <td class="text-right"><?=formatNumberInt($monto);?></td>
+                                    <td class="text-right"><?=formatNumberDec($monto);?></td>
                                   </tr>
                                   <?php    
                                   }
@@ -157,7 +157,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                             </div>
                           </div>
                         </td>
-                        <td class="text-right"><?=formatNumberInt($montoDetalle);?></td>
+                        <td class="text-right"><?=formatNumberDec($montoDetalle);?></td>
                       </tr>    
                       <?php
                         }

@@ -6,9 +6,9 @@ require_once '../styles.php';
 
 $dbh = new Conexion();
 
-/*$sqlX="SET NAMES 'utf8'";
+$sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
-$stmtX->execute();*/
+$stmtX->execute();
 
 
 $nameGestion=$_GET["anio"];
@@ -22,36 +22,26 @@ $area=$_GET["area"];
 //$unidadOrgString=implode(",", $unidadOrganizacional);
 
 $unidadOrgString=buscarHijosUO($unidadOrganizacional);
+//echo $unidadOrgString;
+$abreviaturaServicio=buscarAbreviaturaServicio($codigoServicio);
+$sql="SELECT e.doficina, e.dcliente, e.cantidad, e.fecha, e.fechaestado, e.destado, e.dserviciocurso, e.grandetalle, montobs from ext_solicitudfacturacion e where e.codigoserviciocurso like '%$abreviaturaServicio%' and YEAR(e.fecha)='$nameGestion' and MONTH(e.fecha)='$mes' and e.idestado not in (266) and e.idoficina in ($unidadOrgString)";  
 
-$sql="";
-if($area==11){
-  $sql="SELECT u.abreviatura, 
-  (select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, sum(e.cantidad)cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, sd.nombre as nombreservicio, sum(e.monto_facturado)monto_facturado, e.nro_servicio from ext_servicios e, servicios_oi_detalle sd, unidades_organizacionales u where u.codigo=e.id_oficina and  e.idclaservicio=sd.codigo and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura) in ($mes) and sd.cod_servicio=$codigoServicio group by e.nro_servicio";  
-}else{
-  $sql="SELECT u.abreviatura, 
-  (select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, sum(e.cantidad)cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, sum(e.monto_facturado)monto_facturado, e.nro_servicio from ext_servicios e, unidades_organizacionales u where u.codigo=e.id_oficina and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura) in ($mes) and e.id_cliente=$codigoServicio group by e.nro_servicio";
-}
-
-// and
 //echo $sql;
 
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 
 // bindColumn
-$stmt->bindColumn('abreviatura', $unidad);
-$stmt->bindColumn('cliente', $nombreCliente);
-$stmt->bindColumn('d_tipo', $tipoServicio);
+$stmt->bindColumn('doficina', $unidad);
+$stmt->bindColumn('dcliente', $nombreCliente);
 $stmt->bindColumn('cantidad', $cantidad);
-$stmt->bindColumn('fecha_registro', $fechaRegistro);
-$stmt->bindColumn('fecha_factura', $fechaFactura);
-$stmt->bindColumn('estado_servicio', $estadoServicio);
-$stmt->bindColumn('nro_servicio', $nroServicio);
+$stmt->bindColumn('fecha', $fechaRegistro);
+$stmt->bindColumn('fechaestado', $fechaFactura);
+$stmt->bindColumn('destado', $estadoServicio);
+$stmt->bindColumn('dserviciocurso', $nroServicio);
 
-if($area==11){
-  $stmt->bindColumn('nombreservicio', $nombreServicio);  
-}
-$stmt->bindColumn('monto_facturado', $montoFacturado);
+$stmt->bindColumn('grandetalle', $nombreServicio);  
+$stmt->bindColumn('montobs', $montoFacturado);
 
 ?>
 
@@ -78,11 +68,11 @@ $stmt->bindColumn('monto_facturado', $montoFacturado);
                           <th class="font-weight-bold">Cliente</th>
                           <th class="font-weight-bold">TipoServicio</th>
                           <th class="font-weight-bold">#</th>
-                          <th class="font-weight-bold">FechaServicio</th>
-                          <th class="font-weight-bold">FechaFactura</th>
+                          <th class="font-weight-bold">Fecha</th>
+                          <th class="font-weight-bold">FechaEstado</th>
                           <th class="font-weight-bold">Estado</th>
-                          <th class="font-weight-bold">Nombre</th>
                           <th class="font-weight-bold">CodigoServicio</th>
+                          <th class="font-weight-bold">Nombre</th>
                           <th class="font-weight-bold">Facturado</th>
                           <th class="font-weight-bold">Neto</th>
                         </tr>
@@ -100,7 +90,7 @@ $stmt->bindColumn('monto_facturado', $montoFacturado);
                           <td class="text-center"><?=$index;?></td>
                           <td><?=$unidad;?></td>
                           <td class="text-left small"><?=$nombreCliente;?></td>
-                          <td class="text-left small"><?=$tipoServicio;?></td>
+                          <td class="text-left small"><?=$abreviaturaServicio;?></td>
                           <td><?=$cantidad;?></td>
                           <td><?=$fechaRegistro;?></td>
                           <td><?=$fechaFactura;?></td>

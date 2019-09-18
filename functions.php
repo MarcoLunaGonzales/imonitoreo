@@ -82,6 +82,19 @@ function nameGestion($codigo){
    return($nombreX);
 }
 
+
+function buscarAbreviaturaServicio($codigo){
+   $dbh = new Conexion();
+   $stmt = $dbh->prepare("SELECT abreviatura FROM servicios_oi where codigo=:codigo");
+   $stmt->bindParam(':codigo',$codigo);
+   $stmt->execute();
+   $nombreX="";
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $nombreX=$row['abreviatura'];
+   }
+   return($nombreX);
+}
+
 function nameVersion($codigo){
    $dbh = new Conexion();
    $stmt = $dbh->prepare("SELECT abreviatura FROM versiones_poa where codigo=:codigo");
@@ -785,6 +798,7 @@ function clean_string($string)
         array('','','',' '),
         $string
     );
+    $string = str_replace("'","",$string);
     return $string;
 }
 
@@ -946,10 +960,15 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
     $codIndicadorSumar=obtieneValorConfig(17);
     $sql="";
     if($codIndicadorContar==$indicador){
-      $sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";      
+      //AQUI HACEMOS LA MODIFICACION DESDE LA TABLA DE SOLICITUDFACTURACION
+      /*$sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";      */
+      $abreviaturaServicio=buscarAbreviaturaServicio($codigoClasificador);
+      $sql="SELECT sum(e.cantidad)as registros from ext_solicitudfacturacion e where e.codigoserviciocurso like '%$abreviaturaServicio%' and YEAR(e.fecha)='$anio' and MONTH(e.fecha)='$mes' and e.idestado not in (266) and e.idoficina in ($unidadHijos)";  
     }
     if($codIndicadorSumar==$indicador){
-        $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";
+        /*$sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";*/
+        $abreviaturaServicio=buscarAbreviaturaServicio($codigoClasificador);
+        $sql="SELECT sum(e.montobs)as registros from ext_solicitudfacturacion e where e.codigoserviciocurso like '%$abreviaturaServicio%' and YEAR(e.fecha)='$anio' and MONTH(e.fecha)='$mes' and e.idestado not in (266) and e.idoficina in ($unidadHijos)";  
     }
     //echo $codIndicadorContar." ".$codIndicadorSumar." ".$indicador;
     $stmt = $dbh->prepare($sql);
