@@ -18,7 +18,7 @@ $moduleName="Funciones por Cargo";
 $globalAdmin=$_SESSION["globalAdmin"];
 
 // Preparamos
-$stmt = $dbh->prepare("SELECT c.cod_cargo, c.cod_funcion, c.nombre_funcion from $table c where c.cod_cargo='$codigoCargo' order by 3;
+$stmt = $dbh->prepare("SELECT c.cod_cargo, c.cod_funcion, c.nombre_funcion, c.peso from $table c where c.cod_cargo='$codigoCargo' and c.cod_estado=1 order by 3;
 ");
 // Ejecutamos
 $stmt->execute();
@@ -26,6 +26,7 @@ $stmt->execute();
 $stmt->bindColumn('cod_cargo', $codCargo);
 $stmt->bindColumn('cod_funcion', $codFuncion);
 $stmt->bindColumn('nombre_funcion', $nombreFuncion);
+$stmt->bindColumn('peso', $peso);
 
 ?>
 
@@ -48,6 +49,7 @@ $stmt->bindColumn('nombre_funcion', $nombreFuncion);
                         <tr>
                           <th class="text-center">#</th>
                           <th>Funcion</th>
+                          <th>Peso</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -58,6 +60,21 @@ $stmt->bindColumn('nombre_funcion', $nombreFuncion);
                         <tr>
                           <td align="center"><?=$index;?></td>
                           <td><?=$nombreFuncion;?></td>
+                          <td><?=$peso;?></td>
+                          <td class="td-actions text-right">
+                            <?php
+                            if($globalAdmin==1){
+                            ?>
+                            <a href='index.php?opcion=editFuncionCargo&codigo=<?=$codFuncion;?>' rel="tooltip" class="btn btn-success">
+                              <i class="material-icons">edit</i>
+                            </a>
+                            <button rel="tooltip" class="btn btn-danger" onclick="alerts.showSwal('warning-message-and-confirmation','index.php?opcion=deleteFuncionCargo&codigo=<?=$codFuncion;?>')">
+                              <i class="material-icons">close</i>
+                            </button>
+                            <?php
+                            }
+                            ?>
+                          </td>
                         </tr>
 <?php
 							$index++;
@@ -72,7 +89,7 @@ $stmt->bindColumn('nombre_funcion', $nombreFuncion);
               if($globalAdmin==1){
               ?>
               <div class="card-body">
-                    <button class="btn" onClick="location.href='index.php?opcion=registerFuncionCargo'">Registrar</button>
+                    <button class="btn" onClick="location.href='index.php?opcion=registerFuncionCargo&codigo=<?=$codCargo;?>'">Registrar</button>
                 </div>
 		          <?php
               }

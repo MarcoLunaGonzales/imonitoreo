@@ -120,7 +120,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                               <div id="collapse<?=$indice;?>" class="collapse" role="tabpanel" aria-labelledby="heading<?=$indice;?>" data-parent="#accordion<?=$indice;?>" style="">
                                 <div class="card-body">
                                   <?php
-                                  $sqlDetalleX="SELECT s.indice, s.glosa_detalle, s.fecha, s.monto from po_mayores s, po_plancuentas pc where pc.codigo=s.cuenta and s.fondo=2001 and YEAR(s.fecha)='$anio' and MONTH(s.fecha)<='$mes' and s.ml_partida='$partidaComponente' and pc.codigo='$codigo' order by s.fecha;";
+                                  $sqlDetalleX="SELECT s.indice, s.glosa_detalle, s.fecha, s.monto, s.ml_partida from po_mayores s, po_plancuentas pc where pc.codigo=s.cuenta and s.fondo=2001 and YEAR(s.fecha)='$anio' and MONTH(s.fecha)<='$mes' and s.ml_partida='$partidaComponente' and pc.codigo='$codigo' order by s.fecha;";
                                   
                                   //echo $sqlDetalle;
                                   
@@ -132,20 +132,36 @@ $stmt->bindColumn('nivel', $nivelComponente);
                                   $stmtDetalleX->bindColumn('glosa_detalle', $glosa);
                                   $stmtDetalleX->bindColumn('fecha', $fecha);
                                   $stmtDetalleX->bindColumn('monto', $monto);
+                                  $stmtDetalleX->bindColumn('ml_partida', $mlPartida);
 
                                   ?>
                                   <table width="100%">
                                     <tr>
                                       <th>Detalle</th>
                                       <th>Fecha</th>
+                                      <th class="text-center font-weight-bold">AccNum</th>
+                                      <th class="text-center font-weight-bold">ExternalCost</th>
                                       <th>Monto</th>
                                     </tr>
                                   <?php
                                   while ($rowDetalleX = $stmtDetalleX->fetch(PDO::FETCH_BOUND)) {
+                                    $glosaComparar=string_sanitize($glosa);               
+                                    $sqlVerifica="SELECT cod_externalcost from gastos_externalcosts where fecha='$fecha' and ml_partida='$mlPartida' and glosa_detalle='$glosaComparar'";
+                                    //echo $sqlVerifica;
+                                    $stmtVerifica = $dbh->prepare($sqlVerifica);
+                                    $stmtVerifica->execute();
+                                    $codigoAccX=0;
+                                    while ($rowVerifica = $stmtVerifica->fetch(PDO::FETCH_ASSOC)) {
+                                       $codigoAccX=$rowVerifica['cod_externalcost'];
+                                    }
+                                    $abrevAccX=abrevAccNum($codigoAccX);
+                                    $nombreAccX=nameAccNum($codigoAccX);
                                   ?>
                                   <tr>
                                     <td><?=$fecha;?></td>
                                     <td class="text-left small"><?=$glosa;?></td>
+                                    <td class="text-left small"><?=$abrevAccX;?></td>
+                                    <td class="text-left small"><?=$nombreAccX;?></td>
                                     <td class="text-right"><?=formatNumberDec($monto);?></td>
                                   </tr>
                                   <?php    

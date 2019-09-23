@@ -39,7 +39,7 @@ $stmt->bindColumn('ml_partida', $ml_partida);
 $stmt->bindColumn('glosa_detalle', $glosa_detalle);
 
 
-echo "indice;fondo;nombrefondo;anio;mes;fecha;cta_n1;cta_n2;cta_n3;cta_n4;cuenta;nombrecuenta;partida;debe;haber;organismo;nombreorganismo;ml_partida;glosa_detalle";	
+echo "indice;fondo;nombrefondo;anio;mes;fecha;cta_n1;cta_n2;cta_n3;cta_n4;cuenta;nombrecuenta;partida;debe;haber;organismo;nombreorganismo;ml_partida;glosa_detalle;accnum;externalcost";	
 echo "\r\n";
 
 while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
@@ -51,7 +51,20 @@ while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
 		$haber=$monto;
 		$haber=$haber*(-1);
 	}
-	echo "$indice;$fondo;$nombrefondo;$anio;$mes;$fecha;$cta_n1;$cta_n2;$cta_n3;$cta_n4;$cuenta;$nombrecuenta;$partida;$debe;$haber;$organismo;$nombreorganismo;$ml_partida;$glosa_detalle";	
+	//SACAMOS EL ACCNUM
+	$glosaComparar=string_sanitize($glosa_detalle);               
+    $sqlVerifica="SELECT cod_externalcost from gastos_externalcosts where fecha='$fecha' and ml_partida='$ml_partida' and glosa_detalle='$glosaComparar'";
+    //echo $sqlVerifica;
+    $stmtVerifica = $dbh->prepare($sqlVerifica);
+    $stmtVerifica->execute();
+    $codigoAccX=0;
+    while ($rowVerifica = $stmtVerifica->fetch(PDO::FETCH_ASSOC)) {
+       $codigoAccX=$rowVerifica['cod_externalcost'];
+    }
+    $abrevAccX=abrevAccNum($codigoAccX);
+    $nombreAccX=nameAccNum($codigoAccX);
+
+	echo "$indice;$fondo;$nombrefondo;$anio;$mes;$fecha;$cta_n1;$cta_n2;$cta_n3;$cta_n4;$cuenta;$nombrecuenta;$partida;$debe;$haber;$organismo;$nombreorganismo;$ml_partida;$glosa_detalle;$abrevAccX;$nombreAccX";	
 	echo "\r\n";
 }
 

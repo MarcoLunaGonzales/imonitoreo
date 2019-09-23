@@ -33,6 +33,9 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                     <i class="material-icons">assignment</i>
                   </div>
                   <h4 class="card-title"><?=$moduleName?></h4>
+                  <a href="index.php?opcion=listCargosInactivos" class="<?=$buttonCeleste;?> btn-round" title="Ver Cargos Inactivos">
+                        <i class="material-icons">bookmark_border</i>
+                  </a>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
