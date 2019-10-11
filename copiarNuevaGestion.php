@@ -34,6 +34,15 @@ $sqlDelete="DELETE from objetivos where cod_gestion='$gestionNueva'";
 $stmtDel=$dbh->prepare($sqlDelete);
 $stmtDel->execute();
 
+$sqlDelete="DELETE from componentessis where cod_gestion='$gestionNueva'";
+$stmtDel=$dbh->prepare($sqlDelete);
+$stmtDel->execute();
+
+$sqlDelete="DELETE from external_costs where cod_gestion='$gestionNueva'";
+$stmtDel=$dbh->prepare($sqlDelete);
+$stmtDel->execute();
+
+
 
 $sqlObj="SELECT codigo, nombre from objetivos where cod_gestion='$gestionAnterior'";
 $stmt = $dbh->prepare($sqlObj);
@@ -101,14 +110,18 @@ while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
 			$stmtInsertAct = $dbh->prepare($sqlInsertAct);
 			$stmtInsertAct->execute();
 
-		}
-			
+		}		
 	}
-
 }
 
-/*$sqlInsertObj="INSERT INTO objetivos (nombre, cod_perspectiva, abreviatura, cod_tipoobjetivo, descripcion,   cod_gestion, cod_estado, cod_indicador) 
-	SELECT nombre, cod_perspectiva, abreviatura, cod_tipoobjetivo, descripcion, '$gestionNueva', cod_estado, cod_indicador ";*/
+$sqlInsertAct="INSERT INTO componentessis (nombre, abreviatura, nivel, cod_padre, cod_estado, partida, cod_personal, cod_gestion) SELECT nombre, abreviatura, nivel, cod_padre, cod_estado, partida, cod_personal, '$gestionNueva' FROM componentessis WHERE cod_gestion='$gestionAnterior'";
+$stmtInsertAct = $dbh->prepare($sqlInsertAct);
+$stmtInsertAct->execute();
 
+$sqlInsertAct="INSERT INTO external_costs (nombre, nombre_en, abreviatura, cod_estado, cod_gestion) SELECT nombre, nombre_en, abreviatura, cod_estado, '$gestionNueva' FROM external_costs WHERE cod_gestion='$gestionAnterior'";
+$stmtInsertAct = $dbh->prepare($sqlInsertAct);
+$stmtInsertAct->execute();
+
+//ACA INSERTAMOS EL PROYECTO SIS
 
 ?>

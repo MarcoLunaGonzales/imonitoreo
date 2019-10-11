@@ -21,6 +21,7 @@ $personal=$_POST["cod_personal"];
 $globalGestion=$_SESSION["globalGestion"];
 
 // Prepare
+
 $stmt = $dbh->prepare("INSERT INTO $table (nombre, abreviatura, nivel, cod_padre, partida, cod_estado, cod_personal, cod_gestion) VALUES (:nombre, :abreviatura, :nivel, :cod_padre, :partida, :cod_estado, :cod_personal, :cod_gestion)");
 // Bind
 $stmt->bindParam(':nombre', $nombre);

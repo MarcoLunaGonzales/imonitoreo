@@ -7,7 +7,7 @@ $dbh = new Conexion();
 
 $globalGestion=$_SESSION["globalGestion"];
 
-$table="componenetessis";
+$table="componentessis";
 $moduleName="Actividad SIS";
 
 ?>

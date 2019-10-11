@@ -24,14 +24,16 @@ $globalUsuario=$_SESSION["globalUser"];
 
 
 //LLAMAMOS A UN SP QUE ORDENA LOS COMPONENTES O ACTIVIDADES SIS
-$sql = 'CALL ordenar_componentes(?)';
+$sql = 'CALL ordenar_componentes(?,?)';
 $stmt = $dbh->prepare($sql);
 $stmt->bindParam(1, $globalUsuario, PDO::PARAM_INT, 10);
+$stmt->bindParam(2, $globalGestion, PDO::PARAM_INT, 10);
 $stmt->execute();
 
 
 $sql="SELECT codigo, nombre, abreviatura, nivel, cod_padre, cod_estado, partida, indice, cod_usuario from componentessis_orden 
   where cod_usuario='$globalUsuario' and nivel in (1,2) ORDER BY indice";
+//echo $sql;
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 

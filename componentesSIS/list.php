@@ -12,6 +12,7 @@ $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
+
 $table="componentessis";
 $moduleName="Actividades SIS";
 

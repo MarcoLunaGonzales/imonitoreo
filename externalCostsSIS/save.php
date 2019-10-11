@@ -4,6 +4,9 @@ require_once '../layouts/bodylogin.php';
 require_once '../conexion.php';
 require_once '../functions.php';
 
+
+session_start();
+
 $dbh = new Conexion();
 
 $table="external_costs";
@@ -15,9 +18,10 @@ $name=$_POST["name"];
 $name=clean_string($name);
 $abreviatura=$_POST["abreviatura"];
 $codEstado="1";
+$globalGestion=$_SESSION["globalGestion"];
 
 // Prepare
-$sql="INSERT INTO $table (nombre, nombre_en, abreviatura, cod_estado) VALUES ('$nombre','$name','$abreviatura','$codEstado')";
+$sql="INSERT INTO $table (nombre, nombre_en, abreviatura, cod_estado, cod_gestion) VALUES ('$nombre','$name','$abreviatura','$codEstado','$globalGestion')";
 //echo $sql;
 $stmt = $dbh->prepare($sql);
 $flagSuccess=$stmt->execute();

@@ -5,6 +5,9 @@ require_once 'styles.php';
 
 $dbh = new Conexion();
 
+
+$globalGestion=$_SESSION["globalGestion"];
+
 $table="external_costs";
 $moduleName="External Costs";
 
@@ -23,6 +26,15 @@ $moduleName="External Costs";
 			  </div>
 			  <div class="card-body ">
 				
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Gestion</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <input class="form-control" type="text" name="gestion" value="<?=$globalNombreGestion;?>" id="gestion" disabled="true" />
+					</div>
+				  </div>
+				</div>
+
 				<div class="row">
 				  	<label class="col-sm-2 col-form-label">Codigo</label>
 			  		<div class="col-sm-7">

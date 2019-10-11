@@ -4,6 +4,7 @@ require_once 'conexion.php';
 require_once 'styles.php';
 
 $globalAdmin=$_SESSION["globalAdmin"];
+$globalGestion=$_SESSION["globalGestion"];
 
 
 $dbh = new Conexion();
@@ -16,7 +17,9 @@ $table="external_costs";
 $moduleName="External Costs";
 
 // Preparamos
-$stmt = $dbh->prepare("SELECT codigo, nombre, nombre_en, abreviatura FROM $table where cod_estado=1");
+$sql="SELECT e.codigo, e.nombre, e.nombre_en, e.abreviatura, (select g.nombre from gestiones g where g.codigo=e.cod_gestion)as gestion FROM $table e where e.cod_estado=1 and e.cod_gestion='$globalGestion'";
+//echo $sql;
+$stmt = $dbh->prepare($sql);
 // Ejecutamos
 $stmt->execute();
 // bindColumn
@@ -24,6 +27,7 @@ $stmt->bindColumn('codigo', $codigo);
 $stmt->bindColumn('nombre', $nombre);
 $stmt->bindColumn('nombre_en', $nombreEn);
 $stmt->bindColumn('abreviatura', $abreviatura);
+$stmt->bindColumn('gestion', $gestion);
 
 ?>
 
@@ -45,6 +49,7 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                         <tr>
                           <th class="text-center">#</th>
                           <th>Codigo</th>
+                          <th>Gestion</th>
                           <th>Nombre</th>
                           <th>Name</th>
                           <th class="text-right">Actions</th>
@@ -58,6 +63,7 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                         <tr>
                           <td align="center"><?=$index;?></td>
                           <td><?=$abreviatura;?></td>
+                          <td><?=$gestion;?></td>
                           <td><?=$nombre;?></td>
                           <td><?=$nombreEn;?></td>
                           <td class="td-actions text-right">
