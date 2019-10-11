@@ -5,6 +5,8 @@ require_once 'styles.php';
 
 $dbh = new Conexion();
 
+$globalGestion=$_SESSION["globalGestion"];
+
 $table="componenetessis";
 $moduleName="Actividad SIS";
 
@@ -22,6 +24,16 @@ $moduleName="Actividad SIS";
 				</div>
 			  </div>
 			  <div class="card-body ">
+				
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Gestion</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <input class="form-control" type="text" name="gestion" value="<?=$globalNombreGestion;?>" id="gestion" disabled="true" />
+					</div>
+				  </div>
+				</div>
+
 				<div class="row">
 				  <label class="col-sm-2 col-form-label">Codigo</label>
 				  <div class="col-sm-7">
@@ -66,7 +78,7 @@ $moduleName="Actividad SIS";
 					  <select class="selectpicker" name="padre" id="padre" data-style="<?=$comboColor;?>">
 					  	<option disabled selected value=""></option>
 					  	<?php
-					  	$stmt = $dbh->prepare("SELECT codigo, abreviatura FROM componentessis where nivel in (1,2) order by 1");
+					  	$stmt = $dbh->prepare("SELECT codigo, abreviatura FROM componentessis where nivel in (1,2) and cod_gestion='$globalGestion' order by 1");
 						$stmt->execute();
 						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 							$codigoX=$row['codigo'];

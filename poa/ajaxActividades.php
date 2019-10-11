@@ -31,8 +31,8 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 		<div class="col-sm-3">
 	        <div class="form-group">
 				<input type="hidden" name="codigo<?=$codigo;?>" id="codigo<?=$codigo;?>" value="0">
-				<select class="selectpicker" name="norma_priorizada<?=$codigo;?>" id="norma_priorizada<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
-				  	<option value="">Norma Priorizada</option>
+				<select class="selectpicker form-control form-control-sm" name="norma_priorizada<?=$codigo;?>" id="norma_priorizada<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+				  	<option value="">Sector</option>
 				  	<?php
 				  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
 					$stmt->execute();
@@ -40,22 +40,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 						$codigoX=$row['codigo'];
 						$nombreX=$row['nombre'];
 					?>
-					<optgroup label="<?=$nombreX;?>">
-					<?php
-					  	$stmtY = $dbh->prepare("SELECT n.codigo, n.nombre, n.abreviatura FROM normas n, normas_priorizadas np where n.codigo=np.codigo and n.cod_sector='$codigoX' and n.cod_estado=1 order by 2");
-						$stmtY->execute();
-						while ($rowY = $stmtY->fetch(PDO::FETCH_ASSOC)) {
-							$codigoY=$rowY['codigo'];
-							$nombreY=$rowY['nombre'];
-							$nombreY=cutString($nombreY,80);
-							$abreviaturaY=$rowY['abreviatura'];
-
-					?>
-							<option value="<?=$codigoY;?>" data-subtext="<?=$nombreY?>"><?=$abreviaturaY;?></option>	
-					<?php
-						}
-					?>
-					</optgroup>
+						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>	
 					<?php	
 					}
 				  	?>
@@ -65,7 +50,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 
 		<div class="col-sm-3">
 	        <div class="form-group">
-				<select class="selectpicker" name="norma<?=$codigo;?>" id="norma<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+				<select class="selectpicker form-control form-control-sm" name="norma<?=$codigo;?>" id="norma<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 				  	<option value="">Norma</option>
 				  	<?php
 				  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
@@ -106,7 +91,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 
 	  	<div class="col-sm-3">
 	    	<div class="form-group">
-	        <select class="selectpicker" name="clasificador<?=$codigo;?>" id="clasificador<?=$codigo;?>" data-style="<?=$comboColor;?>" data-width="200px" data-live-search="true" onChange="completaActividad(this,<?=$codigo;?>)" >
+	        <select class="selectpicker form-control form-control-sm" name="clasificador<?=$codigo;?>" id="clasificador<?=$codigo;?>" data-style="<?=$comboColor;?>" data-width="200px" data-live-search="true" onChange="completaActividad(this,<?=$codigo;?>)" >
 			  	<option disabled selected value="">Clasificador</option>
 			  	<?php
 			  	if($nombreTablaClasificador!="" && $nombreTablaClasificador!="clientes"){
@@ -154,7 +139,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 
 		<div class="col-sm-2">
 	    	<div class="form-group">
-	        <select class="selectpicker form-control" name="clave_indicador<?=$codigo;?>" id="clave_indicador<?=$codigo;?>" data-style="<?=$comboColor;?>">
+	        <select class="selectpicker form-control form-control-sml" name="clave_indicador<?=$codigo;?>" id="clave_indicador<?=$codigo;?>" data-style="<?=$comboColor;?>" required="true">
 			  	<option value="">CMI</option>
 				<option value="0">No</option>
 				<option value="1">Si</option>
@@ -190,7 +175,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 
 		<div class="col-sm-4">
         	<div class="form-group">
-	        <select class="selectpicker form-control" name="hito<?=$codigo;?>" id="hito<?=$codigo;?>" data-style="<?=$comboColor;?>">
+	        <select class="selectpicker form-control form-control-sm" name="hito<?=$codigo;?>" id="hito<?=$codigo;?>" data-style="<?=$comboColor;?>">
 			  	<option disabled selected value="">Hito</option>
 			  	<?php
 			  	$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM hitos where cod_estado=1 order by 2");

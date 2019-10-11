@@ -104,12 +104,13 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.clave_indicador, a.observaciones, a.cod_hito
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional='$codUnidadX' and a.cod_area='$codAreaX' ";
 
-
-					if($codEstadoPOAGestion==3 || $codEstadoPOAGestion==1){
+					if($codEstadoPOAGestion==3 || $codEstadoPOAGestion==2){
 						$sqlLista.=" and a.actividad_extra=1 ";
 					}
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
-					//echo $sql;
+					
+					//echo $sqlLista;
+					
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();
@@ -151,8 +152,8 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 									<div class="col-sm-3">
 				                        <div class="form-group">
 			                        	<input type="hidden" name="codigo<?=$index;?>" id="codigo<?=$index;?>" value="<?=$codigo;?>">
-				                        <select class="selectpicker form-control" name="norma_priorizada<?=$index;?>" id="norma_priorizada<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
-									  		<option value="">Norma Priorizada</option>
+				                        <select class="selectpicker form-control form-control-sm" name="norma_priorizada<?=$index;?>" id="norma_priorizada<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+									  		<option value="">Sector</option>
 										  	<?php
 										  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
 											$stmt->execute();
@@ -160,22 +161,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 												$codigoX=$row['codigo'];
 												$nombreX=$row['nombre'];
 											?>
-											<optgroup label="<?=$nombreX;?>">
-											<?php
-											  	$stmtY = $dbh->prepare("SELECT n.codigo, n.nombre, n.abreviatura FROM normas n, normas_priorizadas np where n.codigo=np.codigo and  cod_sector='$codigoX' and cod_estado=1 order by 2");
-												$stmtY->execute();
-												while ($rowY = $stmtY->fetch(PDO::FETCH_ASSOC)) {
-													$codigoY=$rowY['codigo'];
-													$nombreY=$rowY['nombre'];
-													$nombreY=cutString($nombreY,80);
-													$abreviaturaY=$rowY['abreviatura'];
-
-											?>
-													<option value="<?=$codigoY;?>" data-subtext="<?=$nombreY?>" <?=($codigoY==$normaPriorizada)?"selected":"";?>  ><?=$abreviaturaY;?></option>	
-											<?php
-												}
-											?>
-											</optgroup>
+												<option value="<?=$codigoX;?>" <?=($codigoX==$normaPriorizada)?"selected":"";?>  ><?=$nombreX;?></option>	
 											<?php	
 											}
 										  	?>
@@ -185,7 +171,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 
 			                        <div class="col-sm-3">
 			                        	<div class="form-group">
-								        <select class="selectpicker form-control" name="norma<?=$index;?>" id="norma<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+								        <select class="selectpicker form-control form-control-sm" name="norma<?=$index;?>" id="norma<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 										  	<option value="">Norma</option>
 										  	<?php
 										  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
@@ -226,7 +212,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 
 		                          	<div class="col-sm-3">
 			                        	<div class="form-group">
-								        <select class="selectpicker form-control" name="clasificador<?=$index;?>" id="clasificador<?=$index;?>" data-style="<?=$comboColor;?>" data-width="200px">
+								        <select class="selectpicker form-control form-control-sm" name="clasificador<?=$index;?>" id="clasificador<?=$index;?>" data-style="<?=$comboColor;?>" data-width="200px">
 										  	<option disabled selected value="">Clasificador</option>
 										  	<?php
 										  	if($nombreTablaClasificador!="" && $nombreTablaClasificador!="clientes"){
@@ -275,7 +261,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 
 		                          	<div class="col-sm-2">
 			                        	<div class="form-group">
-								        <select class="selectpicker form-control" name="clave_indicador<?=$index;?>" id="clave_indicador<?=$index;?>" data-style="<?=$comboColor;?>">
+								        <select class="selectpicker form-control form-control-sm" name="clave_indicador<?=$index;?>" id="clave_indicador<?=$index;?>" data-style="<?=$comboColor;?>">
 										  	<option value="">CMI</option>
 											<option value="0" <?=($claveIndicador==0)?"selected":"";?>>No</option>
 											<option value="1" <?=($claveIndicador==1)?"selected":"";?>>Si</option>
@@ -310,7 +296,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 
 									<div class="col-sm-4">
 			                        	<div class="form-group">
-								        <select class="selectpicker form-control" name="hito<?=$index;?>" id="hito<?=$index;?>" data-style="<?=$comboColor;?>">
+								        <select class="selectpicker form-control form-control-sm" name="hito<?=$index;?>" id="hito<?=$index;?>" data-style="<?=$comboColor;?>">
 										  	<option disabled selected value="">Hito</option>
 										  	<?php
 										  	$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM hitos where cod_estado=1 order by 2");
@@ -370,7 +356,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
         </button>
       </div>
       <div class="modal-body" style="text-align:center;">
-	  	<select class="selectpicker" name="areaModal" id="areaModal" data-style="<?=$comboColor;?>" required>
+	  	<select class="selectpicker " name="areaModal" id="areaModal" data-style="<?=$comboColor;?>" required>
 		  	<option disabled selected value="">Area</option>
 		  	<?php
 		  	$sqlAreas="SELECT i.cod_indicador, u.codigo as codigoUnidad, u.nombre as nombreUnidad, u.abreviatura as abrevUnidad, a.codigo as codigoArea, a.nombre as nombreArea, a.abreviatura as abrevArea from indicadores_unidadesareas i, unidades_organizacionales u, areas a where i.cod_indicador='$codigoIndicador' and i.cod_area=a.codigo and i.cod_unidadorganizacional=u.codigo";

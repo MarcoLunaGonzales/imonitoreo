@@ -6,9 +6,9 @@ require_once 'functions.php';
 
 $dbh = new Conexion();
 
-$sqlX="SET NAMES 'utf8'";
+/*$sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
-$stmtX->execute();
+$stmtX->execute();*/
 
 //SACAMOS LA CONFIGURACION PARA REDIRECCIONAR EL PON
 $codigoIndicadorPON=obtenerCodigoPON();

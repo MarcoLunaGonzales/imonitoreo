@@ -153,12 +153,13 @@ if($globalPerfilX==1){
             </a>
             <div class="collapse" id="operativo">
               <ul class="nav">
-                <li class="nav-item ">
+                
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=listObjetivosOp">
                     <span class="sidebar-mini"> OO </span>
                     <span class="sidebar-normal"> Objetivos Operativos</span>
                   </a>
-                </li>                
+                </li-->                
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOA">
@@ -174,7 +175,7 @@ if($globalPerfilX==1){
                   </a>
                 </li> 
 
-                <li class="nav-item ">
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAI">
                     <span class="sidebar-mini"> POAI </span>
                     <span class="sidebar-normal">POAI Programacion</span>
@@ -186,49 +187,7 @@ if($globalPerfilX==1){
                     <span class="sidebar-mini"> POAIE </span>
                     <span class="sidebar-normal">POAI Ejecucion</span>
                   </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=seguimientoPOA">
-                    <span class="sidebar-mini"> SPOA </span>
-                    <span class="sidebar-normal">Seguimiento POA</span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
-                    <span class="sidebar-mini"> IxA </span>
-                    <span class="sidebar-normal">Indicadores x Area</span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroSeguimientoPresOp">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO </span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroSegPresOpResumen">
-                    <span class="sidebar-mini"> SPOR </span>
-                    <span class="sidebar-normal"> Seguimiento PO Resumen </span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroRevisionPresOpxCuenta">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO por Cuenta </span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroRevisionPORegionArea">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO por Area y Regional </span>
-                  </a>
-                </li> 
+                </li-->  
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=distribucionDNSA">
@@ -336,13 +295,13 @@ if($globalPerfilX==1){
 
 
           <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#reportes">
+            <a class="nav-link" data-toggle="collapse" href="#reportesgenerales">
               <i class="material-icons">assessment</i>
-              <p> Reportes
+              <p> Reportes Generales
                 <b class="caret"></b>
               </p>
             </a>
-            <div class="collapse" id="reportes">
+            <div class="collapse" id="reportesgenerales">
               <ul class="nav">
 
                 <li class="nav-item ">
@@ -366,12 +325,12 @@ if($globalPerfilX==1){
                   </a>
                 </li>  
 
-                <li class="nav-item ">
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpPlanAudi">
                     <span class="sidebar-mini"> PA </span>
                     <span class="sidebar-normal"> Plan de Auditorias </span>
                   </a>
-                </li>  
+                </li-->  
 
                 <li class="nav-item ">
                   <a class="nav-link" href="reportes/rptPlanCuentas.php" target="_blank">
@@ -379,6 +338,28 @@ if($globalPerfilX==1){
                     <span class="sidebar-normal"> Plan de Cuentas</span>
                   </a>
                 </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPresupuestoSIS">
+                    <span class="sidebar-mini"> PS </span>
+                    <span class="sidebar-normal"> Presupuesto SIS</span>
+                  </a>
+                </li>  
+
+              </ul>
+            </div>
+          </li>
+
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportespoa">
+              <i class="material-icons">assessment</i>
+              <p> Reportes POA
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportespoa">
+              <ul class="nav">
 
                 <li class="nav-item ">
                   <a class="nav-link" href="reportes/rptObjConf.php" target="_blank">
@@ -406,7 +387,38 @@ if($globalPerfilX==1){
                     <span class="sidebar-mini"> EPD </span>
                     <span class="sidebar-normal"> Ejecucion POA Detalle</span>
                   </a>
-                </li>  
+                </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOA">
+                    <span class="sidebar-mini"> SPOA </span>
+                    <span class="sidebar-normal">Seguimiento POA</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
+                    <span class="sidebar-mini"> IxA </span>
+                    <span class="sidebar-normal">Indicadores x Area</span>
+                  </a>
+                </li> 
+
+
+              </ul>
+            </div>
+          </li>
+
+
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportespo">
+              <i class="material-icons">assessment</i>
+              <p> Reportes PO
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportespo">
+              <ul class="nav">  
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpPresupuestoOp">
@@ -420,14 +432,35 @@ if($globalPerfilX==1){
                     <span class="sidebar-mini"> RPO </span>
                     <span class="sidebar-normal"> Resumen </br> Presupuesto Operativo</span>
                   </a>
-                </li>
+                </li>       
 
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=rptOpPresupuestoSIS">
-                    <span class="sidebar-mini"> PS </span>
-                    <span class="sidebar-normal"> Presupuesto SIS</span>
+                 <a class="nav-link" href="?opcion=filtroSeguimientoPresOp">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO </span>
                   </a>
-                </li>                
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroSegPresOpResumen">
+                    <span class="sidebar-mini"> SPOR </span>
+                    <span class="sidebar-normal"> Seguimiento PO Resumen </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroRevisionPresOpxCuenta">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO por Cuenta </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroRevisionPORegionArea">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO por Area y Regional </span>
+                  </a>
+                </li>       
 
               </ul>
             </div>
@@ -642,7 +675,7 @@ if($globalPerfilX==2){
                   </a>
                 </li> 
 
-                <li class="nav-item ">
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAI">
                     <span class="sidebar-mini"> POAI </span>
                     <span class="sidebar-normal">POAI Programacion</span>
@@ -654,35 +687,7 @@ if($globalPerfilX==2){
                     <span class="sidebar-mini"> POAIE </span>
                     <span class="sidebar-normal">POAI Ejecucion</span>
                   </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=seguimientoPOA">
-                    <span class="sidebar-mini"> SPOA </span>
-                    <span class="sidebar-normal">Seguimiento POA</span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
-                    <span class="sidebar-mini"> IxA </span>
-                    <span class="sidebar-normal">Indicadores x Area</span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroSeguimientoPresOp">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO </span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroRevisionPORegionArea">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO por Area y Regional </span>
-                  </a>
-                </li> 
+                </li--> 
 
               </ul>
             </div>
@@ -745,24 +750,72 @@ if($globalPerfilX==2){
             </div>
           </li>
 
-
           <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#reportes">
+            <a class="nav-link" data-toggle="collapse" href="#reportesgenerales">
               <i class="material-icons">assessment</i>
-              <p> Reportes
+              <p> Reportes Generales
                 <b class="caret"></b>
               </p>
             </a>
-            <div class="collapse" id="reportes">
+            <div class="collapse" id="reportesgenerales">
               <ul class="nav">
-                
+
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=rptOpActividadesHitos">
+                  <a class="nav-link" href="?opcion=rptActividadesHitos">
                     <span class="sidebar-mini"> AH </span>
                     <span class="sidebar-normal"> Actividades por Hito </span>
                   </a>
                 </li>  
 
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpCursos">
+                    <span class="sidebar-mini"> Cu </span>
+                    <span class="sidebar-normal"> Cursos </span>
+                  </a>
+                </li>  
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpServicios">
+                    <span class="sidebar-mini"> Se </span>
+                    <span class="sidebar-normal"> Servicios </span>
+                  </a>
+                </li>  
+
+                <!--li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPlanAudi">
+                    <span class="sidebar-mini"> PA </span>
+                    <span class="sidebar-normal"> Plan de Auditorias </span>
+                  </a>
+                </li-->  
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="reportes/rptPlanCuentas.php" target="_blank">
+                    <span class="sidebar-mini"> PC </span>
+                    <span class="sidebar-normal"> Plan de Cuentas</span>
+                  </a>
+                </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPresupuestoSIS">
+                    <span class="sidebar-mini"> PS </span>
+                    <span class="sidebar-normal"> Presupuesto SIS</span>
+                  </a>
+                </li>  
+
+              </ul>
+            </div>
+          </li>
+
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportespoa">
+              <i class="material-icons">assessment</i>
+              <p> Reportes POA
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportespoa">
+              <ul class="nav">
 
                 <li class="nav-item ">
                   <a class="nav-link" href="reportes/rptObjConf.php" target="_blank">
@@ -790,7 +843,38 @@ if($globalPerfilX==2){
                     <span class="sidebar-mini"> EPD </span>
                     <span class="sidebar-normal"> Ejecucion POA Detalle</span>
                   </a>
-                </li>  
+                </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOA">
+                    <span class="sidebar-mini"> SPOA </span>
+                    <span class="sidebar-normal">Seguimiento POA</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
+                    <span class="sidebar-mini"> IxA </span>
+                    <span class="sidebar-normal">Indicadores x Area</span>
+                  </a>
+                </li> 
+
+
+              </ul>
+            </div>
+          </li>
+
+
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportespo">
+              <i class="material-icons">assessment</i>
+              <p> Reportes PO
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportespo">
+              <ul class="nav">  
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpPresupuestoOp">
@@ -799,10 +883,44 @@ if($globalPerfilX==2){
                   </a>
                 </li>
 
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPresupuestoOpResumen">
+                    <span class="sidebar-mini"> RPO </span>
+                    <span class="sidebar-normal"> Resumen </br> Presupuesto Operativo</span>
+                  </a>
+                </li>       
+
+                <li class="nav-item ">
+                 <a class="nav-link" href="?opcion=filtroSeguimientoPresOp">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroSegPresOpResumen">
+                    <span class="sidebar-mini"> SPOR </span>
+                    <span class="sidebar-normal"> Seguimiento PO Resumen </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroRevisionPresOpxCuenta">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO por Cuenta </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroRevisionPORegionArea">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO por Area y Regional </span>
+                  </a>
+                </li>       
+
               </ul>
             </div>
           </li>
-
 
           <li class="nav-item ">
             <a class="nav-link" data-toggle="collapse" href="#utilitarios">
@@ -813,7 +931,12 @@ if($globalPerfilX==2){
             </a>
             <div class="collapse" id="utilitarios">
               <ul class="nav">
-
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listGestionTrabajo">
+                    <span class="sidebar-mini"> CG </span>
+                    <span class="sidebar-normal"> Cambiar Gestion de Trabajo </span>
+                  </a>
+                </li>
               </ul>
             </div>
           </li>
@@ -909,7 +1032,7 @@ if($globalPerfilX==3){
                   </a>
                 </li> 
 
-                <li class="nav-item ">
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAI">
                     <span class="sidebar-mini"> POAI </span>
                     <span class="sidebar-normal">POAI Programacion</span>
@@ -921,71 +1044,28 @@ if($globalPerfilX==3){
                     <span class="sidebar-mini"> POAIE </span>
                     <span class="sidebar-normal">POAI Ejecucion</span>
                   </a>
-                </li>               
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=seguimientoPOA">
-                    <span class="sidebar-mini"> SPOA </span>
-                    <span class="sidebar-normal">Seguimiento POA</span>
-                  </a>
-                </li>
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
-                    <span class="sidebar-mini"> IxA </span>
-                    <span class="sidebar-normal">Indicadores x Area</span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroSeguimientoPresOp">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO </span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroSegPresOpResumen">
-                    <span class="sidebar-mini"> SPOR </span>
-                    <span class="sidebar-normal"> Seguimiento PO Resumen </span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroRevisionPresOpxCuenta">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO por Cuenta </span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroRevisionPORegionArea">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO por Area y Regional </span>
-                  </a>
-                </li>
+                </li-->               
 
               </ul>
             </div>
           </li>
 
           <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#reportes">
+            <a class="nav-link" data-toggle="collapse" href="#reportesgenerales">
               <i class="material-icons">assessment</i>
-              <p> Reportes
+              <p> Reportes Generales
                 <b class="caret"></b>
               </p>
             </a>
-            <div class="collapse" id="reportes">
+            <div class="collapse" id="reportesgenerales">
               <ul class="nav">
-                
+
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=rptOpActividadesHitos">
+                  <a class="nav-link" href="?opcion=rptActividadesHitos">
                     <span class="sidebar-mini"> AH </span>
                     <span class="sidebar-normal"> Actividades por Hito </span>
                   </a>
                 </li>  
-
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpCursos">
@@ -1001,12 +1081,41 @@ if($globalPerfilX==3){
                   </a>
                 </li>  
 
-                <li class="nav-item ">
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpPlanAudi">
                     <span class="sidebar-mini"> PA </span>
                     <span class="sidebar-normal"> Plan de Auditorias </span>
                   </a>
+                </li-->  
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="reportes/rptPlanCuentas.php" target="_blank">
+                    <span class="sidebar-mini"> PC </span>
+                    <span class="sidebar-normal"> Plan de Cuentas</span>
+                  </a>
                 </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPresupuestoSIS">
+                    <span class="sidebar-mini"> PS </span>
+                    <span class="sidebar-normal"> Presupuesto SIS</span>
+                  </a>
+                </li>  
+
+              </ul>
+            </div>
+          </li>
+
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportespoa">
+              <i class="material-icons">assessment</i>
+              <p> Reportes POA
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportespoa">
+              <ul class="nav">
 
                 <li class="nav-item ">
                   <a class="nav-link" href="reportes/rptObjConf.php" target="_blank">
@@ -1034,7 +1143,38 @@ if($globalPerfilX==3){
                     <span class="sidebar-mini"> EPD </span>
                     <span class="sidebar-normal"> Ejecucion POA Detalle</span>
                   </a>
-                </li>  
+                </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOA">
+                    <span class="sidebar-mini"> SPOA </span>
+                    <span class="sidebar-normal">Seguimiento POA</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
+                    <span class="sidebar-mini"> IxA </span>
+                    <span class="sidebar-normal">Indicadores x Area</span>
+                  </a>
+                </li> 
+
+
+              </ul>
+            </div>
+          </li>
+
+
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportespo">
+              <i class="material-icons">assessment</i>
+              <p> Reportes PO
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportespo">
+              <ul class="nav">  
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpPresupuestoOp">
@@ -1042,6 +1182,41 @@ if($globalPerfilX==3){
                     <span class="sidebar-normal"> Presupuesto Operativo</span>
                   </a>
                 </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPresupuestoOpResumen">
+                    <span class="sidebar-mini"> RPO </span>
+                    <span class="sidebar-normal"> Resumen </br> Presupuesto Operativo</span>
+                  </a>
+                </li>       
+
+                <li class="nav-item ">
+                 <a class="nav-link" href="?opcion=filtroSeguimientoPresOp">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroSegPresOpResumen">
+                    <span class="sidebar-mini"> SPOR </span>
+                    <span class="sidebar-normal"> Seguimiento PO Resumen </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroRevisionPresOpxCuenta">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO por Cuenta </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroRevisionPORegionArea">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO por Area y Regional </span>
+                  </a>
+                </li>       
 
               </ul>
             </div>
@@ -1057,11 +1232,15 @@ if($globalPerfilX==3){
             </a>
             <div class="collapse" id="utilitarios">
               <ul class="nav">
-
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listGestionTrabajo">
+                    <span class="sidebar-mini"> CG </span>
+                    <span class="sidebar-normal"> Cambiar Gestion de Trabajo </span>
+                  </a>
+                </li>
               </ul>
             </div>
           </li>
-
 
         </ul>
       </div>
@@ -1333,12 +1512,13 @@ if($globalPerfilX==5){
             </a>
             <div class="collapse" id="operativo">
               <ul class="nav">
-                <li class="nav-item ">
+                
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=listObjetivosOp">
                     <span class="sidebar-mini"> OO </span>
                     <span class="sidebar-normal"> Objetivos Operativos</span>
                   </a>
-                </li>                
+                </li-->                
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOA">
@@ -1351,41 +1531,6 @@ if($globalPerfilX==5){
                   <a class="nav-link" href="?opcion=listPOAEjecucion&area=0&unidad=0">
                     <span class="sidebar-mini"> POAE </span>
                     <span class="sidebar-normal">POA Ejecucion</span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=seguimientoPOA">
-                    <span class="sidebar-mini"> SPOA </span>
-                    <span class="sidebar-normal">Seguimiento POA</span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroSeguimientoPresOp">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO </span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroSegPresOpResumen">
-                    <span class="sidebar-mini"> SPOR </span>
-                    <span class="sidebar-normal"> Seguimiento PO Resumen </span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroRevisionPresOpxCuenta">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO por Cuenta </span>
-                  </a>
-                </li> 
-
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=filtroRevisionPORegionArea">
-                    <span class="sidebar-mini"> SPO </span>
-                    <span class="sidebar-normal"> Seguimiento PO por Area y Regional </span>
                   </a>
                 </li> 
 
@@ -1472,23 +1617,43 @@ if($globalPerfilX==5){
             </div>
           </li>
 
-
           <li class="nav-item ">
-            <a class="nav-link" data-toggle="collapse" href="#reportes">
+            <a class="nav-link" data-toggle="collapse" href="#reportesgenerales">
               <i class="material-icons">assessment</i>
-              <p> Reportes
+              <p> Reportes Generales
                 <b class="caret"></b>
               </p>
             </a>
-            <div class="collapse" id="reportes">
+            <div class="collapse" id="reportesgenerales">
               <ul class="nav">
 
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=rptOpActividadesHitos">
+                  <a class="nav-link" href="?opcion=rptActividadesHitos">
                     <span class="sidebar-mini"> AH </span>
                     <span class="sidebar-normal"> Actividades por Hito </span>
                   </a>
                 </li>  
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpCursos">
+                    <span class="sidebar-mini"> Cu </span>
+                    <span class="sidebar-normal"> Cursos </span>
+                  </a>
+                </li>  
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpServicios">
+                    <span class="sidebar-mini"> Se </span>
+                    <span class="sidebar-normal"> Servicios </span>
+                  </a>
+                </li>  
+
+                <!--li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPlanAudi">
+                    <span class="sidebar-mini"> PA </span>
+                    <span class="sidebar-normal"> Plan de Auditorias </span>
+                  </a>
+                </li-->  
 
                 <li class="nav-item ">
                   <a class="nav-link" href="reportes/rptPlanCuentas.php" target="_blank">
@@ -1496,6 +1661,28 @@ if($globalPerfilX==5){
                     <span class="sidebar-normal"> Plan de Cuentas</span>
                   </a>
                 </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPresupuestoSIS">
+                    <span class="sidebar-mini"> PS </span>
+                    <span class="sidebar-normal"> Presupuesto SIS</span>
+                  </a>
+                </li>  
+
+              </ul>
+            </div>
+          </li>
+
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportespoa">
+              <i class="material-icons">assessment</i>
+              <p> Reportes POA
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportespoa">
+              <ul class="nav">
 
                 <li class="nav-item ">
                   <a class="nav-link" href="reportes/rptObjConf.php" target="_blank">
@@ -1523,7 +1710,38 @@ if($globalPerfilX==5){
                     <span class="sidebar-mini"> EPD </span>
                     <span class="sidebar-normal"> Ejecucion POA Detalle</span>
                   </a>
-                </li>  
+                </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOA">
+                    <span class="sidebar-mini"> SPOA </span>
+                    <span class="sidebar-normal">Seguimiento POA</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
+                    <span class="sidebar-mini"> IxA </span>
+                    <span class="sidebar-normal">Indicadores x Area</span>
+                  </a>
+                </li> 
+
+
+              </ul>
+            </div>
+          </li>
+
+
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportespo">
+              <i class="material-icons">assessment</i>
+              <p> Reportes PO
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportespo">
+              <ul class="nav">  
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpPresupuestoOp">
@@ -1537,14 +1755,35 @@ if($globalPerfilX==5){
                     <span class="sidebar-mini"> RPO </span>
                     <span class="sidebar-normal"> Resumen </br> Presupuesto Operativo</span>
                   </a>
-                </li>
+                </li>       
 
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=rptOpPresupuestoSIS">
-                    <span class="sidebar-mini"> PS </span>
-                    <span class="sidebar-normal"> Presupuesto SIS</span>
+                 <a class="nav-link" href="?opcion=filtroSeguimientoPresOp">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO </span>
                   </a>
-                </li>                
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroSegPresOpResumen">
+                    <span class="sidebar-mini"> SPOR </span>
+                    <span class="sidebar-normal"> Seguimiento PO Resumen </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroRevisionPresOpxCuenta">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO por Cuenta </span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=filtroRevisionPORegionArea">
+                    <span class="sidebar-mini"> SPO </span>
+                    <span class="sidebar-normal"> Seguimiento PO por Area y Regional </span>
+                  </a>
+                </li>       
 
               </ul>
             </div>
@@ -1769,12 +2008,12 @@ if($globalPerfilX==6){
                   </a>
                 </li>  
 
-                <li class="nav-item ">
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpPlanAudi">
                     <span class="sidebar-mini"> PA </span>
                     <span class="sidebar-normal"> Plan de Auditorias </span>
                   </a>
-                </li>
+                </li-->
 
                 <li class="nav-item ">
                   <a class="nav-link" href="reportes/rptObjConf.php" target="_blank">
@@ -1825,11 +2064,15 @@ if($globalPerfilX==6){
             </a>
             <div class="collapse" id="utilitarios">
               <ul class="nav">
-
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listGestionTrabajo">
+                    <span class="sidebar-mini"> CG </span>
+                    <span class="sidebar-normal"> Cambiar Gestion de Trabajo </span>
+                  </a>
+                </li>
               </ul>
             </div>
           </li>
-
 
         </ul>
       </div>

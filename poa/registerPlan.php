@@ -102,7 +102,8 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					if($codEstadoPOAGestion==3 && $codEstadoPOAGestion==1){
 						$sqlLista.=" and a.actividad_extra=1 ";
 					}
-					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre";
+//					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre";
+					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
 					//echo $sqlLista;
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos

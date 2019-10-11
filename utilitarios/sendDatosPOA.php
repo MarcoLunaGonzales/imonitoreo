@@ -28,7 +28,7 @@ if($version==0){
 	$tabla2="actividades_poaplanificacion_version";
 }
 
-$sql="SELECT p.nombre as perspectiva, o.codigo as codObjetivo, o.abreviatura as abrevObjetivo, o.nombre as nombreObjetivo, i.codigo as codIndicador, 
+$sql="SELECT (select g.nombre from gestiones g where g.codigo=a.cod_gestion)as gestion, p.nombre as perspectiva, o.codigo as codObjetivo, o.abreviatura as abrevObjetivo, o.nombre as nombreObjetivo, i.codigo as codIndicador, 
 i.nombre as nombreIndicador, a.codigo as codActividad, a.nombre as nombreActividad, 
 (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,
@@ -45,6 +45,7 @@ if($version!=0){
 // echo $sql;
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
+$stmt->bindColumn('gestion', $gestion);
 $stmt->bindColumn('perspectiva', $perspectiva);
 $stmt->bindColumn('codObjetivo', $codObjetivo);
 $stmt->bindColumn('abrevObjetivo', $abrevObjetivo);
@@ -67,7 +68,7 @@ $stmt->bindColumn('cod_hito', $codHito);
 $stmt->bindColumn('hito', $hito);
 $stmt->bindColumn('cod_datoclasificador', $codDatoClasificador);
 
-echo "perspectiva;codObjetivo;abrevObjetivo;nombreObjetivo;codIndicador;nombreIndicador;codActividad;nombreActividad;normapriorizada;sectorpriorizado;norma;sector;tipodato;producto_esperado;cod_unidadorganizacional;cod_area;unidad;area;cod_hito;hito;codDatoClas;nombreClasificador;version;eneP;eneE;eneDesc;febP;febE;febDesc;marP;marE;marDesc;abrP;abrE;abrDesc;mayP;mayE;mayDesc;junP;junE;junDesc;julP;julE;julDesc;agoP;agoE;agoDesc;sepP;sepE;sepDesc;octP;octE;octDesc;novP;novE;novDesc;dicP;dicE;dicDesc";	
+echo "gestion;perspectiva;codObjetivo;abrevObjetivo;nombreObjetivo;codIndicador;nombreIndicador;codActividad;nombreActividad;normapriorizada;sectorpriorizado;norma;sector;tipodato;producto_esperado;cod_unidadorganizacional;cod_area;unidad;area;cod_hito;hito;codDatoClas;nombreClasificador;version;eneP;eneE;eneDesc;febP;febE;febDesc;marP;marE;marDesc;abrP;abrE;abrDesc;mayP;mayE;mayDesc;junP;junE;junDesc;julP;julE;julDesc;agoP;agoE;agoDesc;sepP;sepE;sepDesc;octP;octE;octDesc;novP;novE;novDesc;dicP;dicE;dicDesc";	
 echo "\r\n";
 
 while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
@@ -84,7 +85,7 @@ while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
 		$nombreDatoClasificador=obtieneDatoClasificador($codDatoClasificador,$nombreTablaClasificador);    	
     }
 
-	$txt="$perspectiva;$codObjetivo;$abrevObjetivo;$nombreObjetivo;$codIndicador;$nombreIndicador;$codActividad;$nombreActividad;$normapriorizada;$sectorpriorizado;$norma;$sector;$tipodato;$producto_esperado;$cod_unidadorganizacional;$cod_area;$unidad;$area;$codHito;$hito;$codDatoClasificador;$nombreDatoClasificador;$version;";	
+	$txt="$gestion;$perspectiva;$codObjetivo;$abrevObjetivo;$nombreObjetivo;$codIndicador;$nombreIndicador;$codActividad;$nombreActividad;$normapriorizada;$sectorpriorizado;$norma;$sector;$tipodato;$producto_esperado;$cod_unidadorganizacional;$cod_area;$unidad;$area;$codHito;$hito;$codDatoClasificador;$nombreDatoClasificador;$version;";	
 	for($i=1;$i<=12;$i++){
 		
 		if($version==0){

@@ -53,7 +53,7 @@ while($rowVerifica = $stmtVerifica->fetch(PDO::FETCH_ASSOC)) {
 
 // Preparamos
 $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
-(SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,
+(SELECT s.nombre from sectores s where s.codigo=a.cod_normapriorizada)as sectorpriorizado,
 (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
 (a.cod_tiposeguimiento)as tipodato, 
@@ -128,8 +128,8 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                           <th class="text-center">-</th>
                           <th>Area</th>
                           <th>Actividad</th>
-                          <th>Sector/Norma Priorizado</th>
-                          <th>Sector/Norma</th>
+                          <th>Sector</th>
+                          <th>Norma</th>
                           <th>Act.CMI</th>
                           <th>Clasificador</th>
                           <th>Personal POAI</th>
@@ -156,8 +156,8 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                           <td class="text-center"><?=$index;?></td>
                           <td><?=$abrevUnidad."-".$abrevArea;?></td>
                           <td><?=$nombre;?></td>
-                          <td><?=$sectorPriorizado." ".$normaPriorizada;?></td>
-                          <td><?=$sector." ".$norma;?></td>
+                          <td><?=$sectorPriorizado?></td>
+                          <td><?=$norma;?></td>
                           <td class="text-center">
                             <div class="card-icon">
                               <i class="material-icons"><?=$iconCheck;?></i>

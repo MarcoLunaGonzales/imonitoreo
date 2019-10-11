@@ -6,6 +6,7 @@ require_once 'styles.php';
 $dbh = new Conexion();
 
 $globalAdmin=$_SESSION["globalAdmin"];
+$globalGestion=$_SESSION["globalGestion"];
 
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
@@ -16,7 +17,7 @@ $moduleName="Actividades SIS";
 
 // Preparamos
 $stmt = $dbh->prepare("SELECT cp.codigo, cp.nombre, cp.abreviatura, cp.nivel, (select abreviatura 
-from componentessis cpc where cp.cod_padre=cpc.codigo)cod_padre, partida, (select p.nombre from personal2 p where p.codigo=cp.cod_personal)as personal FROM $table cp where cp.cod_estado=1;
+from componentessis cpc where cp.cod_padre=cpc.codigo)cod_padre, partida, (select p.nombre from personal2 p where p.codigo=cp.cod_personal)as personal, (select g.nombre from gestiones g where g.codigo=cp.cod_gestion)as gestion FROM $table cp where cp.cod_estado=1 and cp.cod_gestion='$globalGestion';
 ");
 // Ejecutamos
 $stmt->execute();
@@ -28,6 +29,7 @@ $stmt->bindColumn('nivel', $nivel);
 $stmt->bindColumn('cod_padre', $cod_padre);
 $stmt->bindColumn('partida', $partida);
 $stmt->bindColumn('personal', $personal);
+$stmt->bindColumn('gestion', $gestion);
 
 ?>
 
@@ -48,6 +50,7 @@ $stmt->bindColumn('personal', $personal);
                       <thead>
                         <tr>
                          <th>Codigo</th>
+                         <th>Gestion</th>
                           <th>Nombre</th>
                           <th>Partida</th>
                           <th data-orderable="false">Nivel</th>
@@ -63,6 +66,7 @@ $stmt->bindColumn('personal', $personal);
 ?>
                         <tr>
                           <td><?=$abreviatura;?></td>
+                          <td><?=$gestion;?></td>
                           <td><?=$nombre;?></td>
                           <td><?=$partida;?></td>
                           <td><?=$nivel;?></td>
