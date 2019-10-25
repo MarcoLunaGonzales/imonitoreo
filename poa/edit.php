@@ -145,8 +145,8 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 									<div class="col-sm-3">
 				                        <div class="form-group">
 			                        	<input type="hidden" name="codigo<?=$index;?>" id="codigo<?=$index;?>" value="<?=$codigo;?>">
-				                        <select class="selectpicker form-control" name="norma_priorizada<?=$index;?>" id="norma_priorizada<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
-									  		<option value="">Norma Priorizada</option>
+				                        <select class="selectpicker form-control form-control-sm" name="norma_priorizada<?=$index;?>" id="norma_priorizada<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+									  		<option value="">Sector</option>
 										  	<?php
 										  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
 											$stmt->execute();
@@ -154,22 +154,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 												$codigoX=$row['codigo'];
 												$nombreX=$row['nombre'];
 											?>
-											<optgroup label="<?=$nombreX;?>">
-											<?php
-											  	$stmtY = $dbh->prepare("SELECT n.codigo, n.nombre, n.abreviatura FROM normas n, normas_priorizadas np where n.codigo=np.codigo and  cod_sector='$codigoX' and cod_estado=1 order by 2");
-												$stmtY->execute();
-												while ($rowY = $stmtY->fetch(PDO::FETCH_ASSOC)) {
-													$codigoY=$rowY['codigo'];
-													$nombreY=$rowY['nombre'];
-													$nombreY=cutString($nombreY,80);
-													$abreviaturaY=$rowY['abreviatura'];
-
-											?>
-													<option value="<?=$codigoY;?>" data-subtext="<?=$nombreY?>" <?=($codigoY==$normaPriorizada)?"selected":"";?>  ><?=$abreviaturaY;?></option>	
-											<?php
-												}
-											?>
-											</optgroup>
+												<option value="<?=$codigoX;?>" <?=($codigoX==$normaPriorizada)?"selected":"";?>  ><?=$nombreX;?></option>	
 											<?php	
 											}
 										  	?>
@@ -179,7 +164,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 
 			                        <div class="col-sm-3">
 			                        	<div class="form-group">
-								        <select class="selectpicker form-control" name="norma<?=$index;?>" id="norma<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+								        <select class="selectpicker form-control form-control-sm" name="norma<?=$index;?>" id="norma<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 										  	<option value="">Norma</option>
 										  	<?php
 										  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
@@ -220,7 +205,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 
 		                          	<div class="col-sm-3">
 			                        	<div class="form-group">
-								        <select class="selectpicker form-control" name="clasificador<?=$index;?>" id="clasificador<?=$index;?>" data-style="<?=$comboColor;?>" data-width="200px">
+								        <select class="selectpicker form-control form-control-sm" name="clasificador<?=$index;?>" id="clasificador<?=$index;?>" data-style="<?=$comboColor;?>" data-width="200px">
 										  	<option disabled selected value="">Clasificador</option>
 										  	<?php
 										  	if($nombreTablaClasificador!="" && $nombreTablaClasificador!="clientes"){
@@ -269,7 +254,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 
 		                          	<div class="col-sm-3">
 			                        	<div class="form-group">
-								        <select class="selectpicker form-control" name="clave_indicador<?=$index;?>" id="clave_indicador<?=$index;?>" data-style="<?=$comboColor;?>">
+								        <select class="selectpicker form-control form-control-sm" name="clave_indicador<?=$index;?>" id="clave_indicador<?=$index;?>" data-style="<?=$comboColor;?>">
 										  	<option value="">CMI</option>
 											<option value="0" <?=($claveIndicador==0)?"selected":"";?>>No</option>
 											<option value="1" <?=($claveIndicador==1)?"selected":"";?>>Si</option>
@@ -304,7 +289,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 
 									<div class="col-sm-4">
 			                        	<div class="form-group">
-								        <select class="selectpicker form-control" name="hito<?=$index;?>" id="hito<?=$index;?>" data-style="<?=$comboColor;?>">
+								        <select class="selectpicker form-control form-control-sm" name="hito<?=$index;?>" id="hito<?=$index;?>" data-style="<?=$comboColor;?>">
 										  	<option disabled selected value="">Hito</option>
 										  	<?php
 										  	$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM hitos where cod_estado=1 order by 2");

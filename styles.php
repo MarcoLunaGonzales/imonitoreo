@@ -4,6 +4,7 @@
 $colorCard="card-header-rose";
 $colorCard2="card-header-success";
 $button="btn";
+$buttonNormal="btn";
 $buttonCeleste="btn btn-info";
 $buttonMorado="btn btn-primary";
 $buttonEdit="btn btn-success";
@@ -17,5 +18,10 @@ $buttonCard="card-header-rose card-header-icon";
 $comboColor="btn btn-info";
 
 $colorCardDetail="card-header-rose";
+
+$iconEdit="edit";
+$iconDelete="delete";
+$iconCard="assignment";
+
 
 ?>

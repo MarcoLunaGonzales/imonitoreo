@@ -22,7 +22,7 @@ $dbh = new Conexion();
               <i class="material-icons">assignment</i>
             </div>
             <h4 class="card-title">Sincronizacion de Datos Generales</h4>
-            <h6 class="card-title">Datos a sincronizar: Gestiones, Unidades Organizacionales, Areas, Sectores, Normas, Programas, Servicios, Codigos IAF, Clientes</h6>
+            <h6 class="card-title">Datos a sincronizar: Gestiones, Unidades Organizacionales, Areas, Normas, Programas, Servicios, Codigos IAF, Clientes</h6>
           </div>
           <div class="card-body">
                   
@@ -116,7 +116,7 @@ echo "Unidades Organizacionales Sincronizado!!<br>";
 
 
 //SECTORES
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "tipoLista"=>"Sectores"); 
+/*$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "tipoLista"=>"Sectores"); 
 $url="http://ibnored.ibnorca.org/wsibno/catalogo/ws-sector-comite.php";
 $tableInsert="sectores";
 $json=callService($parametros, $url);
@@ -139,7 +139,7 @@ foreach ($obj as $objDet){
   $flagSuccess=$stmt->execute();
 }
 echo "Sectores Sincronizado!!<br>";
-
+*/
 
 //NORMAS
 $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "TipoLista"=>"Todos");

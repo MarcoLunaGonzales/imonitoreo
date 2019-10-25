@@ -1,13 +1,16 @@
 <?php
 
 require_once 'conexion.php';
+require_once 'configModule.php';
+require_once 'styles.php';
+
+$globalAdmin=$_SESSION["globalAdmin"];
+
+
 $dbh = new Conexion();
 
-$table="sectores";
-$moduleName="Sectores";
-
 // Preparamos
-$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM $table where cod_estado=1");
+$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM $table where cod_estado=1 order by 2");
 // Ejecutamos
 $stmt->execute();
 // bindColumn
@@ -22,19 +25,21 @@ $stmt->bindColumn('abreviatura', $abreviatura);
         <div class="row">
             <div class="col-md-12">
               <div class="card">
-                <div class="card-header card-header-rose card-header-icon">
+                <div class="card-header <?=$colorCard;?> card-header-icon">
                   <div class="card-icon">
-                    <i class="material-icons">assignment</i>
+                    <i class="material-icons"><?=$iconCard;?></i>
                   </div>
-                  <h4 class="card-title"><?=$moduleName?></h4>
+                  <h4 class="card-title"><?=$moduleNamePlural?></h4>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-striped table-bordered" id="tablePaginator">
+                    <table class="table">
                       <thead>
                         <tr>
                           <th class="text-center">#</th>
                           <th>Nombre</th>
+                          <th>Abreviatura</th>
+                          <th class="text-right">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -45,6 +50,21 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                         <tr>
                           <td align="center"><?=$index;?></td>
                           <td><?=$nombre;?></td>
+                          <td><?=$abreviatura;?></td>
+                          <td class="td-actions text-right">
+                            <?php
+                            if($globalAdmin==1){
+                            ?>
+                            <a href='<?=$urlEdit;?>&codigo=<?=$codigo;?>' rel="tooltip" class="<?=$buttonEdit;?>">
+                              <i class="material-icons"><?=$iconEdit;?></i>
+                            </a>
+                            <button rel="tooltip" class="<?=$buttonDelete;?>" onclick="alerts.showSwal('warning-message-and-confirmation','<?=$urlDelete;?>&codigo=<?=$codigo;?>')">
+                              <i class="material-icons"><?=$iconDelete;?></i>
+                            </button>
+                            <?php
+                            }
+                            ?>
+                          </td>
                         </tr>
 <?php
 							$index++;
@@ -55,10 +75,16 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                   </div>
                 </div>
               </div>
-				<div class="card-body">
-                    <!--button class="btn" onClick="location.href='index.php?opcion=registerArea'">Registrar</button-->
-                </div>
-			  
+              <?php
+              if($globalAdmin==1){
+              ?>
+      				<div class="card-footer ml-auto mr-auto">
+                    <button class="<?=$buttonNormal;?>" onClick="location.href='<?=$urlRegister;?>'">Registrar</button>
+              </div>
+              <?php
+              }
+              ?>
+		  
             </div>
           </div>  
         </div>

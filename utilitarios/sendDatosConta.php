@@ -17,9 +17,12 @@ session_start();
 $gestion=$_POST["gestion"];
 $nombreGestion=nameGestion($gestion);
 
+$mes=$_POST["mes"];
+$mesString=implode(",", $mes);
+
 $sql="SELECT p.indice, p.fondo, (select pf.abreviatura from po_fondos pf where pf.codigo=p.fondo) as nombrefondo, p.anio, p.mes, p.fecha, p.cta_n1, p.cta_n2, p.cta_n3, p.cta_n4, p.cuenta, 
 	(select pp.nombre from po_plancuentas pp where pp.codigo=p.cuenta) as nombrecuenta, 
-	p.partida, p.monto, p.organismo, (select po.nombre from po_organismos po where po.codigo=p.organismo)as nombreorganismo, p.ml_partida, p.glosa, p.glosa_detalle from po_mayores p where p.anio='$nombreGestion' and p.mes>8";
+	p.partida, p.monto, p.organismo, (select po.nombre from po_organismos po where po.codigo=p.organismo)as nombreorganismo, p.ml_partida, p.glosa, p.glosa_detalle from po_mayores p where p.anio='$nombreGestion' and p.mes in ($mesString)";
 
 //echo $sql;
 

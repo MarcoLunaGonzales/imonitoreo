@@ -115,6 +115,17 @@
 		if ($_GET['opcion']=='listSectores') {
 			require_once('sectores/list.php');
 		}
+		if ($_GET['opcion']=='registerSector') {
+			require_once('sectores/register.php');
+		}
+		if ($_GET['opcion']=='editSector') {
+			$codigo=$_GET['codigo'];
+			require_once('sectores/edit.php');
+		}
+		if ($_GET['opcion']=='deleteSector') {
+			$codigo=$_GET['codigo'];
+			require_once('sectores/saveDelete.php');
+		}
 
 		//HITOS
 		if ($_GET['opcion']=='listHitos') {

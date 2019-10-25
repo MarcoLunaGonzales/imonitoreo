@@ -40,7 +40,7 @@ if($banderaLogin==1 || $tipoLogin==1){
 		//SI TIPO LOGIN ES 1 VEMOS SI EXISTE EL USUARIO EN MONITOREO
 		$sql="SELECT p.codigo, p.nombre, p.cod_area, p.cod_unidad, pd.perfil from personal2 p, personal_datosadicionales pd where p.codigo=pd.cod_personal and pd.usuario='$user' and pd.contrasena='$password'";
 	}else{
-		$sql="SELECT p.codigo, p.nombre, p.cod_area, p.cod_unidad, 0 as perfil from personal2 p where p.codigo='$idUsuarioSW'";
+		$sql="SELECT p.codigo, p.nombre, p.cod_area, p.cod_unidad, pd.perfil from personal2 p, personal_datosadicionales pd where p.codigo=pd.cod_personal and p.codigo='$idUsuarioSW'";
 	}
 
 	//echo $sql;

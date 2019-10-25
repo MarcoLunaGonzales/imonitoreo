@@ -22,34 +22,50 @@ $dbh = new Conexion();
                 </div>
                 
                 <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>Gestion</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td align="center">
+                        <div class="row">
+                          <label class="col-sm-2 col-form-label">Gestion</label>
+                          <div class="col-sm-7">
+                          <div class="form-group">
                             <select class="selectpicker" title="Seleccione una opcion" name="gestion" id="gestion" data-style="<?=$comboColor;?>" required>
                               <option disabled selected value=""></option>
                               <?php
-                              $stmt = $dbh->prepare("SELECT g.codigo, g.nombre FROM gestiones g where g.cod_estado=1 order by 2 desc");
-                              $stmt->execute();
-                              while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                $codigoX=$row['codigo'];
-                                $nombreX=$row['nombre'];
+                              $stmt = $dbh->prepare("SELECT codigo, nombre FROM gestiones order by 2 desc");
+                            $stmt->execute();
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                              $codigoX=$row['codigo'];
+                              $nombreX=$row['nombre'];
+                            ?>
+                            <option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+                            <?php 
+                            }
                               ?>
-                              <option value="<?=$codigoX;?>"><?=$nombreX;?></option>
-                              <?php 
-                              }
-                                ?>
                             </select>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                          </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <label class="col-sm-2 col-form-label">Mes</label>
+                          <div class="col-sm-7">
+                          <div class="form-group">
+                            <select class="selectpicker form-control" title="Seleccione una opcion" name="mes[]" id="mes" data-style="select-with-transition" multiple required>
+                              <option disabled selected value=""></option>
+                              <?php
+                              $stmt = $dbh->prepare("SELECT codigo, nombre FROM meses order by 1");
+                            $stmt->execute();
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                              $codigoX=$row['codigo'];
+                              $nombreX=$row['nombre'];
+                            ?>
+                            <option value="<?=$codigoX;?>" selected><?=$nombreX;?></option>
+                            <?php 
+                            }
+                              ?>
+                            </select>
+                          </div>
+                          </div>
+                        </div>
+
                   </div>
                 </div>
               </div>
