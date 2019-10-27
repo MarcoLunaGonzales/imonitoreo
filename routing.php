@@ -126,6 +126,10 @@
 			$codigo=$_GET['codigo'];
 			require_once('sectores/saveDelete.php');
 		}
+		if ($_GET['opcion']=='listSectoresNormalizacion') {
+			require_once('sectoresnormalizacion/list.php');
+		}
+		
 
 		//HITOS
 		if ($_GET['opcion']=='listHitos') {

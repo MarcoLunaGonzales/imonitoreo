@@ -30,12 +30,7 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                     <i class="material-icons"><?=$iconCard;?></i>
                   </div>
                   <h4 class="card-title"><?=$moduleNamePlural?></h4>
-                  <h6 class="card-title">Ver Sectores de Normalización</h6>
-                  <a href='index.php?opcion=listSectoresNormalizacion'>
-                      <i class="material-icons" title="Ver Sectores de Normalización">view_comfy</i>
-                  </a>
                 </div>
-
                 <div class="card-body">
                   <div class="table-responsive">
                     <table class="table">
@@ -57,18 +52,6 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                           <td><?=$nombre;?></td>
                           <td><?=$abreviatura;?></td>
                           <td class="td-actions text-right">
-                            <?php
-                            if($globalAdmin==1){
-                            ?>
-                            <a href='<?=$urlEdit;?>&codigo=<?=$codigo;?>' rel="tooltip" class="<?=$buttonEdit;?>">
-                              <i class="material-icons"><?=$iconEdit;?></i>
-                            </a>
-                            <button rel="tooltip" class="<?=$buttonDelete;?>" onclick="alerts.showSwal('warning-message-and-confirmation','<?=$urlDelete;?>&codigo=<?=$codigo;?>')">
-                              <i class="material-icons"><?=$iconDelete;?></i>
-                            </button>
-                            <?php
-                            }
-                            ?>
                           </td>
                         </tr>
 <?php
@@ -79,17 +62,7 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                     </table>
                   </div>
                 </div>
-              </div>
-              <?php
-              if($globalAdmin==1){
-              ?>
-      				<div class="card-footer ml-auto mr-auto">
-                    <button class="<?=$buttonNormal;?>" onClick="location.href='<?=$urlRegister;?>'">Registrar</button>
-              </div>
-              <?php
-              }
-              ?>
-		  
+              </div>		  
             </div>
           </div>  
         </div>

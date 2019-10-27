@@ -3,8 +3,8 @@
 require_once '../conexion.php';
 $dbh = new Conexion();
 
-$table="sectores";
-$moduleName="Sectores";
+$table="sectores_economicos";
+$moduleName="Sectores Economicos";
 
 // Preparamos
 $stmt = $dbh->prepare("SELECT a.codigo, a.nombre, a.abreviatura FROM $table a where a.cod_estado=1 order by 2");
