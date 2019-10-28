@@ -162,7 +162,7 @@ if($globalPerfilX==1){
                 </li-->                
 
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=listPOA">
+                  <a class="nav-link" href="?opcion=listPOA&area=0&unidad=0&sector=0">
                     <span class="sidebar-mini"> POAP </span>
                     <span class="sidebar-normal">POA Programacion</span>
                   </a>
@@ -662,7 +662,7 @@ if($globalPerfilX==2){
               <ul class="nav">                
 
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=listPOA">
+                  <a class="nav-link" href="?opcion=listPOA&area=0&unidad=0&sector=0">
                     <span class="sidebar-mini"> POAP </span>
                     <span class="sidebar-normal">POA Programacion</span>
                   </a>
@@ -1019,7 +1019,7 @@ if($globalPerfilX==3){
               <ul class="nav">                
 
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=listPOA">
+                  <a class="nav-link" href="?opcion=listPOA&area=0&unidad=0&sector=0">
                     <span class="sidebar-mini"> POAP </span>
                     <span class="sidebar-normal">POA Programacion</span>
                   </a>
@@ -1521,7 +1521,7 @@ if($globalPerfilX==5){
                 </li-->                
 
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=listPOA">
+                  <a class="nav-link" href="?opcion=listPOA&area=0&unidad=0&sector=0">
                     <span class="sidebar-mini"> POAP </span>
                     <span class="sidebar-normal">POA Programacion</span>
                   </a>
@@ -1867,7 +1867,7 @@ if($globalPerfilX==6){
               <ul class="nav">                
 
                 <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=listPOA">
+                  <a class="nav-link" href="?opcion=listPOA&area=0&unidad=0&sector=0">
                     <span class="sidebar-mini"> POAP </span>
                     <span class="sidebar-normal">POA Programacion</span>
                   </a>

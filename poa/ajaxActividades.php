@@ -34,7 +34,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 				<select class="selectpicker form-control form-control-sm" name="norma_priorizada<?=$codigo;?>" id="norma_priorizada<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 				  	<option value="">Sector</option>
 				  	<?php
-				  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
+				  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores_economicos where cod_estado=1 order by 2");
 					$stmt->execute();
 					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 						$codigoX=$row['codigo'];

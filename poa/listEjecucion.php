@@ -54,11 +54,6 @@ WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_ti
 //if($globalAdmin==0){
   $sql.=" and iua.cod_area in ($area) and iua.cod_unidadorganizacional in ($unidad)";
 //}
-if($globalUserPON==1){
-  $sql.=" union ";
-  $sql.=" SELECT (select p.nombre from perspectivas p where p.codigo=o.cod_perspectiva)as perspectiva, o.codigo, o.abreviatura, o.descripcion, (SELECT g.nombre from gestiones g WHERE g.codigo=o.cod_gestion) as gestion, i.nombre as nombreindicador, i.codigo as codigoindicador
-  FROM objetivos o, indicadores i, indicadores_unidadesareas iua WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and i.codigo in ($codigoIndicadorPON)";  
-}
 $sql.=" GROUP BY i.codigo ORDER BY perspectiva, abreviatura, nombreindicador";
 //echo $sql;
 $stmt = $dbh->prepare($sql);

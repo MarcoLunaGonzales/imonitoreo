@@ -371,6 +371,17 @@ function enviarDefinicionAreaUnidad(){
   location.href='index.php?opcion=listPOAEjecucion&area='+area+'&unidad='+unidad;
 }
 
+function enviarDefinicionAreaUnidadSector(){
+  var comboarea=document.getElementById('areaModal');
+  var combounidad=document.getElementById('unidadModal');
+  var combosector=document.getElementById('sectorModal');
+  var area=comboarea.options[comboarea.selectedIndex].value;
+  var unidad=combounidad.options[combounidad.selectedIndex].value;
+  var sector=combosector.options[combosector.selectedIndex].value;
+
+  location.href='index.php?opcion=listPOA&area='+area+'&unidad='+unidad+'&sector='+sector;
+}
+
 /*FUNCIONES AJAX PARA LAS SOLICITUDES DE FONDOS SIS*/
 function addSolicitudFondo(obj) {
       numFilas++;
@@ -660,7 +671,7 @@ function totalesDetallePOA2(){
 function totalesPlanificacion(){
    var main=document.getElementById('tablePaginatorFixed');   
    var numFilas=main.rows.length;
-   var numCols=main.rows[2].cells.length;
+   var numCols=main.rows[1].cells.length;
    
    for(var j=4; j<=numCols-1; j++){
     var subtotal=0;

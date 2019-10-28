@@ -24,6 +24,9 @@ $gestion=$_POST["gestion"];
 $codAreaX=$_POST["areas"];
 $codUnidadX=$_POST["unidad_organizacional"];
 
+$sectores=$_POST["sectores"];
+
+
 $codUnidadArray=implode(",", $codUnidadX);
 $codAreaArray=implode(",", $codAreaX);
 
@@ -58,10 +61,14 @@ $moduleName="Ejecucion POA Detallado por Actividad";
           <?php
           $sqlLista="SELECT distinct(a.codigo)as codigo, a.orden, a.nombre, a.cod_tiporesultado,
           a.cod_unidadorganizacional, a.cod_area, (SELECT h.nombre from hitos h where h.codigo=a.cod_hito)as hito, 
-          (SELECT i.nombre from indicadores i where i.codigo=a.cod_indicador)as indicador, a.cod_indicador
+          (SELECT i.nombre from indicadores i where i.codigo=a.cod_indicador)as indicador, a.cod_indicador,
+          (SELECT s.nombre from sectores_economicos s where s.codigo=a.cod_normapriorizada) as sector
            from actividades_poa a where  a.cod_estado=1 and a.cod_area in ($codAreaArray) and a.cod_unidadorganizacional in ($codUnidadArray) ";
           if($codActividad>0){
             $sqlLista.=" and a.codigo in ($codActividad) ";
+          }
+          if($sectores>0){
+            $sqlLista.=" and a.cod_normapriorizada in ($sectores)";
           }
           $sqlLista.=" order by hito, a.cod_unidadorganizacional, a.cod_area, indicador, a.nombre";
           
@@ -81,6 +88,7 @@ $moduleName="Ejecucion POA Detallado por Actividad";
           $stmtLista->bindColumn('hito', $nombreHitoActividad);
           $stmtLista->bindColumn('indicador', $nombreIndicadorActividad);
           $stmtLista->bindColumn('cod_indicador', $codIndicador);
+          $stmtLista->bindColumn('sector', $sectorEconomico);
 
           ?>
 
@@ -92,6 +100,7 @@ $moduleName="Ejecucion POA Detallado por Actividad";
                           <th class="text-center">Area</th>
                           <th class="text-center">Objetivo</th>
                           <th class="text-center">Indicador</th>
+                          <th class="text-center">Sector</th>
                           <th class="text-center">Hito</th>
                           <th class="text-center">Nombre</th>
                           <th colspan="2" class="text-center">Ene</th>
@@ -109,6 +118,7 @@ $moduleName="Ejecucion POA Detallado por Actividad";
                           <th colspan="2" class="text-center">Total</th>
                         </tr>
                         <tr>
+                          <th class="text-center">-</th>
                           <th class="text-center">-</th>
                           <th class="text-center">-</th>
                           <th class="text-center">-</th>
@@ -158,6 +168,7 @@ $moduleName="Ejecucion POA Detallado por Actividad";
                           <td class="text-center font-weight-bold small"><h6><p class="text-danger"><?=$abrevUnidad;?>-<?=$abrevArea;?></p></h6></td>
                           <td class="text-left font-weight-bold small"><?=$nombreObjetivo;?></td>
                           <td class="text-left font-weight-bold small"><?=$nombreIndicadorActividad;?></td>
+                          <td class="text-left font-weight-bold small"><?=$sectorEconomico;?></td>
                           <td class="text-left font-weight-bold small"><?=$nombreHitoActividad;?></td>
                           <td class="text-left font-weight-bold small"><?=$nombre;?></td>
                         <?php
@@ -208,6 +219,7 @@ $moduleName="Ejecucion POA Detallado por Actividad";
                       </tbody>
                       <tfoot>
                           <tr>
+                            <th>-</th>
                             <th>-</th>
                             <th>-</th>
                             <th>-</th>

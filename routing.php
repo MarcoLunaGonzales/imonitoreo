@@ -397,6 +397,9 @@
 
 		//POA  - PON
 		if ($_GET['opcion']=='listPOA') {
+			$area=$_GET['area'];
+			$unidad=$_GET['unidad'];
+			$sector=$_GET['sector'];
 			require_once('poa/list.php');
 		}
 		if ($_GET['opcion']=='listPOAEjecucion') {

@@ -15,8 +15,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 
 $codigoIndicador=$codigo;
-$areaIndicador=$area;
-$unidadIndicador=$unidad;
+
+$globalAreaPlanificacion=$_SESSION["globalAreaPlanificacion"];
+$globalUnidadPlanificacion=$_SESSION["globalUnidadPlanificacion"];
+$globalSectorPlanificacion=$_SESSION["globalSectorPlanificacion"];
 
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
@@ -53,7 +55,7 @@ while($rowVerifica = $stmtVerifica->fetch(PDO::FETCH_ASSOC)) {
 
 // Preparamos
 $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
-(SELECT s.nombre from sectores s where s.codigo=a.cod_normapriorizada)as sectorpriorizado,
+(SELECT s.nombre from sectores_economicos s where s.codigo=a.cod_normapriorizada)as sectorpriorizado,
 (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
 (a.cod_tiposeguimiento)as tipodato, 
@@ -61,19 +63,22 @@ a.producto_esperado, a.cod_unidadorganizacional, a.cod_area,
 (a.cod_datoclasificador)as datoclasificador, 
 (select p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, actividad_extra, clave_indicador
  from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 "; 
-if($globalAdmin==0){
-  $sql.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) ";
   //SI EL CONTADOR IDENTIFICA QUE HAY UNA PERSONA ASIGNADA AL INDICADOR LO FILTRA POR PERSONA
-  if($contadorVerifica>0){
-    $sql.=" and a.cod_personal in ($globalUser) ";
-  }
+if($contadorVerifica>0){
+  $sql.=" and a.cod_personal in ($globalUser) ";
 } 
-if($areaIndicador!=0){
-  $sql.=" and a.cod_area in ($areaIndicador) ";
+
+if($globalAreaPlanificacion!=0){
+  $sql.=" and a.cod_area in ($globalAreaPlanificacion) ";
 }
-if($unidadIndicador!=0){
-  $sql.=" and a.cod_unidadorganizacional in ($unidadIndicador) ";
+if($globalUnidadPlanificacion!=0){
+  $sql.=" and a.cod_unidadorganizacional in ($globalUnidadPlanificacion) ";
+}
+if($globalSectorPlanificacion!=0){
+  $sql.=" and a.cod_normapriorizada in ($globalSectorPlanificacion) ";
 } 
+
+
 $sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
 
 //echo $sql;
@@ -113,9 +118,9 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                   <h4 class="card-title"><?=$moduleName?></h4>
                   <h6 class="card-title">Objetivo: <?=$nombreObjetivo?></h6>
                   <h6 class="card-title">Indicador: <?=$nombreIndicador?> &nbsp;&nbsp;&nbsp;
-                    <a href="#" class="<?=$buttonCeleste;?> btn-round" data-toggle="modal" data-target="#myModal"  title="Filtrar">
+                    <!--a href="#" class="<?=$buttonCeleste;?> btn-round" data-toggle="modal" data-target="#myModal"  title="Filtrar">
                         <i class="material-icons">filter_list</i>
-                    </a>
+                    </a-->
                   </h6>
                   
 
@@ -195,13 +200,13 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                     <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAActInd&codigo=<?=$codigoIndicador?>'">Registrar</button-->
                     <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAGroup&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Registrar</button>
 
-                    <a href="#" onclick="javascript:window.open('poa/registerPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>')" class="<?=$button;?>">Planificar</a>  
+                    <a href="#" onclick="javascript:window.open('poa/registerPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$globalAreaPlanificacion;?>&unidad=<?=$globalUnidadPlanificacion;?>')" class="<?=$button;?>">Planificar</a>  
 
                     <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOA&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar Personal</button>
 
                     <button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOAI&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar POAI</button-->
 
-                    <a href="?opcion=listPOA" class="<?=$buttonCancel;?>">Cancelar</a> 
+                    <a href="?opcion=listPOA&area=0&unidad=0&sector=0" class="<?=$buttonCancel;?>">Cancelar</a> 
                 </div>
             </div>
           </div>  

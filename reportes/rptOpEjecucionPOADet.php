@@ -104,6 +104,29 @@ $dbh = new Conexion();
 				  </div>
 				</div>
 
+				<div class="row">
+				  <label class="col-sm-2 col-form-label">Sectores</label>
+				  <div class="col-sm-7">
+					<div class="form-group">
+					  <select class="selectpicker form-control" title="Seleccione una opcion" name="sectores" id="sectores" data-style="<?=$comboColor;?>">
+					  	<option value="0" selected="true">-</option>
+					  	<?php
+					  	$stmt = $dbh->prepare("SELECT s.codigo, s.nombre, s.abreviatura FROM sectores_economicos s order by 2");
+						$stmt->execute();
+						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+							$codigoX=$row['codigo'];
+							$nombreX=$row['nombre'];
+							$abreviaturaX=$row['abreviatura'];
+						?>
+						<option value="<?=$codigoX;?>" data-subtext="<?=$nombreX;?>"><?=$abreviaturaX;?></option>
+						<?php	
+						}
+					  	?>
+					  </select>
+					</div>
+				  </div>
+				</div>
+
 				
 				
 
