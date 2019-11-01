@@ -23,7 +23,7 @@ $areaString=implode(",", $areas);
 
 $sql="SELECT a.cod_area, a.cod_unidadorganizacional, i.codigo,
 i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre as nombreperspectiva
- from actividades_poa a, indicadores i, objetivos o, perspectivas p where a.cod_area in ($areaString) 
+ from actividades_poa a, indicadores i, objetivos o, perspectivas p where a.cod_gestion='$gestion' and a.cod_area in ($areaString) 
 and a.cod_unidadorganizacional in ($unidadOrgString) and o.cod_perspectiva in ($perspectivaString) and a.cod_estado=1 and 
  a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva
 group by a.cod_area, a.cod_unidadorganizacional, i.codigo, i.nombre

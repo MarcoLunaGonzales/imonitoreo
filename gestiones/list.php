@@ -9,7 +9,7 @@ $moduleName="Gestiones";
 
 $globalAdmin=$_SESSION["globalAdmin"];
 // Preparamos
-$sql="SELECT codigo, nombre, abreviatura, (select er.nombre from estados_referenciales er, gestiones_datosadicionales gd where er.codigo=gd.cod_estado and gd.cod_gestion=g.codigo) as estado, (select ep.nombre from estados_poa ep, gestiones_datosadicionales gd where ep.codigo=gd.cod_estadopoa and gd.cod_gestion=g.codigo) as estadopoa FROM $table g where cod_estado=1 order by 1 desc";
+$sql="SELECT codigo, nombre, abreviatura, (select er.nombre from estados_referenciales er, gestiones_datosadicionales gd where er.codigo=gd.cod_estado and gd.cod_gestion=g.codigo) as estado, (select ep.nombre from estados_poa ep, gestiones_datosadicionales gd where ep.codigo=gd.cod_estadopoa and gd.cod_gestion=g.codigo) as estadopoa FROM $table g where cod_estado in (1,2,3) order by 1 desc";
 //echo $sql;
 $stmt = $dbh->prepare($sql);
 // Ejecutamos

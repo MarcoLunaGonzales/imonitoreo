@@ -289,6 +289,9 @@
 			$codigo=$_GET['codigo'];
 			require_once('versiones_poa/saveGenerarPOA.php');
 		}
+		if ($_GET['opcion']=='cargarPOA') {
+			require_once('utilitarios/cargarPOA.php');
+		}
 		
 
 

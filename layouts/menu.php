@@ -498,6 +498,13 @@ if($globalPerfilX==1){
                 </li>   
 
                 <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=cargarPOA">
+                    <span class="sidebar-mini"> CPOA </span>
+                    <span class="sidebar-normal"> Cargar POA </span>
+                  </a>
+                </li>   
+
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=descargarDatosConta">
                     <span class="sidebar-mini"> DC </span>
                     <span class="sidebar-normal"> Datos Contabilidad </span>

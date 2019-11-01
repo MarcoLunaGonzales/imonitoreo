@@ -799,6 +799,11 @@ function clean_string($string)
         $string
     );
     $string = str_replace("'","",$string);
+
+    $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+    $reemplazar=array("", "", "", "");
+    $string=str_ireplace($buscar,$reemplazar,$string);
+
     return $string;
 }
 

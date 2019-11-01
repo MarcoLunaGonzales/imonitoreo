@@ -4,7 +4,7 @@
    private $tipo_de_base = 'mysql';
    //private $host = '192.168.10.19';
    private $host = 'localhost';
-   private $nombre_de_base = 'imonitoreo';
+   private $nombre_de_base = 'ibnmonitoreo';
    //private $nombre_de_base = 'ibnmonitoreo';
    private $usuario = 'root';
    //private $usuario = 'ingresobd';

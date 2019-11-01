@@ -63,7 +63,7 @@ $moduleName="Ejecucion POA Detallado por Actividad";
           a.cod_unidadorganizacional, a.cod_area, (SELECT h.nombre from hitos h where h.codigo=a.cod_hito)as hito, 
           (SELECT i.nombre from indicadores i where i.codigo=a.cod_indicador)as indicador, a.cod_indicador,
           (SELECT s.nombre from sectores_economicos s where s.codigo=a.cod_normapriorizada) as sector
-           from actividades_poa a where  a.cod_estado=1 and a.cod_area in ($codAreaArray) and a.cod_unidadorganizacional in ($codUnidadArray) ";
+           from actividades_poa a where  a.cod_gestion='$gestion' and a.cod_estado=1 and a.cod_area in ($codAreaArray) and a.cod_unidadorganizacional in ($codUnidadArray) ";
           if($codActividad>0){
             $sqlLista.=" and a.codigo in ($codActividad) ";
           }
