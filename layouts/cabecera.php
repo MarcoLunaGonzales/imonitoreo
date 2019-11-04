@@ -23,7 +23,7 @@
               $fechaSistema=date("d/m/Y");
               $horaSistema=date("H:i");
             ?>
-            <h6><?="[Gestion:".$globalNombreGestion."] [Area:".$globalNombreUnidad." - ".$globalNombreArea."]";?></h6>
+            <h6>Gestión Trabajo: </h6>&nbsp;<h4 class="text-danger font-weight-bold">[<?=$globalNombreGestion;?>]</h4>&nbsp;&nbsp;&nbsp;<h6>Unidad/Area: </h6>&nbsp;<h4 class="text-danger font-weight-bold">[<?=$globalNombreUnidad." - ".$globalNombreArea;?>]</h4>
           
           <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">

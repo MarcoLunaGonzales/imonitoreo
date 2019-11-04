@@ -223,8 +223,9 @@ function abrevArea($codigo){
    $stmt->execute();
    $cadenaAreas="";
    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      $cadenaAreas=$cadenaAreas."-".$row['abreviatura'];
+      $cadenaAreas.=$row['abreviatura']."-";
    }
+   $cadenaAreas = substr($cadenaAreas, 0, -1); 
    return($cadenaAreas);
 }
 
@@ -327,8 +328,9 @@ function abrevUnidad($codigo){
    $stmt->execute();
    $nombreX="";
    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      $nombreX.=$row['abreviatura']." - ";
+      $nombreX.=$row['abreviatura']."-";
    }
+   $nombreX = substr($nombreX, 0, -1); 
    return($nombreX);
 }
 
@@ -342,6 +344,18 @@ function nameObjetivo($codigo){
 		$nombreX=$row['nombre'];
 	}
 	return($nombreX);
+}
+
+function nameSectorEconomico($codigo){
+  $dbh = new Conexion();
+  $stmt = $dbh->prepare("SELECT nombre FROM sectores_economicos where codigo=:codigo");
+  $stmt->bindParam(':codigo',$codigo);
+  $stmt->execute();
+  $nombreX="";
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $nombreX=$row['nombre'];
+  }
+  return($nombreX);
 }
 
 function nameObjetivoxIndicador($codigo){

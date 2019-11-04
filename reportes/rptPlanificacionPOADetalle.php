@@ -22,6 +22,8 @@ $version=$_POST["version"];
 $codIndicador=$_POST["cod_indicador"];
 $nameIndicador=nameIndicador($codIndicador);
 
+$nameObjetivo=nameObjetivoxIndicador($codIndicador);
+
 $nameVersion=nameVersion($version);
 
 $perspectivaString=implode(",", $perspectiva);
@@ -36,13 +38,15 @@ if($version==0){
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
 (SELECT t.abreviatura from tipos_seguimiento t where t.codigo=a.cod_tiposeguimiento)as tipodato, 
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado,
-i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre as nombreperspectiva
+i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre as nombreperspectiva,
+(select u.nombre from unidades_organizacionales u where u.codigo=a.cod_unidadorganizacional)as nombreunidad,
+(select a.nombre from areas a where a.codigo=a.cod_area)as nombrearea
  from actividades_poa a, indicadores i, objetivos o, perspectivas p where a.cod_gestion in ($gestion) and a.cod_area in ($areaString) and a.cod_unidadorganizacional in ($unidadOrgString) and o.cod_perspectiva in ($perspectivaString) and a.cod_estado=1 and 
  a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva and i.codigo='$codIndicador' ";
  if($sectores>0){
   $sql.=" and a.cod_normapriorizada in ($sectores) "; 
  }
- $sql.=" order by nombreperspectiva, nombreobjetivo, nombreindicador, a.orden";  
+ $sql.=" order by nombreunidad, nombrearea, sector, a.nombre";  
 }else{
   $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,
@@ -50,13 +54,15 @@ i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
 (SELECT t.abreviatura from tipos_seguimiento t where t.codigo=a.cod_tiposeguimiento)as tipodato, 
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado,
-i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre as nombreperspectiva
+i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre as nombreperspectiva,
+(select u.nombre from unidades_organizacionales u where u.codigo=a.cod_unidadorganizacional)as nombreunidad,
+(select a.nombre from areas a where a.codigo=a.cod_area)as nombrearea
  from actividades_poa_version a, indicadores i, objetivos o, perspectivas p where a.cod_gestion in ($gestion) and a.cod_area in ($areaString) and a.cod_unidadorganizacional in ($unidadOrgString) and o.cod_perspectiva in ($perspectivaString) and a.cod_estado=1 and 
  a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva and a.cod_version='$version' and i.codigo='$codIndicador' ";
  if($sectores>0){
   $sql.=" AND a.cod_normapriorizada in ($sectores) "; 
  }
- $sql.=" order by nombreperspectiva, nombreobjetivo, nombreindicador, a.orden";
+ $sql.=" order by nombreunidad, nombrearea, sector, a.nombre";
 }
 
 //echo $sql;
@@ -95,8 +101,9 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                   </div>
                   <h4 class="card-title">Reporte de Planificacion POA</h4>
                   <h6 class="card-title">Gestion: <?=$nameGestion;?> Version: <?=$nameVersion;?></h6>
+                  <h6 class="card-title">Objetivo: <?=$nameObjetivo;?></h6>
                   <h6 class="card-title">Indicador: <?=$nameIndicador;?></h6>
-
+  
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">

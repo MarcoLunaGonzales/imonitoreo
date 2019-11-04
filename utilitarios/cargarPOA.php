@@ -28,7 +28,7 @@ $dbh = new Conexion();
             <select class="selectpicker" title="Seleccionar" name="gestion" id="gestion" data-style="<?=$comboColor;?>" required>
               <option disabled selected value=""></option>
               <?php
-              $stmt = $dbh->prepare("SELECT codigo, nombre FROM gestiones WHERE cod_estado=3 order by 2 desc");
+              $stmt = $dbh->prepare("SELECT g.codigo, g.nombre FROM gestiones g, gestiones_datosadicionales gd WHERE g.codigo=gd.cod_gestion and gd.cod_estadopoa=1 order by 2 desc");
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               $codigoX=$row['codigo'];

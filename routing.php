@@ -472,6 +472,13 @@
 			$codigo_indicador=$_GET['codigo_indicador'];
 			require_once('poa/saveDelete.php');
 		}
+		if ($_GET['opcion']=='saveDeleteActxIndicador') {
+			$codigo_indicador=$_GET['codigo'];
+			$codigo_area=$_GET['area'];
+			$codigo_unidad=$_GET['unidad'];
+			$codigo_sector=$_GET['sector'];
+			require_once('poa/saveDeleteActxIndicador.php');
+		}
 		if ($_GET['opcion']=='asignarPOA') {
 			$codigo=$_GET['codigo'];
 			$areaUnidad=$_GET['areaUnidad'];

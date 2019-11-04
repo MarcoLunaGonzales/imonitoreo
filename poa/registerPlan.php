@@ -16,6 +16,13 @@ $globalAdmin=$_SESSION["globalAdmin"];
 $codigoIndicador=$_GET['codigo'];
 $areaIndicador=$_GET['area'];
 $unidadIndicador=$_GET['unidad'];
+$sectorIndicador=$_GET['sector'];
+
+$nameSector="-";
+if($sectorIndicador!=0){
+  $nameSector=nameSectorEconomico($sectorIndicador);
+}
+
 
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
@@ -75,7 +82,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					  <h4 class="card-title">Registrar <?=$moduleName;?> </h4>
 					  <h6 class="card-title">Objetivo: <?=$nombreObjetivo;?></h6>
 					  <h6 class="card-title">Indicador: <?=$nombreIndicador;?></h6>
-					  <h6 class="card-title">Periodicidad:<?=$nombrePeriodo;?></h6>
+					  <h6 class="card-title">Sector: <?=$nameSector;?></h6>
 					</div>
 				</div>
 				<span class="text-center font-weight-bold text-primary">Nota: Los montos de ejecucion se visualizan debajo de la caja de texto en color morado.</span>
@@ -90,7 +97,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					</div>
 
 					<?php
-					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_tiporesultado,
+					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.producto_esperado,
 					(SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador, a.cod_unidadorganizacional, a.cod_area
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1";
 					if($globalAdmin==0){
@@ -102,8 +109,10 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					if($codEstadoPOAGestion==3 && $codEstadoPOAGestion==1){
 						$sqlLista.=" and a.actividad_extra=1 ";
 					}
-//					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre";
-					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+					if($sectorIndicador!=0){
+						$sqlLista.=" and a.cod_normapriorizada in ($sectorIndicador) ";
+					}
+					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden ";
 					//echo $sqlLista;
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
@@ -113,7 +122,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					$stmtLista->bindColumn('codigo', $codigo);
 					$stmtLista->bindColumn('orden', $orden);
 					$stmtLista->bindColumn('nombre', $nombre);
-					$stmtLista->bindColumn('cod_tiporesultado', $codTipoDato);
+					$stmtLista->bindColumn('producto_esperado', $productoEsperado);
 					$stmtLista->bindColumn('datoclasificador', $datoClasificador);
 					$stmtLista->bindColumn('cod_unidadorganizacional', $codUnidad);
 					$stmtLista->bindColumn('cod_area', $codArea);
@@ -130,6 +139,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                      <th class="text-center">#</th>
 		                      <th class="text-center">Area</th>
 		                      <th>Nombre</th>
+		                      <th>Prod.Esperado</th>
 		                      <th width="<?=$anchoColumna;?>">Ene</th>
 		                      <th width="<?=$anchoColumna;?>">Feb</th>
 		                      <th width="<?=$anchoColumna;?>">Mar</th>
@@ -156,6 +166,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                      <td class="text-center"><?=$index;?></td>
 		                      <td class="text-center font-weight-bold"><h6><p class="text-danger"><?=$abrevUnidad;?>-<?=$abrevArea;?></p></h6></td>
 		                      <td class="text-left font-weight-bold small"><?=$nombre;?></td>
+		                      <td class="text-left small"><?=$productoEsperado;?></td>
 		                    <?php
 		                    $totalPlanificado=0;
 	                    	for($i=1;$i<=12;$i++){
@@ -186,14 +197,12 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                            $descripcionEj=$rowRec['descripcion'];
 	                          	}
 	                          	//FIN EJECUCION
-	                    		if($codTipoDato==1){
 	                    	?>
 	                    		<td>
 	                    			<input class="form-control" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="planificado<?=$index;?>" onChange="calcularTotalPlanificado(<?=$index;?>);" OnKeyUp="calcularTotalPlanificado(<?=$index;?>);" step="0.01" required>
 	                    			<span class="text-center font-weight-bold text-primary" title="<?=$descripcionEj?>"><?=($valorEj)>0?formatNumberDec($valorEj):"-";?></span>
 	                    		</td>
 	                    	<?php	
-	                    		}
 	                    	}
 		                    ?>
 		                    <input type="hidden" name="tipo_dato|<?=$codigo;?>" id="tipo_dato|<?=$codigo;?>|<?=$i;?>" value="<?=$codTipoDato;?>">

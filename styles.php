@@ -12,6 +12,7 @@ $buttonDetailMin="btn btn-info";
 $buttonCancel="btn btn-danger";
 
 $buttonDetail="btn btn-fab btn-info";
+$buttonDetailDelete="btn btn-fab btn-danger";
 
 $buttonCard="card-header-rose card-header-icon";
 

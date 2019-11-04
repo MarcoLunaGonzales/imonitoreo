@@ -10,14 +10,23 @@ $dbh = new Conexion();
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();*/
 
+
+$nameUnidad="";
+$nameArea="";
+$nameSector="-";
+
 if($area!=0 && $unidad!=0){
   $_SESSION["globalAreaPlanificacion"]=$area;
   $_SESSION["globalUnidadPlanificacion"]=$unidad;
+  $nameUnidad=abrevUnidad($unidad);
+  $nameArea=abrevArea($area);
 }
 
 if($sector!=0){
   $_SESSION["globalSectorPlanificacion"]=$sector;
-}else{
+  $nameSector=nameSectorEconomico($sector);
+}
+if($sector==""){
   $_SESSION["globalSectorPlanificacion"]=0;
 }
 
@@ -66,10 +75,11 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
               <i class="material-icons">assignment</i>
             </div>
             <h4 class="card-title"><?=$moduleName?></h4>
+            <h6 class="card-title">Unidad: <span class="text-danger"><?=$nameUnidad;?></span> - Area: <span class="text-danger"><?=$nameArea;?></span> - Sector: <span class="text-danger"><?=$nameSector;?></span></h6>
           </div>
           <div class="card-body">
             <div class="table-responsive">
-              <table class="table table-striped" id="tablePaginator">
+              <table class="table table-striped" id="tablePaginator50">
                 <thead>
                   <tr>
                     <th class="text-center">-</th>
@@ -79,6 +89,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                     <th>Ind. Estrategico</th>
                     <th class="text-center" data-orderable="false">Actividades</th>
                     <th class="text-center" data-orderable="false">POAI</th>
+                    <th class="text-center" data-orderable="false">Borrar</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -101,8 +112,8 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                     if($globalAdmin==1){
                     ?>
                     <td class="text-center">
-                      <button class="<?=$buttonDetail;?>" data-toggle="modal" data-target="#myModal" onClick="ajaxCargosPOAI(<?=$codigoIndicador?>);" title="Registrar Cargos POAI"> 
-                          <i class="material-icons">settings</i>
+                      <button class="<?=$buttonDetail;?>" data-toggle="modal" data-target="#myModal" onClick="ajaxCargosPOAI(<?=$codigoIndicador?>);"> 
+                          <i class="material-icons" title="Registrar Cargos POAI">settings</i>
                       </button>
                     </td>
                     <?php
@@ -114,6 +125,25 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                     <?php
                     }
                     ?>
+
+                    <?php
+                    if($globalAdmin==1){
+                    ?>
+                    <td class="text-center">
+                      <button class="<?=$buttonDetailDelete;?>" onclick="alerts.showSwal('warning-message-and-confirmation','index.php?opcion=saveDeleteActxIndicador&codigo=<?=$codigoIndicador;?>&area=<?=$area;?>&unidad=<?=$unidad;?>&sector=<?=$sector;?>')"> 
+                          <i class="material-icons" title="Borrar Todas las Actividades">delete</i>
+                      </button>
+                    </td>
+                    <?php
+                    }else{
+                    ?>
+                    <td class="text-center">
+                      -
+                    </td>
+                    <?php
+                    }
+                    ?>
+
                   </tr>
                   <?php
           				$index++;
@@ -132,7 +162,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
 
 
 <!-- Classic Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

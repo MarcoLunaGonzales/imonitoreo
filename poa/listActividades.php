@@ -20,6 +20,17 @@ $globalAreaPlanificacion=$_SESSION["globalAreaPlanificacion"];
 $globalUnidadPlanificacion=$_SESSION["globalUnidadPlanificacion"];
 $globalSectorPlanificacion=$_SESSION["globalSectorPlanificacion"];
 
+$nameUnidad="";
+$nameArea="";
+$nameSector="-";
+
+$nameUnidad=abrevUnidad($globalUnidadPlanificacion);
+$nameArea=abrevArea($globalAreaPlanificacion);
+
+if($globalSectorPlanificacion!=0){
+  $nameSector=nameSectorEconomico($globalSectorPlanificacion);
+}
+
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
 
@@ -79,7 +90,7 @@ if($globalSectorPlanificacion!=0){
 } 
 
 
-$sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+$sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre";
 
 //echo $sql;
 
@@ -117,7 +128,9 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                   </div>
                   <h4 class="card-title"><?=$moduleName?></h4>
                   <h6 class="card-title">Objetivo: <?=$nombreObjetivo?></h6>
-                  <h6 class="card-title">Indicador: <?=$nombreIndicador?> &nbsp;&nbsp;&nbsp;
+                  <h6 class="card-title">Indicador: <?=$nombreIndicador?>
+                  <h6 class="card-title">Unidad: <span class="text-danger"><?=$nameUnidad;?></span> - Area: <span class="text-danger"><?=$nameArea;?></span> - Sector: <span class="text-danger"><?=$nameSector;?></span></h6>
+          
                     <!--a href="#" class="<?=$buttonCeleste;?> btn-round" data-toggle="modal" data-target="#myModal"  title="Filtrar">
                         <i class="material-icons">filter_list</i>
                     </a-->
@@ -127,7 +140,7 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-striped" id="tablePaginator">
+                    <table class="table table-striped" id="tablePaginator50">
                       <thead>
                         <tr>
                           <th class="text-center">-</th>
@@ -200,13 +213,13 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                     <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAActInd&codigo=<?=$codigoIndicador?>'">Registrar</button-->
                     <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAGroup&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Registrar</button>
 
-                    <a href="#" onclick="javascript:window.open('poa/registerPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$globalAreaPlanificacion;?>&unidad=<?=$globalUnidadPlanificacion;?>')" class="<?=$button;?>">Planificar</a>  
+                    <a href="#" onclick="javascript:window.open('poa/registerPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$globalAreaPlanificacion;?>&unidad=<?=$globalUnidadPlanificacion;?>&sector=<?=$globalSectorPlanificacion;?>')" class="<?=$button;?>">Planificar</a>  
 
                     <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOA&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar Personal</button>
 
                     <button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOAI&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar POAI</button-->
 
-                    <a href="?opcion=listPOA&area=0&unidad=0&sector=0" class="<?=$buttonCancel;?>">Cancelar</a> 
+                    <a href="?opcion=listPOA&area=<?=$globalAreaPlanificacion;?>&unidad=<?=$globalUnidadPlanificacion;?>&sector=<?=$globalSectorPlanificacion;?>" class="<?=$buttonCancel;?>">Cancelar</a> 
                 </div>
             </div>
           </div>  
