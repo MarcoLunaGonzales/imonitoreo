@@ -112,7 +112,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					if($sectorIndicador!=0){
 						$sqlLista.=" and a.cod_normapriorizada in ($sectorIndicador) ";
 					}
-					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden ";
+					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre ";
 					//echo $sqlLista;
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos

@@ -542,6 +542,9 @@
 		if ($_GET['opcion']=='rptOpPlanificacionPOADetalle') {
 			require_once('reportes/rptOpPlanificacionPOADet.php');
 		}
+		if ($_GET['opcion']=='rptOpPlanificacionPOASector') {
+			require_once('reportes/rptOpPlanificacionPOASector.php');
+		}
 		if ($_GET['opcion']=='rptOpPresupuestoOp') {
 			require_once('reportes/rptOpPresupuesto.php');
 		}

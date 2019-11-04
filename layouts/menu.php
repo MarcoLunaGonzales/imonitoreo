@@ -376,6 +376,13 @@ if($globalPerfilX==1){
                 </li> 
 
                 <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPlanificacionPOASector">
+                    <span class="sidebar-mini"> PPS </span>
+                    <span class="sidebar-normal"> Planificacion POA x Sector</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpEjecucionPOA">
                     <span class="sidebar-mini"> EPOA </span>
                     <span class="sidebar-normal"> Ejecucion POA</span>

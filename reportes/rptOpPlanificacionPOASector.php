@@ -25,12 +25,12 @@ $dbh = new Conexion();
 	<div class="container-fluid">
 
 		<div class="col-md-12">
-		  <form id="form1" class="form-horizontal" action="reportes/rptPlanificacionPOADetalle.php" method="post" target="_blank">
+		  <form id="form1" class="form-horizontal" action="reportes/rptPlanificacionPOASector.php" method="post" target="_blank">
 		  	<input type="hidden" name="cod_objetivo" value="<?=$codigoObjetivo?>">
 			<div class="card ">
 			  <div class="card-header <?=$colorCard;?> card-header-text">
 				<div class="card-text">
-				  <h4 class="card-title">Reporte Planificacion POA</h4>
+				  <h4 class="card-title">Reporte Planificacion POA x Sector</h4>
 				</div>
 			  </div>
 			  <div class="card-body ">
@@ -58,13 +58,13 @@ $dbh = new Conexion();
 				</div>
 
 				<div class="row">
-				  <label class="col-sm-2 col-form-label">Perspectiva</label>
+				  <label class="col-sm-2 col-form-label">Sector</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
-					  <select class="selectpicker" name="perspectiva[]" id="perspectiva" data-style="select-with-transition" title="Seleccione una opcion" onChange="ajaxIndicadoresReport(this.form);" required>
+					  <select class="selectpicker" name="sectores[]" id="sectores" data-style="select-with-transition" title="Seleccione una opcion" required>
 					  	<option disabled selected value=""></option>
 					  	<?php
-					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM perspectivas order by 2 desc");
+					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores_economicos order by 2");
 						$stmt->execute();
 						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 							$codigoX=$row['codigo'];
@@ -75,14 +75,6 @@ $dbh = new Conexion();
 						}
 					  	?>
 					  </select>
-					</div>
-				  </div>
-				</div>
-
-				<div class="row">
-				  <label class="col-sm-2 col-form-label">Indicador</label>
-				  <div class="col-sm-7">
-					<div class="form-group" id="divIndicador">
 					</div>
 				  </div>
 				</div>
@@ -134,53 +126,6 @@ $dbh = new Conexion();
 					</div>
 				  </div>
 				</div>
-
-
-				<div class="row">
-				  <label class="col-sm-2 col-form-label">Sectores</label>
-				  <div class="col-sm-7">
-					<div class="form-group">
-					  <select class="selectpicker form-control" title="Seleccione una opcion" name="sectores" id="sectores" data-style="<?=$comboColor;?>">
-					  	<option value="0" selected="true">-</option>
-					  	<?php
-					  	$stmt = $dbh->prepare("SELECT s.codigo, s.nombre, s.abreviatura FROM sectores_economicos s order by 2");
-						$stmt->execute();
-						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-							$codigoX=$row['codigo'];
-							$nombreX=$row['nombre'];
-							$abreviaturaX=$row['abreviatura'];
-						?>
-						<option value="<?=$codigoX;?>" data-subtext="<?=$nombreX;?>"><?=$abreviaturaX;?></option>
-						<?php	
-						}
-					  	?>
-					  </select>
-					</div>
-				  </div>
-				</div>
-
-				<div class="row">
-				  <label class="col-sm-2 col-form-label">Ver Version</label>
-				  <div class="col-sm-7">
-					<div class="form-group">
-					  <select class="selectpicker" title="Seleccione una opcion" name="version" id="version" data-style="<?=$comboColor;?>">
-					  	<option value="0" selected="true">-</option>
-					  	<?php
-					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM versiones_poa order by 1");
-						$stmt->execute();
-						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-							$codigoX=$row['codigo'];
-							$nombreX=$row['nombre'];
-						?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>
-						<?php	
-						}
-					  	?>
-					  </select>
-					</div>
-				  </div>
-				</div>
-				
 
 
 			  </div>

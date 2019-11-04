@@ -6,6 +6,7 @@ require_once '../styles.php';
 $dbh = new Conexion();
 
 $codPerspectiva=$_GET['cod_perspectiva'];
+$codGestion=$_GET['cod_gestion'];
 
 ?>
 
@@ -13,7 +14,7 @@ $codPerspectiva=$_GET['cod_perspectiva'];
 	<option disabled selected value=""></option>
 	<?php
 
-	$sql="SELECT i.codigo, o.abreviatura, i.nombre from indicadores i, objetivos o where o.cod_perspectiva='$codPerspectiva' and i.cod_objetivo=o.codigo;";
+	$sql="SELECT i.codigo, o.abreviatura, i.nombre from indicadores i, objetivos o where o.cod_perspectiva='$codPerspectiva' and i.cod_objetivo=o.codigo and i.cod_gestion='$codGestion' ";
 	
 	echo $sql;
 

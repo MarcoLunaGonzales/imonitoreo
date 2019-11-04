@@ -143,7 +143,7 @@ while(!feof($file)){
 		}		
 		
 		if($banderaError==0){
-			$sqlInsert="INSERT INTO actividades_poa_temp (cod_gestion, orden, nombre, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, clave_indicador, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, cod_tiporesultado, cod_datoclasificador, cod_hito) VALUES ('$gestion', '$indice', '$nombreAct', '$idSector', '$idNorma', '1', '$prodEsperado', '$cmi', '$idIndicador', '$idUnidad', '$idArea', '1', '1', '$codClasificador', '$idHito');";
+			$sqlInsert="INSERT INTO actividades_poa_temp (cod_gestion, orden, nombre, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, clave_indicador, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, cod_tiporesultado, cod_datoclasificador, cod_hito) VALUES ('$gestion', '$indice', '$nombreAct', '$idSector', '$idNorma', '$unidadMedida', '$prodEsperado', '$cmi', '$idIndicador', '$idUnidad', '$idArea', '1', '1', '$codClasificador', '$idHito');";
 			$stmtInsert=$dbh->prepare($sqlInsert);
 		  	$stmtInsert->execute();
 

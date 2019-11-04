@@ -40,12 +40,14 @@ function nuevoAjax()
 
 
 
-function ajaxIndicadoresReport(perspectiva){
+function ajaxIndicadoresReport(formu){
   var contenedor;
   contenedor = document.getElementById('divIndicador');
   ajax=nuevoAjax();
-  perspectiva=perspectiva.value;
-  ajax.open('GET', 'reportes/ajaxIndicadores.php?cod_perspectiva='+perspectiva,true);
+  var perspectiva=document.getElementById('perspectiva').value;
+  var gestion=document.getElementById('gestion').value;
+
+  ajax.open('GET', 'reportes/ajaxIndicadores.php?cod_perspectiva='+perspectiva+'&cod_gestion='+gestion,true);
   ajax.onreadystatechange=function() {
     if (ajax.readyState==4) {
       contenedor.innerHTML = ajax.responseText

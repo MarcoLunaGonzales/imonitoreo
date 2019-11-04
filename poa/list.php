@@ -105,7 +105,10 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                     <td><?=$nombreIndicador;?></td>
                     <td class="text-center">
                       <a href='index.php?opcion=listActividadesPOA&codigo=<?=$codigoIndicador;?>&area=0&unidad=0' rel="tooltip"  class="<?=$buttonDetail;?>">
-                        <i class="material-icons" title="Ver Actividades">description</i>
+                        <!--i class="material-icons" title="Ver Actividades">description</i-->
+                          <strong class="fa-stack-1x">
+                              2    
+                          </strong>
                       </a>
                     </td>
                     <?php
@@ -173,7 +176,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
       </div>
       <div class="modal-body" style="text-align:center;">
       <select class="selectpicker" name="unidadModal" id="unidadModal" data-style="<?=$comboColor;?>" required>
-        <option disabled selected value="">Unidad</option>
+        <!--option disabled selected value="">Unidad</option-->
         <?php
         $sqlAreas="SELECT i.cod_indicador, u.codigo as codigoUnidad, u.nombre as nombreUnidad, u.abreviatura as abrevUnidad from indicadores_unidadesareas i, unidades_organizacionales u where i.cod_unidadorganizacional=u.codigo";
         if($globalAdmin==0){
@@ -194,7 +197,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
       </select>
 
       <select class="selectpicker" name="areaModal" id="areaModal" data-style="<?=$comboColor;?>" required>
-        <option disabled selected value="">Area</option>
+        <!--option disabled selected value="">Area</option-->
         <?php
         $sqlAreas="SELECT i.cod_indicador, a.codigo as codigoArea, a.nombre as nombreArea, a.abreviatura as abrevArea from indicadores_unidadesareas i, areas a where i.cod_area=a.codigo ";
         if($globalAdmin==0){
