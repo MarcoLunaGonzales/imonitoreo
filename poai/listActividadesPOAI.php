@@ -1,10 +1,10 @@
 <?php
-
 require_once 'conexion.php';
 require_once 'functions.php';
 require_once 'styles.php';
 
 $dbh = new Conexion();
+
 
 //SACAMOS LA CONFIGURACION PARA REDIRECCIONAR EL PON
 $stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=6");
@@ -14,16 +14,30 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   $codigoIndicadorPON=$row['valor_configuracion'];
 }
 
+/*$globalAreaPlanificacion=$_SESSION["globalAreaPlanificacion"];
+$globalUnidadPlanificacion=$_SESSION["globalUnidadPlanificacion"];
+$globalSectorPlanificacion=$_SESSION["globalSectorPlanificacion"];*/
+
 $codigoIndicador=$codigo;
+
 $areaIndicador=$area;
 $unidadIndicador=$unidad;
+
+//echo $area." ".$unidad;
+//echo $areaIndicador." ".$unidadIndicador;
 
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
 
+$nameUnidad="";
+$nameArea="";
+$nameSector="-";
+
+$nameUnidad=abrevUnidad($unidadIndicador);
+$nameArea=abrevArea($areaIndicador);
+
 $table="actividades_poa";
 $moduleName="Actividades POAI";
-
 $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
@@ -43,7 +57,6 @@ while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
   $nombreTablaClasificador=$rowClasificador['tabla'];
 }
 if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA QUE NO DE ERROR
-
 // Preparamos
 $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,
@@ -56,7 +69,7 @@ a.producto_esperado, a.cod_unidadorganizacional, a.cod_area,
 (select t.nombre from tipos_actividadpoa t where t.codigo=a.cod_tipoactividad) as tipo_actividad,
 (select p.nombre from periodos p where p.codigo=a.cod_periodo) as periodo, a.cod_funcion, (select cf.nombre_funcion from cargos_funciones cf where cf.cod_funcion=a.cod_funcion)as funcion
  from actividades_poa a where a.cod_personal='$globalUser' and a.cod_indicador='$codigoIndicador' and a.poai=1 and (a.cod_actividadpadre>0 or a.cod_actividadpadre=-1000) "; 
-if($globalAdmin==0){
+ if($globalAdmin==0){
   $sql.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad)";
 } 
 if($areaIndicador!=0){
@@ -66,13 +79,10 @@ if($unidadIndicador!=0){
   $sql.=" and a.cod_unidadorganizacional in ($unidadIndicador) ";
 } 
 $sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
-
 //echo $sql;
-
 $stmt = $dbh->prepare($sql);
 // Ejecutamos
 $stmt->execute();
-
 // bindColumn
 $stmt->bindColumn('codigo', $codigo);
 $stmt->bindColumn('orden', $orden);
@@ -92,9 +102,7 @@ $stmt->bindColumn('tipo_actividad', $tipoActividad);
 $stmt->bindColumn('periodo', $periodo);
 $stmt->bindColumn('cod_funcion', $codFuncion);
 $stmt->bindColumn('funcion', $nombreFuncion);
-
 ?>
-
 <div class="content">
 	<div class="container-fluid">
         <div class="row">
@@ -107,11 +115,11 @@ $stmt->bindColumn('funcion', $nombreFuncion);
                   <h4 class="card-title"><?=$moduleName?></h4>
                   <h6 class="card-title">Objetivo: <?=$nombreObjetivo?></h6>
                   <h6 class="card-title">Indicador: <?=$nombreIndicador?> &nbsp;&nbsp;&nbsp;
-                    <a href="#" class="<?=$buttonCeleste;?> btn-round" data-toggle="modal" data-target="#myModal"  title="Filtrar">
+                    <!--a href="#" class="<?=$buttonCeleste;?> btn-round" data-toggle="modal" data-target="#myModal"  title="Filtrar">
                         <i class="material-icons">filter_list</i>
-                    </a>
+                    </a-->
                   </h6>
-                  
+                  <h6 class="card-title">Unidad: <span class="text-danger"><?=$nameUnidad;?></span> - Area: <span class="text-danger"><?=$nameArea;?></span> - Sector: <span class="text-danger"><?=$nameSector;?></span></h6>
 
                 </div>
                 <div class="card-body">
@@ -165,22 +173,21 @@ $stmt->bindColumn('funcion', $nombreFuncion);
                   </div>
                 </div>
               </div>
-
-
         				<div class="card-body">
-                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAI&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Registrar</button>
+                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAI&codigo=<?=$codigoIndicador?>&area=<?=$area;?>&unidad=<?=$unidad;?>'">Registrar</button>
 
-                    <a href="#" onclick="javascript:window.open('poaI/registerPOAIPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>')" class="<?=$button;?>">Planificar</a>  
-
-
-                    <a href="?opcion=listPOAI" class="<?=$buttonCancel;?>">Cancelar</a> 
+                    <a href="#" onclick="javascript:window.open('poai/registerPOAIPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>')" class="<?=$button;?>">Planificar</a>  
+                    <a href="?opcion=listPOAI&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>" class="<?=$buttonCancel;?>">Cancelar</a> 
                 </div>
             </div>
           </div>  
         </div>
     </div>
 
-<!-- Classic Modal -->
+
+
+
+    <!-- Classic Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -211,7 +218,6 @@ $stmt->bindColumn('funcion', $nombreFuncion);
       }
         ?>
       </select>
-
       <select class="selectpicker" name="areaModal" id="areaModal" data-style="<?=$comboColor;?>" required>
         <option disabled selected value="">Area</option>
         <?php

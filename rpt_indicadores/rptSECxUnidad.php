@@ -93,12 +93,14 @@ $_SESSION['mesTemporal']=$mesTemporal;
                     $totalCursosAcum+=$numeroCursosAcum;
                     $totalAlumnos+=$numeroAlumnos;
                     $totalAlumnosAcum+=$numeroAlumnosAcum;
+
+                    $urlCursos="rptIndicadoresCursos.php?gestion=$anioTemporal&mes=$mesTemporal&unidad_organizacional=$codUnidad&tipocursos=$tipoCursoX";
                   ?>
                   <tr>
                     <td class="text-left"><?=$tipoCursoX;?></td>
-                    <td class="text-right"><?=formatNumberInt($numeroCursos);?></td>
+                    <td class="text-right"><a href="<?=$urlCursos;?>&ver=0" target="_blank"><?=formatNumberInt($numeroCursos);?></a></td>
                     <td class="text-right"><?=formatNumberInt($numeroAlumnos);?></td>
-                    <td class="text-right"><?=formatNumberInt($numeroCursosAcum);?></td>
+                    <td class="text-right"><a href="<?=$urlCursos;?>&ver=1" target="_blank"><?=formatNumberInt($numeroCursosAcum);?></a></td>
                     <td class="text-right"><?=formatNumberInt($numeroAlumnosAcum);?></td>
                   </tr>
                   <?php

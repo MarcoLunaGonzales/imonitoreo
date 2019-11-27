@@ -95,20 +95,20 @@ $stmt->bindColumn('usuariopon', $usuarioPON);
                             <?php
                             if($globalAdmin==1){
                             ?>
-                            <a href='index.php?opcion=editPersonal&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success" title="Administrar Acceso">
-                              <i class="material-icons">fingerprint</i>
+                            <a href='index.php?opcion=editPersonal&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success">
+                              <i class="material-icons" title="Administrar Acceso">fingerprint</i>
                             </a>
 
-                            <a href='index.php?opcion=addAreas&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success" title="Adicionar Area">
-                              <i class="material-icons">library_add</i>
+                            <a href='index.php?opcion=addAreas&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success">
+                              <i class="material-icons" title="Adicionar Area">library_add</i>
                             </a>
 
-                            <a href='index.php?opcion=addUnidades&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success" title="Adicionar Unidades">
-                              <i class="material-icons">library_add</i>
+                            <a href='index.php?opcion=addUnidades&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success">
+                              <i class="material-icons" title="Adicionar Unidades">library_add</i>
                             </a>
 
-                            <button rel="tooltip" class="btn btn-danger" onclick="alerts.showSwal('warning-message-and-confirmation','index.php?opcion=deletePersonal&codigo=<?=$codigo;?>')" title="Inactivar Personal">
-                              <i class="material-icons">person_add_disabled</i>
+                            <button rel="tooltip" class="btn btn-danger" onclick="alerts.showSwal('warning-message-and-confirmation','index.php?opcion=deletePersonal&codigo=<?=$codigo;?>')">
+                              <i class="material-icons" title="Inactivar Personal">person_add_disabled</i>
                             </button>
                             <?php
                             }

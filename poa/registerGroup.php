@@ -60,7 +60,6 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 <script>
 	numFilas=<?=$contadorRegistros;?>;
 	cantidadItems=<?=$contadorRegistros;?>;
-
 	//verificaModalArea();
 </script>
 
@@ -78,9 +77,9 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 				<div class="card-header <?=$colorCard;?> card-header-text">
 					<div class="card-text">
 					  <h4 class="card-title">Registrar <?=$moduleName;?></h4>
-					  <h6 class="card-title">Objetivo: <?=$nombreObjetivo;?></h6>
-					  <h6 class="card-title">Indicador: <?=$nombreIndicador;?></h6>
 					</div>
+				  		<h6 class="card-title">Objetivo: <?=$nombreObjetivo;?></h6>
+					  	<h6 class="card-title">Indicador: <?=$nombreIndicador;?></h6>
 				</div>
 				<div class="card-body ">
 					<div class="row">
@@ -145,7 +144,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
               							$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
 
 			                    ?>
-						<div id="div<?=$index;?>">	
+						<!--div id="div<?=$index;?>">	
 	                    
 		                    <div class="col-md-12">
 								<div class="row">
@@ -327,6 +326,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
         							$index++;
         						}
         						?>
+        				<!-->
 		            </fieldset>
 
 
@@ -335,7 +335,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 						<a href="#" class="btn" data-toggle="modal" data-target="#myModal">
                         	Cambiar Area
 	                    </a>
-						<a href="?opcion=listPOA" class="<?=$buttonCancel;?>">Cancelar</a>
+						<a href="?opcion=listActividadesPOA&codigo=<?=$codigoIndicador;?>&area=0&unidad=0" class="<?=$buttonCancel;?>">Cancelar</a>
 
 				  	</div>
 

@@ -9,7 +9,11 @@ $dbh = new Conexion();
 $codigoObjetivo=$_POST["cod_objetivo"];
 $propiedad_cargo=$_POST["propiedad_cargo"];
 
-$urlRedirect="../index.php?opcion=listPOA";
+$area=$_POST["global_area"];
+$unidad=$_POST["global_unidad"];
+$sector=$_POST["global_sector"];
+
+$urlRedirect="../index.php?opcion=listPOA&area=".$area."&unidad=".$unidad."&sector=".$sector;
 
 session_start();
 

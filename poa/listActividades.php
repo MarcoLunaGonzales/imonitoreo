@@ -72,12 +72,12 @@ $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n wh
 (a.cod_tiposeguimiento)as tipodato, 
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area,
 (a.cod_datoclasificador)as datoclasificador, 
-(select p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, actividad_extra, clave_indicador
+(select p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, actividad_extra, clave_indicador, poai
  from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 "; 
   //SI EL CONTADOR IDENTIFICA QUE HAY UNA PERSONA ASIGNADA AL INDICADOR LO FILTRA POR PERSONA
-if($contadorVerifica>0){
+/*if($contadorVerifica>0){
   $sql.=" and a.cod_personal in ($globalUser) ";
-} 
+} */
 
 if($globalAreaPlanificacion!=0){
   $sql.=" and a.cod_area in ($globalAreaPlanificacion) ";
@@ -87,9 +87,7 @@ if($globalUnidadPlanificacion!=0){
 }
 if($globalSectorPlanificacion!=0){
   $sql.=" and a.cod_normapriorizada in ($globalSectorPlanificacion) ";
-} 
-
-
+}
 $sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre";
 
 //echo $sql;
@@ -114,6 +112,7 @@ $stmt->bindColumn('datoclasificador', $datoClasificador);
 $stmt->bindColumn('personal', $personal);
 $stmt->bindColumn('actividad_extra', $actividadExtra);
 $stmt->bindColumn('clave_indicador', $actividadCMI);
+$stmt->bindColumn('poai', $actividadPOAI);
 
 ?>
 
@@ -170,7 +169,7 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
                             $iconCheck="clear";
                           }
                       ?>
-                        <tr>
+                        <tr class="<?=($actividadPOAI==1)?'text-danger':''?>" >
                           <td class="text-center"><?=$index;?></td>
                           <td><?=$abrevUnidad."-".$abrevArea;?></td>
                           <td><?=$nombre;?></td>
@@ -211,23 +210,25 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
 
         				<div class="card-body">
                     <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAActInd&codigo=<?=$codigoIndicador?>'">Registrar</button-->
-                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAGroup&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Registrar</button>
+                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAGroup&codigo=<?=$codigoIndicador?>&areaUnidad=<?=$globalUnidadPlanificacion;?>|<?=$globalAreaPlanificacion;?>'">Registrar Nuevas Actividades</button>
 
                     <a href="#" onclick="javascript:window.open('poa/registerPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$globalAreaPlanificacion;?>&unidad=<?=$globalUnidadPlanificacion;?>&sector=<?=$globalSectorPlanificacion;?>')" class="<?=$button;?>">Planificar</a>  
 
-                    <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOA&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar Personal</button>
-
-                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOAI&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar POAI</button-->
+                    <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=asignarPOA&codigo=<?=$codigoIndicador?>&areaUnidad=0'">Asignar Personal</button-->
 
                     <a href="?opcion=listPOA&area=<?=$globalAreaPlanificacion;?>&unidad=<?=$globalUnidadPlanificacion;?>&sector=<?=$globalSectorPlanificacion;?>" class="<?=$buttonCancel;?>">Cancelar</a> 
+
+                    <button class="<?=$buttonPrimary;?>" onClick="location.href='index.php?opcion=asignarPOAI&codigo=<?=$codigoIndicador?>&area=<?=$globalAreaPlanificacion;?>&unidad=<?=$globalUnidadPlanificacion;?>&sector=<?=$globalSectorPlanificacion;?>'">Asignar POAI</button>
                 </div>
             </div>
           </div>  
         </div>
     </div>
 
+
+
 <!-- Classic Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!--div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -285,5 +286,5 @@ $stmt->bindColumn('clave_indicador', $actividadCMI);
       </div>
     </div>
   </div>
-</div>
+</div-->
 <!--  End Modal -->

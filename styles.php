@@ -4,6 +4,7 @@
 $colorCard="card-header-rose";
 $colorCard2="card-header-success";
 $button="btn";
+$buttonPrimary="btn btn-primary";
 $buttonNormal="btn";
 $buttonCeleste="btn btn-info";
 $buttonMorado="btn btn-primary";

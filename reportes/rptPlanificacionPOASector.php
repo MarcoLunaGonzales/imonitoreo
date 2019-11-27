@@ -34,7 +34,7 @@ i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre
 (select u.nombre from unidades_organizacionales u where u.codigo=a.cod_unidadorganizacional)as nombreunidad,
 (select a.nombre from areas a where a.codigo=a.cod_area)as nombrearea
  from actividades_poa a, indicadores i, objetivos o, perspectivas p where a.cod_gestion in ($gestion) and a.cod_area in ($areaString) and a.cod_unidadorganizacional in ($unidadOrgString) and a.cod_estado=1 and 
- a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva and a.cod_normapriorizada in ($sectoresString) order by nombreunidad, nombrearea, sector, a.nombre";  
+ a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva and a.cod_normapriorizada in ($sectoresString) order by o.abreviatura, nombreindicador, nombreunidad, nombrearea, sector, a.nombre";  
 
 //echo $sql;
 
@@ -56,7 +56,7 @@ $stmt->bindColumn('cod_area', $codArea);
 $stmt->bindColumn('cod_tiporesultado', $codTipoDato);
 $stmt->bindColumn('nombreindicador', $nombreIndicador);
 $stmt->bindColumn('nombreobjetivo', $nombreObjetivo);
-$stmt->bindColumn('abreviatura', $abreviatura);
+$stmt->bindColumn('abreviatura', $abreviaturaObj);
 $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
 
 ?>
@@ -79,6 +79,7 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                       <thead>
                         <tr>
                           <th class="text-center">-</th>
+                          <th class="font-weight-bold">Indicador</th>
                           <th class="font-weight-bold">Area</th>
                           <th class="font-weight-bold">Sector</th>
                           <th class="font-weight-bold">Actividad</th>
@@ -142,6 +143,7 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                       ?>
                         <tr>
                           <td class="text-center small"><?=$index;?></td>
+                          <td class="text-left small"><?=$abreviaturaObj." ".$nombreIndicador;?></td>
                           <td class="text-center small"><?=$abrevUnidad."-".$abrevArea;?></td>
                           <td class="text-center small"><?=$sectorPriorizado;?></td>
                           <td class="text-left small"><?=$nombre;?></td>
@@ -174,6 +176,7 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                       </tbody>
                       <tfoot>
                         <tr>
+                          <th>-</th>
                           <th>-</th>
                           <th>-</th>
                           <th>-</th>

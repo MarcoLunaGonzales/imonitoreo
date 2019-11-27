@@ -96,6 +96,16 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                 <?php
                   $index=1;
                 	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+                      $sqlNroAct="SELECT count(*)as contador from actividades_poa a where a.cod_unidadorganizacional='$unidad' and a.cod_area='$area' and a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
+                      if($sector>0){
+                        $sqlNroAct.=" and a.cod_normapriorizada='$sector'";
+                      }
+                      $stmtNroAct = $dbh->prepare($sqlNroAct);
+                      $stmtNroAct->execute();
+                      $nroActividadesIndicador=0;
+                      while ($rowNroAct = $stmtNroAct->fetch(PDO::FETCH_ASSOC)) {
+                          $nroActividadesIndicador=$rowNroAct['contador'];
+                      }
                 ?>
                   <tr>
                     <td class="text-center"><?=$index;?></td>
@@ -106,8 +116,8 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                     <td class="text-center">
                       <a href='index.php?opcion=listActividadesPOA&codigo=<?=$codigoIndicador;?>&area=0&unidad=0' rel="tooltip"  class="<?=$buttonDetail;?>">
                         <!--i class="material-icons" title="Ver Actividades">description</i-->
-                          <strong class="fa-stack-1x">
-                              2    
+                          <strong>
+                              <?=($nroActividadesIndicador==0)?"-":$nroActividadesIndicador;?>
                           </strong>
                       </a>
                     </td>
@@ -115,7 +125,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                     if($globalAdmin==1){
                     ?>
                     <td class="text-center">
-                      <button class="<?=$buttonDetail;?>" data-toggle="modal" data-target="#myModal" onClick="ajaxCargosPOAI(<?=$codigoIndicador?>);"> 
+                      <button class="<?=$buttonDetail;?>" data-toggle="modal" data-target="#myModal1" onClick="ajaxCargosPOAI(<?=$codigoIndicador?>);"> 
                           <i class="material-icons" title="Registrar Cargos POAI">settings</i>
                       </button>
                     </td>
@@ -169,7 +179,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Definir Unidad/Area/Sector para la Programación</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Definir Unidad/Area/Sector para la Programacion</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -242,6 +252,36 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
   </div>
 </div>
 <!--  End Modal -->
+
+
+
+<!-- PROPIEDAD DE CARGOS POAI -->
+<form id="form1" class="form-horizontal" action="poa/saveConfigCargos.php" method="post">
+  
+  <input type="hidden" name="global_area" value="<?=$area;?>">
+  <input type="hidden" name="global_unidad" value="<?=$unidad;?>">
+  <input type="hidden" name="global_sector" value="<?=$sector;?>">
+
+  <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Configuración Propiedad Cargos para POAI</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+            <i class="material-icons">clear</i>
+          </button>
+        </div>
+        <div class="modal-body" id="modal-body">
+        </div>
+          <div class="modal-footer">
+            <button type="submit" class="<?=$button;?>">Guardar</button>
+            <button type="button" class="btn btn-danger btn-link" data-dismiss="modal">Cerrar</button>  
+          </div>
+      </div>
+    </div>
+  </div>
+</form>
+  <!--  End Modal -->
 
 
 <?php

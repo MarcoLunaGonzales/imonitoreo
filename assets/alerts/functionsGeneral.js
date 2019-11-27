@@ -384,6 +384,17 @@ function enviarDefinicionAreaUnidadSector(){
   location.href='index.php?opcion=listPOA&area='+area+'&unidad='+unidad+'&sector='+sector;
 }
 
+function enviarDefinicionAreaUnidadSectorPOAI(){
+  var comboarea=document.getElementById('areaModal');
+  var combounidad=document.getElementById('unidadModal');
+  var combosector=document.getElementById('sectorModal');
+  var area=comboarea.options[comboarea.selectedIndex].value;
+  var unidad=combounidad.options[combounidad.selectedIndex].value;
+  var sector=combosector.options[combosector.selectedIndex].value;
+
+  location.href='index.php?opcion=listPOAI&area='+area+'&unidad='+unidad+'&sector='+sector;
+}
+
 /*FUNCIONES AJAX PARA LAS SOLICITUDES DE FONDOS SIS*/
 function addSolicitudFondo(obj) {
       numFilas++;
@@ -675,7 +686,7 @@ function totalesPlanificacion(){
    var numFilas=main.rows.length;
    var numCols=main.rows[1].cells.length;
    
-   for(var j=4; j<=numCols-1; j++){
+   for(var j=5; j<=numCols-1; j++){
     var subtotal=0;
       for(var i=1; i<=numFilas-2; i++){
             var datoS=main.rows[i].cells[j].innerHTML;

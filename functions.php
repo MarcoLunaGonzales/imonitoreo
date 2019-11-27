@@ -112,6 +112,7 @@ function nameCargo($codigo){
    $stmt = $dbh->prepare("SELECT nombre FROM cargos where codigo=:codigo");
    $stmt->bindParam(':codigo',$codigo);
    $stmt->execute();
+   $nombreX="";
    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $nombreX=$row['nombre'];
    }
@@ -324,7 +325,9 @@ function namePersonal($codigo){
 
 function abrevUnidad($codigo){
    $dbh = new Conexion();
-   $stmt = $dbh->prepare("SELECT abreviatura FROM unidades_organizacionales where codigo in ($codigo)");
+   $sql="SELECT abreviatura FROM unidades_organizacionales where codigo in ($codigo)";
+   //echo $sql;
+   $stmt = $dbh->prepare($sql);
    $stmt->execute();
    $nombreX="";
    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -536,6 +539,26 @@ function planificacionPorIndicador($indicador, $area, $unidad, $mes, $acumulado)
   return($cantidadPlanificada);
 }
 
+function planificacionPorActividad($actividad, $area, $unidad, $mes, $acumulado){
+  $dbh = new Conexion();
+  $sql="SELECT IFNULL(sum(ap.value_numerico),0)as cantidad from actividades_poa a, actividades_poaplanificacion ap where a.codigo=ap.cod_actividad and a.codigo='$actividad' and a.cod_unidadorganizacional='$unidad' and a.cod_area='$area'";
+  if($acumulado==0){
+    $sql.=" and ap.mes='$mes' ";
+  }
+  if($acumulado==1){
+    $sql.=" and ap.mes<='$mes' ";  
+  }
+//  echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cantidadPlanificada=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidadPlanificada=$row['cantidad'];
+  }
+  return($cantidadPlanificada);
+}
+
+
 //ACUMULADO 0=POR MES; 1=ACUMULADO; 2=TODA LA GESTION
 function planificacionPorIndicadorVersion($indicador, $area, $unidad, $mes, $acumulado, $version){
   $dbh = new Conexion();
@@ -578,7 +601,8 @@ function ejecucionPorIndicador($indicador, $area, $unidad, $mes, $acumulado){
 function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   $dbh = new Conexion();
   $cadenaEstados=obtieneValorConfig(27);
-  $sql="SELECT count(*) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.gestion='$anio' and c.estado in ($cadenaEstados) and c.id_oficina in ($unidad) ";
+  //$sql="SELECT count(*) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.gestion='$anio' and c.estado in ($cadenaEstados) and c.id_oficina in ($unidad) ";
+  $sql="SELECT count(*) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.estado in ($cadenaEstados) and c.id_oficina in ($unidad) ";
   if($acumulado==0){
     $sql.=" and MONTH(c.fecha_inicio)='$mes' ";
   }
@@ -601,7 +625,8 @@ function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
 function alumnosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   $dbh = new Conexion();
   $cadenaEstados=obtieneValorConfig(27);
-  $sql="SELECT sum(c.alumnos_modulo) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.gestion='$anio' and c.estado in ($cadenaEstados) ";
+  //$sql="SELECT sum(c.alumnos_modulo) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.gestion='$anio' and c.estado in ($cadenaEstados) ";
+  $sql="SELECT sum(c.alumnos_modulo) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.estado in ($cadenaEstados) ";
   if($unidad!=0){
     $sql.=" and c.id_oficina in ($unidad) ";  
   }

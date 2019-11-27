@@ -175,14 +175,14 @@ if($globalPerfilX==1){
                   </a>
                 </li> 
 
-                <!--li class="nav-item ">
-                  <a class="nav-link" href="?opcion=listPOAI">
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listPOAI&area=0&unidad=0">
                     <span class="sidebar-mini"> POAI </span>
                     <span class="sidebar-normal">POAI Programacion</span>
                   </a>
                 </li>                
 
-                <li class="nav-item ">
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAIEjecucion">
                     <span class="sidebar-mini"> POAIE </span>
                     <span class="sidebar-normal">POAI Ejecucion</span>
@@ -689,14 +689,14 @@ if($globalPerfilX==2){
                   </a>
                 </li> 
 
-                <!--li class="nav-item ">
-                  <a class="nav-link" href="?opcion=listPOAI">
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listPOAI&area=0&unidad=0">
                     <span class="sidebar-mini"> POAI </span>
                     <span class="sidebar-normal">POAI Programacion</span>
                   </a>
                 </li>                
 
-                <li class="nav-item ">
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAIEjecucion">
                     <span class="sidebar-mini"> POAIE </span>
                     <span class="sidebar-normal">POAI Ejecucion</span>
@@ -842,6 +842,13 @@ if($globalPerfilX==2){
                   <a class="nav-link" href="?opcion=rptOpPlanificacionPOADetalle">
                     <span class="sidebar-mini"> PPOA </span>
                     <span class="sidebar-normal"> Planificacion POA</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPlanificacionPOASector">
+                    <span class="sidebar-mini"> PPS </span>
+                    <span class="sidebar-normal"> Planificacion POA x Sector</span>
                   </a>
                 </li> 
 
@@ -1046,14 +1053,14 @@ if($globalPerfilX==3){
                   </a>
                 </li> 
 
-                <!--li class="nav-item ">
-                  <a class="nav-link" href="?opcion=listPOAI">
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listPOAI&area=0&unidad=0">
                     <span class="sidebar-mini"> POAI </span>
                     <span class="sidebar-normal">POAI Programacion</span>
                   </a>
                 </li>  
 
-                <li class="nav-item ">
+                <!--li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAIEjecucion">
                     <span class="sidebar-mini"> POAIE </span>
                     <span class="sidebar-normal">POAI Ejecucion</span>
@@ -1142,6 +1149,13 @@ if($globalPerfilX==3){
                   <a class="nav-link" href="?opcion=rptOpPlanificacionPOADetalle">
                     <span class="sidebar-mini"> PPOA </span>
                     <span class="sidebar-normal"> Planificacion POA</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPlanificacionPOASector">
+                    <span class="sidebar-mini"> PPS </span>
+                    <span class="sidebar-normal"> Planificacion POA x Sector</span>
                   </a>
                 </li> 
 
@@ -1709,6 +1723,13 @@ if($globalPerfilX==5){
                   <a class="nav-link" href="?opcion=rptOpPlanificacionPOADetalle">
                     <span class="sidebar-mini"> PPOA </span>
                     <span class="sidebar-normal"> Planificacion POA</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPlanificacionPOASector">
+                    <span class="sidebar-mini"> PPS </span>
+                    <span class="sidebar-normal"> Planificacion POA x Sector</span>
                   </a>
                 </li> 
 

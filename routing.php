@@ -495,10 +495,15 @@
 		//POAI
 		if ($_GET['opcion']=='asignarPOAI') {
 			$codigo=$_GET['codigo'];
-			$areaUnidad=$_GET['areaUnidad'];
+			$area=$_GET['area'];
+			$unidad=$_GET['unidad'];
+			$sector=$_GET['sector'];
 			require_once('poai/asignarPOAI.php');
 		}
 		if ($_GET['opcion']=='listPOAI') {
+			$area=$_GET['area'];
+			$unidad=$_GET['unidad'];
+			$sector=0;
 			require_once('poai/listPOAI.php');
 		}
 		if ($_GET['opcion']=='listActividadesPOAI') {
@@ -509,7 +514,8 @@
 		}
 		if ($_GET['opcion']=='registerPOAI') {
 			$codigo=$_GET['codigo'];
-			$areaUnidad=$_GET['areaUnidad'];
+			$area=$_GET['area'];
+			$unidad=$_GET['unidad'];
 			require_once('poai/registerPOAI.php');
 		}
 		if ($_GET['opcion']=='registerPOAIPlan') {

@@ -2,13 +2,11 @@
 require_once '../conexion.php';
 require_once '../functions.php';
 require_once '../styles.php';
-
 $dbh = new Conexion();
 
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
-
 
 session_start();
 $globalAdmin=$_SESSION["globalAdmin"];
@@ -16,32 +14,27 @@ $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
-
 $codigo=$_GET['codigo'];
 $codActividad=$_GET['codActividad'];
 $codigoIndicador=$_GET['cod_indicador'];
 $codUnidad=$_GET['cod_unidad'];
 $codArea=$_GET['cod_area'];
-
 $index=$codigo;
-
 /*$codUnidadHijosX=buscarHijosUO($codUnidad);
 $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);*/
-
 ?>
-
 <div id="div<?=$index;?>">
 	<table border="0">
 	<tr>
 		<td width="20%" align="center">
-	    	
-	    	<input type="hidden" name="codigoPadre<?=$index;?>" id="codigoPadre<?=$index;?>" value="<?=$codActividad;?>">
 
+	    	<input type="hidden" name="codigoPadre<?=$index;?>" id="codigoPadre<?=$index;?>" value="<?=$codActividad;?>">
 	    	<input type="hidden" name="codigoPOAI<?=$index;?>" id="codigoPOAI<?=$index;?>" value="0">
-	        
+
 	        <select class="form-control" name="personal<?=$index;?>" id="personal<?=$index;?>" data-style="<?=$comboColor;?>" onChange="ajaxFuncionesCargos(this,<?=$index;?>);" data-live-search="true" required>
 	    	<?php
-		  	$sql="SELECT p.codigo, p.nombre, (select c.nombre from cargos c where c.codigo=pd.cod_cargo)as cargo from personal2 p, personal_datosadicionales pd, personal_unidadesorganizacionales pu where p.codigo=pd.cod_personal and p.codigo=pu.cod_personal and pu.cod_unidad='$codUnidad' and pd.cod_cargo in (select i.cod_cargo from indicadores_areascargos i where i.cod_indicador='$codigoIndicador' and i.cod_area='$codArea') order by 1,2";
+		  	$sql="SELECT p.codigo, p.nombre, (select c.nombre from cargos c where c.codigo=pd.cod_cargo)as cargo from personal2 p, personal_datosadicionales pd, personal_unidadesorganizacionales pu where p.codigo=pd.cod_personal and p.codigo=pu.cod_personal and pu.cod_unidad='$codUnidad' and pd.cod_cargo in (select i.cod_cargo from indicadores_areascargos i where i.cod_indicador='$codigoIndicador' and i.cod_area='$codArea') order by 2";
+		  	//echo $sql;
 		  	?>
 		  		<option value="">Seleccionar Persona</option>
 		  	<?php
@@ -60,7 +53,6 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 		</td>
 		<td width="65%" align="center">
 			<div class="form-group" id="divFuncion<?=$index;?>">
-
 			</div>
 		</td>
 		<td width="10%" align="center">

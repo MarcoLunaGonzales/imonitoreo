@@ -1,75 +1,65 @@
 <?php
-
 require_once 'conexion.php';
 require_once 'styles.php';
 require_once 'functions.php';
-
 $dbh = new Conexion();
-
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
-
 $globalNombreGestion=$_SESSION["globalNombreGestion"];
 $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
-$globalUnidad=$_SESSION["globalUnidad"];
-$globalArea=$_SESSION["globalArea"];
 
+$globalAreaPlanificacion=$_SESSION["globalAreaPlanificacion"];
+$globalUnidadPlanificacion=$_SESSION["globalUnidadPlanificacion"];
+$globalSectorPlanificacion=$_SESSION["globalSectorPlanificacion"];
+
+$globalUnidad=$unidad;
+$globalArea=$area;
+$globalSector=$sector;
 $globalAdmin=$_SESSION["globalAdmin"];
-
 $codigoIndicador=$codigo;
-$areaUnidad=$areaUnidad;
-
 $nombreAreaX="-";
 $nombreUnidadX="-";
 $codUnidadX=0;
 $codAreaX=0;
-if($areaUnidad!=0){
-	list($codUnidadX,$codAreaX)=explode("|", $areaUnidad);
-	$nombreAreaX=abrevArea($codAreaX);
-	$nombreUnidadX=abrevUnidad($codUnidadX);
-}
-
+$nombreAreaX=abrevArea($globalArea);
+$nombreUnidadX=abrevUnidad($globalUnidad);
 $codUnidadHijosX=buscarHijosUO($codUnidadX);
-
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
-
-
 $table="actividades_poa";
 $moduleName="Asignar POAI";
 
+$sqlUpdate="UPDATE actividades_poa set cod_actividadpadre=0 where cod_actividadpadre is null;";
+$stmtUpdate = $dbh->prepare($sqlUpdate);
+$stmtUpdate->execute();
+
+
 $sqlCount="";
-if($globalAdmin==1){
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_estado=1 and poai=1 and cod_actividadpadre>0";	
-}else{
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_area in ($globalArea) and cod_unidadorganizacional in ($globalUnidad) and cod_estado=1 and poai=1 and cod_actividadpadre>0";	
-}
+$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_estado=1 and poai=1 and cod_actividadpadre>0 and cod_area='$globalArea' and cod_unidadorganizacional='$globalUnidad' ";
+if($globalSector>0){
+	$sqlCount.=" and cod_normapriorizada='$globalSector'";
+}	
 //echo $sqlCount;
 $stmtX = $dbh->prepare($sqlCount);
 $stmtX->execute();
 while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 	$contadorRegistros=$row['nro_registros'];
 }
-
 ?>
-
 <script>
 	numFilas=<?=$contadorRegistros;?>;
 	cantidadItems=<?=$contadorRegistros;?>;
 	console.log("INICIO CONTADORES: "+cantidadItems);
 </script>
-
 <div class="content">
 	<div class="container-fluid">
-
 		<form id="form1" class="form-horizontal" action="poai/saveAsignarPOAI.php" method="post">
-			
+
 			<input type="hidden" name="cantidad_filas" id="cantidad_filas" value="<?=$contadorRegistros;?>">
 			<input type="hidden" name="codigo_indicador" id="codigo_indicador" value="<?=$codigoIndicador;?>">
-			
 
 			<div class="card">
 				<div class="card-header <?=$colorCard;?> card-header-text">
@@ -94,21 +84,19 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 						</div>
 					  </div>
 					</div>
-
 					<?php
 					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_normapriorizada,
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado, a.cod_norma,
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.cod_personal, a.cod_funcion, (select cf.nombre_funcion from cargos_funciones cf where cf.cod_funcion=a.cod_funcion)as funcion
-					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional in ($codUnidadX) and a.cod_area in ($codAreaX) and a.cod_actividadpadre=0 ";
-
+					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional in ($globalUnidad) and a.cod_area in ($globalArea) and a.cod_actividadpadre=0 ";
+					if($globalSector>0){
+						$sqlLista.=" AND cod_normapriorizada='$globalSector' ";
+					}
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
-					
 					//echo $sqlLista;
-					
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();
-
 					// bindColumn
 					$stmtLista->bindColumn('codigo', $codigo);
 					$stmtLista->bindColumn('orden', $orden);
@@ -126,25 +114,26 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 					$stmtLista->bindColumn('cod_personal',$codPersonal);
 					$stmtLista->bindColumn('cod_funcion',$codFuncion);
 					$stmtLista->bindColumn('funcion',$nombreFuncion);
-
 					?>
 				    	<?php
 	                        $index=1;
 							$indexDetalle=1;
+							$planificadoTotalGestion=0;
 	                      	while ($rowLista = $stmtLista->fetch(PDO::FETCH_BOUND)) {
       							//echo $codUnidad." ----- ".$codArea." ".$norma;
-
+      							$planificadoTotalGestion=planificacionPorActividad($codigo, $codArea, $codUnidad, 12, 1);
 	                    ?>
 					<div>	           
 						<div class="col-md-12">
 							<div class="row">
 								<div class="col-sm-3">
 				                    <div class="form-group">
-				                    <label for="actividad<?=$index;?>" class="bmd-label-floating">Actividad</label>			
-		                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();" readonly="true"><?=$nombre;?></textarea>	
+				                    <label for="actividad<?=$index;?>" class="bmd-label-floating">Actividad</label>
+		                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();" readonly="true" rows="4"><?=$nombre;?></textarea>
+		                          		<span class="text-primary font-weight-bold">Planificado Gestión: <?=$planificadoTotalGestion;?></span>
 	 								</div>
 	                          	</div>
-		                          	
+
 								<div class="col-sm-9">
 									<fieldset id="fiel<?=$index;?>" style="width:100%;border:0;">
 										<table align="center"class="text" cellSpacing="1" cellPadding="2" width="100%" border="0" id="data0">
@@ -158,16 +147,14 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 											<tr class="titulo_tabla" align="center">
 												<td width="20%" align="center">Personal</td>
 												<td width="65%" align="center">Funcion</td>
-												<td width="10%" align="center">Meta</td>
+												<td width="10%" align="center">Meta(%)</td>
 												<td width="5%" align="center">&nbsp;</td>
 											</tr>
-
 											<?php
 											$sqlListaDetalle="SELECT a.codigo, a.orden, a.nombre, a.cod_personal, a.cod_funcion, (select cf.nombre_funcion from cargos_funciones cf where cf.cod_funcion=a.cod_funcion)as funcion, a.metapoai from actividades_poa a where a.cod_actividadpadre='$codigo' order by a.nombre";
 											$stmtListaDetalle = $dbh->prepare($sqlListaDetalle);
 											// Ejecutamos
 											$stmtListaDetalle->execute();
-
 											// bindColumn
 											$stmtListaDetalle->bindColumn('codigo', $codigoDetalle);
 											$stmtListaDetalle->bindColumn('orden', $ordenDetalle);
@@ -176,17 +163,15 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 											$stmtListaDetalle->bindColumn('cod_funcion',$codFuncion);
 											$stmtListaDetalle->bindColumn('funcion',$nombreFuncion);
 											$stmtListaDetalle->bindColumn('metapoai',$metaPOAI);
-
 					                      	while ($rowListaDetalle = $stmtListaDetalle->fetch(PDO::FETCH_BOUND)) {
 											?>
 											<div id="div<?=$indexDetalle;?>">
 												<tr>
 													<td width="20%" align="center">
-												    	
-												    	<input type="hidden" name="codigoPadre<?=$indexDetalle;?>" id="codigoPadre<?=$indexDetalle;?>" value="<?=$codigo;?>">
 
+												    	<input type="hidden" name="codigoPadre<?=$indexDetalle;?>" id="codigoPadre<?=$indexDetalle;?>" value="<?=$codigo;?>">
 												    	<input type="hidden" name="codigoPOAI<?=$indexDetalle;?>" id="codigoPOAI<?=$indexDetalle;?>" value="<?=$codigoDetalle;?>">
-												        
+
 												        <select class="form-control" name="personal<?=$indexDetalle;?>" id="personal<?=$indexDetalle;?>" data-style="<?=$comboColor;?>" onChange="ajaxFuncionesCargos(this,<?=$indexDetalle;?>);" data-live-search="true" required>
 												    	<?php
 													  	$sql="SELECT p.codigo, p.nombre, (select c.nombre from cargos c where c.codigo=pd.cod_cargo)as cargo from personal2 p, personal_datosadicionales pd, personal_unidadesorganizacionales pu where p.codigo=pd.cod_personal and p.codigo=pu.cod_personal and pu.cod_unidad='$codUnidad' and pd.cod_cargo in (select i.cod_cargo from indicadores_areascargos i where i.cod_indicador='$codigoIndicador' and i.cod_area='$codArea') order by 1,2";
@@ -253,31 +238,29 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 		                        </div>
 			            	</div>
 		            	</div>
-							
+
 							<div class="h-divider">
 	        				</div>
-		 					
-	 					</div>
 
+	 					</div>
 					            <?php
         							$index++;
         						}
         						?>		    
-	            
+
 				  	<div class="card-body">
 						<button type="submit" class="<?=$button;?>">Guardar</button>
 						<a href="#" class="btn" data-toggle="modal" data-target="#myModal">
                         	Cambiar Area
 	                    </a>
-						<a href="?opcion=listPOA" class="<?=$buttonCancel;?>">Cancelar</a>
-
+						<a href="?opcion=listPOA&area=<?=$globalAreaPlanificacion;?>&unidad=<?=$globalUnidadPlanificacion;?>&sector=<?=$globalSectorPlanificacion;?>" class="<?=$buttonCancel;?>">Cancelar</a>
 				  	</div>
-
 				</div>
 			</div>	
 		</form>
 	</div>
 </div>
+
 
 <!-- Classic Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -298,9 +281,9 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 		  		$sqlAreas.=" and i.cod_unidadorganizacional in ($globalUnidad) and i.cod_area in ($globalArea) ";
 		  	}
 		  	$sqlAreas.=" order by 3,6";
-		  	
-		  	echo $sqlAreas;
-		  	
+
+		  	//echo $sqlAreas;
+
 		  	$stmt = $dbh->prepare($sqlAreas);
 			$stmt->execute();
 			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -310,7 +293,6 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 				$codigoA=$row['codigoArea'];
 				$nombreA=$row['nombreArea'];
 				$abrevA=$row['abrevArea'];
-
 			?>
 			<option value="<?=$codigoU;?>|<?=$codigoA;?>" data-subtext="<?=$nombreU;?>-<?=$nombreA?>"><?=$abrevU;?> - <?=$abrevA;?></option>
 			<?php	
@@ -326,13 +308,3 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
   </div>
 </div>
 <!--  End Modal -->
-
-<?php
-if($areaUnidad==0){
-?>
-<script>
-	verificaModalArea();
-</script>
-<?php
-}
-?>

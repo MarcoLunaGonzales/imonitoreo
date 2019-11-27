@@ -13,7 +13,7 @@ $moduleName="Cargos";
 $globalAdmin=$_SESSION["globalAdmin"];
 
 // Preparamos
-$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM $table where cod_estado=1");
+$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM $table where cod_estado=1 order by 2");
 // Ejecutamos
 $stmt->execute();
 // bindColumn

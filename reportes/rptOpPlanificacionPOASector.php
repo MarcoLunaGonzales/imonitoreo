@@ -40,7 +40,6 @@ $dbh = new Conexion();
 				  <div class="col-sm-7">
 					<div class="form-group">
 					  <select class="selectpicker" title="Seleccione una opcion" name="gestion" id="gestion" data-style="<?=$comboColor;?>" required>
-					  	<option disabled selected value=""></option>
 					  	<?php
 					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM gestiones order by 2 desc");
 						$stmt->execute();
@@ -61,8 +60,8 @@ $dbh = new Conexion();
 				  <label class="col-sm-2 col-form-label">Sector</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
-					  <select class="selectpicker" name="sectores[]" id="sectores" data-style="select-with-transition" title="Seleccione una opcion" required>
-					  	<option disabled selected value=""></option>
+					  <select class="selectpicker" name="sectores[]" id="sectores" data-style="select-with-transition" multiple data-actions-box="true" required>
+					  	<!--option disabled selected value=""></option-->
 					  	<?php
 					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores_economicos order by 2");
 						$stmt->execute();
@@ -83,8 +82,7 @@ $dbh = new Conexion();
 				  <label class="col-sm-2 col-form-label">Unidad Organizacional</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
-					  <select class="selectpicker form-control" title="Seleccione una opcion" name="unidad_organizacional[]" id="unidad_organizacional" data-style="select-with-transition" multiple required>
-					  	<option disabled selected value=""></option>
+					  <select class="selectpicker form-control" title="Seleccione una opcion" name="unidad_organizacional[]" id="unidad_organizacional" data-style="select-with-transition" data-size="5" data-actions-box="true" multiple required>
 					  	<?php
 					  	$sql="SELECT u.codigo, u.nombre FROM unidades_organizacionales u, unidadesorganizacionales_poa up where u.codigo=up.cod_unidadorganizacional ";
 			  			$sql.=" and u.codigo in ($globalUnidadesReports) ";
@@ -108,8 +106,7 @@ $dbh = new Conexion();
 				  <label class="col-sm-2 col-form-label">Area</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
-					  <select class="selectpicker form-control" title="Seleccione una opcion" name="areas[]" id="areas" data-style="select-with-transition" multiple="" required>
-					  	<option disabled selected value=""></option>
+					  <select class="selectpicker form-control" title="Seleccione una opcion" name="areas[]" id="areas" data-style="select-with-transition" data-size="5" data-actions-box="true" multiple required>
 					  	<?php
 					  	$stmt = $dbh->prepare("SELECT a.codigo, a.nombre, a.abreviatura FROM areas a, areas_poa ap where a.codigo=ap.cod_area and a.codigo in ($globalAreasReports) order by 2");
 						$stmt->execute();

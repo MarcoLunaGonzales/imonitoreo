@@ -15,6 +15,8 @@ $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 
+$globalSectorPlanificacion=$_SESSION["globalSectorPlanificacion"];
+
 $codigo=$_GET['codigo'];
 $codigoIndicador=$_GET['cod_indicador'];
 $codUnidad=$_GET['cod_unidad'];
@@ -40,7 +42,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 						$codigoX=$row['codigo'];
 						$nombreX=$row['nombre'];
 					?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>	
+						<option value="<?=$codigoX;?>" <?=($globalSectorPlanificacion==$codigoX)?"selected":"";?> ><?=$nombreX;?></option>	
 					<?php	
 					}
 				  	?>

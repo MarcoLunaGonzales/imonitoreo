@@ -25,7 +25,7 @@ $globalUsuario=$_SESSION["globalUser"];
 
 
 $sqlDetalleX="SELECT pc.codigo, m.glosa_detalle, m.fecha, m.monto, m.fondo, m.organismo, m.ml_partida, 
-(select c.abreviatura from componentessis c where c.partida=m.ml_partida)as codigoact from po_mayores m, po_plancuentas pc where pc.codigo=m.cuenta and m.fondo=2001 and YEAR(m.fecha)='$anio' and MONTH(m.fecha)='$mes' and m.ml_partida<>'' order by m.fecha;";
+(select c.abreviatura from componentessis c where c.partida=m.ml_partida limit 0,1)as codigoact from po_mayores m, po_plancuentas pc where pc.codigo=m.cuenta and m.fondo=2001 and YEAR(m.fecha)='$anio' and MONTH(m.fecha)='$mes' and m.ml_partida<>'' order by m.fecha;";
 
 //echo $sqlDetalleX;
 
@@ -104,7 +104,7 @@ $stmtDetalleX->bindColumn('codigoact', $codigoActividad);
                           <select class="form-control" title="Seleccione una opcion" name="externalcost[]" id="externalcost[]" data-style="<?=$comboColor;?>">
                             <option disabled selected value="">AccNum</option>
                           <?php
-                          $stmt = $dbh->prepare("select e.codigo, e.nombre, e.abreviatura from external_costs e order by e.abreviatura");
+                          $stmt = $dbh->prepare("select e.codigo, e.nombre, e.abreviatura from external_costs e where e.cod_gestion='$gestion' order by e.abreviatura");
                           $stmt->execute();
                           while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             $codigoX=$row['codigo'];

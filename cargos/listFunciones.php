@@ -89,7 +89,7 @@ $stmt->bindColumn('peso', $peso);
               if($globalAdmin==1){
               ?>
               <div class="card-body">
-                    <button class="btn" onClick="location.href='index.php?opcion=registerFuncionCargo&codigo=<?=$codCargo;?>'">Registrar</button>
+                    <button class="btn" onClick="location.href='index.php?opcion=registerFuncionCargo&codigo=<?=$codigoCargo;?>'">Registrar</button>
                 </div>
 		          <?php
               }
