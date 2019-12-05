@@ -38,12 +38,11 @@ $stmtX->execute();
 
 $codigoIndicadorPON=obtenerCodigoPON();
 
-//SACAMOS EL ESTADO DEL POA PARA LA GESTION
-$codEstadoPOAGestion=estadoPOAGestion($globalGestion);
-
 
 //SACAMOS EL ESTADO DEL POA PARA LA GESTION
 $codEstadoPOAGestion=estadoPOAGestion($globalGestion);
+
+//echo "estado poa: ".$codEstadoPOAGestion;
 
 $table="actividades_poa";
 $moduleName="Planificacion de Actividades";
@@ -106,14 +105,16 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					if($areaIndicador!=0 && $unidadIndicador!=0){
 						$sqlLista.=" and a.cod_area in ($areaIndicador) and a.cod_unidadorganizacional in ($unidadIndicador) ";	
 					}
-					if($codEstadoPOAGestion==3 && $codEstadoPOAGestion==1){
+					if($codEstadoPOAGestion==2 || $codEstadoPOAGestion==3){
 						$sqlLista.=" and a.actividad_extra=1 ";
 					}
 					if($sectorIndicador!=0){
 						$sqlLista.=" and a.cod_normapriorizada in ($sectorIndicador) ";
 					}
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre ";
+					
 					//echo $sqlLista;
+
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();
@@ -199,7 +200,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 	                          	//FIN EJECUCION
 	                    	?>
 	                    		<td>
-	                    			<input class="form-control" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="planificado<?=$index;?>" onChange="calcularTotalPlanificado(<?=$index;?>);" OnKeyUp="calcularTotalPlanificado(<?=$index;?>);" step="0.01" required>
+	                    			<input class="form-control" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="planificado<?=$index;?>|mes<?=$i;?>" onChange="calcularTotalPlanificado(<?=$index;?>,<?=$i;?>);" OnKeyUp="calcularTotalPlanificado(<?=$index;?>);" step="0.01" required>
 	                    			<span class="text-center font-weight-bold text-primary" title="<?=$descripcionEj?>"><?=($valorEj)>0?formatNumberDec($valorEj):"-";?></span>
 	                    		</td>
 	                    	<?php	
@@ -213,6 +214,27 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
     						}
 					        ?>
 		                  </tbody>
+		                  <tfoot>
+		                  	<tr>
+		                      <th class="text-center">-</th>
+		                      <th class="text-center">-</th>
+		                      <th>-</th>
+		                      <th>-</th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes1" id="totalMes1" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes2" id="totalMes2" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes3" id="totalMes3" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes4" id="totalMes4" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes5" id="totalMes5" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes6" id="totalMes6" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes7" id="totalMes7" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes8" id="totalMes8" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes9" id="totalMes9" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes10" id="totalMes10" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes11" id="totalMes11" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes12" id="totalMes12" value="" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>">-</th>
+		                    </tr>
+		                  </tfoot>
 		                </table>
 		              </div>
 

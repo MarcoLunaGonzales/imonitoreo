@@ -17,6 +17,16 @@
             <span class="navbar-toggler-icon icon-bar"></span>
           </button>
             <?php 
+              require_once 'conexion.php';
+              $dbh = new Conexion();
+              $sqlFechaMayores="SELECT max(p.fecha)as fecha from po_mayores p";
+              $stmtMayores= $dbh->prepare($sqlFechaMayores);
+              $stmtMayores->execute();
+              $stmtMayores->bindColumn('fecha', $fechaMayores);
+              while ($rowMayores = $stmtMayores->fetch(PDO::FETCH_BOUND)) {
+                $fechaMayoresX=$rowMayores["fecha"];
+              }
+              
               $globalNombreGestion=$_SESSION['globalNombreGestion'];
               $globalNombreUnidad=$_SESSION['globalNombreUnidad'];
               $globalNombreArea=$_SESSION['globalNombreArea'];
@@ -24,6 +34,8 @@
               $horaSistema=date("H:i");
             ?>
             <h6>Gestión Trabajo: </h6>&nbsp;<h4 class="text-danger font-weight-bold">[<?=$globalNombreGestion;?>]</h4>&nbsp;&nbsp;&nbsp;<h6>Unidad: </h6>&nbsp;<h4 class="text-danger font-weight-bold">[ <?=$globalNombreUnidad;?> ]</h4> &nbsp;&nbsp; <h6>Area: </h6>&nbsp;<h4 class="text-danger font-weight-bold">[ <?=$globalNombreArea;?> ]</h4>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <h6 class="small font-weight-bold">Actualización Mayores: [<span class="text-primary font-weight-bold"><?=$fechaMayores;?></span>]</h6>
           
           <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">

@@ -1,4 +1,5 @@
 <?php
+set_time_limit(0);
 
 header('Content-Type: application/octet-stream');
 header("Content-Transfer-Encoding: Binary"); 
@@ -30,14 +31,14 @@ if($version==0){
 
 $sql="SELECT (select g.nombre from gestiones g where g.codigo=a.cod_gestion)as gestion, p.nombre as perspectiva, o.codigo as codObjetivo, o.abreviatura as abrevObjetivo, o.nombre as nombreObjetivo, i.codigo as codIndicador, 
 i.nombre as nombreIndicador, a.codigo as codActividad, a.nombre as nombreActividad, 
-(SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
-(SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,
+(select se.codigo from sectores_economicos se where se.codigo=a.cod_normapriorizada)as codigo_sector,
+(select se.nombre from sectores_economicos se where se.codigo=a.cod_normapriorizada)as sectorpriorizado,
 (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
 (SELECT t.abreviatura from tipos_seguimiento t where t.codigo=a.cod_tiposeguimiento)as tipodato, 
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, (select u.nombre from unidades_organizacionales u where u.codigo=a.cod_unidadorganizacional)as unidad, (select aa.nombre from areas aa where aa.codigo=a.cod_area)as area, a.cod_hito, (select h.nombre from hitos h where h.codigo=a.cod_hito)as hito, a.cod_datoclasificador
 from $tabla1 a, indicadores i, objetivos o, perspectivas p where a.cod_estado=1 and 
- a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva and a.cod_gestion='$gestion' ";
+ a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva and a.cod_gestion='$gestion'";
 
 if($version!=0){
 	$sql.=" and a.cod_version='$version' ";
@@ -54,7 +55,7 @@ $stmt->bindColumn('codIndicador', $codIndicador);
 $stmt->bindColumn('nombreIndicador', $nombreIndicador);
 $stmt->bindColumn('codActividad', $codActividad);
 $stmt->bindColumn('nombreActividad', $nombreActividad);
-$stmt->bindColumn('normapriorizada', $normapriorizada);
+$stmt->bindColumn('codigo_sector', $normapriorizada);
 $stmt->bindColumn('sectorpriorizado', $sectorpriorizado);
 $stmt->bindColumn('norma', $norma);
 $stmt->bindColumn('sector', $sector);
@@ -68,7 +69,7 @@ $stmt->bindColumn('cod_hito', $codHito);
 $stmt->bindColumn('hito', $hito);
 $stmt->bindColumn('cod_datoclasificador', $codDatoClasificador);
 
-echo "gestion;perspectiva;codObjetivo;abrevObjetivo;nombreObjetivo;codIndicador;nombreIndicador;codActividad;nombreActividad;normapriorizada;sectorpriorizado;norma;sector;tipodato;producto_esperado;cod_unidadorganizacional;cod_area;unidad;area;cod_hito;hito;codDatoClas;nombreClasificador;version;eneP;eneE;eneDesc;febP;febE;febDesc;marP;marE;marDesc;abrP;abrE;abrDesc;mayP;mayE;mayDesc;junP;junE;junDesc;julP;julE;julDesc;agoP;agoE;agoDesc;sepP;sepE;sepDesc;octP;octE;octDesc;novP;novE;novDesc;dicP;dicE;dicDesc";	
+echo "gestion;perspectiva;codObjetivo;abrevObjetivo;nombreObjetivo;codIndicador;nombreIndicador;codActividad;nombreActividad;codSectorEconomico;sectorEconomico;norma;sector;tipodato;producto_esperado;cod_unidadorganizacional;cod_area;unidad;area;cod_hito;hito;tablaClasificador;codDatoClas;nombreClasificador;version;eneP;eneE;eneDesc;febP;febE;febDesc;marP;marE;marDesc;abrP;abrE;abrDesc;mayP;mayE;mayDesc;junP;junE;junDesc;julP;julE;julDesc;agoP;agoE;agoDesc;sepP;sepE;sepDesc;octP;octE;octDesc;novP;novE;novDesc;dicP;dicE;dicDesc";	
 echo "\r\n";
 
 while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
@@ -79,13 +80,14 @@ while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
     $reemplazar=array("", "", "", "");
     $nombreActividad=str_ireplace($buscar,$reemplazar,$nombreActividad);
 
+    $nombreTablaClasificador="";
     $nombreDatoClasificador="";
     if($codDatoClasificador>0){
 		$nombreTablaClasificador=obtieneTablaClasificador($codIndicador,$cod_unidadorganizacional,$cod_area);
 		$nombreDatoClasificador=obtieneDatoClasificador($codDatoClasificador,$nombreTablaClasificador);    	
     }
 
-	$txt="$gestion;$perspectiva;$codObjetivo;$abrevObjetivo;$nombreObjetivo;$codIndicador;$nombreIndicador;$codActividad;$nombreActividad;$normapriorizada;$sectorpriorizado;$norma;$sector;$tipodato;$producto_esperado;$cod_unidadorganizacional;$cod_area;$unidad;$area;$codHito;$hito;$codDatoClasificador;$nombreDatoClasificador;$version;";	
+	$txt="$gestion;$perspectiva;$codObjetivo;$abrevObjetivo;$nombreObjetivo;$codIndicador;$nombreIndicador;$codActividad;$nombreActividad;$normapriorizada;$sectorpriorizado;$norma;$sector;$tipodato;$producto_esperado;$cod_unidadorganizacional;$cod_area;$unidad;$area;$codHito;$hito;$nombreTablaClasificador;$codDatoClasificador;$nombreDatoClasificador;$version;";	
 	for($i=1;$i<=12;$i++){
 		
 		if($version==0){

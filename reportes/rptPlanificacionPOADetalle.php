@@ -36,7 +36,7 @@ if($version==0){
 (SELECT s.abreviatura from sectores_economicos s where s.codigo=a.cod_normapriorizada)as sectorpriorizado,
 (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
-(SELECT t.abreviatura from tipos_seguimiento t where t.codigo=a.cod_tiposeguimiento)as tipodato, 
+a.cod_tiposeguimiento as tipodato, 
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado,
 i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre as nombreperspectiva,
 (select u.nombre from unidades_organizacionales u where u.codigo=a.cod_unidadorganizacional)as nombreunidad,
@@ -52,7 +52,7 @@ i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,
 (SELECT n.abreviatura from normas n where n.codigo=a.cod_norma)as norma,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector,
-(SELECT t.abreviatura from tipos_seguimiento t where t.codigo=a.cod_tiposeguimiento)as tipodato, 
+a.cod_tiposeguimiento as tipodato, 
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado,
 i.nombre as nombreindicador, o.nombre as nombreobjetivo, o.abreviatura, p.nombre as nombreperspectiva,
 (select u.nombre from unidades_organizacionales u where u.codigo=a.cod_unidadorganizacional)as nombreunidad,
@@ -114,6 +114,7 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                           <th class="font-weight-bold">Area</th>
                           <th class="font-weight-bold">Sector</th>
                           <th class="font-weight-bold">Actividad</th>
+                          <th class="font-weight-bold">U.Medida</th>
                           <th class="font-weight-bold">Ene</th>
                           <th class="font-weight-bold">Feb</th>
                           <th class="font-weight-bold">Mar</th>
@@ -187,6 +188,7 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                           <td class="text-center small"><?=$abrevUnidad."-".$abrevArea;?></td>
                           <td class="text-center small"><?=$sectorPriorizado;?></td>
                           <td class="text-left small"><?=$nombre;?></td>
+                          <td class="text-center small"><?=$tipoDato;?></td>
                           <?php
                           $totalActividad=0;
                           for($i=1;$i<=12;$i++){
@@ -219,6 +221,7 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
                           <th>-</th>
                           <th>-</th>
                           <th>-</th>
+                          <th>-</th>
                           <th>TOTALES</th>
                         </tr>
                       </tfoot>
@@ -233,5 +236,5 @@ $stmt->bindColumn('nombreperspectiva', $nombrePerspectiva);
 
 
 <script type="text/javascript">
-  totalesPlanificacion();
+  totalesPlanificacionPOA();
 </script>

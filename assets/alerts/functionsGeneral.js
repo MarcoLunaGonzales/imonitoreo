@@ -710,6 +710,65 @@ function totalesPlanificacion(){
   }   
 }
 
+
+function totalesPlanificacionPOASector(){
+   var main=document.getElementById('tablePaginatorFixed');   
+   var numFilas=main.rows.length;
+   var numCols=main.rows[1].cells.length;
+   
+   for(var j=6; j<=numCols-1; j++){
+    var subtotal=0;
+      for(var i=1; i<=numFilas-2; i++){
+            var datoS=main.rows[i].cells[j].innerHTML;
+            datoS=datoS.trim();
+            console.log(datoS+" "+typeof(datoS));
+            if(datoS=="-"){
+              datoS="0";
+            }
+            datoS=datoS.replace(/,/g,'');
+            console.log(datoS);
+            var dato=parseFloat(datoS);
+            //console.log(dato);
+            subtotal=subtotal+dato;
+            var subtotalF=number_format(subtotal,0); 
+            console.log("subtotal: "+subtotalF);
+      }
+      var fila=document.createElement('TH');
+      main.rows[numFilas-1].appendChild(fila);
+      main.rows[numFilas-1].cells[j].className='text-right'; 
+      main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
+  }   
+}
+
+function totalesPlanificacionPOA(){
+   var main=document.getElementById('tablePaginatorFixed');   
+   var numFilas=main.rows.length;
+   var numCols=main.rows[1].cells.length;
+   
+   for(var j=5; j<=numCols-1; j++){
+    var subtotal=0;
+      for(var i=1; i<=numFilas-2; i++){
+            var datoS=main.rows[i].cells[j].innerHTML;
+            datoS=datoS.trim();
+            console.log(datoS+" "+typeof(datoS));
+            if(datoS=="-"){
+              datoS="0";
+            }
+            datoS=datoS.replace(/,/g,'');
+            console.log(datoS);
+            var dato=parseFloat(datoS);
+            //console.log(dato);
+            subtotal=subtotal+dato;
+            var subtotalF=number_format(subtotal,0); 
+            console.log("subtotal: "+subtotalF);
+      }
+      var fila=document.createElement('TH');
+      main.rows[numFilas-1].appendChild(fila);
+      main.rows[numFilas-1].cells[j].className='text-right'; 
+      main.rows[numFilas-1].cells[j].innerHTML=subtotalF;      
+  }   
+}
+
 var dynamicColors = function() {
     var r = Math.floor(Math.random() * 255);
     var g = Math.floor(Math.random() * 255);
@@ -733,17 +792,23 @@ function calcularTotalEj(){
 }
 
 
-function calcularTotalPlanificado(indice){
+function calcularTotalPlanificado(indice, mes){
   var suma=0;
+  var sumaVertical=0;
   var formulariop = document.getElementById("form1");
   for (var i=0;i<formulariop.elements.length;i++){
     //if (formulariop.elements[i].id.indexOf("planificado"+indice) !== -1 ){        
-    if (formulariop.elements[i].id==("planificado"+indice)){        
+    if (formulariop.elements[i].id.indexOf("planificado"+indice)!=-1){        
       suma += (formulariop.elements[i].value) * 1;
       console.log(formulariop.elements[i].name+" "+formulariop.elements[i].id+" "+formulariop.elements[i].value);
     }
+    if(formulariop.elements[i].id.indexOf("mes"+mes)!=-1){
+      sumaVertical += (formulariop.elements[i].value) * 1;
+      console.log(formulariop.elements[i].name+" "+formulariop.elements[i].id+" "+formulariop.elements[i].value); 
+    }
   }  
   document.getElementById("totalPlani"+indice).value=suma;  
+  document.getElementById("totalMes"+mes).value=sumaVertical;  
 }
 
 //CON ESTE PROCESO ENVIAMSO LOS ARCHIVOS AJAX A LA LIBRERIA DEL ING. WILLY
