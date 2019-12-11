@@ -69,14 +69,16 @@ function ejecutadoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cu
   $agencia=str_replace('|', ',', $agencia);
   $sql="SELECT distinct(pc.codigo) as codigo, pc.nivel from po_plancuentas pc where pc.codigo like '4%'";
   if($organismo!=0){
-    $sql.=" and pc.codigo in (select distinct(pp.cod_cuenta) from po_presupuesto pp where pp.cod_organismo in ($organismo) and pp.cod_cuenta like '4%' and pp.monto>0)";
+    $sql.=" and pc.codigo in (select distinct(pp.cod_cuenta) from po_presupuesto pp where pp.cod_organismo in ($organismo) and pp.cod_cuenta like '4%' and pp.monto>0 and pp.cod_ano='$anio')";
   }else{
     $sql.=" and pc.nivel=5 ";
   }
   if($cuenta!=0){
     $sql.=" and pc.codigo='$cuenta'";
   }
+  
   //echo $sql;
+  
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
   $montoIngresoEjecutado=0;

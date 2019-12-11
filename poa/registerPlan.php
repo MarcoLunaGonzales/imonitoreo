@@ -159,6 +159,22 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                  <tbody>
 		                  <?php
 		                    $index=1;
+
+		                    $sumaVerticalEne=0;
+		                    $sumaVerticalFeb=0;
+		                    $sumaVerticalMar=0;
+		                    $sumaVerticalAbr=0;
+		                    $sumaVerticalMay=0;
+		                    $sumaVerticalJun=0;
+		                    $sumaVerticalJul=0;
+		                    $sumaVerticalAgo=0;
+		                    $sumaVerticalSep=0;
+		                    $sumaVerticalOct=0;
+		                    $sumaVerticalNov=0;
+		                    $sumaVerticalDic=0;
+
+		                    $sumaTotalTotal=0;
+
 		                  	while ($row = $stmtLista->fetch(PDO::FETCH_BOUND)) {
 	                  			$abrevArea=abrevArea($codArea);
                           		$abrevUnidad=abrevUnidad($codUnidad);
@@ -170,6 +186,7 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                      <td class="text-left small"><?=$productoEsperado;?></td>
 		                    <?php
 		                    $totalPlanificado=0;
+
 	                    	for($i=1;$i<=12;$i++){
 	                    		$sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
 	                    		$stmtRecupera = $dbh->prepare($sqlRecupera);
@@ -186,6 +203,21 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 									$valueBooleano=$rowRec['value_booleano'];
 								}
 								$totalPlanificado=$totalPlanificado+$valueNumero;
+								$sumaTotalTotal+=$valueNumero;
+
+								if($i==1){$sumaVerticalEne+=$valueNumero;}
+								if($i==2){$sumaVerticalFeb+=$valueNumero;}
+								if($i==3){$sumaVerticalMar+=$valueNumero;}
+								if($i==4){$sumaVerticalAbr+=$valueNumero;}
+								if($i==5){$sumaVerticalMay+=$valueNumero;}
+								if($i==6){$sumaVerticalJun+=$valueNumero;}
+								if($i==7){$sumaVerticalJul+=$valueNumero;}
+								if($i==8){$sumaVerticalAgo+=$valueNumero;}
+								if($i==9){$sumaVerticalSep+=$valueNumero;}
+								if($i==10){$sumaVerticalOct+=$valueNumero;}
+								if($i==11){$sumaVerticalNov+=$valueNumero;}
+								if($i==12){$sumaVerticalDic+=$valueNumero;}
+
 								//OBTENEMOS LA EJECUCION
 								$valorEj=0;
 								$descripcionEj="";
@@ -198,15 +230,16 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                            $descripcionEj=$rowRec['descripcion'];
 	                          	}
 	                          	//FIN EJECUCION
+	                          	$mesHexa=dechex($i);
 	                    	?>
 	                    		<td>
-	                    			<input class="form-control" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="planificado<?=$index;?>|mes<?=$i;?>" onChange="calcularTotalPlanificado(<?=$index;?>,<?=$i;?>);" OnKeyUp="calcularTotalPlanificado(<?=$index;?>);" step="0.01" required>
+	                    			<input class="form-control" value="<?=$valueNumero;?>" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="planificado<?=$index;?>|mes<?=$mesHexa;?>" onChange="calcularTotalPlanificado('<?=$index;?>','<?=$mesHexa;?>');" OnKeyUp="calcularTotalPlanificado('<?=$index;?>','<?=$mesHexa;?>');" step="0.01" required>
 	                    			<span class="text-center font-weight-bold text-primary" title="<?=$descripcionEj?>"><?=($valorEj)>0?formatNumberDec($valorEj):"-";?></span>
 	                    		</td>
 	                    	<?php	
 	                    	}
 		                    ?>
-		                    <input type="hidden" name="tipo_dato|<?=$codigo;?>" id="tipo_dato|<?=$codigo;?>|<?=$i;?>" value="<?=$codTipoDato;?>">
+		                    <input type="hidden" name="tipo_dato|<?=$codigo;?>" id="tipo_dato|<?=$codigo;?>|<?=$mesHexa;?>" value="<?=$codTipoDato;?>">
 		                    	<td><input type="text" class="form-control" name="totalPlani<?=$index;?>" id="totalPlani<?=$index;?>" value="<?=formatNumberDec($totalPlanificado);?>" readonly="true"></td>
 		                    </tr>
 					        <?php
@@ -219,20 +252,20 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 		                      <th class="text-center">-</th>
 		                      <th class="text-center">-</th>
 		                      <th>-</th>
-		                      <th>-</th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes1" id="totalMes1" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes2" id="totalMes2" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes3" id="totalMes3" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes4" id="totalMes4" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes5" id="totalMes5" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes6" id="totalMes6" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes7" id="totalMes7" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes8" id="totalMes8" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes9" id="totalMes9" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes10" id="totalMes10" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes11" id="totalMes11" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes12" id="totalMes12" value="" readonly="true"></th>
-		                      <th width="<?=$anchoColumna;?>">-</th>
+		                      <th>TOTALES</th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes1" id="totalMes1" value="<?=formatNumberDec($sumaVerticalEne);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes2" id="totalMes2" value="<?=formatNumberDec($sumaVerticalFeb);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes3" id="totalMes3" value="<?=formatNumberDec($sumaVerticalMar);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes4" id="totalMes4" value="<?=formatNumberDec($sumaVerticalAbr);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes5" id="totalMes5" value="<?=formatNumberDec($sumaVerticalMay);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes6" id="totalMes6" value="<?=formatNumberDec($sumaVerticalJun);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes7" id="totalMes7" value="<?=formatNumberDec($sumaVerticalJul);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes8" id="totalMes8" value="<?=formatNumberDec($sumaVerticalAgo);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMes9" id="totalMes9" value="<?=formatNumberDec($sumaVerticalSep);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMesa" id="totalMesa" value="<?=formatNumberDec($sumaVerticalOct);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMesb" id="totalMesb" value="<?=formatNumberDec($sumaVerticalNov);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalMesc" id="totalMesc" value="<?=formatNumberDec($sumaVerticalDic);?>" readonly="true"></th>
+		                      <th width="<?=$anchoColumna;?>"><input type="text" class="form-control" name="totalTotal" id="totalTotal" value="<?=formatNumberDec($sumaTotalTotal);?>" readonly="true"></th>
 		                    </tr>
 		                  </tfoot>
 		                </table>
@@ -245,6 +278,8 @@ if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA Q
 					<a href="#" onclick="javascript:window.close();" class="<?=$buttonCancel;?>">Cancelar</a>
 				  </div>
 			</div>
+
 		  </form>
 	</div>
 </div>
+

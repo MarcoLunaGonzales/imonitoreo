@@ -795,20 +795,23 @@ function calcularTotalEj(){
 function calcularTotalPlanificado(indice, mes){
   var suma=0;
   var sumaVertical=0;
+  var sumaTotal=0;
   var formulariop = document.getElementById("form1");
   for (var i=0;i<formulariop.elements.length;i++){
-    //if (formulariop.elements[i].id.indexOf("planificado"+indice) !== -1 ){        
     if (formulariop.elements[i].id.indexOf("planificado"+indice)!=-1){        
       suma += (formulariop.elements[i].value) * 1;
-      console.log(formulariop.elements[i].name+" "+formulariop.elements[i].id+" "+formulariop.elements[i].value);
     }
     if(formulariop.elements[i].id.indexOf("mes"+mes)!=-1){
       sumaVertical += (formulariop.elements[i].value) * 1;
-      console.log(formulariop.elements[i].name+" "+formulariop.elements[i].id+" "+formulariop.elements[i].value); 
+    }
+    //aqui sumamos los totales
+    if( (formulariop.elements[i].id.indexOf("planificado"))!=-1 ||  (formulariop.elements[i].id.indexOf("mes"))!=-1 ){
+      sumaTotal += formulariop.elements[i].value * 1;
     }
   }  
-  document.getElementById("totalPlani"+indice).value=suma;  
-  document.getElementById("totalMes"+mes).value=sumaVertical;  
+  document.getElementById("totalPlani"+indice).value=number_format(suma,2);  
+  document.getElementById("totalMes"+mes).value=number_format(sumaVertical,2);
+  document.getElementById("totalTotal").value=number_format(sumaTotal,2);
 }
 
 //CON ESTE PROCESO ENVIAMSO LOS ARCHIVOS AJAX A LA LIBRERIA DEL ING. WILLY

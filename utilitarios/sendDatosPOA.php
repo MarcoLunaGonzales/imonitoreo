@@ -40,6 +40,8 @@ a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, (select u.nombre fr
 from $tabla1 a, indicadores i, objetivos o, perspectivas p where a.cod_estado=1 and 
  a.cod_indicador=i.codigo and i.cod_objetivo=o.codigo and p.codigo=o.cod_perspectiva and a.cod_gestion='$gestion'";
 
+// and a.cod_unidadorganizacional=1625 and a.cod_indicador=64 and a.codigo=7380 ";
+
 if($version!=0){
 	$sql.=" and a.cod_version='$version' ";
 }
@@ -90,6 +92,7 @@ while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
 	$txt="$gestion;$perspectiva;$codObjetivo;$abrevObjetivo;$nombreObjetivo;$codIndicador;$nombreIndicador;$codActividad;$nombreActividad;$normapriorizada;$sectorpriorizado;$norma;$sector;$tipodato;$producto_esperado;$cod_unidadorganizacional;$cod_area;$unidad;$area;$codHito;$hito;$nombreTablaClasificador;$codDatoClasificador;$nombreDatoClasificador;$version;";	
 	for($i=1;$i<=12;$i++){
 		
+		$banderaPlani=0;
 		if($version==0){
 			$sqlRecupera="SELECT value_numerico from $tabla2 where cod_actividad=:cod_actividad and mes=:cod_mes";
 			$stmtRecupera = $dbh->prepare($sqlRecupera);
@@ -100,6 +103,8 @@ while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
 			while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
 				$valorPlanificacion=$rowRec['value_numerico'];
 				$txt.=$valorPlanificacion.";";
+				//echo "version 0=".$valorPlanificacion;
+				$banderaPlani=1;
 			}
 		}else{
 			$sqlRecupera="SELECT value_numerico from $tabla2 where cod_actividad=:cod_actividad and mes=:cod_mes and cod_version=:cod_version";
@@ -113,7 +118,12 @@ while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
 			while ($rowRec = $stmtRecupera->fetch(PDO::FETCH_ASSOC)) {
 				$valorPlanificacion=$rowRec['value_numerico'];
 				$txt.=$valorPlanificacion.";";
+				//echo "version X=".$valorPlanificacion;
+				$banderaPlani=1;
 			}
+		}
+		if($banderaPlani==0){
+			$txt.="0;";
 		}
 		 	
 
@@ -135,6 +145,8 @@ while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
 		$descripcionEj=str_ireplace($buscar,$reemplazar,$descripcionEj);
 
 		$txt.=$valorEjecucion.";".$descripcionEj.";";
+		//echo "ejecucion =".$valorEjecucion." ".$descripcionEj;
+
 	}
 	$txt.="\r\n";
 	echo $txt;
