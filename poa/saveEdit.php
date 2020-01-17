@@ -20,17 +20,26 @@ $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
 $fechaHoraActual=date("Y-m-d H:i:s");
 
-// Prepare
-$stmt = $dbh->prepare("UPDATE $table set nombre=:nombre, descripcion=:descripcion,  modified_at=:modifiedAt, modified_by=:modifiedBy, cod_indicador=:cod_indicador where codigo=:codigo");
-// Bind
-$stmt->bindParam(':codigo', $codigo);
-$stmt->bindParam(':nombre', $nombre);
-$stmt->bindParam(':descripcion', $descripcion);
-$stmt->bindParam(':modifiedAt', $fechaHoraActual);
-$stmt->bindParam(':modifiedBy', $globalUser);
-$stmt->bindParam(':cod_indicador', $indicadorEst);
+$nombre=strtoupper($nombre);
+$descripcion=strtoupper($descripcion);
 
-$flagSuccess=$stmt->execute();
+// Prepare
+$sql="UPDATE $table set nombre=:nombre, descripcion=:descripcion,  modified_at=:modifiedAt, modified_by=:modifiedBy, cod_indicador=:cod_indicador where codigo=:codigo";
+$stmt = $dbh->prepare($sql);
+// Bind
+
+$values = array(':codigo' => $codigo,
+		':nombre' => $nombre,
+		':descripcion' => $descripcion,
+		':modifiedAt' => $fechaHoraActual,
+		':modifiedBy' => $globalUser,
+		':cod_indicador' => $indicadorEst);
+
+$exQuery=str_replace(array_keys($values), array_values($values), $sql);
+
+echo $exQuery;
+
+$flagSuccess=$stmt->execute($values);
 
 $flagSuccessDetail=true;
 
@@ -48,11 +57,12 @@ for ($i=0;$i<count($hitos);$i++){
 	}
 }
 
-if($flagSuccessDetail==true && $flagSuccess==true){
+
+/*if($flagSuccessDetail==true && $flagSuccess==true){
 	showAlertSuccessError(true,$urlRedirect);	
 }else{
 	showAlertSuccessError(false,$urlRedirect);
-}
+}*/
 
 
 ?>

@@ -528,7 +528,7 @@ if($globalPerfilX==1){
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=descargarDatosPO">
                     <span class="sidebar-mini"> DPO </span>
-                    <span class="sidebar-normal"> Datos PO </span>
+                    <span class="sidebar-normal">  Datos PO  </span>
                   </a>
                 </li> 
 

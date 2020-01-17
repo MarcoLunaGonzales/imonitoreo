@@ -12,6 +12,10 @@ $stmt = $dbh->prepare("ALTER TABLE actividades_poaejecucion DROP FOREIGN KEY act
 $stmt->execute();
 $stmt = $dbh->prepare("ALTER TABLE `actividades_poaplanificacion` DROP FOREIGN KEY `actividades_poaplanificacion_fk1`;");
 $stmt->execute();
+$stmt = $dbh->prepare("ALTER TABLE `actividades_poaplanificacion_temp` DROP FOREIGN KEY `actividades_poaplanificacion_temp_ibfk_1`;");
+$stmt->execute();
+
+
 
 
 
@@ -47,7 +51,11 @@ $fechaHoraActual=date("Y-m-d H:i:s");
 
 for ($i=1;$i<=$cantidadFilas;$i++){ 	    	
 	// Prepare
-	$nombre=$_POST["actividad".$i];
+	if(isset($_POST["actividad".$i])){
+		$nombre=$_POST["actividad".$i];
+	}else{
+		$nombre="";
+	}
 	//echo $i." area: ".$area." <br>";
 
 	if($nombre!=0 || $nombre!=""){
@@ -58,11 +66,26 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 		$productoEsperado=$_POST["producto_esperado".$i];
 		$tipoSeguimiento=$_POST["tipo_seguimiento".$i];
 		$tipoResultado="1";//valor numerico por defecto
-		$datoClasificador=$_POST["clasificador".$i];
+		$datoClasificador="0";
+		if(isset($_POST["clasificador".$i])){
+			$datoClasificador=$_POST["clasificador".$i];
+		}
 		$observaciones=$_POST["observaciones".$i];
-		$hito=$_POST["hito".$i];
+		$hito="0";
+
+		if(isset($_POST["hito".$i])){
+			$hito=$_POST["hito".$i];
+		}
 		$claveIndicador=$_POST["clave_indicador".$i];
 
+		$nombre=strtoupper($nombre);
+		$observaciones=strtoupper($observaciones);
+		if($normaPriorizada==""){
+			$normaPriorizada=0;
+		}
+		if($norma==""){
+			$norma=0;
+		}
 
 		$codigoPOA=0;
 		if($codigo==0){
@@ -116,6 +139,7 @@ for ($i=1;$i<=$cantidadFilas;$i++){
     	);
 
     	$exQuery=str_replace(array_keys($values), array_values($values), $sql);
+    	
     	//echo $exQuery;
 
 		$flagSuccess=$stmt->execute($values);	
@@ -126,6 +150,8 @@ for ($i=1;$i<=$cantidadFilas;$i++){
 $stmt = $dbh->prepare("ALTER TABLE `actividades_poaejecucion` ADD CONSTRAINT `actividades_poaejecucion_fk1` FOREIGN KEY (`cod_actividad`) REFERENCES `actividades_poa` (`codigo`);");
 $stmt->execute();
 $stmt = $dbh->prepare("ALTER TABLE `actividades_poaplanificacion` ADD CONSTRAINT `actividades_poaplanificacion_fk1` FOREIGN KEY (`cod_actividad`) REFERENCES `actividades_poa` (`codigo`);");
+$stmt->execute();
+$stmt = $dbh->prepare("ALTER TABLE `actividades_poaplanificacion_temp` ADD CONSTRAINT `actividades_poaplanificacion_temp_ibfk_1` FOREIGN KEY (`cod_actividad`) REFERENCES `actividades_poa` (`codigo`);");
 $stmt->execute();
 
 

@@ -90,6 +90,8 @@ if (!$conexión) {
     $mlPartida=odbc_result($rs,"ML_Partida");
     $glosa=odbc_result($rs,"glosa");
     $glosa=clean_string($glosa);
+
+    $glosa=string_sanitize($glosa);
     
     $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
     $reemplazar=array("", "", "", "");
@@ -102,6 +104,8 @@ if (!$conexión) {
     $glosaDetalle=str_ireplace($buscar,$reemplazar,$glosaDetalle);
     $glosaDetalle=addslashes($glosaDetalle);
 
+    $glosaDetalle=string_sanitize($glosaDetalle);
+
     $clase=odbc_result($rs,"clase");
     $numero=odbc_result($rs,"numero");
 
@@ -110,7 +114,7 @@ if (!$conexión) {
 
     $insert_str .= "('$indiceCodigo','$fondo','$anio','$mes','$fecha','$cta1','$cta2','$cta3','$cta4','$cuenta','$partida','$monto','$organismo','$mlPartida','$glosa','$glosaDetalle','$clase','$numero'),"; 
 
-    if($indiceCodigo%10==0){
+    if($indiceCodigo%200==0){
       $insert_str = substr_replace($insert_str, '', -1, 1);
       $sqlInserta="INSERT INTO po_mayores (indice, fondo, anio, mes, fecha, cta_n1, cta_n2, cta_n3, cta_n4, cuenta, partida, monto, organismo, ml_partida, glosa, glosa_detalle, clase, numero) 
         values ".$insert_str.";";
@@ -125,7 +129,7 @@ if (!$conexión) {
       //echo $sqlInserta."<br>";
       break;
     }
-    if($indiceCodigo%10==0){
+    if($indiceCodigo%200==0){
       echo "INSERTANDO.... Tuplas -> $indiceCodigo <br>";
     }
 

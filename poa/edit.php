@@ -248,7 +248,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 									<div class="col-sm-6">
 					                    <div class="form-group">
 					                    <label for="actividad<?=$index;?>" class="bmd-label-floating">Actividad</label>			
-			                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();"><?=$nombre;?></textarea>	
+			                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" style="text-transform: uppercase;"><?=$nombre;?></textarea>	
 		 								</div>
 		                          	</div>
 
@@ -283,7 +283,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 									<div class="col-sm-6">
 					                    <div class="form-group">
 					                    <label for="observaciones<?=$index;?>" class="bmd-label-floating">Observaciones</label>			
-			                          	<input class="form-control" type="text" name="observaciones<?=$index;?>" id="observaciones<?=$index;?>" onkeyup="javascript:this.value=this.value.toUpperCase();" value="<?=$observaciones;?>">	
+			                          	<input class="form-control" type="text" name="observaciones<?=$index;?>" id="observaciones<?=$index;?>" style="text-transform: uppercase;" value="<?=$observaciones;?>">	
 		 								</div>
 		                          	</div>
 

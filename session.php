@@ -1,17 +1,27 @@
 <?php
+
+
 require_once 'functions.php';
 require_once 'conexion.php';
 
-$dbh = new Conexion();
 session_start();
+
+
+$dbh = new Conexion();
 $user=$_POST["user"];
 $password=$_POST["password"];
 
 //OBTENEMOS EL VALOR DE LA CONFIGURACION 1 -> LOGIN PROPIO DE MONITOREO    2-> LOGIN POR SERVICIO WEB
 $tipoLogin=obtieneValorConfig(-1);
 
+//echo $tipoLogin;
+
+//echo "hola";
+
 $banderaLogin=0;
+
 if($tipoLogin==2){
+	
 	$sIdentificador = "monitoreo";
 	$sKey="837b8d9aa8bb73d773f5ef3d160c9b17";
 	$nombreuser=$user;
@@ -126,7 +136,6 @@ if($banderaLogin==1 || $tipoLogin==1){
 		$_SESSION['globalServerArchivos']="http://ibnored.ibnorca.org/itranet/documentos/";
 
 
-
 		$sIdentificador = "monitoreo";
 		$sKey="837b8d9aa8bb73d773f5ef3d160c9b17";
 		$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, "operacion"=>"Menu", "IdUsuario"=>$codigo);
@@ -143,10 +152,8 @@ if($banderaLogin==1 || $tipoLogin==1){
 		//print_r($remote_server_output);       
 		$obj=json_decode($remote_server_output);
 		$_SESSION['globalMenuJson']=$obj;
-
+		
 	}
-
-
 }
 
 header("location:index.php");

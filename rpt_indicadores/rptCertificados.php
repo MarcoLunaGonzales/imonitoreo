@@ -43,6 +43,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   $cadenaUnidades=$row['valor_configuracion'];
 }
 
+//SACAMOS LA CONFIG PARA OMITIR LOS CERTIFICADOR R.M.
+$txtOmitirRM=obtieneValorConfig(30);
+
 ?>
 
 <div class="content">
@@ -274,7 +277,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
                     $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
 
-                  $sqlN="SELECT e.norma, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A','') ";
+                  $sqlN="SELECT e.norma, count(*)as cantidad from ext_certificados e where e.norma not in ('N/A','') and 
+                  e.norma not like '%$txtOmitirRM%' ";
                   if($vista==1){
                     $sqlN.=" and YEAR(e.fechaemision)=$anioTemporal ";
                   }else{
@@ -347,8 +351,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <th class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberInt(100);?></th>
                     <?php
                     }
-                    $cantCertificadosUnidad=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,'',1,$vista);
-                    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,38,'',1,$vista);
+                    $cantCertificadosUnidad=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,$areaCertificacion,'',1,$vista);
+                    $cantCertificados=obtenerCantCertificadosNorma(0,$anioTemporal,$mesTemporal,$areaCertificacion,'',1,$vista);
                     $participacionNorma=0;
                     if($cantCertificadosUnidad>0){
                       $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;

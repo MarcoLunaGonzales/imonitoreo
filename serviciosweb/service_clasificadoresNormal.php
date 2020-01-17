@@ -8,7 +8,7 @@ $sKey = "837b8d9aa8bb73d773f5ef3d160c9b17"; // llave de acuerdo al sistema
 
 /*PARAMETROS PARA LA OBTENCION DEL LISTADO DEL CLASIFICADOR*/
 //$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "padre"=>$codigoPadreX); // cambiar padre por los valores correspondientes
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"755");
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"1580");
 //$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"403");
 //$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"821");
 

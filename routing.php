@@ -272,6 +272,9 @@
 		if ($_GET['opcion']=='descargarDatosPOA') {
 			require_once('utilitarios/descargarDatosPOA.php');
 		}
+		if ($_GET['opcion']=='descargarDatosPO') {
+			require_once('utilitarios/descargarDatosPO.php');
+		}
 		if ($_GET['opcion']=='sincronizacionDatos') {
 			require_once('utilitarios/sincronizacionDatos.php');
 		}

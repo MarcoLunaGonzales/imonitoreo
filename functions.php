@@ -843,6 +843,10 @@ function clean_string($string)
     $reemplazar=array("", "", "", "");
     $string=str_ireplace($buscar,$reemplazar,$string);
 
+    $buscar=array("ª","/");
+    $reemplazar=array("","");
+    $string=str_ireplace($buscar,$reemplazar,$string);
+
     return $string;
 }
 
@@ -1342,9 +1346,10 @@ function obtenerCantEmpresasCertificados($unidad,$anioTemporal,$mesTemporal,$are
   $fechaVistaIni=$anioTemporal."-".$mesTemporal."-01";
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
+  $txtOmitirRM=obtieneValorConfig(30);
 
   $dbh = new Conexion();
-  $sql="SELECT count(distinct(e.idcliente))as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  $sql="SELECT count(distinct(e.idcliente))as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
   if($vista==1){
     if($acumulado==0){
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)='$mesTemporal' ";
@@ -1374,9 +1379,10 @@ function obtenerCantCertificados($unidad,$anioTemporal,$mesTemporal,$area1,$ambo
   $fechaVistaIni=$anioTemporal."-".$mesTemporal."-01";
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
+  $txtOmitirRM=obtieneValorConfig(30);
 
   $dbh = new Conexion();
-  $sql="SELECT count(*)as cantidad from ext_certificados e where  e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  $sql="SELECT count(*)as cantidad from ext_certificados e where  e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
   if($vista==1){
     if($acumulado==0){
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)='$mesTemporal' ";
@@ -1406,13 +1412,15 @@ function obtenerCantCertificadosNorma($unidad,$anioTemporal,$mesTemporal,$area1,
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
 
+  $txtOmitirRM=obtieneValorConfig(30);
+
   $dbh = new Conexion();
-  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','')";
   if($norma==""){
     if($vista==1){
-      $sql.=" and e.norma in (SELECT ee.norma from ext_certificados ee where ee.norma not in ('N/A') and YEAR(ee.fechaemision)=$anioTemporal and ee.idarea='$area1') ";
+      $sql.=" and e.norma in (SELECT ee.norma from ext_certificados ee where YEAR(ee.fechaemision)=$anioTemporal and ee.idarea='$area1') ";
     }else{
-      $sql.=" and e.norma in (SELECT ee.norma from ext_certificados ee where ee.norma not in ('N/A') and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' and ee.idarea='$area1') ";
+      $sql.=" and e.norma in (SELECT ee.norma from ext_certificados ee where e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' and ee.idarea='$area1') ";
     }
   }else{
     $sql.=" and e.norma='$norma' ";
@@ -1449,9 +1457,10 @@ function obtenerCantCertificadosIAF($unidad,$anioTemporal,$mesTemporal,$area1,$i
   $fechaVistaIni=$anioTemporal."-".$mesTemporal."-01";
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
+  $txtOmitirRM=obtieneValorConfig(30);
 
   $dbh = new Conexion();
-  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
   if($iaf==0){
     if($vista==1){
       $sql.=" and e.iaf in (SELECT ee.iaf from ext_certificados ee where ee.iaf not in ('0') and YEAR(ee.fechaemision)=$anioTemporal and ee.idarea='$area1') ";
@@ -1491,9 +1500,10 @@ function obtenerCantEmpresasOrganismo($unidad,$anioTemporal,$mesTemporal,$area1,
   $fechaVistaIni=$anioTemporal."-".$mesTemporal."-01";
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
+  $txtOmitirRM=obtieneValorConfig(30);
 
   $dbh = new Conexion();
-  $sql="SELECT count(distinct(e.idcliente))as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  $sql="SELECT count(distinct(e.idcliente))as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
   if($vista==1){
     if($acumulado==0){
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)='$mesTemporal' ";
@@ -1522,12 +1532,14 @@ function obtenerCantEmpresasOrganismo($unidad,$anioTemporal,$mesTemporal,$area1,
 
 
 function obtenerCantCertificadosOrganismo($unidad,$anioTemporal,$mesTemporal,$area1,$organismoCert,$acumulado,$vista){
+  $dbh = new Conexion();
+
   $fechaVistaIni=$anioTemporal."-".$mesTemporal."-01";
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
+  $txtOmitirRM=obtieneValorConfig(30);
   
-  $dbh = new Conexion();
-  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) ";
+  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
   if($vista==1){
     if($acumulado==0){
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)='$mesTemporal' ";

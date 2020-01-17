@@ -20,6 +20,9 @@ for($i=0; $i<count($externalCosts);$i++){
     $glosa=string_sanitize($glosa);
 
 	$sql="DELETE from gastos_externalcosts where fecha='$fecha' and ml_partida='$partida' and glosa_detalle='$glosa' and cod_externalcost='$codigoAcc'";
+    
+    //echo $sql."<br>";
+    
     $stmt = $dbh->prepare($sql);
     $flagSuccess2=$stmt->execute();
 
@@ -28,6 +31,7 @@ for($i=0; $i<count($externalCosts);$i++){
     }
     
     $sql="INSERT INTO gastos_externalcosts (fecha, ml_partida, glosa_detalle, cod_externalcost) VALUES ('$fecha','$partida','$glosa','$codigoAcc')";
+    //echo $sql."<br>";
     $stmt = $dbh->prepare($sql);
     $flagSuccess2=$stmt->execute();
 
@@ -42,7 +46,5 @@ if($flagSuccessDetail==true){
 }else{
 	showAlertSuccessError(false,$urlRedirect);
 }
-
-
 
 ?>
