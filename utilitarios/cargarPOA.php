@@ -53,6 +53,19 @@ $dbh = new Conexion();
         </div>
         
 
+        <div class="row">
+          <label class="col-sm-2 col-form-label">Opciones</label>
+          <div class="col-sm-7">
+          <div class="form-group">
+            <select class="selectpicker" title="Seleccionar" name="tipo" id="tipo" data-style="<?=$comboColor;?>" required>
+              <option value="0">Anexar Actividades sin Borrar.</option>
+              <option value="1">Borrar Actividades por coincidencia de Indicador-Unidad-Area y Cargar.</option>
+            </select>
+          </div>
+          </div>
+        </div>
+
+
         </div>
         <div class="card-footer ml-auto mr-auto">
         <button type="submit" class="<?=$button;?>">Guardar</button>

@@ -41,7 +41,7 @@ while($resp = $query->fetch()){
 	$FechaInicio=$resp['FechaInicio'];
 	$FechaFin=$resp['FechaFin'];
 	$NroModulo=$resp['NroModulo'];
-	$fechaNacimiento=$resp['FechaNacimiento'];
+	$fechaNacimiento=$resp['clFechaNacimiento'];
 
 	$insert_str .= "('$IdCurso','$Curso_gestion','$d_oficina','$d_Programa','$d_Tipo','$d_empresa','$d_aprobacion','$Nombre_Curso','$Curso_CantModulos','$Estado','$Cod_Curso','$CiAlumno','$d_alumno','$IdModulo','$FechaInicio','$FechaFin','$NroModulo','$fechaNacimiento'),";	
 

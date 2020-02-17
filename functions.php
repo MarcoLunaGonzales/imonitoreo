@@ -598,7 +598,7 @@ function ejecucionPorIndicador($indicador, $area, $unidad, $mes, $acumulado){
   return($cantidadPlanificada);
 }
 
-function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
+function cursosPorUnidadAnt($unidad, $anio, $mes, $acumulado, $tipocurso){
   $dbh = new Conexion();
   $cadenaEstados=obtieneValorConfig(27);
   //$sql="SELECT count(*) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.gestion='$anio' and c.estado in ($cadenaEstados) and c.id_oficina in ($unidad) ";
@@ -622,30 +622,66 @@ function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   return($numeroCursos);  
 }
 
-function alumnosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
+function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   $dbh = new Conexion();
-  $cadenaEstados=obtieneValorConfig(27);
-  //$sql="SELECT sum(c.alumnos_modulo) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.gestion='$anio' and c.estado in ($cadenaEstados) ";
-  $sql="SELECT sum(c.alumnos_modulo) as cantidad, c.id_oficina from ext_cursos c where YEAR(c.fecha_inicio)='$anio' and c.estado in ($cadenaEstados) ";
-  if($unidad!=0){
-    $sql.=" and c.id_oficina in ($unidad) ";  
-  }
+  $sql="SELECT eac.d_oficina, eac.cod_curso, eac.nromodulo ,count(*)as cuenta from ext_alumnos_cursos eac where eac.curso_gestion='$anio' and eac.cod_curso not in ('') and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.id_oficina in ($unidad)) ";
+
   if($acumulado==0){
-    $sql.=" and MONTH(c.fecha_inicio)='$mes' ";
+    $sql.=" and YEAR(eac.fechainicio)='$anio' and MONTH(eac.fechainicio)='$mes' ";
   }
   if($acumulado==1){
-    $sql.=" and MONTH(c.fecha_inicio)<='$mes' ";  
-  }  
-  if($tipocurso!=""){
-    $sql.=" and c.tipo in ('$tipocurso')";
+    $sql.=" and YEAR(eac.fechainicio)='$anio' and MONTH(eac.fechainicio)<='$mes' ";  
   }
+  if($tipocurso!=""){
+    $sql.=" and eac.d_tipo in ('$tipocurso')";
+  }
+  $sql.=" GROUP BY eac.d_oficina, eac.cod_curso, eac.nromodulo ";
+
+  //echo $sql."<br>";
+
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
-  $cantidad=0;
+  $numeroCursos=0;
+  $cantidadAlumnos=0;
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      $cantidad=$row['cantidad'];
+      $cantidadAlumnos=$cantidadAlumnos+$row['cuenta'];
+      $numeroCursos++;
   }
-  return($cantidad);  
+  return($numeroCursos);  
+}
+
+function alumnosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
+  $dbh = new Conexion();
+  $sql="SELECT eac.d_oficina, eac.cod_curso, eac.nromodulo ,count(*)as cuenta from ext_alumnos_cursos eac where eac.curso_gestion='$anio' and eac.cod_curso not in ('') and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec  ";
+  
+  if($unidad!=0){
+    $sql.=" where ec.id_oficina in ($unidad)) ";
+  }else{
+    $sql.=" ) ";
+  }
+
+  if($acumulado==0){
+    $sql.=" and YEAR(eac.fechainicio)='$anio' and MONTH(eac.fechainicio)='$mes' ";
+  }
+  if($acumulado==1){
+    $sql.=" and YEAR(eac.fechainicio)='$anio' and MONTH(eac.fechainicio)<='$mes' ";  
+  }
+  if($tipocurso!=""){
+    $sql.=" and eac.tipo in ('$tipocurso')";
+  }
+  $sql.=" GROUP BY eac.d_oficina, eac.cod_curso, eac.nromodulo ";
+
+  //echo $sql."<br>";
+
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $numeroCursos=0;
+  $cantidadAlumnos=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $cantidadAlumnos=$cantidadAlumnos+$row['cuenta'];
+      $numeroCursos++;
+  }
+  return($cantidadAlumnos);    
 }
 
 function serviciosPorUnidad($unidad, $anio, $mes, $acumulado, $tipoServicio, $vista){//vista 1 cantidad, 2 monto bs.
@@ -950,6 +986,8 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
   $dbh = new Conexion();
   $unidadHijos=buscarHijosUO($unidad);
   $valueRegistros=0;
+
+  //echo "ingresando a la funcion";
   
   //echo "clasificador:".$clasificador;
   
@@ -1018,7 +1056,9 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
         $abreviaturaServicio=buscarAbreviaturaServicio($codigoClasificador);
         $sql="SELECT sum(e.montobs)as registros from ext_solicitudfacturacion e where e.codigoserviciocurso like '%$abreviaturaServicio%' and YEAR(e.fecha)='$anio' and MONTH(e.fecha)='$mes' and e.idestado not in (266) and e.idoficina in ($unidadHijos)";  
     }
-    //echo $codIndicadorContar." ".$codIndicadorSumar." ".$indicador;
+    echo $sql;
+    //echo $codIndicadorContar." ".$codIndicadorSumar." ".$indicador." ".$sql." </br>";
+    
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -1039,6 +1079,7 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
       $valueRegistros=$row['registros'];
     }
   }
+  //echo $sql;
 
   return($valueRegistros);
 }
@@ -1304,7 +1345,7 @@ function calcularAlumnosGrupoEtario($unidad,$area,$mes,$anio,$edadmin,$edadmax){
 
   $fechaActual=$anio."-".$mes."-01";
 
-  $sql="SELECT count(distinct(eac.cialumno))as cantidad from ext_alumnos_cursos eac where YEAR(eac.fechainicio)=$anio and  MONTH(eac.fechainicio)<='$mes' and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where  ec.estado in ($cadenaEstados) and c.gestion='$anio' ";
+  $sql="SELECT count(distinct(eac.cialumno))as cantidad from ext_alumnos_cursos eac where YEAR(eac.fechainicio)=$anio and  MONTH(eac.fechainicio)<='$mes' and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.gestion='$anio' ";
   if($unidad!=0){
     $sql.=" and ec.id_oficina in ($unidad) ";
   }
@@ -1347,9 +1388,11 @@ function obtenerCantEmpresasCertificados($unidad,$anioTemporal,$mesTemporal,$are
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
   $txtOmitirRM=obtieneValorConfig(30);
+  $estadosOmitir=obtieneValorConfig(31);
+
 
   $dbh = new Conexion();
-  $sql="SELECT count(distinct(e.idcliente))as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
+  $sql="SELECT count(distinct(e.idcliente))as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in ($estadosOmitir) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
   if($vista==1){
     if($acumulado==0){
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)='$mesTemporal' ";
@@ -1357,7 +1400,7 @@ function obtenerCantEmpresasCertificados($unidad,$anioTemporal,$mesTemporal,$are
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)<='$mesTemporal' ";
     }    
   }else{
-    $sql.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";
+    $sql.=" and e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' ";
   }
   if($unidad>0){
     $sql.=" and e.idoficina in ($unidad) ";
@@ -1380,9 +1423,10 @@ function obtenerCantCertificados($unidad,$anioTemporal,$mesTemporal,$area1,$ambo
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
   $txtOmitirRM=obtieneValorConfig(30);
+  $estadosOmitir=obtieneValorConfig(31);
 
   $dbh = new Conexion();
-  $sql="SELECT count(*)as cantidad from ext_certificados e where  e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
+  $sql="SELECT count(*)as cantidad from ext_certificados e where  e.idarea=$area1 and e.idestado not in ($estadosOmitir) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
   if($vista==1){
     if($acumulado==0){
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)='$mesTemporal' ";
@@ -1390,12 +1434,14 @@ function obtenerCantCertificados($unidad,$anioTemporal,$mesTemporal,$area1,$ambo
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)<='$mesTemporal' ";
     }
   }else{
-    $sql.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";    
+    $sql.=" and e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' ";    
   }
   if($unidad>0){
     $sql.=" and e.idoficina in ($unidad) ";
   } 
+  
   //echo $sql;
+  
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
   $cantidad=0;
@@ -1413,14 +1459,16 @@ function obtenerCantCertificadosNorma($unidad,$anioTemporal,$mesTemporal,$area1,
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
 
   $txtOmitirRM=obtieneValorConfig(30);
+  $estadosOmitir=obtieneValorConfig(31);
+
 
   $dbh = new Conexion();
-  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','')";
+  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in ($estadosOmitir) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','')";
   if($norma==""){
     if($vista==1){
       $sql.=" and e.norma in (SELECT ee.norma from ext_certificados ee where YEAR(ee.fechaemision)=$anioTemporal and ee.idarea='$area1') ";
     }else{
-      $sql.=" and e.norma in (SELECT ee.norma from ext_certificados ee where e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' and ee.idarea='$area1') ";
+      $sql.=" and e.norma in (SELECT ee.norma from ext_certificados ee where e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' and ee.idarea='$area1') ";
     }
   }else{
     $sql.=" and e.norma='$norma' ";
@@ -1432,7 +1480,7 @@ function obtenerCantCertificadosNorma($unidad,$anioTemporal,$mesTemporal,$area1,
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)<='$mesTemporal' ";
     }
   }else{
-    $sql.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";        
+    $sql.=" and e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' ";        
   }
   if($unidad>0){
     $sql.=" and e.idoficina in ($unidad) ";
@@ -1458,14 +1506,15 @@ function obtenerCantCertificadosIAF($unidad,$anioTemporal,$mesTemporal,$area1,$i
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
   $txtOmitirRM=obtieneValorConfig(30);
+  $estadosOmitir=obtieneValorConfig(31);
 
   $dbh = new Conexion();
-  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
+  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in ($estadosOmitir) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
   if($iaf==0){
     if($vista==1){
       $sql.=" and e.iaf in (SELECT ee.iaf from ext_certificados ee where ee.iaf not in ('0') and YEAR(ee.fechaemision)=$anioTemporal and ee.idarea='$area1') ";
     }else{
-      $sql.=" and e.iaf in (SELECT ee.iaf from ext_certificados ee where ee.iaf not in ('0') and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' and ee.idarea='$area1') ";
+      $sql.=" and e.iaf in (SELECT ee.iaf from ext_certificados ee where ee.iaf not in ('0') and e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' and ee.idarea='$area1') ";
     }
   }else{
     $sql.=" and e.iaf='$iaf' ";
@@ -1477,7 +1526,7 @@ function obtenerCantCertificadosIAF($unidad,$anioTemporal,$mesTemporal,$area1,$i
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)<='$mesTemporal' ";
     }
   }else{
-    $sql.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";    
+    $sql.=" and e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' ";    
   }
   if($unidad>0){
     $sql.=" and e.idoficina in ($unidad) ";
@@ -1501,9 +1550,10 @@ function obtenerCantEmpresasOrganismo($unidad,$anioTemporal,$mesTemporal,$area1,
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
   $txtOmitirRM=obtieneValorConfig(30);
+  $estadosOmitir=obtieneValorConfig(31);
 
   $dbh = new Conexion();
-  $sql="SELECT count(distinct(e.idcliente))as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
+  $sql="SELECT count(distinct(e.idcliente))as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in ($estadosOmitir) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
   if($vista==1){
     if($acumulado==0){
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)='$mesTemporal' ";
@@ -1511,7 +1561,7 @@ function obtenerCantEmpresasOrganismo($unidad,$anioTemporal,$mesTemporal,$area1,
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)<='$mesTemporal' ";
     }    
   }else{
-    $sql.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";        
+    $sql.=" and e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' ";        
   }
 
   if($unidad>0){
@@ -1538,8 +1588,9 @@ function obtenerCantCertificadosOrganismo($unidad,$anioTemporal,$mesTemporal,$ar
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaIni.'+1 month'));
   $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
   $txtOmitirRM=obtieneValorConfig(30);
+  $estadosOmitir=obtieneValorConfig(31);
   
-  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in (646, 860, 475, 1118) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
+  $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in ($estadosOmitir) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
   if($vista==1){
     if($acumulado==0){
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)='$mesTemporal' ";
@@ -1547,7 +1598,7 @@ function obtenerCantCertificadosOrganismo($unidad,$anioTemporal,$mesTemporal,$ar
       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)<='$mesTemporal' ";
     }
   }else{
-    $sql.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";            
+    $sql.=" and e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' ";            
   }
   if($unidad>0){
     $sql.=" and e.idoficina in ($unidad) ";

@@ -183,7 +183,8 @@ $moduleName="Registro de Ejecucion POA";
 		                    <tr>
 		                      <td class="text-center"><?=$index;?></td>
 		                      <td class="text-center"><?=$abrevArea."-".$abrevUnidad;?></td>
-		                      <td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?><?=$actRetrasadas;?></td>
+		                      <!--td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?><?=$actRetrasadas;?></td-->
+		                      <td class="text-left small"><?=$nombre;?><?=$actRetrasadas;?></td>
 		                      <td class="text-left small"><?=$nombreDatoClasificador;?>)</td>
 		                    <?php
 	                    	for($i=$codMesX;$i<=$codMesX;$i++){

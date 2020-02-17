@@ -60,7 +60,7 @@ while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
 		
 		$banderaPlani=0;
 		if($version==0){
-			$sqlRecupera="SELECT sum(p.monto)as monto from po_presupuesto p where p.cod_gestion='$gestion' and p.cod_fondo='$codFondo' and p.cod_organismo='$codOrganismo' and p.cod_mes='$i' ";
+			$sqlRecupera="SELECT sum(p.monto)as monto from po_presupuesto p where p.cod_gestion='$gestion' and p.cod_fondo='$codFondo' and p.cod_organismo='$codOrganismo' and p.cod_mes='$i' and p.cod_cuenta='$codCuenta'";
 			//echo $sqlRecupera;
 			$stmtRecupera = $dbh->prepare($sqlRecupera);
 			$stmtRecupera->execute();

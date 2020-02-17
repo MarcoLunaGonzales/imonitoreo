@@ -38,111 +38,129 @@ echo "<h6>Hora Inicio Proceso: " . date("Y-m-d H:i:s")."</h6>";
   $conexión=odbc_connect($dsn, $usuario, $clave);
 //end modificado
 
+$arrayGestiones = array(2019,2020,2021);
+$longArray = count($arrayGestiones);
+
 if (!$conexión) { 
   exit( "Error al conectar: " . $conexión);
 }else{
   /*BORRAMOS LA TABLA DE MAYORES*/
-  $sqlDelete = "DELETE from po_mayores where anio='2019'";
-  $stmtDelete = $dbh->prepare($sqlDelete);
-  $flagSuccess=$stmtDelete->execute();
-   
-  //maximo codigo tabla po_mayores
-  $flagSuccess=TRUE;
-  $sqlInserta="";
+  for($i=0; $i<$longArray-1; $i++){
 
-  $sqlMaxCod = 'SELECT IFNULL(max(indice),0)maximo from po_mayores';
-  $stmtMaxCod = $dbh->prepare($sqlMaxCod);
-  $stmtMaxCod->execute();
-  while ($rowMaxCod = $stmtMaxCod->fetch(PDO::FETCH_ASSOC)) {
-    $indiceMax=$rowMaxCod['maximo'];
-  }
-  
-/* query MARCO original
-  $sql = "SELECT v.fondo, v.ano, v.mes, CONVERT(char(10), v.fecha,126)as fecha, v.cta_n1, v.cta_n2, v.cta_n3, v.cta_n4, v.cuenta, v.partida, v.MontoBs, v.organismo, v.ML_Partida, v.glosa, v.GlosaDeta, v.clase, v.numero from ibnorca2019.dbo.vw_MayorContable v";
- */
-// query modificado IBNORCA - INGE (se agrego el nombre de base de datos a la tabla del from ibnorca2019.dbo.vw_MayorContable
- $sql = "SELECT v.fondo, v.ano, v.mes, CONVERT(char(10), v.fecha,126)as fecha, v.cta_n1, v.cta_n2, v.cta_n3, v.cta_n4, v.cuenta, v.partida, v.MontoBs, v.organismo, v.ML_Partida, v.glosa, v.GlosaDeta, v.clase, v.numero from ibnorca2019.dbo.vw_MayorContable v";
-// end modificado
+    $sqlDelete = "DELETE from po_mayores where anio='$arrayGestiones[$i]'";
+    $stmtDelete = $dbh->prepare($sqlDelete);
+    $flagSuccess=$stmtDelete->execute();
+     
+    //maximo codigo tabla po_mayores
+    $flagSuccess=TRUE;
+    $sqlInserta="";
 
-  //echo $sql."<br>";
-  $rs = odbc_exec( $conexión, $sql );
-  if ( !$rs ) { 
-  exit( "Error en la consulta SQL" ); 
-  }
-  $indiceCodigo=$indiceMax+1;
-
-  $insert_str="";
-
-  while(odbc_fetch_row($rs)){ 
-
-    $fondo=odbc_result($rs,"fondo");
-    $anio=odbc_result($rs,"ano");
-    $mes=odbc_result($rs,"mes");
-    $fecha=odbc_result($rs,"fecha");
-    $cta1=odbc_result($rs,"cta_n1");
-    $cta2=odbc_result($rs,"cta_n2");
-    $cta3=odbc_result($rs,"cta_n3");
-    $cta4=odbc_result($rs,"cta_n4");
-    $cuenta=odbc_result($rs,"cuenta");
-    $partida=odbc_result($rs,"partida");
-    $monto=odbc_result($rs,"MontoBs");
-    $organismo=odbc_result($rs,"organismo");
-    $mlPartida=odbc_result($rs,"ML_Partida");
-    $glosa=odbc_result($rs,"glosa");
-    $glosa=clean_string($glosa);
-
-    $glosa=string_sanitize($glosa);
-    
-    $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
-    $reemplazar=array("", "", "", "");
-    $glosa=str_ireplace($buscar,$reemplazar,$glosa);
-    
-    $glosa=addslashes($glosa);
-    
-    $glosaDetalle=odbc_result($rs,"GlosaDeta");
-    $glosaDetalle=clean_string($glosaDetalle);
-    $glosaDetalle=str_ireplace($buscar,$reemplazar,$glosaDetalle);
-    $glosaDetalle=addslashes($glosaDetalle);
-
-    $glosaDetalle=string_sanitize($glosaDetalle);
-
-    $clase=odbc_result($rs,"clase");
-    $numero=odbc_result($rs,"numero");
-
-    
-    //echo $fondo." ".$glosa."<br>";
-
-    $insert_str .= "('$indiceCodigo','$fondo','$anio','$mes','$fecha','$cta1','$cta2','$cta3','$cta4','$cuenta','$partida','$monto','$organismo','$mlPartida','$glosa','$glosaDetalle','$clase','$numero'),"; 
-
-    if($indiceCodigo%200==0){
-      $insert_str = substr_replace($insert_str, '', -1, 1);
-      $sqlInserta="INSERT INTO po_mayores (indice, fondo, anio, mes, fecha, cta_n1, cta_n2, cta_n3, cta_n4, cuenta, partida, monto, organismo, ml_partida, glosa, glosa_detalle, clase, numero) 
-        values ".$insert_str.";";
-      $stmtInsert=$dbh->prepare($sqlInserta);
-      $flagSuccess=$stmtInsert->execute();
-      $insert_str="";
-    } 
-    $indiceCodigo++;
-
-    if($flagSuccess==FALSE){
-      echo "*****************ERROR*****************";
-      //echo $sqlInserta."<br>";
-      break;
-    }
-    if($indiceCodigo%200==0){
-      echo "INSERTANDO.... Tuplas -> $indiceCodigo <br>";
+    $sqlMaxCod = 'SELECT IFNULL(max(indice),0)maximo from po_mayores';
+    $stmtMaxCod = $dbh->prepare($sqlMaxCod);
+    $stmtMaxCod->execute();
+    while ($rowMaxCod = $stmtMaxCod->fetch(PDO::FETCH_ASSOC)) {
+      $indiceMax=$rowMaxCod['maximo'];
     }
 
+    $txtBDGestion="";
+    if($arrayGestiones[$i]==2018){
+      $txtBDGestion="ibnorca2018";
+    }
+    if($arrayGestiones[$i]==2019){
+      $txtBDGestion="ibnorca2019";
+    }
+    if($arrayGestiones[$i]==2020){
+      $txtBDGestion="ibnorca2020";
+    }
+    if($arrayGestiones[$i]==2021){
+      $txtBDGestion="ibnorca2021";
+    }
+
+    // query modificado IBNORCA - INGE (se agrego el nombre de base de datos a la tabla del from ibnorca2019.dbo.vw_MayorContable
+    $sql = "SELECT v.fondo, v.ano, v.mes, CONVERT(char(10), v.fecha,126)as fecha, v.cta_n1, v.cta_n2, v.cta_n3, v.cta_n4, v.cuenta, v.partida, v.MontoBs, v.organismo, v.ML_Partida, v.glosa, v.GlosaDeta, v.clase, v.numero from $txtBDGestion.dbo.vw_MayorContable v";
+    // end modificado
+
+    $rs = odbc_exec( $conexión, $sql );
+    if ( !$rs ) { 
+      echo $sql."<br>";
+      exit( "Error en la consulta SQL" ); 
+    }
+    $indiceCodigo=$indiceMax+1;
+
+    $insert_str="";
+
+    while(odbc_fetch_row($rs)){ 
+
+      $fondo=odbc_result($rs,"fondo");
+      $anio=odbc_result($rs,"ano");
+      $mes=odbc_result($rs,"mes");
+      $fecha=odbc_result($rs,"fecha");
+      $cta1=odbc_result($rs,"cta_n1");
+      $cta2=odbc_result($rs,"cta_n2");
+      $cta3=odbc_result($rs,"cta_n3");
+      $cta4=odbc_result($rs,"cta_n4");
+      $cuenta=odbc_result($rs,"cuenta");
+      $partida=odbc_result($rs,"partida");
+      $monto=odbc_result($rs,"MontoBs");
+      $organismo=odbc_result($rs,"organismo");
+      $mlPartida=odbc_result($rs,"ML_Partida");
+      $glosa=odbc_result($rs,"glosa");
+      $glosa=clean_string($glosa);
+
+      $glosa=string_sanitize($glosa);
+      
+      $buscar=array(chr(13).chr(10), "\r\n", "\n", "\r");
+      $reemplazar=array("", "", "", "");
+      $glosa=str_ireplace($buscar,$reemplazar,$glosa);
+      
+      $glosa=addslashes($glosa);
+      
+      $glosaDetalle=odbc_result($rs,"GlosaDeta");
+      $glosaDetalle=clean_string($glosaDetalle);
+      $glosaDetalle=str_ireplace($buscar,$reemplazar,$glosaDetalle);
+      $glosaDetalle=addslashes($glosaDetalle);
+
+      $glosaDetalle=string_sanitize($glosaDetalle);
+
+      $clase=odbc_result($rs,"clase");
+      $numero=odbc_result($rs,"numero");
+
+      
+      //echo $fondo." ".$glosa."<br>";
+
+      $insert_str .= "('$indiceCodigo','$fondo','$anio','$mes','$fecha','$cta1','$cta2','$cta3','$cta4','$cuenta','$partida','$monto','$organismo','$mlPartida','$glosa','$glosaDetalle','$clase','$numero'),"; 
+
+      if($indiceCodigo%200==0){
+        $insert_str = substr_replace($insert_str, '', -1, 1);
+        $sqlInserta="INSERT INTO po_mayores (indice, fondo, anio, mes, fecha, cta_n1, cta_n2, cta_n3, cta_n4, cuenta, partida, monto, organismo, ml_partida, glosa, glosa_detalle, clase, numero) 
+          values ".$insert_str.";";
+        $stmtInsert=$dbh->prepare($sqlInserta);
+        $flagSuccess=$stmtInsert->execute();
+        $insert_str="";
+      } 
+      $indiceCodigo++;
+
+      if($flagSuccess==FALSE){
+        echo "*****************ERROR*****************";
+        //echo $sqlInserta."<br>";
+        break;
+      }
+      if($indiceCodigo%200==0){
+        echo "INSERTANDO.... Tuplas -> $indiceCodigo <br>";
+      }
+
+    }
+    $insert_str = substr_replace($insert_str, '', -1, 1);
+    $sqlInserta="INSERT INTO po_mayores (indice, fondo, anio, mes, fecha, cta_n1, cta_n2, cta_n3, cta_n4, cuenta, partida, monto, organismo, ml_partida, glosa, glosa_detalle, clase, numero) 
+          values ".$insert_str.";";
+    //echo $sqlInserta;
+    $stmtInsert=$dbh->prepare($sqlInserta);
+    $stmtInsert->execute();
+
   }
-  $insert_str = substr_replace($insert_str, '', -1, 1);
-  $sqlInserta="INSERT INTO po_mayores (indice, fondo, anio, mes, fecha, cta_n1, cta_n2, cta_n3, cta_n4, cuenta, partida, monto, organismo, ml_partida, glosa, glosa_detalle, clase, numero) 
-        values ".$insert_str.";";
-  //echo $sqlInserta;
-  $stmtInsert=$dbh->prepare($sqlInserta);
-  $stmtInsert->execute();
 
+}//FIN RECORRIDO GESTION
 
-}
 odbc_close($conexión);
 
 echo "<h6>Hora Fin Proceso Mayores: " . date("Y-m-d H:i:s")."</h6>";

@@ -700,7 +700,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   </div>
 </div>
 
-
 <script type="text/javascript">
   totalesRptSec();
 </script>

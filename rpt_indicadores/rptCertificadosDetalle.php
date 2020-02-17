@@ -16,6 +16,10 @@ $stmtX->execute();
 
 session_start();
 
+$txtOmitirRM=obtieneValorConfig(30);
+$estadosOmitir=obtieneValorConfig(31);
+
+
 $mesTemporal=$_GET["mes"];
 $nombreMes=nameMes($mesTemporal);
 $anioTemporal=$_GET["anio"];
@@ -120,7 +124,7 @@ $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
                   if($iaf>0){
                     $sql.=" and e.iaf='$iaf' ";
                   }
-                  $sql.=" and e.idestado not in (646, 860, 475, 1118) order by unidad, area, cliente ";
+                  $sql.=" AND e.idestado not in ($estadosOmitir) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') order by unidad, area, cliente ";
                   
                   //echo $sql;
                   

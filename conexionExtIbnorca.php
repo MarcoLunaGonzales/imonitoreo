@@ -2,11 +2,11 @@
  class ConexionExterno extends PDO { 
 
    private $tipo_de_base = 'mysql';
-   private $host = '192.168.10.19';
+   private $host = '192.168.20.12';
    private $nombre_de_base = 'ibnorca';
    private $usuario = 'ingresobd';
    private $contrasena = 'ingresoibno';
-   private $port = '';
+   //private $port = '';
 
 /*   private $tipo_de_base = 'mysql';
    private $host = 'localhost';

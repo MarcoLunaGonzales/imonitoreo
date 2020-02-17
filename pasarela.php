@@ -6,10 +6,11 @@ $dbh = new Conexion();
 session_start();
 
 
-$user=$_POST["idUsuario "];
+$user=$_POST["idUsuario"];
 $keyID=$_POST["key"];
 
 
+echo $user." ".$keyID;
 if($keyID=="ZAFHKnDxHQ94CJ6RSgwp"){
 
 	$sql="";
@@ -122,6 +123,5 @@ if($keyID=="ZAFHKnDxHQ94CJ6RSgwp"){
 else{
 	header("location:error.html");
 }
-
 
 ?>

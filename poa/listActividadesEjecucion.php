@@ -74,7 +74,7 @@ $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n wh
 (SELECT t.abreviatura from tipos_seguimiento t where t.codigo=a.cod_tiposeguimiento)as tipodato, 
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area, a.cod_tiporesultado, (select i.cod_clasificador from indicadores i where i.codigo=a.cod_indicador)as datoclasificador,
           (a.cod_datoclasificador)as codigodetalleclasificador
- from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
+ from actividades_poa a where a.cod_gestion in ($globalGestion) and a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
   $sql.=" and a.cod_area in ($globalAreaEjecucion) and a.cod_unidadorganizacional in ($globalUnidadEjecucion)";
 
 if($areaIndicador!=0){
@@ -84,7 +84,9 @@ if($unidadIndicador!=0){
   $sql.=" and a.cod_unidadorganizacional in ($unidadIndicador) ";
 } 
 $sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+
 //echo $sql;
+
 $stmt = $dbh->prepare($sql);
 // Ejecutamos
 $stmt->execute();
@@ -173,10 +175,9 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
 
 
                           //SACAMOS LA PLANIFICACION
-                          $sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
+                          $sqlRecupera="SELECT value_numerico, value_string, value_booleano from actividades_poaplanificacion where cod_actividad='$codigo' and mes='$codMesX'";
+                          //echo $sqlRecupera;
                           $stmtRecupera = $dbh->prepare($sqlRecupera);
-                          $stmtRecupera->bindParam(':cod_actividad',$codigo);
-                          $stmtRecupera->bindParam(':cod_mes',$codMesX);
                           $stmtRecupera->execute();
                           $valueNumero=0;
                           $valueString="";
@@ -256,7 +257,8 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                         <tr>
                           <td class="text-center"><?=$index;?></td>
                           <td><?=$abrevArea."-".$abrevUnidad;?></td>
-                          <td class="text-left"><?=$nombre;?><?=$cadenaNormas;?><?=$actRetrasadas?></td>
+                          <!--td class="text-left"><?=$nombre;?><?=$cadenaNormas;?><?=$actRetrasadas?></td-->
+                          <td class="text-left"><?=$nombre;?><?=$actRetrasadas?></td-->
                           <td><?=$productoEsperado;?></td>
                           <!--td><?=$tipoDato;?></td-->
                           <td><?=$nombreDatoClasificador;?></td>

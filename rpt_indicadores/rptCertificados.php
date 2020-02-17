@@ -12,6 +12,7 @@ $dbh = new Conexion();
 
 session_start();
 
+
 $mesTemporal=$_GET["mes"];
 $nombreMes=nameMes($mesTemporal);
 $anioTemporal=$_GET["anio"];

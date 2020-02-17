@@ -91,8 +91,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </thead>
                 <tbody>
                   <?php
-                  $sql="SELECT (SELECT u.nombre from unidades_organizacionales u where u.codigo=e.id_oficina)oficina, (select p.nombre from programas p where p.codigo=e.id_programa)programa, e.sigla, e.codigocurso, e.tipo, e.nombre_curso, e.cantidad_modulos, e.estado, e.costo_modulo, e.empresa, e.nro_modulo, e.tema, e.fecha_inicio, e.fecha_fin, e.docente, e.alumnos_modulo from ext_cursos e where e.estado in ($cadenaEstados) and e.id_oficina in ($codUnidad) and YEAR(e.fecha_inicio)='$anioTemporal' and MONTH(e.fecha_inicio)<='$mesTemporal' and e.gestion='$anioTemporal'";
+                  $sql="SELECT (SELECT u.nombre from unidades_organizacionales u where u.codigo=e.id_oficina)oficina, (select p.nombre from programas p where p.codigo=e.id_programa)programa, e.sigla, e.codigocurso, e.tipo, e.nombre_curso, e.cantidad_modulos, e.estado, e.costo_modulo, e.empresa, e.nro_modulo, e.tema, e.fecha_inicio, e.fecha_fin, e.docente, e.alumnos_modulo from ext_alumnos_cursos eac, ext_cursos e where eac.cod_curso=e.codigocurso and e.id_oficina in ($codUnidad) and YEAR(e.fecha_inicio)='$anioTemporal' and MONTH(e.fecha_inicio)<='$mesTemporal' and e.gestion='$anioTemporal' and e.codigocurso not in ('')  and e.alumnos_modulo>0 GROUP BY e.codigocurso, e.nro_modulo";
+                  
                   //echo $sql;
+                  
                   $stmt = $dbh->prepare($sql);
                   $stmt->execute();
                   $stmt->bindColumn('oficina', $nombreOficina);
