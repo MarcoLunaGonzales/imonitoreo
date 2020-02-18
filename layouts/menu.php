@@ -493,6 +493,13 @@ if($globalPerfilX==1){
             <div class="collapse" id="utilitarios">
               <ul class="nav">
                 <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listEnlacesExternos">
+                    <span class="sidebar-mini"> EE </span>
+                    <span class="sidebar-normal"> Enlaces Externos </span>
+                  </a>
+                </li>
+
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listGestionTrabajo">
                     <span class="sidebar-mini"> CG </span>
                     <span class="sidebar-normal"> Cambiar Gestion de Trabajo </span>
@@ -968,7 +975,14 @@ if($globalPerfilX==2){
             </a>
             <div class="collapse" id="utilitarios">
               <ul class="nav">
-                <li class="nav-item ">
+
+                <li class="nav-item ">        
+                  <a class="nav-link" href="?opcion=listEnlacesExternos">
+                    <span class="sidebar-mini"> EE </span>
+                    <span class="sidebar-normal"> Enlaces Externos </span>
+                  </a>
+                </li>
+                <li class="nav-item ">        
                   <a class="nav-link" href="?opcion=listGestionTrabajo">
                     <span class="sidebar-mini"> CG </span>
                     <span class="sidebar-normal"> Cambiar Gestion de Trabajo </span>
@@ -1276,6 +1290,14 @@ if($globalPerfilX==3){
             </a>
             <div class="collapse" id="utilitarios">
               <ul class="nav">
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listEnlacesExternos">
+                    <span class="sidebar-mini"> EE </span>
+                    <span class="sidebar-normal"> Enlaces Externos </span>
+                  </a>
+                </li>
+
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listGestionTrabajo">
                     <span class="sidebar-mini"> CG </span>
@@ -2115,6 +2137,12 @@ if($globalPerfilX==6){
             </a>
             <div class="collapse" id="utilitarios">
               <ul class="nav">
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listEnlacesExternos">
+                    <span class="sidebar-mini"> EE </span>
+                    <span class="sidebar-normal"> Enlaces Externos </span>
+                  </a>
+                </li>
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listGestionTrabajo">
                     <span class="sidebar-mini"> CG </span>

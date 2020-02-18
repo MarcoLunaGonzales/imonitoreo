@@ -295,7 +295,17 @@
 		if ($_GET['opcion']=='cargarPOA') {
 			require_once('utilitarios/cargarPOA.php');
 		}
-		
+		//ENLACES EXTERNOS
+		if ($_GET['opcion']=='listEnlacesExternos') {
+			require_once('enlaces_externos/list.php');
+		}
+		if ($_GET['opcion']=='registerEnlaceExterno') {
+			require_once('enlaces_externos/register.php');
+		}
+		if ($_GET['opcion']=='deleteEnlaceExterno') {
+			$codigo=$_GET['codigo'];
+			require_once('enlaces_externos/saveDelete.php');
+		}
 
 
 
