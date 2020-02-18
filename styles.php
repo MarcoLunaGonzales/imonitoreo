@@ -9,6 +9,7 @@ $buttonNormal="btn";
 $buttonCeleste="btn btn-info";
 $buttonMorado="btn btn-primary";
 $buttonEdit="btn btn-success";
+$buttonDelete="btn btn-danger";
 $buttonDetailMin="btn btn-info";
 $buttonCancel="btn btn-danger";
 
