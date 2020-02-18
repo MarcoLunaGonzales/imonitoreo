@@ -22,17 +22,19 @@ $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 $globalAdmin=$_SESSION["globalAdmin"];
+$cod_proyecto=$_SESSION["globalProyecto"];
 
 $fechaHoraActual=date("Y-m-d H:i:s");
 
 //INSERTAMOS LA CABECERA
-$stmt = $dbh->prepare("INSERT INTO solicitud_fondos (cod_gestion, fecha, observaciones, created_at, created_by, cod_estado) VALUES (:cod_gestion, :fecha, :observaciones, :created_at, :created_by, :cod_estado)");
+$stmt = $dbh->prepare("INSERT INTO solicitud_fondos (cod_gestion, fecha, observaciones, created_at, created_by, cod_estado,cod_proyecto) VALUES (:cod_gestion, :fecha, :observaciones, :created_at, :created_by, :cod_estado,:cod_proyecto)");
 $stmt->bindParam(':cod_gestion', $globalGestion);
 $stmt->bindParam(':fecha', $fecha);
 $stmt->bindParam(':observaciones', $observaciones);
 $stmt->bindParam(':created_at', $fechaHoraActual);
 $stmt->bindParam(':created_by', $globalUser);
 $stmt->bindParam(':cod_estado', $codEstado);
+$stmt->bindParam(':cod_proyecto', $cod_proyecto);
 $flagSuccess=$stmt->execute();	
 //SACAMOS EL CODIGO PARA EL DETALLE
 $lastId = $dbh->lastInsertId();

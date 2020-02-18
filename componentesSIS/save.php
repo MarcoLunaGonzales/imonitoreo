@@ -19,10 +19,12 @@ $padre=$_POST["padre"];
 $codEstado="1";
 $personal=$_POST["cod_personal"];
 $globalGestion=$_SESSION["globalGestion"];
+$cod_proyecto=$_SESSION["globalProyecto"];
+
 
 // Prepare
 
-$stmt = $dbh->prepare("INSERT INTO $table (nombre, abreviatura, nivel, cod_padre, partida, cod_estado, cod_personal, cod_gestion) VALUES (:nombre, :abreviatura, :nivel, :cod_padre, :partida, :cod_estado, :cod_personal, :cod_gestion)");
+$stmt = $dbh->prepare("INSERT INTO $table (nombre, abreviatura, nivel, cod_padre, partida, cod_estado, cod_personal, cod_gestion,cod_proyecto) VALUES (:nombre, :abreviatura, :nivel, :cod_padre, :partida, :cod_estado, :cod_personal, :cod_gestion,:cod_proyecto)");
 // Bind
 $stmt->bindParam(':nombre', $nombre);
 $stmt->bindParam(':abreviatura', $abreviatura);
@@ -32,6 +34,7 @@ $stmt->bindParam(':cod_padre', $padre);
 $stmt->bindParam(':cod_estado', $codEstado);
 $stmt->bindParam(':cod_personal', $personal);
 $stmt->bindParam(':cod_gestion', $globalGestion);
+$stmt->bindParam(':cod_proyecto', $cod_proyecto);
 
 $flagSuccess=$stmt->execute();
 showAlertSuccessError($flagSuccess,$urlRedirect);

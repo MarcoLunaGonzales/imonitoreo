@@ -10,7 +10,7 @@ $globalAdmin=$_SESSION["globalAdmin"];
 $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
-
+$codigo_proy=$_SESSION["globalProyecto"];
 $codigo=$_GET['codigo'];
 
 $sqlX="SET NAMES 'utf8'";
@@ -27,7 +27,7 @@ $stmtX->execute();
 				<select class="selectpicker form-control" name="componente<?=$codigo;?>" id="componente<?=$codigo;?>" data-style="<?=$comboColor;?>"  data-live-search="true" required="true">
 				  	<option value="">Actividad</option>
 				  	<?php
-				  	$stmt = $dbh->prepare("SELECT codigo, abreviatura, nombre FROM componentessis where cod_estado=1 and nivel=3 order by 2,3");
+				  	$stmt = $dbh->prepare("SELECT codigo, abreviatura, nombre FROM componentessis where cod_estado=1 and nivel=3 and cod_proyecto=$codigo_proy order by 2,3");
 					$stmt->execute();
 					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 						$codigoX=$row['codigo'];

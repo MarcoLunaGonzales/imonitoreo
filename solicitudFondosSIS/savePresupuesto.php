@@ -22,10 +22,12 @@ $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 $globalAdmin=$_SESSION["globalAdmin"];
+$cod_proyecto=$_SESSION["globalProyecto"];
 
 $fechaHoraActual=date("Y-m-d H:i:s");
 
 //borramos la tabla SI EL TIPO ES 0
+
 if($tipoCargado==0){
 	$stmtDel = $dbh->prepare("DELETE FROM sis_presupuesto WHERE cod_ano=:cod_anio");
 	$stmtDel->bindParam(':cod_anio', $nombreGestion);
@@ -140,6 +142,14 @@ while(!feof($file)){
 				$partidaX=$row['partida'];
 			}
 		}
+		if($partidaX=="0"){
+			$sql="SELECT c.partida from componentessis c where c.codigo='$idCuenta'";
+			$stmt=$dbh->prepare($sql);
+			$stmt->execute();
+			while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
+				$partidaX=$row['partida'];
+			}
+		}
 		
 		//echo $sql."<br>";
 		//echo $partidaX."<br>";
@@ -155,123 +165,135 @@ while(!feof($file)){
 				$flagSuccess=$stmtDel->execute();	
 			}
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '1',
-					':monto'=>$enero
+					':monto'=>$enero,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '2',
-					':monto'=>$febrero
+					':monto'=>$febrero,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '3',
-					':monto'=>$marzo
+					':monto'=>$marzo,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '4',
-					':monto'=>$abril
+					':monto'=>$abril,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '5',
-					':monto'=>$mayo
+					':monto'=>$mayo,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '6',
-					':monto'=>$junio
+					':monto'=>$junio,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '7',
-					':monto'=>$julio
+					':monto'=>$julio,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '8',
-					':monto'=>$agosto
+					':monto'=>$agosto,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '9',
-					':monto'=>$septiembre
+					':monto'=>$septiembre,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '10',
-					':monto'=>$octubre
+					':monto'=>$octubre,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '11',
-					':monto'=>$noviembre
+					':monto'=>$noviembre,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 
-			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto)";	    		    
+			$sql="INSERT INTO sis_presupuesto (cod_cuenta, cod_gestion, cod_ano, cod_mes, monto,cod_proyecto) VALUES (:cod_cuenta, :cod_gestion, :cod_ano, :cod_mes, :monto,:cod_proyecto)";	    		    
 			$stmt = $dbh->prepare($sql);
 			$values = array( ':cod_cuenta' => $idCuenta,
 					':cod_gestion' => $gestion,
 					':cod_ano' => $nombreGestion,
 					':cod_mes'=> '12',
-					':monto'=>$diciembre
+					':monto'=>$diciembre,
+					':cod_proyecto'=>$cod_proyecto
 					);
 			$stmt->execute($values);
 		}

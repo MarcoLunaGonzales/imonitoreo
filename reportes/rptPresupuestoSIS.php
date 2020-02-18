@@ -13,11 +13,13 @@ $stmtX->execute();
 
 
 $gestion=$_POST["gestion"];
+$codigo_proy=$_POST["codigo_proy"];
+$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
 
 $anio=nameGestion($gestion);
 
 $sql="SELECT distinct(c.partida), c.nombre, c.abreviatura from sis_presupuesto p, componentessis c
-where p.cod_cuenta=c.partida and p.cod_ano='$anio' and p.monto>0";
+where p.cod_cuenta=c.partida and p.cod_ano='$anio' and p.monto>0 and c.cod_proyecto=$codigo_proy";
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 
@@ -49,7 +51,7 @@ $totalDic=0;
                   <div class="card-icon">
                     <i class="material-icons">assignment</i>
                   </div>
-                  <h4 class="card-title">Reporte Revision Presupuesto SIS</h4>
+                  <h4 class="card-title">Reporte Revision Presupuesto - Proyecto <?=$nombre_proyecto?></h4>
                   <h6 class="card-title">Gestion: <?=$anio;?> </h6>
 
                 </div>

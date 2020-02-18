@@ -19,9 +19,11 @@ $name=clean_string($name);
 $abreviatura=$_POST["abreviatura"];
 $codEstado="1";
 $globalGestion=$_SESSION["globalGestion"];
+$cod_proyecto=$_SESSION["globalProyecto"];
+
 
 // Prepare
-$sql="INSERT INTO $table (nombre, nombre_en, abreviatura, cod_estado, cod_gestion) VALUES ('$nombre','$name','$abreviatura','$codEstado','$globalGestion')";
+$sql="INSERT INTO $table (nombre, nombre_en, abreviatura, cod_estado, cod_gestion,cod_proyecto) VALUES ('$nombre','$name','$abreviatura','$codEstado','$globalGestion',$cod_proyecto)";
 //echo $sql;
 $stmt = $dbh->prepare($sql);
 $flagSuccess=$stmt->execute();

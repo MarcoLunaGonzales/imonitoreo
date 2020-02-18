@@ -578,10 +578,16 @@
 
 		
 		//COMPONENTES SIS
+
+		if ($_GET['opcion']=='principal_actividades') {
+			$codigo_proy=$_GET['codigo_proy'];
+			require_once('componentesSIS/principal_actividades.php');
+		}
 		if ($_GET['opcion']=='listComponentesSIS') {
 			require_once('componentesSIS/list.php');
 		}
 		if ($_GET['opcion']=='registerComponenteSIS') {
+			
 			require_once('componentesSIS/register.php');
 		}
 		if ($_GET['opcion']=='editComponenteSIS') {

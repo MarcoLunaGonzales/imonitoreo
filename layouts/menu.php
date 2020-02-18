@@ -7,6 +7,9 @@ $globalNameUserX=$_SESSION['globalNameUser'];
 $globalNombreUnidadX=$_SESSION['globalNombreUnidad'];
 $globalNombreAreaX=$_SESSION['globalNombreArea'];
 
+$codigo_proy=$_SESSION["globalProyecto"];
+$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
+
 if($globalPerfilX==1){
 ?>
 <div class="sidebar" data-color="azure" data-background-color="black" data-image="assets/img/sidebar-1.jpg">
@@ -204,16 +207,21 @@ if($globalPerfilX==1){
           <li class="nav-item ">
             <a class="nav-link" data-toggle="collapse" href="#proyectosis">
               <i class="material-icons">linear_scale</i>
-              <p> Proyecto SIS
+              <p> Proyectos
                 <b class="caret"></b>
               </p>
             </a>
             <div class="collapse" id="proyectosis">
               <ul class="nav">
-                
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=principal_actividades&codigo_proy=''">
+                    <span class="sidebar-mini"> SP </span>
+                    <span class="sidebar-normal"> Seleccionar Proyecto </span>
+                  </a>
+                </li>
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listComponentesSIS">
-                    <span class="sidebar-mini"> AS </span>
+                    <span class="sidebar-mini"> A </span>
                     <span class="sidebar-normal"> Actividades </span>
                   </a>
                 </li>                
@@ -234,7 +242,7 @@ if($globalPerfilX==1){
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=cargarPresupuestoSIS">
-                    <span class="sidebar-mini"> CPS </span>
+                    <span class="sidebar-mini"> CP </span>
                     <span class="sidebar-normal">Cargar Presupuesto</span>
                   </a>
                 </li>    
@@ -248,15 +256,15 @@ if($globalPerfilX==1){
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=seguimientoAnualSIS2">
-                    <span class="sidebar-mini"> SS </span>
-                    <span class="sidebar-normal">Seguimiento</br>SIS</span>
+                    <span class="sidebar-mini"> SP </span>
+                    <span class="sidebar-normal">Seguimientos Proyectos</span>
                   </a>
                 </li>                
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=seguimientoAnualSIS">
-                    <span class="sidebar-mini"> SDS </span>
-                    <span class="sidebar-normal">Seguimiento</br>Detallado SIS</span>
+                    <span class="sidebar-mini"> SDP </span>
+                    <span class="sidebar-normal">Seguimiento Detallado Proyectos</span>
                   </a>
                 </li>                
 
@@ -286,7 +294,13 @@ if($globalPerfilX==1){
                     <span class="sidebar-mini"> RGS </span>
                     <span class="sidebar-normal">Revisión General SIS</span>
                   </a>
-                </li>                                
+                </li>     
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPresupuestoSIS">
+                    <span class="sidebar-mini"> PS </span>
+                    <span class="sidebar-normal"> Presupuesto Proyectos</span>
+                  </a>
+                </li>                            
 
 
               </ul>
@@ -339,12 +353,7 @@ if($globalPerfilX==1){
                   </a>
                 </li>
 
-                <li class="nav-item ">
-                  <a class="nav-link" href="?opcion=rptOpPresupuestoSIS">
-                    <span class="sidebar-mini"> PS </span>
-                    <span class="sidebar-normal"> Presupuesto SIS</span>
-                  </a>
-                </li>  
+                 
 
               </ul>
             </div>

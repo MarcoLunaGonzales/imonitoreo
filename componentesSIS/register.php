@@ -4,11 +4,16 @@ require_once 'conexion.php';
 require_once 'styles.php';
 
 $dbh = new Conexion();
+// $codigo_proy=$codigo_proy;
+// echo $codigo_proy;
 
 $globalGestion=$_SESSION["globalGestion"];
 
+$codigo_proy=$_SESSION["globalProyecto"];
+$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
+
 $table="componentessis";
-$moduleName="Actividad SIS";
+$moduleName="Actividad - Proyecto ".$nombre_proyecto;
 
 ?>
 
@@ -17,6 +22,7 @@ $moduleName="Actividad SIS";
 
 		<div class="col-md-12">
 		  <form id="form1" class="form-horizontal" action="componentesSIS/save.php" method="post">
+		  	<!-- <input name="codigo_proy" id="codigo_proy" value="<?=$codigo_proy?>" hidden="true" /> -->
 			<div class="card ">
 			  <div class="card-header <?=$colorCard;?> card-header-text">
 				<div class="card-text">
@@ -98,7 +104,7 @@ $moduleName="Actividad SIS";
 				  <label class="col-sm-2 col-form-label">Responsable</label>
 				  <div class="col-sm-7">
 					<div class="form-group">
-					  <select class="selectpicker" name="cod_personal" id="cod_personal" data-style="<?=$comboColor;?>">
+					  <select class="selectpicker" name="cod_personal" id="cod_personal" data-style="<?=$comboColor;?>" data-show-subtext="true" data-live-search="true">
 					  	<option disabled selected value=""></option>
 					  	<?php
 					  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM personal2 p, personal_datosadicionales pd where p.codigo=pd.cod_personal and pd.cod_estado in (1) order by 2");

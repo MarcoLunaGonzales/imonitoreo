@@ -8,9 +8,11 @@ $dbh = new Conexion();
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
+$codigo_proy=$_SESSION["globalProyecto"];
+$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
 
 $table="external_costs";
-$moduleName="Editar External Cost";
+$moduleName="Editar External Cost - Proyecto ".$nombre_proyecto;
 
 //RECIBIMOS LAS VARIABLES
 $codigo=$codigo;

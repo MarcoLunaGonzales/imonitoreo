@@ -11,9 +11,12 @@ $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 $globalAdmin=$_SESSION["globalAdmin"];
 
+$codigo_proy=$_SESSION["globalProyecto"];
+$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
+
 $dbh = new Conexion();
 
-$moduleName="Solicitud de Fondos";
+$moduleName="Solicitud de Fondos - Proyecto ".$nombre_proyecto;
 ?>
 
 

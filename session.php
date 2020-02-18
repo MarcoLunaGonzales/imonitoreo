@@ -101,6 +101,7 @@ if($banderaLogin==1 || $tipoLogin==1){
 		$_SESSION['logueado']=1;
 		$_SESSION['globalPerfil']=$perfil;
 		$_SESSION['globalUserPON']=0;
+		$_SESSION['globalProyecto']='';
 
 
 		if($codigo==183){

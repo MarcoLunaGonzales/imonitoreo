@@ -7,9 +7,10 @@ $dbh = new Conexion();
 
 
 $globalGestion=$_SESSION["globalGestion"];
-
+$codigo_proy=$_SESSION["globalProyecto"];
+$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
 $table="external_costs";
-$moduleName="External Costs";
+$moduleName="External Costs - Proyecto ".$nombre_proyecto;
 
 ?>
 

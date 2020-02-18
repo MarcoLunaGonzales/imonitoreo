@@ -24,8 +24,8 @@ alerts = {
     }
     else if (type == 'warning-message-and-confirmation') {
       swal({
-        title: 'Esta Seguro?',
-        text: "No podra revertir el borrado!",
+        title: 'Está Seguro?',
+        text: "No podrá revertir el borrado!",
         type: 'warning',
         showCancelButton: true,
         confirmButtonClass: 'btn btn-success',
@@ -44,13 +44,33 @@ alerts = {
     }
     else if (type == 'warning-message-and-confirmation2') {
       swal({
-        title: 'Esta Seguro?',
-        text: "Se borraran los datos anteriores!",
+        title: 'Está Seguro?',
+        text: "Se borrarán los datos anteriores!",
         type: 'warning',
         showCancelButton: true,
         confirmButtonClass: 'btn btn-success',
         cancelButtonClass: 'btn btn-danger',
         confirmButtonText: 'Si, Generar!',
+        cancelButtonText: 'No, Cancelar!',
+        buttonsStyling: false
+      }).then((result) => {
+          if (result.value) {
+            location.href=url; 
+            return(true);
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            return(false);
+          }
+        })
+    }
+        else if (type == 'warning-message-and-confirmation3') {
+      swal({
+        title: 'Estás seguro?',
+        text: "Se cambiará de proyecto.",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonClass: 'btn btn-success',
+        cancelButtonClass: 'btn btn-danger',
+        confirmButtonText: 'Si, Cambiar!',
         cancelButtonText: 'No, Cancelar!',
         buttonsStyling: false
       }).then((result) => {

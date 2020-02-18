@@ -5,34 +5,40 @@ require_once 'styles.php';
 
 $globalAdmin=$_SESSION["globalAdmin"];
 $globalGestion=$_SESSION["globalGestion"];
+$codigo_proy=$_SESSION["globalProyecto"];
+// echo $codigo_proy;
+if($codigo_proy==''){
+  $codigo_proy=$codigo_proy;
+  include("principal_actividades.php");
+}else{
+  $nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
 
+  $dbh = new Conexion();
 
-$dbh = new Conexion();
+  $sqlX="SET NAMES 'utf8'";
+  $stmtX = $dbh->prepare($sqlX);
+  $stmtX->execute();
 
-$sqlX="SET NAMES 'utf8'";
-$stmtX = $dbh->prepare($sqlX);
-$stmtX->execute();
+  $table="external_costs";
+  $moduleName="External Costs - Proyecto ".$nombre_proyecto;
 
-$table="external_costs";
-$moduleName="External Costs";
+  // Preparamos
+  $sql="SELECT e.codigo, e.nombre, e.nombre_en, e.abreviatura, (select g.nombre from gestiones g where g.codigo=e.cod_gestion)as gestion FROM $table e where e.cod_estado=1 and e.cod_gestion='$globalGestion' and cod_proyecto=$codigo_proy";
+  //echo $sql;
+  $stmt = $dbh->prepare($sql);
+  // Ejecutamos
+  $stmt->execute();
+  // bindColumn
+  $stmt->bindColumn('codigo', $codigo);
+  $stmt->bindColumn('nombre', $nombre);
+  $stmt->bindColumn('nombre_en', $nombreEn);
+  $stmt->bindColumn('abreviatura', $abreviatura);
+  $stmt->bindColumn('gestion', $gestion);
 
-// Preparamos
-$sql="SELECT e.codigo, e.nombre, e.nombre_en, e.abreviatura, (select g.nombre from gestiones g where g.codigo=e.cod_gestion)as gestion FROM $table e where e.cod_estado=1 and e.cod_gestion='$globalGestion'";
-//echo $sql;
-$stmt = $dbh->prepare($sql);
-// Ejecutamos
-$stmt->execute();
-// bindColumn
-$stmt->bindColumn('codigo', $codigo);
-$stmt->bindColumn('nombre', $nombre);
-$stmt->bindColumn('nombre_en', $nombreEn);
-$stmt->bindColumn('abreviatura', $abreviatura);
-$stmt->bindColumn('gestion', $gestion);
+  ?>
 
-?>
-
-<div class="content">
-	<div class="container-fluid">
+  <div class="content">
+	   <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -56,10 +62,10 @@ $stmt->bindColumn('gestion', $gestion);
                         </tr>
                       </thead>
                       <tbody>
-<?php
-						$index=1;
-                      	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
-?>
+                    <?php
+                    						$index=1;
+                                          	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+                    ?>
                         <tr>
                           <td align="center"><?=$index;?></td>
                           <td><?=$abreviatura;?></td>
@@ -81,10 +87,10 @@ $stmt->bindColumn('gestion', $gestion);
                             ?>
                           </td>
                         </tr>
-<?php
-							$index++;
-						}
-?>
+                <?php
+                							$index++;
+                						}
+                ?>
                       </tbody>
                     </table>
                   </div>
@@ -101,6 +107,8 @@ $stmt->bindColumn('gestion', $gestion);
               ?>
 		  
             </div>
-          </div>  
-        </div>
-    </div>
+        </div>  
+      </div>
+  </div>
+
+<?php } ?>

@@ -16,32 +16,54 @@ $dbh = new Conexion();
       <div class="card ">
         <div class="card-header <?=$colorCard;?> card-header-text">
         <div class="card-text">
-          <h4 class="card-title">Revisar Presupuesto SIS</h4>
+          <h4 class="card-title">Revisar Presupuestos Proyectos</h4>
         </div>
         </div>
         <div class="card-body ">
-    
-        <div class="row">
-          <label class="col-sm-2 col-form-label">Gestion</label>
-          <div class="col-sm-7">
-          <div class="form-group">
-            <select class="selectpicker" title="Seleccionar" name="gestion" id="gestion" data-style="<?=$comboColor;?>" required>
-              <option disabled selected value=""></option>
-              <?php
-              $stmt = $dbh->prepare("SELECT codigo, nombre FROM gestiones order by 2 desc");
-            $stmt->execute();
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-              $codigoX=$row['codigo'];
-              $nombreX=$row['nombre'];
-            ?>
-            <option value="<?=$codigoX;?>"><?=$nombreX;?></option>
-            <?php 
-            }
+
+
+          <div class="row">
+            <label class="col-sm-2 col-form-label">Proyecto</label>
+            <div class="col-sm-7">
+            <div class="form-group">
+              <select class="selectpicker" title="Seleccionar" name="codigo_proy" id="codigo_proy" data-style="<?=$comboColor;?>" required>
+                <option disabled selected value=""></option>
+                <?php
+                $stmt = $dbh->prepare("SELECT codigo,nombre from proyectos_financiacionexterna where cod_estadoreferencial=1 order by 2 desc");
+              $stmt->execute();
+              while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $codigoX=$row['codigo'];
+                $nombreX=$row['nombre'];
               ?>
-            </select>
+              <option value="<?=$codigoX;?>"  <?=($codigo_proy==$codigoX)?"selected":"";?> ><?=$nombreX;?></option>
+              <?php 
+              }
+                ?>
+              </select>
+            </div>
+            </div>
           </div>
+          <div class="row">
+            <label class="col-sm-2 col-form-label">Gestion</label>
+            <div class="col-sm-7">
+            <div class="form-group">
+              <select class="selectpicker" title="Seleccionar" name="gestion" id="gestion" data-style="<?=$comboColor;?>" required>
+                <option disabled selected value=""></option>
+                <?php
+                $stmt = $dbh->prepare("SELECT codigo, nombre FROM gestiones order by 2 desc");
+              $stmt->execute();
+              while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $codigoX=$row['codigo'];
+                $nombreX=$row['nombre'];
+              ?>
+              <option value="<?=$codigoX;?>"><?=$nombreX;?></option>
+              <?php 
+              }
+                ?>
+              </select>
+            </div>
+            </div>
           </div>
-        </div>
 
 
         </div>

@@ -23,13 +23,17 @@ $nombreMes=nameMes($mes);
 
 $globalGestion=$_SESSION["globalGestion"];
 $globalUsuario=$_SESSION["globalUser"];
+$codigo_proy=$_GET["codigo_proy"];
+$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
+
 
 
 //LLAMAMOS A UN SP QUE ORDENA LOS COMPONENTES O ACTIVIDADES SIS
-$sql = 'CALL ordenar_componentes(?,?)';
+$sql = 'CALL ordenar_componentes(?,?,?)';
 $stmt = $dbh->prepare($sql);
 $stmt->bindParam(1, $globalUsuario, PDO::PARAM_INT, 10);
 $stmt->bindParam(2, $globalGestion, PDO::PARAM_INT, 10);
+$stmt->bindParam(3, $codigo_proy, PDO::PARAM_INT, 10);
 $stmt->execute();
 
 
@@ -56,7 +60,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                   <div class="card-icon">
                     <i class="material-icons">assignment</i>
                   </div>
-                  <h4 class="card-title">Reporte Seguimiento Detallado SIS</h4>
+                  <h4 class="card-title">Reporte Seguimiento Detallado - Proyecto <?=$nombre_proyecto?></h4>
                   <h6 class="card-title">Gestion: <?=$anio;?> Mes: <?=$nombreMes;?></h6>
 
                 </div>

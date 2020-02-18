@@ -5,8 +5,10 @@ require_once 'styles.php';
 
 $dbh = new Conexion();
 
+$codigo_proy=$_SESSION["globalProyecto"];
+$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
 $table="componentessis";
-$moduleName="Editar Actividad SIS";
+$moduleName="Editar Actividad - Proyecto ".$nombre_proyecto;
 
 //RECIBIMOS LAS VARIABLES
 $codigo=$codigo;
