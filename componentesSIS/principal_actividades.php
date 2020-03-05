@@ -15,7 +15,8 @@ $nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
 // if($globalProyecto==''){
   $dbh = new Conexion();
   $stmt = $dbh->prepare(" SELECT codigo,abreviatura,nombre,cod_unidadorganizacional,
-  (select o.abreviatura from unidades_organizacionales o where o.codigo=cod_unidadorganizacional) as nombre_uo from proyectos_financiacionexterna where cod_estadoreferencial=1");
+  (select o.abreviatura from unidades_organizacionales o where o.codigo=cod_unidadorganizacional) as nombre_uo 
+  from proyectos_financiacionexterna where cod_estadoreferencial=1 and codigo<>0");
   //ejecutamos
   $stmt->execute();
   //bindColumn

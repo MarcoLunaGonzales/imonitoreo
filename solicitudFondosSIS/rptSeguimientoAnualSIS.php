@@ -60,7 +60,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                   <div class="card-icon">
                     <i class="material-icons">assignment</i>
                   </div>
-                  <h4 class="card-title">Reporte Seguimiento Detallado - Proyecto <?=$nombre_proyecto?></h4>
+                  <h4 class="card-title">Reporte Seguimiento Detallado de Proyecto <?=$nombre_proyecto?></h4>
                   <h6 class="card-title">Gestion: <?=$anio;?> Mes: <?=$nombreMes;?></h6>
 
                 </div>

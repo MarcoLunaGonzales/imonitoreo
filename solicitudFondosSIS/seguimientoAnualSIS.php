@@ -23,7 +23,7 @@ $codigo_proy=$_SESSION["globalProyecto"];
       <div class="card ">
         <div class="card-header <?=$colorCard;?> card-header-text">
         <div class="card-text">
-          <h4 class="card-title">Seguimiento Detallado Proyectos</h4>
+          <h4 class="card-title">Seguimiento Detallado de Proyectos</h4>
         </div>
         </div>
         <div class="card-body ">

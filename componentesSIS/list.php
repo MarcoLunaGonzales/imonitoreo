@@ -26,9 +26,10 @@ if($codigo_proy==''){
   $moduleName="Actividades - Proyecto ".$nombre_proyecto;
 
   // Preparamos
-  $stmt = $dbh->prepare("SELECT cp.codigo, cp.nombre, cp.abreviatura, cp.nivel, (select abreviatura 
-  from componentessis cpc where cp.cod_padre=cpc.codigo)cod_padre, partida, (select p.nombre from personal2 p where p.codigo=cp.cod_personal)as personal, (select g.nombre from gestiones g where g.codigo=cp.cod_gestion)as gestion FROM $table cp where cp.cod_estado=1 and cp.cod_gestion='$globalGestion' and cod_proyecto=$codigo_proy;
-  ");
+  $sql="SELECT cp.codigo, cp.nombre, cp.abreviatura, cp.nivel, (select abreviatura 
+  from componentessis cpc where cp.cod_padre=cpc.codigo)cod_padre, partida, (select p.nombre from personal2 p where p.codigo=cp.cod_personal)as personal, (select g.nombre from gestiones g where g.codigo=cp.cod_gestion)as gestion FROM $table cp where cp.cod_estado=1 and cp.cod_gestion='$globalGestion' and cod_proyecto=$codigo_proy;";
+//  echo $sql;
+  $stmt = $dbh->prepare($sql);
   // Ejecutamos
   $stmt->execute();
   // bindColumn

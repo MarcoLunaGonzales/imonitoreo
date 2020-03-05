@@ -84,7 +84,7 @@ $moduleName="Actividad - Proyecto ".$nombre_proyecto;
 					  <select class="selectpicker" name="padre" id="padre" data-style="<?=$comboColor;?>">
 					  	<option disabled selected value=""></option>
 					  	<?php
-					  	$stmt = $dbh->prepare("SELECT codigo, abreviatura FROM componentessis where nivel in (1,2) and cod_gestion='$globalGestion' order by 1");
+					  	$stmt = $dbh->prepare("SELECT codigo, abreviatura FROM componentessis where nivel in (1,2) and cod_gestion='$globalGestion' and cod_proyecto=$codigo_proy order by 1");
 						$stmt->execute();
 						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 							$codigoX=$row['codigo'];

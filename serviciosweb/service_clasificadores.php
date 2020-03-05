@@ -14,7 +14,7 @@ $sKey = "837b8d9aa8bb73d773f5ef3d160c9b17"; // llave de acuerdo al sistema
 
 
 //PARA SACAR POR NIVELES
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"Niveles", "padre"=>"80");
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"Niveles", "padre"=>"210");
 
 		$parametros=json_encode($parametros);
 		// abrimos la sesión cURL
