@@ -1,24 +1,12 @@
 
 
 <?php
-function listarComponentes(){
+function listarComponentes($codigo_proyecto){
     require_once '../conexion.php';
-
     $dbh = new Conexion();
     // Preparamos
-    $stmt = $dbh->prepare("SELECT codigo,nombre,abreviatura from componentessis where cod_estado=1;");
-    // Ejecutamos
-    // $stmt->execute();
-    // // bindColumn
-    // $stmt->bindColumn('codigo', $codigo);
-    // $stmt->bindColumn('nombre', $nombre);
-    // $stmt->bindColumn('abreviatura', $abreviatura);
-    // $stmt->bindColumn('nivel', $nivel);
-    // $stmt->bindColumn('cod_padre', $cod_padre);
-    // $stmt->bindColumn('partida', $partida);
-    // $stmt->bindColumn('personal', $personal);
-    // $stmt->bindColumn('gestion', $gestion);
-    // $objComponentes=new stdClass();
+    $stmt = $dbh->prepare("SELECT codigo,nombre,abreviatura from componentessis where cod_estado=1 and cod_proyecto=$codigo_proyecto;");
+
     $resp = false;
     $filas = array();
     if($stmt->execute()){
@@ -26,69 +14,44 @@ function listarComponentes(){
         $resp = true;
     }
     else{
-        echo "Error: Listar Estados o Departamentos";
+        echo "Error: Listar Componentes";
         $resp=false;
         exit;       
     }
     return $filas;
-
 }
-
-
 /*
- SERVICIO WEB PARA OPERACIONES DE LISTA DE PERSONAL  */
+ SERVICIO WEB PARA OPERACIONES Componentes  */
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
     // Decodificando formato Json
-    $datos = json_decode(file_get_contents("php://input"), true);
-    //print_r($datos);
-    // require ('../clases/Sistema.php'); 
-    // $sis=new Sistema();
-    // //***Recuperar parametros de login*******/
-    // $sisIdentificador = $datos['sIdentificador'];   // Identificador de sesion del sistema
-    // $sisKey = $datos['sKey'];           // clave para la sesion
-    // $verifSis=$sis->keySistema($sisIdentificador, $sisKey);
-    
+    $datos = json_decode(file_get_contents("php://input"), true);    
     //Parametros de consulta
     $accion=NULL;
     if(isset($datos['accion']))
-        $accion=$datos['accion']; 
-    
-    // if($verifSis['estado']== true){
-    //     include ('../clases/Clasificador.php');
-    //     include ('../clases/Cliente.php');
-    //     $cla = new Clasificador();
-        
-        
+        $accion=$datos['accion']; //recibimos la accion
+        $codigo_proyecto=$datos['codigo_proyecto'];//recibimos el codigo del proyecto
         $estado=false;
         $mensaje="";
         $total=0;
         $lista=array();
-        
-
-
-    // //echo 'aqui';
-            
-        if($accion=="ListarPersonal"){
-                                
-            try{
-                //$lstPersonal = $personal->listarClientexAtributoWS($tipo, $atributo); // por atributo
-                $lstPersonal = listarComponentes();
-                $totalPersonal=count($lstPersonal);
+        if($accion=="ListarComponentes"){
+            try{                
+                $lstComponentes = listarComponentes($codigo_proyecto);//llamamos a la funcion 
+                $totalComponentes=count($lstComponentes);
                 $resultado=array(
                             "estado"=>true,
-                            "mensaje"=>"Lista de Personal obtenida correctamente", 
-                            "lstPersonal"=>$lstPersonal, 
-                            "totalPersonal"=>$totalPersonal
+                            "mensaje"=>"Lista de Componentes obtenida correctamente", 
+                            "lstComponentes"=>$lstComponentes, 
+                            "totalComponentes"=>$totalComponentes
                             
                             );
             }catch(Exception $e){
                 $estado=true;
-                $mensaje = "No se pudo obtener la lista de personal".$e;
+                $mensaje = "No se pudo obtener la lista de Componentes".$e;
                 $resultado=array("estado"=>$estado, 
                             "mensaje"=>$mensaje, 
-                            "lstPersonal"=>array(),
-                            "totalPersonal"=>0);
+                            "lstComponentes"=>array(),
+                            "totalComponentes"=>0);
             }
             
             
@@ -98,12 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
             header('Content-type: application/json');
             echo json_encode($resultado);
-    // }else{
-    //         $resp=array("estado"=>false, 
-    //                     "mensaje"=>"Error en las credenciales");
-    //         header('Content-type: application/json');
-    //         echo json_encode($resp);
-    // }
 }else{
     $resp=array("estado"=>false, 
                 "mensaje"=>"No tiene acceso al WS");
