@@ -5,6 +5,10 @@ require_once '../conexion.php';
 require_once '../functions.php';
 require_once '../styles.php';
 
+session_start();
+$globalGestion=$_SESSION["globalGestion"];
+$globalNombreGestion=$_SESSION["globalNombreGestion"];
+
 $dbh = new Conexion();
 
 $moduleName="Objetivos e Indicadores Estrategicos";
@@ -17,7 +21,8 @@ o.abreviatura, i.codigo, i.nombre,
 (SELECT p.nombre FROM periodos p WHERE p.codigo=i.cod_periodo)periodo, i.descripcion_calculo, i.lineamiento,
 (SELECT t.nombre FROM tipos_calculo t WHERE t.codigo=i.cod_tipocalculo)tipocalculo, 
 (SELECT t.nombre FROM tipos_resultado t WHERE t.codigo=i.cod_tiporesultado)tiporesultado
-FROM indicadores i, objetivos o WHERE i.cod_objetivo=o.codigo ORDER BY perspectiva, o.abreviatura, i.nombre";
+FROM indicadores i, objetivos o WHERE i.cod_objetivo=o.codigo and o.cod_gestion='$globalGestion' ORDER BY perspectiva, o.abreviatura, i.nombre";
+//echo $sql;
 $stmt = $dbh->prepare($sql);
 // Ejecutamos
 $stmt->execute();
@@ -51,7 +56,7 @@ $stmt->bindColumn('tiporesultado', $tipoResultado);
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-condensed" id="tablePaginatorReport">
                       <thead>
                         <tr>
                           <th class="text-center">#</th>

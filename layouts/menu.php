@@ -312,6 +312,13 @@ if($globalPerfilX==1){
                 </li>  
 
                 <li class="nav-item ">
+                  <a class="nav-link" href="reportes/rptClientesGeneral.php" target="_blank">
+                    <span class="sidebar-mini"> Cl </span>
+                    <span class="sidebar-normal"> Clientes </span>
+                  </a>
+                </li>  
+
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpCursos">
                     <span class="sidebar-mini"> Cu </span>
                     <span class="sidebar-normal"> Cursos </span>
@@ -796,6 +803,13 @@ if($globalPerfilX==2){
                 </li>  
 
                 <li class="nav-item ">
+                  <a class="nav-link" href="reportes/rptClientesGeneral.php" target="_blank">
+                    <span class="sidebar-mini"> Cl </span>
+                    <span class="sidebar-normal"> Clientes </span>
+                  </a>
+                </li>  
+
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpCursos">
                     <span class="sidebar-mini"> Cu </span>
                     <span class="sidebar-normal"> Cursos </span>
@@ -1110,6 +1124,13 @@ if($globalPerfilX==3){
                 </li>  
 
                 <li class="nav-item ">
+                  <a class="nav-link" href="reportes/rptClientesGeneral.php" target="_blank">
+                    <span class="sidebar-mini"> Cl </span>
+                    <span class="sidebar-normal"> Clientes </span>
+                  </a>
+                </li>  
+
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpCursos">
                     <span class="sidebar-mini"> Cu </span>
                     <span class="sidebar-normal"> Cursos </span>
@@ -1403,6 +1424,28 @@ if($globalPerfilX==4){
               </ul>
             </div>
           </li>
+
+     <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportespoa">
+              <i class="material-icons">assessment</i>
+              <p> Reportes POA
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportespoa">
+              <ul class="nav">
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="reportes/rptObjConf.php" target="_blank">
+                    <span class="sidebar-mini"> RO </span>
+                    <span class="sidebar-normal"> Reporte Obj. Estrategicos</span>
+                  </a>
+                </li>                
+
+              </ul>
+            </div>
+          </li>
+
 
           <li class="nav-item ">
             <a class="nav-link" data-toggle="collapse" href="#utilitarios">
@@ -1710,6 +1753,13 @@ if($globalPerfilX==5){
                   </a>
                 </li>  
 
+                <li class="nav-item ">
+                  <a class="nav-link" href="reportes/rptClientesGeneral.php" target="_blank">
+                    <span class="sidebar-mini"> Cl </span>
+                    <span class="sidebar-normal"> Clientes </span>
+                  </a>
+                </li>  
+                
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=rptOpCursos">
                     <span class="sidebar-mini"> Cu </span>

@@ -110,8 +110,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 					}
 			  	}
 			  	if($nombreTablaClasificador=="clientes"){
-				  	$stmt = $dbh->prepare("SELECT c.codigo, c.nombre, u.nombre as unidad from clientes c, unidades_organizacionales u where c.cod_unidad=u.codigo 
-				  		and c.cod_unidad in ($codUnidadHijosX) order by 2;");
+				  	$stmt = $dbh->prepare("SELECT c.codigo, c.nombre, u.nombre as unidad from clientes c, unidades_organizacionales u where c.cod_unidad=u.codigo order by 2;");
 					$stmt->execute();
 					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 						$codigoX=$row['codigo'];

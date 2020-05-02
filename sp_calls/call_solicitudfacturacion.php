@@ -14,7 +14,7 @@ echo "<h3>Hora Inicio Proceso Solicitud Facturacion: " . date("Y-m-d H:i:s")."</
 
 
 try{
-	$sql = 'CALL sp_cubo_solFactura';
+	$sql = 'CALL sp_cubo_solFactura(null)';
 	$query = $dbhExterno->query($sql);
 	$query -> setFetchMode(PDO::FETCH_ASSOC);
 

@@ -180,7 +180,7 @@ $stmt->bindColumn('poai', $actividadPOAI);
                               <i class="material-icons"><?=$iconCheck;?></i>
                             </div>
                           </td>
-                          <td class="text-left small"><?=$nombreDatoClasificador;?></td>
+                          <td class="text-left small"><?=$nombreDatoClasificador;?> (<?=$datoClasificador;?>)</td>
                           <td><?=$personal;?></td>
                           <td class="td-actions text-right">
                             <?php
@@ -195,6 +195,9 @@ $stmt->bindColumn('poai', $actividadPOAI);
                             <?php
                             }
                             ?>
+                            <a href="index.php?opcion=editPOAClasificadort&codigo=<?=$codigo;?>&codigo_indicador=<?=$codigoIndicador?>&areaUnidad=<?=$codUnidad;?>|<?=$codArea;?>" class="btn btn-warning" title="Editar Clasificador">
+                              <i class="material-icons">edit</i>
+                            </a>
                           </td>
                         </tr>
             <?php
