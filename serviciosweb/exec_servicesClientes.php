@@ -19,6 +19,8 @@ $tableInsert="clientes";
 $json=callService($parametros, $url);
 $obj=json_decode($json);
 
+//header('Content-type: application/json'); 	
+//print_r($json);
 
 $stmtDel=$dbh->prepare("DELETE FROM $tableInsert");
 $flagDel=$stmtDel->execute();

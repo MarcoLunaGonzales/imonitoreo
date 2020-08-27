@@ -8,6 +8,7 @@ require_once '../styles.php';
 
 $dbh = new Conexion();
 
+
 ?>
 
 
@@ -28,23 +29,19 @@ $dbh = new Conexion();
 
 echo "<h6>Hora Inicio Proceso: " . date("Y-m-d H:i:s")."</h6>";
 
-//conexion modificado IBNORCA- INGE
+
   $dsn = "conta"; 
-// $dsn = "DRIVER={SQL Server};SERVER=RLP-VMGDB\SQLEXPRESS ";
-  //debe ser de sistema no de usuario
   $usuario = "consultadb";
   $clave="consultaibno1$";
-  //realizamos la conexion mediante odbc
   $conexión=odbc_connect($dsn, $usuario, $clave);
-//end modificado
 
-$arrayGestiones = array(2019,2020,2021);
+$arrayGestiones = array(2019,2020);
 $longArray = count($arrayGestiones);
 
 if (!$conexión) { 
   exit( "Error al conectar: " . $conexión);
 }else{
-  /*BORRAMOS LA TABLA DE MAYORES*/
+  //BORRAMOS LA TABLA DE MAYORES
   for($i=0; $i<$longArray-1; $i++){
 
     $sqlDelete = "DELETE from po_mayores where anio='$arrayGestiones[$i]'";
@@ -71,9 +68,6 @@ if (!$conexión) {
     }
     if($arrayGestiones[$i]==2020){
       $txtBDGestion="ibnorca2020";
-    }
-    if($arrayGestiones[$i]==2021){
-      $txtBDGestion="ibnorca2021";
     }
 
     // query modificado IBNORCA - INGE (se agrego el nombre de base de datos a la tabla del from ibnorca2019.dbo.vw_MayorContable
@@ -160,10 +154,11 @@ if (!$conexión) {
   }
 
 }//FIN RECORRIDO GESTION
-
 odbc_close($conexión);
 
+
 echo "<h6>Hora Fin Proceso Mayores: " . date("Y-m-d H:i:s")."</h6>";
+
 ?>
 
           </div>

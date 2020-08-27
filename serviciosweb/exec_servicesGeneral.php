@@ -320,7 +320,7 @@ $flagDel=$stmtDel->execute();
 $detalle=$obj->lista;
 foreach ($detalle as $objDet){
 	$codigoX=$objDet->IdCliente;
-	$nombreX=strtoupper(clean_string($objDet->NombreCliente));
+	$nombreX=strtoupper(clean_string($objDet->NombreRazon));
 	$idCiudad=strtoupper($objDet->IdCiudad);
 	$estadoX="1";
 

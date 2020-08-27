@@ -22,7 +22,7 @@ function presupuestoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, $
         $sql.=" and p.cod_cuenta='$cuenta' ";
      }
    } 
-//  echo $sql;
+  //echo $sql;
   $stmt = $dbh->prepare($sql);
   $flagSuccess2=$stmt->execute();
 
@@ -152,9 +152,18 @@ function montoRedistribucionIT($agencia, $anio, $mes, $organismo, $acumulado, $c
     $cuentaIT=$row['valor_configuracion'];
   }
   $montoIngreso=0;
+  if($acumulado==1 && $mes>=7){
+    $mes=6;
+  }
   $montoIngreso=ejecutadoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, 0);
   $montoRedistIT=0;
   $montoRedistIT=(($montoIngreso*100)/87)*0.03;
+  
+  if($acumulado==0 && $mes>=7){
+    $montoRedistIT=0;
+  }
+  //$montoRedistIT=0;
+
   return($montoRedistIT);
 }
 
@@ -216,11 +225,14 @@ function ejecutadoEgresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cue
             $montoEgresoEjecutado=$montoEgresoEjecutado+$montoRedistribucionIT;
           }
           if($cuentaDN==$codPlanCuenta){
+            //$montoDistribuidoDN=distribucionDNSA($agenciaX, $anio, $mes, $organismo, $acumulado, 1);
             $montoDistribuidoDN=distribucionDNSA($agenciaX, $anio, $mes, $organismo, $acumulado, 1);
+            //$montoDistribuidoDN=0;
             $montoEgresoEjecutado=$montoEgresoEjecutado+$montoDistribuidoDN;
           }
           if($cuentaSA==$codPlanCuenta){
             $montoDistribuidoSA=distribucionDNSA($agenciaX, $anio, $mes, $organismo, $acumulado, 2);
+            //$montoDistribuidoSA=0;
             $montoEgresoEjecutado=$montoEgresoEjecutado+$montoDistribuidoSA;
           }
 
@@ -264,8 +276,10 @@ function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa)
     $organismoDNSA=502;
   }
   $dbh = new Conexion();
+  //if($organismo==)
   //$agencia=str_replace('|', ',', $agencia);
   $sqlRegional="SELECT p.codigo from po_fondos p where p.codigo in ($agencia)";
+  //$sqlRegional="SELECT p.codigo from po_fondos p";
   //echo $sqlRegional;
   $stmtRegional=$dbh->prepare($sqlRegional);
   $stmtRegional->execute();
@@ -315,6 +329,10 @@ function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa)
     $montoEgresoOrganismo=$montoEgresoEjecutado*($porcentaje/100);
     $totalMontoEgresoDNSA=$totalMontoEgresoDNSA+$montoEgresoOrganismo;
   }
+
+  /*if($organismo==503){//oi
+    $totalMontoEgresoDNSA=$totalMontoEgresoDNSA*0.30;
+  }*/
   return($totalMontoEgresoDNSA);
 }
 

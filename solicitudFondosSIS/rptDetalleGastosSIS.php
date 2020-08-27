@@ -20,6 +20,10 @@ $stmtX->execute();
 
 $gestion=$_GET["gestion"];
 $mes=$_GET["mes"];
+$codigo_proy=$_GET["codigo_proy"];
+$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
+
+
 $anio=nameGestion($gestion);
 $nombreMes=nameMes($mes);
 
@@ -27,11 +31,13 @@ $globalGestion=$_SESSION["globalGestion"];
 $globalUsuario=$_SESSION["globalUser"];
 
 //LLAMAMOS A UN SP QUE ORDENA LOS COMPONENTES O ACTIVIDADES SIS
-$sql = 'CALL ordenar_componentes(?,?)';
+$sql = 'CALL ordenar_componentes(?,?,?)';
 $stmt = $dbh->prepare($sql);
 $stmt->bindParam(1, $globalUsuario, PDO::PARAM_INT, 10);
 $stmt->bindParam(2, $globalGestion, PDO::PARAM_INT, 10);
+$stmt->bindParam(3, $codigo_proy, PDO::PARAM_INT, 10);
 $stmt->execute();
+
 
 $sql="SELECT codigo, partida, nombre, abreviatura, nivel from componentessis_orden 
   where cod_usuario='$globalUsuario' ORDER BY indice";

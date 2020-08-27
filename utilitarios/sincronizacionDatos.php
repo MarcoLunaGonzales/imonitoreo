@@ -33,10 +33,20 @@ $dbh = new Conexion();
                   </div>
 
                   <div class="row">
-                    <label class="col-sm-6 col-form-label">Datos Contabilidad</label>
+                    <label class="col-sm-6 col-form-label">Datos Contabilidad Anterior a Jul/2020</label>
                     <div class="col-sm-6">
                     <div class="form-group">
                       <a href="sp_calls/ejecutarSincroConta.php" class="<?=$button;?>" target="_blank">Sincronizar</a>
+                    </div>
+                    </div>
+                  </div>
+
+
+                  <div class="row">
+                    <label class="col-sm-6 col-form-label">Datos Contabilidad Jul/2020 -> </label>
+                    <div class="col-sm-6">
+                    <div class="form-group">
+                      <a href="sp_calls/ejecutarSincroContaFinanciero.php" class="<?=$button;?>" target="_blank">Sincronizar</a>
                     </div>
                     </div>
                   </div>

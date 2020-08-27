@@ -83,7 +83,7 @@ if($areaIndicador!=0){
 if($unidadIndicador!=0){
   $sql.=" and a.cod_unidadorganizacional in ($unidadIndicador) ";
 } 
-$sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+$sql.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre";
 
 //echo $sql;
 

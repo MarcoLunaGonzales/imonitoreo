@@ -125,7 +125,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 							  	<div class="col-sm-3">
 									<div class="form-group">
 										<label for="monto<?=$index;?>" class="bmd-label-floating">Monto</label>
-										<input class="form-control" type="number" name="monto<?=$index;?>" id="monto<?=$index;?>" value="<?=$montoX;?>" required="true"/>
+										<input class="form-control" type="number" name="monto<?=$index;?>" id="monto<?=$index;?>" value="<?=$montoX;?>" step="0.01" required="true"/>
 									</div>
 								</div>
 

@@ -46,7 +46,7 @@ $stmtX->execute();
 	  	<div class="col-sm-3">
 			<div class="form-group">
 				<label for="monto<?=$codigo;?>" class="bmd-label-floating">Monto</label>
-				<input class="form-control" type="number" name="monto<?=$codigo;?>" id="monto<?=$codigo;?>" required="true"/>
+				<input class="form-control" type="number" name="monto<?=$codigo;?>" id="monto<?=$codigo;?>" step="0.01" required="true"/>
 			</div>
 		</div>
 

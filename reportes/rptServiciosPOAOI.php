@@ -24,7 +24,10 @@ $area=$_GET["area"];
 $unidadOrgString=buscarHijosUO($unidadOrganizacional);
 //echo $unidadOrgString;
 $abreviaturaServicio=buscarAbreviaturaServicio($codigoServicio);
-$sql="SELECT e.doficina, e.dcliente, e.cantidad, e.fecha, e.fechaestado, e.destado, e.dserviciocurso, e.grandetalle, montobs from ext_solicitudfacturacion e where e.codigoserviciocurso like '%$abreviaturaServicio%' and YEAR(e.fecha)='$nameGestion' and MONTH(e.fecha)='$mes' and e.idestado not in (266) and e.idoficina in ($unidadOrgString)";  
+
+$sql="SELECT (select u.abreviatura from unidades_organizacionales u where u.codigo=e.id_oficina)as doficina, 
+  (select c.nombre from clientes c where c.codigo=e.id_cliente)as dcliente, e.d_tipo, e.cantidad as cantidad, e.fecha_registro as fecha, e.fecha_factura as fechaestado, e.estado_servicio as destado, e.monto_facturado as montobs, e.nro_servicio as grandetalle from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoServicio and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura)=$mes and e.id_area='$area'";
+//$sql="SELECT e.doficina, e.dcliente, e.cantidad, e.fecha, e.fechaestado, e.destado, e.dserviciocurso, e.grandetalle, montobs from ext_solicitudfacturacion e where e.codigoserviciocurso like '%$abreviaturaServicio%' and YEAR(e.fecha)='$nameGestion' and MONTH(e.fecha)='$mes' and e.idestado not in (266) and e.idoficina in ($unidadOrgString)";  
 
 //echo $sql;
 
@@ -69,7 +72,7 @@ $stmt->bindColumn('montobs', $montoFacturado);
                           <th class="font-weight-bold">TipoServicio</th>
                           <th class="font-weight-bold">#</th>
                           <th class="font-weight-bold">Fecha</th>
-                          <th class="font-weight-bold">FechaEstado</th>
+                          <th class="font-weight-bold">Fecha Factura</th>
                           <th class="font-weight-bold">Estado</th>
                           <th class="font-weight-bold">CodigoServicio</th>
                           <th class="font-weight-bold">Nombre</th>

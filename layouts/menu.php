@@ -182,12 +182,12 @@ if($globalPerfilX==1){
                   </a>
                 </li>                
 
-                <!--li class="nav-item ">
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAIEjecucion">
                     <span class="sidebar-mini"> POAIE </span>
                     <span class="sidebar-normal">POAI Ejecucion</span>
                   </a>
-                </li-->  
+                </li>  
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=distribucionDNSA">
@@ -350,6 +350,13 @@ if($globalPerfilX==1){
                   <a class="nav-link" href="?opcion=rptOpPresupuestoSIS">
                     <span class="sidebar-mini"> PS </span>
                     <span class="sidebar-normal"> Presupuesto SIS</span>
+                  </a>
+                </li>  
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptUserConnected">
+                    <span class="sidebar-mini"> UA </span>
+                    <span class="sidebar-normal"> Ultimos Accesos </span>
                   </a>
                 </li>  
 
@@ -717,12 +724,12 @@ if($globalPerfilX==2){
                   </a>
                 </li>                
 
-                <!--li class="nav-item ">
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAIEjecucion">
                     <span class="sidebar-mini"> POAIE </span>
                     <span class="sidebar-normal">POAI Ejecucion</span>
                   </a>
-                </li--> 
+                </li> 
 
               </ul>
             </div>
@@ -1095,12 +1102,12 @@ if($globalPerfilX==3){
                   </a>
                 </li>  
 
-                <!--li class="nav-item ">
+                <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listPOAIEjecucion">
                     <span class="sidebar-mini"> POAIE </span>
                     <span class="sidebar-normal">POAI Ejecucion</span>
                   </a>
-                </li-->               
+                </li>               
 
               </ul>
             </div>

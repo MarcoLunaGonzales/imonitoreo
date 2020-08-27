@@ -2,19 +2,12 @@
 function listarComponentes($codigo_proyecto){
     require_once '../conexion.php';
     $dbh = new Conexion();
-    // Preparamos
-    $stmt = $dbh->prepare("SELECT codigo,nombre,abreviatura from componentessis where cod_estado=1 and cod_proyecto=$codigo_proyecto and cod_gestion in (select max(cod_gestion) from componentessis where cod_proyecto='$codigo_proyecto') limit 0,10");
-
-    $resp = false;
+    $stmt = $dbh->prepare("SELECT codigo,nombre,abreviatura from componentessis where cod_estado=1 and cod_proyecto=$codigo_proyecto");
+    $resp = $stmt->execute();
     $filas = array();
-    if($stmt->execute()){
-        $filas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $resp = true;
-    }
-    else{
-        echo "Error: Listar Componentes";
-        $resp=false;
-        exit;       
+
+    while($row=$stmt->fetch(PDO::FETCH_ASSOC)){ 
+        $filas['componentesproyectos'][] = $row;     
     }
     return $filas;
 }

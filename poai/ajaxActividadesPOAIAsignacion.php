@@ -34,7 +34,9 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 	        <select class="form-control" name="personal<?=$index;?>" id="personal<?=$index;?>" data-style="<?=$comboColor;?>" onChange="ajaxFuncionesCargos(this,<?=$index;?>);" data-live-search="true" required>
 	    	<?php
 		  	$sql="SELECT p.codigo, p.nombre, (select c.nombre from cargos c where c.codigo=pd.cod_cargo)as cargo from personal2 p, personal_datosadicionales pd, personal_unidadesorganizacionales pu where p.codigo=pd.cod_personal and p.codigo=pu.cod_personal and pu.cod_unidad='$codUnidad' and pd.cod_cargo in (select i.cod_cargo from indicadores_areascargos i where i.cod_indicador='$codigoIndicador' and i.cod_area='$codArea') order by 2";
-		  	//echo $sql;
+		  	
+		  	echo $sql;
+		  	
 		  	?>
 		  		<option value="">Seleccionar Persona</option>
 		  	<?php

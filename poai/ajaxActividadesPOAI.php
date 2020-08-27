@@ -22,12 +22,13 @@ $codArea=$_GET['cod_area'];
 $codUnidadHijosX=buscarHijosUO($codUnidad);
 $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
 ?>
+
 <div class="col-md-12">
 	<div class="row">
 		<div class="col-sm-3">
 	        <div class="form-group">
 				<input type="hidden" name="codigo<?=$codigo;?>" id="codigo<?=$codigo;?>" value="0">
-				<select class="selectpicker" name="norma_priorizada<?=$codigo;?>" id="norma_priorizada<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+				<select class="selectpicker form-control form-control-sm" name="norma_priorizada<?=$codigo;?>" id="norma_priorizada<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 				  	<option value="">Sector</option>
 				  	<?php
 				  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores_economicos where cod_estado=1 order by 2");
@@ -45,7 +46,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 	    </div>
 		<div class="col-sm-3">
 	        <div class="form-group">
-				<select class="selectpicker" name="norma<?=$codigo;?>" id="norma<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+				<select class="selectpicker form-control form-control-sm" name="norma<?=$codigo;?>" id="norma<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 				  	<option value="">Norma</option>
 				  	<?php
 				  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
@@ -83,7 +84,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 		</div>
 	  	<div class="col-sm-3">
 	    	<div class="form-group">
-	        <select class="selectpicker" name="clasificador<?=$codigo;?>" id="clasificador<?=$codigo;?>" data-style="<?=$comboColor;?>" data-width="200px" data-live-search="true" onChange="completaActividad(this,<?=$codigo;?>)" >
+	        <select class="selectpicker form-control form-control-sm" name="clasificador<?=$codigo;?>" id="clasificador<?=$codigo;?>" data-style="<?=$comboColor;?>" data-width="200px" data-live-search="true" onChange="completaActividad(this,<?=$codigo;?>)" >
 			  	<option disabled selected value="">Clasificador</option>
 			  	<?php
 			  	if($nombreTablaClasificador!="" && $nombreTablaClasificador!="clientes"){
@@ -142,7 +143,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 	<div class="row">	
 		<div class="col-sm-3">
 	        <div class="form-group">
-				<select class="selectpicker" name="tipo_actividad<?=$codigo;?>" id="tipo_actividad<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+				<select class="selectpicker form-control form-control-sm" name="tipo_actividad<?=$codigo;?>" id="tipo_actividad<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 				  	<option value="">Tipo de Actividad</option>
 				  	<?php
 				  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM tipos_actividadpoa where cod_estado=1 order by 2");
@@ -160,7 +161,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 	    </div>
 		<div class="col-sm-3">
 	        <div class="form-group">
-				<select class="selectpicker" name="periodo<?=$codigo;?>" id="periodo<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+				<select class="selectpicker form-control form-control-sm" name="periodo<?=$codigo;?>" id="periodo<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 				  	<option value="">Planificación</option>
 				  	<?php
 				  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM periodos where codigo in (0,1) order by 2");
@@ -178,7 +179,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 	    </div>	
 		<div class="col-sm-6">
 	        <div class="form-group">
-				<select class="selectpicker form-control" name="funcion<?=$codigo;?>" id="funcion<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+				<select class="selectpicker form-control form-control-sm" name="funcion<?=$codigo;?>" id="funcion<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 				  	<option value="">Funcion Asociada a la Actividad</option>
 				  	<?php
 				  	$stmt = $dbh->prepare("SELECT cf.cod_funcion, cf.nombre_funcion from personal_datosadicionales p, cargos_funciones cf where p.cod_personal='$globalUser' and p.cod_cargo=cf.cod_cargo ORDER BY 2");

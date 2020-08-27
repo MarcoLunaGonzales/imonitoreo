@@ -78,30 +78,30 @@ $banderaReg=verificaRegistrosSIS($anio);
                 	  		<td><?=$anio;?></td>
                           	<td><?=nameMes($i);?></td>
                           	<td class="td-actions text-center">
-                            	<a href='solicitudFondosSIS/rptSeguimientoAnualSIS.php?gestion=<?=$globalGestion;?>&mes=<?=$i?>' rel="tooltip" class="" target="_blank">
+                            	<a href='solicitudFondosSIS/rptSeguimientoAnualSIS.php?codigo_proy=1&gestion=<?=$globalGestion;?>&mes=<?=$i?>' rel="tooltip" class="" target="_blank">
         	                      <i class="material-icons">input</i>
 	                            </a>
     	                	</td>
                       	<td class="td-actions text-center">
-                        	<a href='solicitudFondosSIS/rptDetalleGastosSIS.php?gestion=<?=$globalGestion;?>&mes=<?=$i?>' rel="tooltip" class="" target="_blank">
+                        	<a href='solicitudFondosSIS/rptDetalleGastosSIS.php?codigo_proy=1&gestion=<?=$globalGestion;?>&mes=<?=$i?>' rel="tooltip" class="" target="_blank">
                             		<i class="material-icons">open_in_new</i>
 	                            </a>
     	                	</td>
 
                         <td class="td-actions text-center">
-                          <a href='solicitudFondosSIS/reporteGastosSISAccNum.php?gestion=<?=$globalGestion;?>&mes=<?=$i?>&tiporeporte=0' rel="tooltip" class="" target="_blank">
+                          <a href='solicitudFondosSIS/reporteGastosSISAccNum.php?codigo_proy=1&gestion=<?=$globalGestion;?>&mes=<?=$i?>&tiporeporte=0' rel="tooltip" class="" target="_blank">
                                 <i class="material-icons">open_in_new</i>
                               </a>
                         </td>                        
                       	
                         <td class="td-actions text-center">
-                          <a href='solicitudFondosSIS/reporteGastosSISAccNum.php?gestion=<?=$globalGestion;?>&mes=<?=$i?>&tiporeporte=1' rel="tooltip" class="" target="_blank">
+                          <a href='solicitudFondosSIS/reporteGastosSISAccNum.php?codigo_proy=1&gestion=<?=$globalGestion;?>&mes=<?=$i?>&tiporeporte=1' rel="tooltip" class="" target="_blank">
                                 <i class="material-icons">open_in_new</i>
                               </a>
                         </td>
 
                         <td class="td-actions text-center">
-                            	<a href='solicitudFondosSIS/rptBalanceCuentasSIS.php?gestion=<?=$globalGestion;?>&mes=<?=$i?>' rel="tooltip" class="" target="_blank">
+                            	<a href='solicitudFondosSIS/rptBalanceCuentasSIS.php?codigo_proy=1&gestion=<?=$globalGestion;?>&mes=<?=$i?>' rel="tooltip" class="" target="_blank">
                             		<i class="material-icons">web_asset</i>
 	                            </a>
     	                	</td> 
@@ -113,11 +113,14 @@ $banderaReg=verificaRegistrosSIS($anio);
                             <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$nameArchivo1;?>' rel="tooltip" class="" target="_blank">
                             		<i class="material-icons">attachment</i>
                             </a>
-
+                            <?php
+                              if($globalAdmin==1){
+                            ?>
                             <button class="<?=$buttonCancel;?> btn-round" onClick="alerts.showSwal('warning-message-and-confirmation','javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$nameArchivo1?>\',\'divArchivo1<?=$i;?>\',12,\'<?=$idArchivo1;?>\');')">
                                 <i class="material-icons">delete_forever</i>
                             </button>
                             <?php
+                              }
                             }
                             ?>
                           </div>
@@ -130,12 +133,14 @@ $banderaReg=verificaRegistrosSIS($anio);
                             <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$nameArchivo2;?>' rel="tooltip" class="" target="_blank">
                               <i class="material-icons">attachment</i>
                             </a>
-
+                            <?php
+                              if($globalAdmin==1){
+                            ?>
                             <button class="<?=$buttonCancel;?> btn-round" onclick="alerts.showSwal('warning-message-and-confirmation','javascript:ajaxDeleteArchivo(\'<?=$globalServerArchivos;?>\',\'<?=$nameArchivo2?>\',\'divArchivo2<?=$i;?>\',12,\'<?=$idArchivo2;?>\');')">
                                 <i class="material-icons">delete_forever</i>
                             </button>
-
                           <?php
+                            }
                           }
                           ?>
                           </div>

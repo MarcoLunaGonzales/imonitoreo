@@ -28,8 +28,8 @@ if($area==11){
   $sql="SELECT u.abreviatura, 
   (select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, sum(e.cantidad)cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, sd.nombre as nombreservicio, sum(e.monto_facturado)monto_facturado, e.nro_servicio from ext_servicios e, servicios_oi_detalle sd, unidades_organizacionales u where u.codigo=e.id_oficina and  e.idclaservicio=sd.codigo and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura) in ($mes) and sd.cod_servicio=$codigoServicio group by e.nro_servicio";  
 }else{
-  $sql="SELECT u.abreviatura, 
-  (select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, sum(e.cantidad)cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, sum(e.monto_facturado)monto_facturado, e.nro_servicio from ext_servicios e, unidades_organizacionales u where u.codigo=e.id_oficina and e.id_oficina in ($unidadOrgString) and YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura) in ($mes) and e.id_cliente=$codigoServicio group by e.nro_servicio";
+  $sql="SELECT (select u.abreviatura from unidades_organizacionales u where u.codigo=e.id_oficina)as abreviatura, 
+  (select c.nombre from clientes c where c.codigo=e.id_cliente)as cliente, e.d_tipo, sum(e.cantidad)cantidad, e.fecha_registro, e.fecha_factura, e.estado_servicio, sum(e.monto_facturado)monto_facturado, e.nro_servicio from ext_servicios e where  YEAR(e.fecha_factura)=$nameGestion and MONTH(e.fecha_factura) in ($mes) and e.id_cliente=$codigoServicio group by e.nro_servicio";
 }
 
 // and

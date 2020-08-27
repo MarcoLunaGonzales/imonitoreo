@@ -255,7 +255,13 @@ function nameOrganismo($codigo){
 
 function codigosGrupoFondo($codigo){
    $dbh = new Conexion();
-   $stmt = $dbh->prepare("SELECT codigo FROM po_fondos where cod_grupo in ($codigo)");
+   $sql="";
+   if($codigo==0){
+      $sql="SELECT codigo FROM po_fondos";
+   }else{
+      $sql="SELECT codigo FROM po_fondos where cod_grupo in ($codigo)";
+   }
+   $stmt = $dbh->prepare($sql);
    $stmt->execute();
    $nombreX="";
    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -267,7 +273,13 @@ function codigosGrupoFondo($codigo){
 
 function nameGrupoFondo($codigo){
    $dbh = new Conexion();
-   $stmt = $dbh->prepare("SELECT abreviatura FROM po_fondos where cod_grupo in ($codigo)");
+   $sql="";
+   if($codigo==0){
+     $sql="SELECT abreviatura FROM po_fondos";
+   }else{
+     $sql="SELECT abreviatura FROM po_fondos where cod_grupo in ($codigo)";    
+   }
+   $stmt = $dbh->prepare($sql);
    $stmt->execute();
    $nombreX="";
    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -990,9 +1002,17 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
   //echo "ingresando a la funcion";
   
   //echo "clasificador:".$clasificador;
-  
+  //ESTA LINEA ES PARA SEC
   if($clasificador==3){
-    $sql="SELECT count(*)as registros from ext_cursos e where e.id_oficina in ($unidadHijos) and MONTH(e.fecha_inicio)=$mes and YEAR(e.fecha_inicio)=$anio and e.gestion='$anio' and e.id_programa='$codigoClasificador'";
+    $codIndicadorContar=obtieneValorConfig(16);
+    $codIndicadorSumar=obtieneValorConfig(17);
+    
+    if($codIndicadorSumar==$indicador){
+      $sql="SELECT sum(importe_neto)as registros from ext_cursos e where  MONTH(e.fecha_factura)=$mes and YEAR(e.fecha_factura)=$anio and e.id_programa='$codigoClasificador'";
+    }else{
+      $sql="SELECT count(distinct(e.codigocurso)) as registros from ext_cursos e where  MONTH(e.fecha_factura)=$mes and YEAR(e.fecha_factura)=$anio and e.id_programa='$codigoClasificador'";
+    }
+    //echo $sql;
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -1007,7 +1027,7 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
       $sql="SELECT count(*)as registros from ext_planauditorias e where e.id_cliente=$codigoClasificador and e.codigoservicio like '%TCP%' and YEAR(e.fecha_realizada)=$anio and MONTH(e.fecha_realizada)=$mes";
     }
     if($codIndicadorSumar==$indicador){
-      $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e where e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area=$area and e.id_cliente=$codigoClasificador";      
+      $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e where YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area=$area and e.id_cliente=$codigoClasificador";      
     }
     //echo $sql;
     $stmt = $dbh->prepare($sql);
@@ -1027,7 +1047,7 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
       $sql="SELECT count(*)as registros from ext_planauditorias e where e.id_cliente=$codigoClasificador and e.codigoservicio like '%TCS%' and YEAR(e.fecha_realizada)=$anio and MONTH(e.fecha_realizada)=$mes";
     }
     if($codIndicadorSumar==$indicador){
-      $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e where e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area=$area and e.id_cliente=$codigoClasificador";      
+      $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e where YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area=$area and e.id_cliente=$codigoClasificador";      
     }
     //echo $sql;
     $stmt = $dbh->prepare($sql);
@@ -1047,16 +1067,18 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
     $sql="";
     if($codIndicadorContar==$indicador){
       //AQUI HACEMOS LA MODIFICACION DESDE LA TABLA DE SOLICITUDFACTURACION
-      /*$sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";      */
       $abreviaturaServicio=buscarAbreviaturaServicio($codigoClasificador);
-      $sql="SELECT sum(e.cantidad)as registros from ext_solicitudfacturacion e where e.codigoserviciocurso like '%$abreviaturaServicio%' and YEAR(e.fecha)='$anio' and MONTH(e.fecha)='$mes' and e.idestado not in (266) and e.idoficina in ($unidadHijos)";  
+      //$sql="SELECT sum(e.cantidad)as registros from ext_solicitudfacturacion e where e.codigoserviciocurso like '%$abreviaturaServicio%' and YEAR(e.fecha)='$anio' and MONTH(e.fecha)='$mes' and e.idestado not in (266) and e.idoficina in ($unidadHijos)";  
+      $sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area='$area';"; 
+      //echo $sql; 
+      
     }
     if($codIndicadorSumar==$indicador){
-        /*$sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";*/
         $abreviaturaServicio=buscarAbreviaturaServicio($codigoClasificador);
-        $sql="SELECT sum(e.montobs)as registros from ext_solicitudfacturacion e where e.codigoserviciocurso like '%$abreviaturaServicio%' and YEAR(e.fecha)='$anio' and MONTH(e.fecha)='$mes' and e.idestado not in (266) and e.idoficina in ($unidadHijos)";  
+        //$sql="SELECT sum(e.montobs)as registros from ext_solicitudfacturacion e where e.codigoserviciocurso like '%$abreviaturaServicio%' and YEAR(e.fecha)='$anio' and MONTH(e.fecha)='$mes' and e.idestado not in (266) and e.idoficina in ($unidadHijos)";  
+        $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e, servicios_oi_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area='$area';";
     }
-    echo $sql;
+    //echo $sql;
     //echo $codIndicadorContar." ".$codIndicadorSumar." ".$indicador." ".$sql." </br>";
     
     $stmt = $dbh->prepare($sql);
@@ -1071,7 +1093,7 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
 
   //ESTA LINEA ES PARA LOS SERVICIOS TLQ
   if($clasificador==4){
-    $sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_tlq_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and e.id_oficina in ($unidadHijos) and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";
+    $sql="SELECT sum(e.cantidad)as registros from ext_servicios e, servicios_tlq_detalle sd where e.idclaservicio=sd.codigo and sd.cod_servicio=$codigoClasificador and YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes;";
     //echo $sql;
     $stmt = $dbh->prepare($sql);
     $stmt->execute();

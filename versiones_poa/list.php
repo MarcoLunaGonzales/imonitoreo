@@ -58,7 +58,7 @@ $stmt->bindColumn('fecha', $fecha);
                             if($globalAdmin==1){
                             ?>
                             <button rel="tooltip" class="btn btn-success" onclick="alerts.showSwal('warning-message-and-confirmation2','index.php?opcion=generarVersionPOA&codigo=<?=$codigo;?>')">
-                              <i class="material-icons" title="Crar Version">autorenew</i>
+                              <i class="material-icons" title="Crear Version">autorenew</i>
                             </button>
                             
                             <button rel="tooltip" class="btn btn-danger" onclick="alerts.showSwal('warning-message-and-confirmation','index.php?opcion=deleteVersionPOA&codigo=<?=$codigo;?>')">

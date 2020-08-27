@@ -66,4 +66,68 @@ $stmtInsert=$dbh->prepare($sqlInserta);
 $stmtInsert->execute();
 
 echo "<h3>Hora Fin Proceso Alumnos Cursos: " . date("Y-m-d H:i:s")."</h3>";
+
+
+
+
+
+
+echo "<h3>Hora Inicio Proceso Alumnos Cursos Nuevo: " . date("Y-m-d H:i:s")."</h3>";
+$sql = "SELECT * from bdifinanciero.v_alumnoscursos ";
+$query = $dbh->query($sql);
+$query -> setFetchMode(PDO::FETCH_ASSOC);
+
+$insert_str="";
+$indice=1;
+
+while($resp = $query->fetch()){
+	$IdCurso=$resp['IdCurso'];
+	$Curso_gestion=$resp['curso_gestion'];
+	$d_oficina=$resp['d_oficina'];
+	$d_Programa=$resp['d_programa'];
+	$d_Tipo=$resp['d_tipo'];
+	$d_empresa=$resp['d_empresa'];
+	$d_aprobacion=$resp['d_aprobacion'];
+	$Nombre_Curso=$resp['nombre_curso'];
+	$Curso_CantModulos=$resp['CantidadModulos'];
+	$Estado=$resp['Estado'];
+	$Cod_Curso=$resp['cod_curso'];
+	$CiAlumno=$resp['ci_estudiante'];
+	$d_alumno=$resp['d_alumno'];
+	$IdModulo=$resp['IdModulo'];
+	$FechaInicio=$resp['FechaInicio'];
+	$FechaFin=$resp['FechaFin'];
+	$NroModulo=$resp['NroModulo'];
+	$fechaNacimiento=$resp['clFechaNacimiento'];
+	$fechaFactura=$resp['fecha_factura'];
+	$montoFactura=$resp['monto_facturacion'];
+
+	$Estado=1;
+
+	$insert_str .= "('$IdCurso','$Curso_gestion','$d_oficina','$d_Programa','$d_Tipo','$d_empresa','$d_aprobacion','$Nombre_Curso','$Curso_CantModulos','$Estado','$Cod_Curso','$CiAlumno','$d_alumno','$IdModulo','$FechaInicio','$FechaFin','$NroModulo','$fechaNacimiento','$fechaFactura','$montoFactura'),";	
+
+	if($indice%200==0){
+		$insert_str = substr_replace($insert_str, '', -1, 1);
+		$sqlInserta="INSERT INTO ext_alumnos_cursos (idcurso, curso_gestion, d_oficina, d_programa, d_tipo, d_empresa, d_aprobacion, nombre_curso, curso_cantmodulos, estado, cod_curso, cialumno, d_alumno, idmodulo, fechainicio, fechafin, nromodulo, fechanacimiento, fecha_factura, monto_factura) 
+			values ".$insert_str.";";
+		//echo $sqlInserta;
+		echo "INSERT TUPLAS $indice";
+		$stmtInsert=$dbh->prepare($sqlInserta);
+		$stmtInsert->execute();
+		$insert_str="";
+	}
+	$indice++;
+}
+
+$insert_str = substr_replace($insert_str, '', -1, 1);
+$sqlInserta="INSERT INTO ext_alumnos_cursos (idcurso, curso_gestion, d_oficina, d_programa, d_tipo, d_empresa, d_aprobacion, nombre_curso, curso_cantmodulos, estado, cod_curso, cialumno, d_alumno, idmodulo, fechainicio, fechafin, nromodulo, fechanacimiento, fecha_factura, monto_factura) 
+	values ".$insert_str.";";
+//echo $sqlInserta;
+$stmtInsert=$dbh->prepare($sqlInserta);
+$stmtInsert->execute();
+
+
+echo "<h3>Hora Fin Proceso Alumnos Cursos Nuevo: " . date("Y-m-d H:i:s")."</h3>";
+
+
 ?>

@@ -1,11 +1,11 @@
 <?php
 
-
 require_once 'functions.php';
 require_once 'conexion.php';
 
 session_start();
 
+date_default_timezone_set('America/La_Paz');
 
 $dbh = new Conexion();
 $user=$_POST["user"];
@@ -104,7 +104,7 @@ if($banderaLogin==1 || $tipoLogin==1){
 		$_SESSION['globalProyecto']='';
 
 
-		if($codigo==183){
+		if($codigo==423 || $codigo==332 || $codigo==195){
 			$_SESSION['globalAdmin']=1;			
 		}else{
 			$_SESSION['globalAdmin']=0;	
@@ -155,6 +155,11 @@ if($banderaLogin==1 || $tipoLogin==1){
 		$_SESSION['globalMenuJson']=$obj;
 		
 	}
+	//INSERTAMOS LA FECHA Y HORA DE SESSION
+	$fechaHoraActual=date("Y-m-d H:i:s");
+	$sqlInsertUserConnect="INSERT usuarios_conectados(cod_personal, fecha) values ('$codigo','$fechaHoraActual')";
+	$stmtInsert = $dbh->prepare($sqlInsertUserConnect);
+	$stmtInsert->execute();
 }
 
 header("location:index.php");

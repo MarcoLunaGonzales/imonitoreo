@@ -61,8 +61,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$globalUnidad
 					  </div>
 					</div>
 					<?php
-					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_tiporesultado,
-					(SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador, a.cod_unidadorganizacional, a.cod_area, a.cod_periodo, a.poai, a.cod_actividadpadre
+					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_tiporesultado, 1 as datoclasificador, a.cod_unidadorganizacional, a.cod_area, a.cod_periodo, a.poai, a.cod_actividadpadre
 					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and (a.cod_actividadpadre>0 or a.cod_actividadpadre=-1000) ";
 					if($globalAdmin==0){
 						$sqlLista.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) and a.cod_personal='$globalUser'";

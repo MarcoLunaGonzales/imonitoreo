@@ -46,6 +46,9 @@ $fechaHoraActual=date("Y-m-d H:i:s");
 	$stmtDel = $dbh->prepare("DELETE FROM actividades_poaplanificacion_temp");
 	$flagSuccess=$stmtDel->execute();	
 
+	$stmtDel = $dbh->prepare("DELETE FROM actividades_poaejecucion_temp");
+	$flagSuccess=$stmtDel->execute();	
+
 	$stmtDel = $dbh->prepare("DELETE FROM actividades_poa_temp");
 	$flagSuccess=$stmtDel->execute();	
 
@@ -74,11 +77,11 @@ while(!feof($file)){
 	$varPOA=str_replace(',', '', $varPOA);
 
 	$contarCampos=substr_count($varPOA, ';'); // 2
-	//echo $contarCampos;
+//	echo $contarCampos;
 	
-	if($varPOA!="" && $contarCampos==24 && $indice>1){
+	if($varPOA!="" && $contarCampos==36 && $indice>1){
 
-		list($idIndicador, $idUnidad, $idArea, $idSector, $idNorma, $idHito, $nombreAct, $prodEsperado, $unidadMedida, $cmi, $tablaClasificador, $codClasificador, $nombreClasificador, $enero, $febrero, $marzo, $abril, $mayo, $junio, $julio, $agosto, $septiembre, $octubre, $noviembre, $diciembre)=explode(";", $varPOA);
+		list($idIndicador, $idUnidad, $idArea, $idSector, $idNorma, $idHito, $nombreAct, $prodEsperado, $unidadMedida, $cmi, $tablaClasificador, $codClasificador, $nombreClasificador, $enero, $febrero, $marzo, $abril, $mayo, $junio, $julio, $agosto, $septiembre, $octubre, $noviembre, $diciembre, $eneroE, $febreroE, $marzoE, $abrilE, $mayoE, $junioE, $julioE, $agostoE, $septiembreE, $octubreE, $noviembreE, $diciembreE)=explode(";", $varPOA);
 
 		if($cmi=="si" || $cmi=="SI"){
 			$cmi=1;
@@ -103,55 +106,72 @@ while(!feof($file)){
 		$noviembre=(float)$noviembre;
 		$diciembre=(float)$diciembre;
 
+		$eneroE=(float)$eneroE;	
+		$febreroE=(float)$febreroE;
+		$marzoE=(float)$marzoE;
+		$abrilE=(float)$abrilE;
+		$mayoE=(float)$mayoE;
+		$junioE=(float)$junioE;
+		$julioE=(float)$julioE;
+		$agostoE=(float)$agostoE;
+		$septiembreE=(float)$septiembreE;
+		$octubreE=(float)$octubreE;
+		$noviembreE=(float)$noviembreE;
+		$diciembreE=(float)$diciembreE;
+
 		$banderaError=0;
 
-		if(!is_numeric($enero)){
+		if(!is_numeric($enero) || !is_numeric($eneroE) ){
 			$banderaError=1;
 		}
-		if(!is_numeric($febrero)){
+		if(!is_numeric($febrero) || !is_numeric($febreroE)){
 			$banderaError=1;
 		}
-		if(!is_numeric($marzo)){
+		if(!is_numeric($marzo) || !is_numeric($marzoE) ){
 			$banderaError=1;
 		}
-		if(!is_numeric($abril)){
+		if(!is_numeric($abril) || !is_numeric($abrilE)){
 			$banderaError=1;
 		}
-		if(!is_numeric($mayo)){
+		if(!is_numeric($mayo) || !is_numeric($mayoE)){
 			$banderaError=1;
 		}
-		if(!is_numeric($junio)){
+		if(!is_numeric($junio) || !is_numeric($junioE)){
 			$banderaError=1;
 		}
-		if(!is_numeric($julio)){
+		if(!is_numeric($julio) || !is_numeric($julioE)){
 			$banderaError=1;
 		}
-		if(!is_numeric($agosto)){
+		if(!is_numeric($agosto) || !is_numeric($agostoE)){
 			$banderaError=1;
 		}
-		if(!is_numeric($septiembre)){
+		if(!is_numeric($septiembre) || !is_numeric($septiembreE)){
 			$banderaError=1;
 		}
-		if(!is_numeric($octubre)){
+		if(!is_numeric($octubre) || !is_numeric($octubreE)){
 			$banderaError=1;
 		}
-		if(!is_numeric($noviembre)){
+		if(!is_numeric($noviembre) || !is_numeric($noviembreE)){
 			$banderaError=1;
 		}		
-		if(!is_numeric($diciembre)){
+		if(!is_numeric($diciembre) || !is_numeric($diciembreE)){
 			$banderaError=1;
 		}		
+
+		//echo "bandera: ".$banderaError;
 		
 		if($banderaError==0){
 			$sqlInsert="INSERT INTO actividades_poa_temp (cod_gestion, orden, nombre, cod_normapriorizada, cod_norma, cod_tiposeguimiento, producto_esperado, clave_indicador, cod_indicador, cod_unidadorganizacional, cod_area, cod_estado, cod_tiporesultado, cod_datoclasificador, cod_hito) VALUES ('$gestion', '$indice', '$nombreAct', '$idSector', '$idNorma', '$unidadMedida', '$prodEsperado', '$cmi', '$idIndicador', '$idUnidad', '$idArea', '1', '1', '$codClasificador', '$idHito');";
+
+			//echo $sqlInsert;
+			
 			$stmtInsert=$dbh->prepare($sqlInsert);
 		  	$stmtInsert->execute();
 
 		  	$lastId = $dbh->lastInsertId();
 
 		  	if($enero>0){
-				$sqlInsert="INSERT INTO actividades_poaplanificacion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '1', '$enero');";
-				//echo $sqlInsert."<br>";
+				$sqlInsert="INSERT INTO actividades_poaplanificacion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '1', '$enero');";				
 				$stmtInsert=$dbh->prepare($sqlInsert);
 			  	$stmtInsert->execute();
 		  	}
@@ -220,7 +240,81 @@ while(!feof($file)){
 				//echo $sqlInsert."<br>";
 				$stmtInsert=$dbh->prepare($sqlInsert);
 			  	$stmtInsert->execute();
-		  	}		  			  			  			  			  			  			  	
+		  	}
+
+
+		  	if($eneroE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '1', '$eneroE');";				
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}
+		  	if($febreroE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '2', '$febreroE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}		  	
+		  	if($marzoE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '3', '$marzoE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}
+		  	if($abrilE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '4', '$abrilE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}		  	
+		  	if($mayoE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '5', '$mayoE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}
+		  	if($junioE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '6', '$junioE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}		  			  			  	
+		  	if($julioE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '7', '$julioE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}		  			  			  	
+		  	if($agostoE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '8', '$agostoE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}		  			  			  	
+		  	if($septiembreE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '9', '$septiembreE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}
+		  	if($octubreE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '10', '$octubreE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}
+		  	if($noviembreE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '11', '$noviembreE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}		  			  			  			  			  			  	
+		  	if($diciembreE>0){
+				$sqlInsert="INSERT INTO actividades_poaejecucion_temp (cod_actividad, mes, value_numerico) VALUES ('$lastId', '12', '$diciembreE');";
+				//echo $sqlInsert."<br>";
+				$stmtInsert=$dbh->prepare($sqlInsert);
+			  	$stmtInsert->execute();
+		  	}
+
 		}else{
 			echo "ERROR EN FILA: ".$indice."<br>";
 		}
@@ -236,6 +330,10 @@ while(!feof($file)){
 //DESDE ACA CARGAMOS A LA TABLA OFICIAL
 
 //BORRAMOS LAS ACTIVIDADES X EL INDICADOR, UNIDAD Y AREA QUE ESTE EN EL ARCHIVO
+$codUnidadX=0;
+$codIndicadorX=0;
+$codAreaX=0;
+
 if($tipoCargado==1){
 	$sqlCarga="SELECT a.cod_indicador, a.cod_unidadorganizacional, a.cod_area from actividades_poa_temp a group by a.cod_indicador, a.cod_unidadorganizacional, a.cod_area";
 	$stmtCarga = $dbh->prepare($sqlCarga);
@@ -251,6 +349,10 @@ if($tipoCargado==1){
 		$stmtDelOficial = $dbh->prepare($sqlDel);
 		$flagSuccess3=$stmtDelOficial->execute();
 
+	  	$sqlDel="DELETE FROM actividades_poaejecucion where cod_actividad in (SELECT codigo from actividades_poa WHERE  cod_indicador='$codIndicadorX' and cod_unidadorganizacional='$codUnidadX' and cod_area='$codAreaX')";
+		$stmtDelOficial = $dbh->prepare($sqlDel);
+		$flagSuccess3=$stmtDelOficial->execute();
+
 	  	$sqlDel="DELETE FROM actividades_poa where cod_indicador='$codIndicadorX' and cod_unidadorganizacional='$codUnidadX' and cod_area='$codAreaX'";
 	  	//echo $sqlDel;
 		$stmtDelOficial = $dbh->prepare($sqlDel);
@@ -258,8 +360,6 @@ if($tipoCargado==1){
 	}       
 }
 //FIN BORRADO X INDICADOR, UNIDAD Y AREA	
-
-
 
 $sqlTemp="SELECT codigo from actividades_poa_temp";
 $stmtTemp = $dbh->prepare($sqlTemp);
@@ -288,6 +388,9 @@ while ($rowTemp = $stmtTemp->fetch(PDO::FETCH_ASSOC)) {
 	$stmtInsertTemp = $dbh->prepare($sqlInsertTemp);
 	$flagSuccess5=$stmtInsertTemp->execute();
 
+	$sqlInsertTemp="INSERT INTO actividades_poaejecucion (cod_actividad, mes, value_numerico) SELECT $codigoPOA, mes, value_numerico FROM actividades_poaejecucion_temp WHERE cod_actividad='$codigoTemp'";
+	$stmtInsertTemp = $dbh->prepare($sqlInsertTemp);
+	$flagSuccess5=$stmtInsertTemp->execute();	
 
 	//echo "contador: ".$contador." variable temp: ".$codigoTemp."<br>";
 	$contador++;

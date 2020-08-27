@@ -194,6 +194,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
         }
         $sqlAreas.=" GROUP BY u.codigo order by 3";
         $stmt = $dbh->prepare($sqlAreas);
+
       $stmt->execute();
       while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $codigoU=$row['codigoUnidad'];

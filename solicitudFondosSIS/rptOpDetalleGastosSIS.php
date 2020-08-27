@@ -24,7 +24,29 @@ $codMesDefault=mesDefaultReport();
         </div>
         </div>
         <div class="card-body ">
-    
+          
+          <div class="row">
+            <label class="col-sm-2 col-form-label">Proyecto</label>
+            <div class="col-sm-7">
+            <div class="form-group">
+              <select class="selectpicker" title="Seleccionar" name="codigo_proy" id="codigo_proy" data-style="<?=$comboColor;?>" required>
+                <option disabled selected value=""></option>
+                <?php
+                $stmt = $dbh->prepare("SELECT codigo,nombre from proyectos_financiacionexterna where cod_estadoreferencial=1 order by 2 desc");
+              $stmt->execute();
+              while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $codigoX=$row['codigo'];
+                $nombreX=$row['nombre'];
+              ?>
+              <option value="<?=$codigoX;?>"  <?=($codigo_proy==$codigoX)?"selected":"";?> ><?=$nombreX;?></option>
+              <?php 
+              }
+                ?>
+              </select>
+            </div>
+            </div>
+          </div>
+
         <div class="row">
           <label class="col-sm-2 col-form-label">Gestion</label>
           <div class="col-sm-7">

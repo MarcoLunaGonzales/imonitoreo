@@ -100,7 +100,7 @@ $moduleName="Registro de Ejecucion POA";
 					if($unidadIndicador!=0){
 					$sqlLista.=" and a.cod_unidadorganizacional in ($unidadIndicador) ";
 					} 
-					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
+					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.nombre";
 					$stmtLista = $dbh->prepare($sqlLista);
 					// Ejecutamos
 					$stmtLista->execute();
@@ -214,6 +214,7 @@ $moduleName="Registro de Ejecucion POA";
 	                          	if($valorEj==0){
 									if($codigoTablaClasificador!=0){
 										$valorEjSis=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
+										$valorEj=$valorEjSis;
 									}
 	                          	}
 	                          	$totalEjecutado+=$valorEj;
@@ -226,7 +227,7 @@ $moduleName="Registro de Ejecucion POA";
 	                    			<input type="hidden" name="ejsistema|<?=$codigo;?>|<?=$i;?>" value="<?=$valorEjSis;?>">
 	                    		</td>
 	                    		<td class="text-center table-success"> 
-	                    			<input class="form-control" min="0" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="ejecutado" value="<?=($valorEj=='')?'0':$valorEj;?>" onChange="calcularTotalEj();" OnKeyUp="calcularTotalEj();" step="0.01" required>
+	                    			<input class="form-control" type="number" name="plan|<?=$codigo;?>|<?=$i;?>" id="ejecutado" value="<?=($valorEj=='')?'0':$valorEj;?>" onChange="calcularTotalEj();" OnKeyUp="calcularTotalEj();" step="0.01" required>
 	                    		</td>
 	                    		<td class="text-center">
 	                    			<textarea class="form-control input-sm" type="text" name="explicacion|<?=$codigo;?>|<?=$i;?>" rows="1"><?=$descripcionEj;?></textarea>

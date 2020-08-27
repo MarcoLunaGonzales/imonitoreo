@@ -457,6 +457,12 @@
 			$areaUnidad=$_GET['areaUnidad'];
 			require_once('poa/edit.php');
 		}
+		if ($_GET['opcion']=='editPOAClasificadort') {
+			$codigoActividad=$_GET['codigo'];
+			$codigoIndicador=$_GET['codigo_indicador'];
+			$areaUnidad=$_GET['areaUnidad'];
+			require_once('poa/editClasificador.php');
+		}
 		if ($_GET['opcion']=='registerPOAPONGroup') {
 			$codigo=$_GET['codigo'];
 			$areaUnidad=$_GET['areaUnidad'];
@@ -584,6 +590,9 @@
 		}
 		if ($_GET['opcion']=='rptActividadesHitos') {
 			require_once('reportes/rptOpActividadesHitos.php');
+		}
+		if ($_GET['opcion']=='rptUserConnected') {
+			require_once('reportes/rptUserConnected.php');
 		}
 
 		

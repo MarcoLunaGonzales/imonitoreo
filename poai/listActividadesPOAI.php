@@ -124,7 +124,7 @@ $stmt->bindColumn('funcion', $nombreFuncion);
                 </div>
                 <div class="card-body">
                   <div class="table-responsive">
-                    <table class="table table-striped" id="tablePaginator">
+                    <table class="table table-condensed" id="tablePaginator">
                       <thead>
                         <tr>
                           <th class="text-center">-</th>
@@ -146,12 +146,12 @@ $stmt->bindColumn('funcion', $nombreFuncion);
                       ?>
                         <tr>
                           <td class="text-center"><?=$index;?></td>
-                          <td><?=$abrevUnidad."-".$abrevArea;?></td>
-                          <td><?=$nombre;?></td>
-                          <td><?=$productoEsperado;?></td>
-                          <td><?=$datoClasificador;?></td>
-                          <td><?=$personal;?></td>
-                          <td><?=$nombreFuncion;?></td>
+                          <td class="text-center small"><?=$abrevUnidad."-".$abrevArea;?></td>
+                          <td class="text-left small"><?=$nombre;?></td>
+                          <td class="text-left small"><?=$productoEsperado;?></td>
+                          <td class="text-left small"><?=$datoClasificador;?></td>
+                          <td class="text-left small"><?=$personal;?></td>
+                          <td class="text-left small"><?=$nombreFuncion;?></td>
                           <?php
                           if($poai==1){
                           ?>

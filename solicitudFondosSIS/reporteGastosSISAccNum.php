@@ -113,6 +113,7 @@ $stmtDetalleX->bindColumn('codigoact', $codigoActividad);
                         <td class="text-center"></td>
                       </tr>  
                       <?php
+                        $index++;
                       }
                       ?>  
                      </tbody>
