@@ -185,7 +185,7 @@ $moduleName="Registro de Ejecucion POA";
 		                      <td class="text-center"><?=$abrevArea."-".$abrevUnidad;?></td>
 		                      <!--td class="text-left small"><?=$nombre;?><?=$cadenaNormas;?><?=$actRetrasadas;?></td-->
 		                      <td class="text-left small"><?=$nombre;?><?=$actRetrasadas;?></td>
-		                      <td class="text-left small"><?=$nombreDatoClasificador;?>)</td>
+		                      <td class="text-left small"><?=$nombreDatoClasificador;?></td>
 		                    <?php
 	                    	for($i=$codMesX;$i<=$codMesX;$i++){
 	                    		$sqlRecupera="SELECT value_numerico from actividades_poaplanificacion where cod_actividad=:cod_actividad and mes=:cod_mes";
@@ -211,11 +211,11 @@ $moduleName="Registro de Ejecucion POA";
 		                            $descripcionEj=$rowRec['descripcion'];
 	                          	}
 	                          	$valorEjSis=0;
+	                          	if($codigoTablaClasificador!=0){
+									$valorEjSis=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
+								}
 	                          	if($valorEj==0){
-									if($codigoTablaClasificador!=0){
-										$valorEjSis=obtieneEjecucionSistema($codMesX,$codAnioX,$codigoTablaClasificador,$codUnidad,$codArea,$codigoIndicador,$codigodetalleclasificador);
-										$valorEj=$valorEjSis;
-									}
+									$valorEj=$valorEjSis;									
 	                          	}
 	                          	$totalEjecutado+=$valorEj;
 	                    	?>

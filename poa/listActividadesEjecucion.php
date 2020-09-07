@@ -31,6 +31,11 @@ $codReporteServicios2=obtieneValorConfig(17);
 //CODIGO DE INDICADOR PARA EL REPORTE DE SERVICIOS
 $codReporteServicios3=obtieneValorConfig(20);
 
+//CODIGO DE INDICADOR PARA TCP NUMERO DE SERVICIOS
+$codReporteServicios4=obtieneValorConfig(32);
+//CODIGO DE INDICADOR PARA TCS NUMERO DE SERVICIOS
+$codReporteServicios5=obtieneValorConfig(33);
+
 
 $codigoIndicador=$codigo;
 $areaIndicador=$area;
@@ -231,9 +236,10 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                           }else{
                             $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador&area=$codArea";
                           }
-                          if($codReporteServicios3==$codigoIndicador){
+                          if( ($codReporteServicios3==$codigoIndicador) || ($codReporteServicios4==$codigoIndicador) || ($codReporteServicios5==$codigoIndicador) ){
                             $url="reportes/rptServiciosPOA.php?anio=$codAnioX&mes=$codMesX&unidad_organizacional=$unidadesHijos&codigoServicio=$codigodetalleclasificador&area=$codArea";
                           }
+
 
                           $cadenaNormas="";
                           $cadenaN="";
@@ -266,7 +272,7 @@ $stmt->bindColumn('codigodetalleclasificador', $codigodetalleclasificador);
                               <?=formatNumberDec($valueNumero);?>
                           </td>
                           <td class="text-center table-success font-weight-bold">
-                            <?=($codReporteCursos==$codigoIndicador || $codReporteServicios==$codigoIndicador || $codReporteServicios2==$codigoIndicador || $codReporteServicios3==$codigoIndicador )?"<a href='$url' target='_blank'>".formatNumberDec($valueEjecutadoSistema)."</a>":formatNumberDec($valueEjecutadoSistema);?>
+                            <?=($url!="")?"<a href='$url' target='_blank'>".formatNumberDec($valueEjecutadoSistema)."</a>":formatNumberDec($valueEjecutadoSistema);?>
                           </td>
                           <td class="text-center table-success font-weight-bold"">
                             <?=formatNumberDec($valueNumeroEj);?>

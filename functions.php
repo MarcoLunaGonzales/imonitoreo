@@ -1021,10 +1021,10 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
   }
   //ESTA LINEA ES PARA TCP
   if($clasificador==1 && $area==39){
-    $codIndicadorContar=obtieneValorConfig(16);
+    $codIndicadorContar=obtieneValorConfig(32);
     $codIndicadorSumar=obtieneValorConfig(17);
     if($codIndicadorContar==$indicador){
-      $sql="SELECT count(*)as registros from ext_planauditorias e where e.id_cliente=$codigoClasificador and e.codigoservicio like '%TCP%' and YEAR(e.fecha_realizada)=$anio and MONTH(e.fecha_realizada)=$mes";
+      $sql="SELECT sum(e.cantidad) as registros from ext_servicios e where YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area=$area and e.id_cliente=$codigoClasificador";
     }
     if($codIndicadorSumar==$indicador){
       $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e where YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area=$area and e.id_cliente=$codigoClasificador";      
@@ -1041,15 +1041,15 @@ function obtieneEjecucionSistema($mes,$anio,$clasificador,$unidad,$area,$indicad
   }
   //ESTA LINEA ES PARA TCS
   if($clasificador==1 && $area==38){
-    $codIndicadorContar=obtieneValorConfig(16);
+    $codIndicadorContar=obtieneValorConfig(33);
     $codIndicadorSumar=obtieneValorConfig(17);
     if($codIndicadorContar==$indicador){
-      $sql="SELECT count(*)as registros from ext_planauditorias e where e.id_cliente=$codigoClasificador and e.codigoservicio like '%TCS%' and YEAR(e.fecha_realizada)=$anio and MONTH(e.fecha_realizada)=$mes";
+      $sql="SELECT sum(e.cantidad) as registros from ext_servicios e where YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area=$area and e.id_cliente=$codigoClasificador";
     }
     if($codIndicadorSumar==$indicador){
       $sql="SELECT sum(e.monto_facturado) as registros from ext_servicios e where YEAR(e.fecha_factura)=$anio and MONTH(e.fecha_factura)=$mes and e.id_area=$area and e.id_cliente=$codigoClasificador";      
     }
-    //echo $sql;
+   //echo $sql;
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -1162,10 +1162,10 @@ function obtieneCodigoClasificador($indicador, $unidad, $area){
 function obtieneDatoClasificador($datoClasi,$nombreTabla){
   $dbh = new Conexion();
   if($nombreTabla=="clientes"){
-    $sqlClasificador="SELECT concat(c.nombre,' (',u.abreviatura,')')as nombre from clientes c, unidades_organizacionales u where u.codigo=c.cod_unidad and c.codigo='$datoClasi'";
+    $sqlClasificador="SELECT concat(c.nombre,' (',u.abreviatura,')',' ',c.codigo)as nombre from clientes c, unidades_organizacionales u where u.codigo=c.cod_unidad and c.codigo='$datoClasi'";
     $stmtClasificador = $dbh->prepare($sqlClasificador);
     $stmtClasificador->execute();
-    $nombreClasi=0;
+    $nombreClasi="";
     while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
       $nombreClasi=$rowClasificador['nombre'];
     }

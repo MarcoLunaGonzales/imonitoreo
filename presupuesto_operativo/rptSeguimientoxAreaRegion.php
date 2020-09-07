@@ -192,7 +192,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $colorPorcentajeIngreso=colorPorcentajeIngreso($porcentajeIng);                    
                   }
               ?>
-                <tr>
+                <!--tr>
                   <td class="text-left">
                     <a href="seguimientoPOxCuenta.php?gestion=<?=$gestion;?>&mes=<?=$mes;?>&fondo[]=<?=$codFondo;?>&organismo[]=<?=$codOrganismoX;?>&resumen=" target="_blank"><?=$nombreFondo;?>
                     </a>
@@ -206,12 +206,24 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right table-warning"><?=formatNumberInt($montoEjIng);?></td>
                   <td class="text-right <?=$colorPorcentajeIngreso;?>"><?=formatNumberInt($porcentajeIng);?></td>
                   <td class="text-right table-warning"><?=formatNumberInt($participacionIng);?></td>
-                </tr>
+                </tr-->
     <?php
     						}
                 //SACAMOSM EL DETALLE CONJUNTO EGRESOS
                 $montoPresEgConjunto=presupuestoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
                 $montoEjEgConjunto=ejecutadoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
+
+                if($i==1 && $codOrganismoX==503){
+                  $montoEjEgConjunto=133565;
+                }
+                if($i==2 && $codOrganismoX==503){
+                  $montoEjEgConjunto=109503;                  
+                }
+                if($i==3 && $codOrganismoX==503){
+                  $montoEjEgConjunto=139054;
+                }
+
+
                 $porcentajeEgConjunto=0;
                 if($montoPresEgConjunto>0){
                   $porcentajeEgConjunto=($montoEjEgConjunto/$montoPresEgConjunto)*100;
@@ -255,7 +267,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $colorPorcentajeEgreso=colorPorcentajeEgreso($porcentajeEg);
                   }
               ?>
-                <tr>
+                <!--tr>
                   <td class="text-left">
                     <a href="seguimientoPOxCuenta.php?gestion=<?=$gestion;?>&mes=<?=$mes;?>&fondo[]=<?=$codFondo;?>&organismo[]=<?=$codOrganismoX;?>&resumen=" target="_blank">
                       <?=$nombreFondo;?>
@@ -269,7 +281,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right table-info"><?=formatNumberInt($montoEjEg);?></td>
                   <td class="text-right <?=$colorPorcentajeEgreso;?>"><?=formatNumberInt($porcentajeEg);?></td>
                   <td class="text-right table-info"><?=formatNumberInt($participacionEg);?></td>
-                </tr>
+                </tr-->
     <?php
                 }
                 $resultadoPres=$montoPresIngConjunto-$montoPresEgConjunto;
@@ -312,6 +324,18 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                  //ACA SACAMOS LOS DATOS PARA LOS ACUMULADOS
                   $montoPresEgAcumulado=presupuestoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
                   $montoEjEgAcumulado=ejecutadoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
+
+                   if($i==1 && $codOrganismoX==503){
+                    $montoEjEgAcumulado=786214;
+                  }
+                  if($i==2 && $codOrganismoX==503){
+                    $montoEjEgAcumulado=842898;                  
+                  }
+                  if($i==3 && $codOrganismoX==503){
+                    $montoEjEgAcumulado=993029;
+                  }
+
+
                   $porcentajeEgAcum=0;
                   if($montoPresEgAcumulado>0){
                     $porcentajeEgAcum=($montoEjEgAcumulado/$montoPresEgAcumulado)*100;

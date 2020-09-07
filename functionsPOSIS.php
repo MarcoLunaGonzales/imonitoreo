@@ -162,8 +162,9 @@ function montoRedistribucionIT($agencia, $anio, $mes, $organismo, $acumulado, $c
   if($acumulado==0 && $mes>=7){
     $montoRedistIT=0;
   }
+  
   //$montoRedistIT=0;
-
+  //echo $montoRedistIT;
   return($montoRedistIT);
 }
 
@@ -268,12 +269,12 @@ function ejecutadoEgresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cue
 //ESTA FUNCION ES IDENTICA A LA DE ejecutadoEgresosMes
 function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa){
    //en la variable dn_sa enviamos el organismo del que queremos ver
-  if($dn_sa==1){
+  /*if($dn_sa==1){
     $campo="porcentaje_dn";
-    $organismoDNSA=501;
+    $organismoDNSA="501";
   }else{
     $campo="porcentaje_sa";
-    $organismoDNSA=502;
+    $organismoDNSA="502,504";
   }
   $dbh = new Conexion();
   //if($organismo==)
@@ -329,10 +330,6 @@ function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa)
     $montoEgresoOrganismo=$montoEgresoEjecutado*($porcentaje/100);
     $totalMontoEgresoDNSA=$totalMontoEgresoDNSA+$montoEgresoOrganismo;
   }
-
-  /*if($organismo==503){//oi
-    $totalMontoEgresoDNSA=$totalMontoEgresoDNSA*0.30;
-  }*/
   return($totalMontoEgresoDNSA);
 }
 
@@ -392,7 +389,8 @@ function montoPresupuestoComponente($gestion, $anio, $mes, $componente, $nivel){
   $monto=0;
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $monto=$row['monto'];
-  }
+  }*/
+  $monto=0;
   return($monto);
 }
 

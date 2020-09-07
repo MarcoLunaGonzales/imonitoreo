@@ -299,6 +299,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $montoPresIngAcumulado=presupuestoIngresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
                   $montoEjIngAcumulado=ejecutadoIngresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
 
+                  $montoPresIngGestion=presupuestoIngresosMes($codigosConjunto,$anio,12,$codOrganismoX,1,0);
                   //CASO ESPECIAL RETIRAR DESPUES
                   //$montoExtraAcumulado=153226;
                   $montoExtraAcumulado=0;
@@ -316,6 +317,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $porcentajeIngAcum=($montoEjIngAcumulado/$montoPresIngAcumulado)*100;
                   }
                   $colorPorcentajeIngreso=colorPorcentajeIngreso($porcentajeIngAcum);
+
+                  $porcentajeIngGestion=0;
+                  if($montoPresIngGestion>0){
+                    $porcentajeIngGestion=($montoEjIngAcumulado/$montoPresIngGestion)*100;
+                  }
+                  $colorPorcentajeIngresoGestion=colorPorcentajeIngreso($porcentajeIngGestion);
+
+
                  ?>
                  <tr>
                   <td class="font-weight-bold">
@@ -365,7 +374,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right font-weight-bold"><?=formatNumberInt($resultadoEjAcum);?></td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($porcentajeResultado);?></td>
                   <td class="text-right font-weight-bold">-</td>
-                 </tr>
+               </tr>
+
+
               </tbody>
             </table>
 
@@ -378,6 +389,26 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   Rentabilidad Acum: <?=($montoEjIngAcumulado>0)?formatNumberInt(($resultadoEjAcum/$montoEjIngAcumulado)*100):0;?> %
                 </td>
               </tr>
+
+              <tr>
+                <td class="text-center font-weight-bold table-success" colspan="2">
+                  -
+                </td>
+                <td class="text-center font-weight-bold table-success" colspan="2">
+                  -
+                </td>
+              </tr>
+
+              <tr>
+                  <td class="font-weight-bold">
+                      Ingresos GESTIÓN
+                    </a>
+                  </td>
+                  <td class="text-right font-weight-bold table-warning"><?=formatNumberInt($montoPresIngGestion);?></td>
+                  <td class="text-right font-weight-bold table-warning"><?=formatNumberInt($montoEjIngAcumulado);?></td>
+                  <td class="text-right font-weight-bold <?=$colorPorcentajeIngresoGestion;?>"><?=formatNumberInt($porcentajeIngGestion);?></td>
+                </tr>
+              
             </table>
 
           <!--/div-->
@@ -396,7 +427,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $participacion3=($montoEjecutadoGrupo3/$montoIngresosTotalGrupos)*100;
 
     ?>
-    <div class="row">
+    <!--div class="row">
     <table width="80%">
       <tr>
         <th class="text-center font-weight-bold table-success">
@@ -415,7 +446,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         </td>
       </tr>
     </table>
-    </div></br></br></br> 
+    </div-->
+
+    </br></br></br> 
         <?php
         }
         ?>

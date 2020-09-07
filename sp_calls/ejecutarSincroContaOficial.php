@@ -41,10 +41,9 @@ $longArray = count($arrayGestiones);
 if (!$conexión) { 
   exit( "Error al conectar: " . $conexión);
 }else{
-  //BORRAMOS LA TABLA DE MAYORES
-  for($i=0; $i<$longArray-1; $i++){
 
-    $sqlDelete = "DELETE from po_mayores where anio='$arrayGestiones[$i]'";
+
+    $sqlDelete = "DELETE from po_mayores where anio='2020'";
     $stmtDelete = $dbh->prepare($sqlDelete);
     $flagSuccess=$stmtDelete->execute();
      
@@ -60,15 +59,9 @@ if (!$conexión) {
     }
 
     $txtBDGestion="";
-    if($arrayGestiones[$i]==2018){
-      $txtBDGestion="ibnorca2018";
-    }
-    if($arrayGestiones[$i]==2019){
-      $txtBDGestion="ibnorca2019";
-    }
-    if($arrayGestiones[$i]==2020){
-      $txtBDGestion="ibnorca2020";
-    }
+
+     $txtBDGestion="ibnorca2020";
+
 
     // query modificado IBNORCA - INGE (se agrego el nombre de base de datos a la tabla del from ibnorca2019.dbo.vw_MayorContable
     $sql = "SELECT v.fondo, v.ano, v.mes, CONVERT(char(10), v.fecha,126)as fecha, v.cta_n1, v.cta_n2, v.cta_n3, v.cta_n4, v.cuenta, v.partida, v.MontoBs, v.organismo, v.ML_Partida, v.glosa, v.GlosaDeta, v.clase, v.numero from $txtBDGestion.dbo.vw_MayorContable v";
@@ -151,7 +144,6 @@ if (!$conexión) {
     $stmtInsert=$dbh->prepare($sqlInserta);
     $stmtInsert->execute();
 
-  }
 
 }//FIN RECORRIDO GESTION
 odbc_close($conexión);
