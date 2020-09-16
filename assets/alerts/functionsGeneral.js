@@ -220,10 +220,15 @@ function addActividad(obj, cod_indicador, cod_unidad, cod_area) {
       ajax.send(null);
 }
 
-function addActividadPOAI(obj,cod_indicador,cod_unidad,cod_area) {
+function addActividadPOAI(obj,cod_indicador,cod_unidad,cod_area,cod_actividad,cod_personal) {
       numFilas++;
       cantidadItems++;
-      
+
+      console.log("codindicador: "+cod_indicador);
+      console.log("cod_unidad: "+cod_unidad);
+      console.log("cod_area : "+cod_area);
+      console.log("cod_actividad : "+cod_actividad);
+
       document.getElementById("cantidad_filas").value=numFilas;
 
       console.log("num: "+numFilas+" cantidadItems: "+cantidadItems);
@@ -235,7 +240,7 @@ function addActividadPOAI(obj,cod_indicador,cod_unidad,cod_area) {
       var divDetalle;
       divDetalle=document.getElementById("div"+numFilas);
       ajax=nuevoAjax();
-      ajax.open("GET","poai/ajaxActividadesPOAI.php?cod_indicador="+cod_indicador+"&cod_unidad="+cod_unidad+"&cod_area="+cod_area+"&codigo="+numFilas,true);
+      ajax.open("GET","poai/ajaxActividadesPOAI.php?cod_indicador="+cod_indicador+"&cod_unidad="+cod_unidad+"&cod_area="+cod_area+"&codigo="+numFilas+"&cod_actividad="+cod_actividad+"&cod_personal="+cod_personal,true);
       ajax.onreadystatechange=function(){
         if (ajax.readyState==4) {
           divDetalle.innerHTML=ajax.responseText;

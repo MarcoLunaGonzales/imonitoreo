@@ -195,6 +195,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
                     $codFondo=obtenerFondosReport($codigoX);
                     $codOrganismo=obtenerOrganismosReport($codArea);
+                    
                     $ingresosMes=ejecutadoIngresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,0,0);
                     $ingresosMesAcum=ejecutadoIngresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,1,0);
 
@@ -630,7 +631,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtGrupo->bindColumn('maximo', $edadMaximo);
                     while($rowGrupo = $stmtGrupo -> fetch(PDO::FETCH_BOUND)){
                       $cantidadAlumnos=calcularAlumnosGrupoEtario($codigoX,$codArea,$mesTemporal,$anioTemporal,$edadMinimo,$edadMaximo);
-                      $porcentajeAlumnos=($cantidadAlumnos/$cantidadAlumnosUnidad)*100;
+                      $porcentajeAlumnos=0;
+
+                      if($cantidadAlumnosUnidad>0){
+                        $porcentajeAlumnos=($cantidadAlumnos/$cantidadAlumnosUnidad)*100;
+                      }
+
                     ?>
                     <td class="text-right"><?=formatNumberInt($cantidadAlumnos);?></td>
                     <td class="text-right text-primary"><?=formatNumberDec($porcentajeAlumnos);?></td>

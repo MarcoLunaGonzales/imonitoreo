@@ -19,63 +19,39 @@ $codigo=$_GET['codigo'];
 $codigoIndicador=$_GET['cod_indicador'];
 $codUnidad=$_GET['cod_unidad'];
 $codArea=$_GET['cod_area'];
+$codActividad=$_GET['cod_actividad'];
+$codPersonal=$_GET['cod_personal'];
+
 $codUnidadHijosX=buscarHijosUO($codUnidad);
 $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$codArea);
 ?>
 
 <div class="col-md-12">
 	<div class="row">
-		<div class="col-sm-3">
-	        <div class="form-group">
-				<input type="hidden" name="codigo<?=$codigo;?>" id="codigo<?=$codigo;?>" value="0">
-				<select class="selectpicker form-control form-control-sm" name="norma_priorizada<?=$codigo;?>" id="norma_priorizada<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
-				  	<option value="">Sector</option>
-				  	<?php
-				  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores_economicos where cod_estado=1 order by 2");
-					$stmt->execute();
-					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-						$codigoX=$row['codigo'];
-						$nombreX=$row['nombre'];
-					?>
-						<option value="<?=$codigoX;?>"><?=$nombreX;?></option>	
-					<?php	
-					}
-				  	?>
-				</select>
+		<input type="hidden" name="codigo<?=$codigo;?>" id="codigo<?=$codigo;?>" value="0">
+				
+
+		<div class="col-sm-6">
+	    	<div class="form-group">
+	        <select class="selectpicker form-control form-control-sm" name="cod_padre<?=$codigo;?>" id="cod_padre<?=$codigo;?>" data-style="<?=$comboColor2;?>" data-live-search="true">
+			  	<option value="">Actividad Padre</option>
+			  	<?php
+			  	$sql="SELECT a.codigo, a.nombre from actividades_poa a where a.codigo='$codActividad' order by a.orden";
+			  	//echo $Sql;
+			  	$stmt = $dbh->prepare($sql);
+				$stmt->execute();
+				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+					$codigoX=$row['codigo'];
+					$nombreX=$row['nombre'];
+				?>
+					<option value="<?=$codigoX;?>" <?=($codigoX==$codPadreX)?"selected":"";?>  data-content="<span class='text-dark small font-weight-bold'><?=$nombreX;?></span>" selected><?=$nombreX;?></option>	
+				<?php
+				}
+			  	?>
+			</select>
 			</div>
-	    </div>
-		<div class="col-sm-3">
-	        <div class="form-group">
-				<select class="selectpicker form-control form-control-sm" name="norma<?=$codigo;?>" id="norma<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
-				  	<option value="">Norma</option>
-				  	<?php
-				  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
-					$stmt->execute();
-					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-						$codigoX=$row['codigo'];
-						$nombreX=$row['nombre'];
-					?>
-					<optgroup label="<?=$nombreX;?>">
-					<?php
-					  	$stmtY = $dbh->prepare("SELECT n.codigo, n.nombre, n.abreviatura FROM normas n where n.cod_sector='$codigoX' and n.cod_estado=1 order by 2");
-						$stmtY->execute();
-						while ($rowY = $stmtY->fetch(PDO::FETCH_ASSOC)) {
-							$codigoY=$rowY['codigo'];
-							$nombreY=$rowY['nombre'];
-							$nombreY=cutString($nombreY,80);
-							$abreviaturaY=$rowY['abreviatura'];
-					?>
-							<option value="<?=$codigoY;?>" data-subtext="<?=$nombreY?>"><?=$abreviaturaY;?></option>	
-					<?php
-						}
-					?>
-					</optgroup>
-					<?php	
-					}
-				  	?>
-				</select>
-			</div>
-	    </div>
+	  	</div>
+
 	  	<div class="col-sm-3">
 			<div class="form-group">
 				<label for="producto_esperado<?=$codigo;?>" class="bmd-label-floating">Producto Esperado</label>
@@ -120,12 +96,36 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 </div>
 <div class="col-md-12">
 	<div class="row">
-	    <div class="col-sm-8">
+	    <div class="col-sm-5">
 		    <div class="form-group">
           		<label for="actividad<?=$codigo;?>" class="bmd-label-floating">Actividad</label>
 				<textarea class="form-control" name="actividad<?=$codigo;?>" id="actividad<?=$codigo;?>" required="true" rows="1"></textarea>
 			</div>
 		</div>
+		<div class="col-sm-3">
+	    	<div class="form-group">
+	        <select class="selectpicker form-control form-control-sm" name="cod_personal<?=$codigo;?>" id="cod_personal<?=$codigo;?>" data-style="<?=$comboColor2;?>" data-live-search="true">
+			  	<option value="">Personal</option>
+			  	<?php
+			  	$sql="SELECT p.codigo, p.nombre, (select c.nombre from cargos c where c.codigo=pd.cod_cargo)as cargo from personal2 p, personal_datosadicionales pd, personal_unidadesorganizacionales pu where p.codigo=pd.cod_personal and p.codigo=pu.cod_personal and pu.cod_unidad='$codUnidad' and pd.cod_cargo in (select i.cod_cargo from indicadores_areascargos i where i.cod_indicador='$codigoIndicador' and i.cod_area='$codArea') ";
+			  	if($codPersonal==1){
+			  		$sql.=" and p.codigo in ($globalUser) ";
+			  	}
+			  	$sql.=" order by 1,2";
+			  	//echo $sql;
+			  	$stmt = $dbh->prepare($sql);
+				$stmt->execute();
+				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+					$codigoX=$row['codigo'];
+					$nombreX=$row['nombre'];
+				?>
+					<option value="<?=$codigoX;?>" <?=($codigoX==$codPadreX)?"selected":"";?>  data-content="<span class='text-dark small font-weight-bold'><?=$nombreX;?></span>" selected><?=$nombreX;?></option>	
+				<?php
+				}
+			  	?>
+			</select>
+			</div>
+	  	</div>
 	  	<div class="col-sm-3">
 			<div class="form-group">
 				<label for="tipo_seguimiento<?=$codigo;?>" class="bmd-label-floating">Unidad de Medida</label>

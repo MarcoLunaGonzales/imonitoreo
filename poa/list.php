@@ -15,11 +15,15 @@ $nameUnidad="";
 $nameArea="";
 $nameSector="-";
 
+
 if($area!=0 && $unidad!=0){
   $_SESSION["globalAreaPlanificacion"]=$area;
   $_SESSION["globalUnidadPlanificacion"]=$unidad;
   $nameUnidad=abrevUnidad($unidad);
   $nameArea=abrevArea($area);
+
+  $areaIndicador=$area;
+  $unidadIndicador=$unidad;
 }
 
 if($sector!=0){
@@ -96,7 +100,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                 <?php
                   $index=1;
                 	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
-                      $sqlNroAct="SELECT count(*)as contador from actividades_poa a where a.cod_unidadorganizacional='$unidad' and a.cod_area='$area' and a.cod_indicador='$codigoIndicador' and a.cod_estado=1 ";
+                      $sqlNroAct="SELECT count(*)as contador from actividades_poa a where a.cod_unidadorganizacional='$unidad' and a.cod_area='$area' and a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_actividadpadre=0 ";
                       if($sector>0){
                         $sqlNroAct.=" and a.cod_normapriorizada='$sector'";
                       }
@@ -114,7 +118,7 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                     <td><?=$abreviatura;?></td>
                     <td><?=$nombreIndicador;?></td>
                     <td class="text-center">
-                      <a href='index.php?opcion=listActividadesPOA&codigo=<?=$codigoIndicador;?>&area=0&unidad=0' rel="tooltip"  class="<?=$buttonDetail;?>">
+                      <a href='index.php?opcion=listActividadesPOA&codigo=<?=$codigoIndicador;?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>' rel="tooltip"  class="<?=$buttonDetail;?>">
                         <!--i class="material-icons" title="Ver Actividades">description</i-->
                           <strong>
                               <?=($nroActividadesIndicador==0)?"-":$nroActividadesIndicador;?>

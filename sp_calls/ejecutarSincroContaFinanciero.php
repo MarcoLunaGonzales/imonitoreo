@@ -61,7 +61,7 @@ if (!$conexión) {
     $txtBDGestion="ibnorca2020";
 
     // query modificado IBNORCA - INGE (se agrego el nombre de base de datos a la tabla del from ibnorca2019.dbo.vw_MayorContable
-    $sql = "SELECT v.fondo, v.ano, v.mes, CONVERT(char(10), v.fecha,126)as fecha, v.cta_n1, v.cta_n2, v.cta_n3, v.cta_n4, v.cuenta, v.partida, v.MontoBs, v.organismo, v.ML_Partida, v.glosa, v.GlosaDeta, v.clase, v.numero from $txtBDGestion.dbo.vw_MayorContable v where v.fecha>='2020-07-01 00:00:00' and fondo=2001";
+    $sql = "SELECT v.fondo, v.ano, v.mes, CONVERT(char(10), v.fecha,126)as fecha, v.cta_n1, v.cta_n2, v.cta_n3, v.cta_n4, v.cuenta, v.partida, v.MontoBs, v.organismo, v.ML_Partida, v.glosa, v.GlosaDeta, v.clase, v.numero from $txtBDGestion.dbo.vw_MayorContable v where v.fecha BETWEEN '2020-07-01 00:00:00' and '2020-07-31 23:59:59' and fondo=2001";
     // end modificado
 
     $rs = odbc_exec( $conexión, $sql );
@@ -164,12 +164,11 @@ echo "<h6>Hora Inicio Nuevo Sistema Proceso Mayores: " . date("Y-m-d H:i:s")."</
       $indiceMax=$rowMaxCod['maximo'];
     }
 
-  $bdFinanciero="ibnfinanciero300";
+  $bdFinanciero="bdifinanciero";
   $sqlFinanciero="SELECT cd.cod_unidadorganizacional, year(c.fecha)as anio, month(c.fecha)as mes, c.fecha, p.numero as codcuenta, (debe-haber)as monto, cd.cod_area, 
-  c.glosa, cd.glosa as glosadetalle, c.cod_tipocomprobante, c.numero
+  c.glosa, cd.glosa as glosadetalle, c.cod_tipocomprobante, c.numero, cd.cod_actividadproyecto
   from $bdFinanciero.comprobantes c, $bdFinanciero.comprobantes_detalle cd, $bdFinanciero.plan_cuentas p where c.codigo=cd.cod_comprobante and cd.cod_cuenta=p.codigo and 
-  year(c.fecha)=2020 and month(c.fecha)>=7 and
-  c.cod_estadocomprobante<>2;";
+  year(c.fecha)=2020 and month(c.fecha)>=7 and c.cod_estadocomprobante<>2;";
   //echo $sqlFinanciero;
   $stmtFin = $dbh->prepare($sqlFinanciero);
   $stmtFin->execute();
@@ -189,6 +188,12 @@ echo "<h6>Hora Inicio Nuevo Sistema Proceso Mayores: " . date("Y-m-d H:i:s")."</
       $glosaDetalle=$rowFin['glosadetalle'];
       $codTipoComp=$rowFin['cod_tipocomprobante'];
       $numero=$rowFin['numero'];
+      $codProyecto=$rowFin['cod_actividadproyecto'];
+      
+      $partidaProyecto="0";
+      if($codProyecto>0){
+        $partidaProyecto=partidaComponentesSIS($codProyecto);
+      }
 
       $codFondo=obtenerFondosReport($codUnidad);
       $codOrganismo=obtenerOrganismosReport($codArea);
@@ -231,9 +236,9 @@ echo "<h6>Hora Inicio Nuevo Sistema Proceso Mayores: " . date("Y-m-d H:i:s")."</
 
 
       ///INSERTANDO NUEVOS
-      $insert_str .= "('$indiceCodigo','$codFondo','$codAnio','$codMes','$fecha','0','0','0','0','$codCuenta','0','$monto','$codOrganismo','0','$glosa','$glosaDetalle','$clase','$numero'),"; 
+      $insert_str .= "('$indiceCodigo','$codFondo','$codAnio','$codMes','$fecha','0','0','0','0','$codCuenta','0','$monto','$codOrganismo','$partidaProyecto','$glosa','$glosaDetalle','$clase','$numero'),"; 
 
-      if($indiceCodigo%200==0){
+      if($indiceCodigo%100==0){
         $insert_str = substr_replace($insert_str, '', -1, 1);
         $sqlInserta="INSERT INTO po_mayores (indice, fondo, anio, mes, fecha, cta_n1, cta_n2, cta_n3, cta_n4, cuenta, partida, monto, organismo, ml_partida, glosa, glosa_detalle, clase, numero) 
           values ".$insert_str.";";
@@ -247,7 +252,7 @@ echo "<h6>Hora Inicio Nuevo Sistema Proceso Mayores: " . date("Y-m-d H:i:s")."</
         echo "*****************ERROR*****************";
         break;
       }
-      if($indiceCodigo%200==0){
+      if($indiceCodigo%100==0){
         echo "INSERTANDO.... Tuplas -> $indiceCodigo <br>";
       }
   }

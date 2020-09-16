@@ -531,10 +531,20 @@
 			$unidad=$_GET['unidad'];
 			require_once('poai/listActividadesPOAI.php');
 		}
+		if ($_GET['opcion']=='listActividadesPOAIDetalle') {
+			$codigo=$_GET['codigo'];
+			$area=$_GET['area'];
+			$unidad=$_GET['unidad'];
+			$actividad=$_GET['actividad'];
+			$vista=$_GET['vista'];
+			require_once('poai/listActividadesPOAIDetalle.php');
+		}
 		if ($_GET['opcion']=='registerPOAI') {
 			$codigo=$_GET['codigo'];
 			$area=$_GET['area'];
 			$unidad=$_GET['unidad'];
+			$actividad=$_GET['actividad'];
+			$vista=$_GET['vista'];
 			require_once('poai/registerPOAI.php');
 		}
 		if ($_GET['opcion']=='registerPOAIPlan') {

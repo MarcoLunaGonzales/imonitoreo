@@ -105,7 +105,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </thead>
                 <tbody>
                   <?php
-                  $sql="SELECT sd.codigo, sd.nombre, sum(e.cantidad)as totalCantidadServicios, sum(e.monto_facturado)as montoTotalFactura from ext_servicios e, servicios_oi_detalle sd, servicios_oi so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)=$mesTemporal and so.codigo=$codServicio group by sd.codigo, sd.nombre order by 4 desc";
+                  $sql="SELECT sd.codigo, sd.nombre, sum(e.cantidad)as totalCantidadServicios, sum(e.monto_facturado*0.87)as montoTotalFactura from ext_servicios e, servicios_oi_detalle sd, servicios_oi so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)=$mesTemporal and so.codigo=$codServicio group by sd.codigo, sd.nombre order by 4 desc";
                   $stmt = $dbh->prepare($sql);
                   $stmt->execute();
                   $stmt->bindColumn('codigo', $codigoServicio);

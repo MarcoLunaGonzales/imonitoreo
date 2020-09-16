@@ -8,7 +8,7 @@ $dbh = new Conexion();
 echo "<h3>Hora Inicio Proceso Cursos: " . date("Y-m-d H:i:s")."</h3>";
 
 
-/*$sql = 'CALL cubo_cursos2()';
+$sql = 'CALL cubo_cursos2()';
 $query = $dbhExterno->query($sql);
 $query -> setFetchMode(PDO::FETCH_ASSOC);
 
@@ -59,8 +59,11 @@ $sqlInserta="INSERT INTO ext_cursos (codigo, gestion, id_oficina, id_programa, s
 	values ".$insert_str.";";
 //echo $sqlInserta;
 $stmtInsert=$dbh->prepare($sqlInserta);
-$stmtInsert->execute();*/
+$stmtInsert->execute();
 
+
+
+/*
 $sql = "SELECT year(fecha_factura) as gestion, 5 as IdOficina, cd.IdPrograma as IdPrograma, ' ' as Sigla, cd.codigo_curso as Codigo,
 0 as carga_horaria, '' as tipo, cd.Nombre as nombre_curso, 0 as CantidadModulos, '' as Estado, 0 as costoModulo,
 df.nombrecliente as empresa, cd.NroModulo as NroModulo, cd.NombreModulo as tema, cd.FechaInicio as FechaInicio, cd.FechaFin as FechaFin, 
@@ -122,7 +125,7 @@ $sqlInserta="INSERT INTO ext_cursos (codigo, gestion, id_oficina, id_programa, s
 //echo $sqlInserta;
 $stmtInsert=$dbh->prepare($sqlInserta);
 $stmtInsert->execute();
-
+*/
 
 echo "<h3>Hora Fin Proceso Cursos: " . date("Y-m-d H:i:s")."</h3>";
 ?>

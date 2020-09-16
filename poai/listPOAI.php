@@ -124,6 +124,18 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                       <?php
                         $index=1;
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+
+                          $sqlNroAct="SELECT count(*)as contador from actividades_poa a where a.cod_unidadorganizacional in ($globalUnidad) and a.cod_area in ($globalArea) and a.cod_indicador='$codigoIndicador' and a.cod_estado=1 
+                            and a.cod_actividadpadre=0";
+                          
+                          //echo $sqlNroAct;
+
+                          $stmtNroAct = $dbh->prepare($sqlNroAct);
+                          $stmtNroAct->execute();
+                          $nroActividadesIndicador=0;
+                          while ($rowNroAct = $stmtNroAct->fetch(PDO::FETCH_ASSOC)) {
+                              $nroActividadesIndicador=$rowNroAct['contador'];
+                          }
                       ?>
                         <tr>
                           <td class="text-center"><?=$index;?></td>
@@ -132,8 +144,10 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                           <td><?=$abreviatura;?></td>
                           <td><?=$nombreIndicador;?></td>
                           <td class="text-center">
-                            <a href='index.php?opcion=listActividadesPOAI&codigo=<?=$codigoIndicador;?>&area=<?=$globalAreaPlanificacion;?>&unidad=<?=$globalUnidadPlanificacion;?>' rel="tooltip" title="Ver Actividades" class="<?=$buttonDetail;?>">
-                              <i class="material-icons">description</i>
+                            <a href='index.php?opcion=listActividadesPOAI&codigo=<?=$codigoIndicador;?>&area=<?=$globalAreaPlanificacion;?>&unidad=<?=$globalUnidadPlanificacion;?>' rel="tooltip" title="Ver Actividades" class="<?=$buttonDetailVerde;?>">
+                              <strong>
+                                <?=($nroActividadesIndicador==0)?"-":$nroActividadesIndicador;?>
+                              </strong>
                             </a>
                           </td>
                         </tr>

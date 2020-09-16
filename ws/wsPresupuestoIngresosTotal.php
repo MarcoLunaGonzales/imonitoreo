@@ -22,13 +22,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		$areaX=$datos['area'];
 		$anioX=$datos['anio'];
 		$mesX=$datos['mes'];
-
+		
+		$acumuladoX=0;
+		if(isset($datos['acumulado'])){
+			$acumuladoX=$datos['acumulado'];
+		}
+		
 		$fondos=obtenerFondosReport($oficinaX);
 		$organismos=obtenerOrganismosReport($areaX);
 
 
-		$presupuestoIngresos=presupuestoIngresosMes($fondos, $anioX, $mesX, $organismos, 1, 0);
-		$ejecutadoIngresos=ejecutadoIngresosMes($fondos, $anioX, $mesX, $organismos, 1, 0);
+		$presupuestoIngresos=presupuestoIngresosMes($fondos, $anioX, $mesX, $organismos, $acumuladoX, 0);
+		$ejecutadoIngresos=ejecutadoIngresosMes($fondos, $anioX, $mesX, $organismos, $acumuladoX, 0);
 
 		$resultado=array("estado"=>true, "mensaje"=>"Datos", "presupuesto"=>$presupuestoIngresos ,"ejecutado"=>$ejecutadoIngresos);
 	}else{

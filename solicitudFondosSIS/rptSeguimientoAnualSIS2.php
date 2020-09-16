@@ -34,7 +34,7 @@ $stmt->execute();
 
 $sql="SELECT codigo, nombre, abreviatura, nivel, cod_padre, cod_estado, partida, indice, cod_usuario from componentessis_orden 
   where cod_usuario='$globalUsuario' and nivel in (1,2) ORDER BY indice";
-//echo $sql;
+
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 
@@ -112,6 +112,8 @@ $stmt->bindColumn('nivel', $nivelComponente);
                       <tbody>
                       <?php
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
+                          //echo "entro1";
+
                           $responsable=obtenerResponsableSIS($codigoComponente);
 
 
@@ -124,7 +126,8 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           if($nivelComponente==3){
                             $styleText="text-left font-weight-bold small";
                           }
-                          
+                          $montoPresComponente=0;
+                          $montoEjecucionComponente=0;
                           $montoPresComponente=montoPresupuestoComponente($gestion,$anio,$mes,$codigoComponente,$nivelComponente);
                           $montoEjecucionComponente=montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);
                       ?>
@@ -172,6 +175,6 @@ $stmt->bindColumn('nivel', $nivelComponente);
         </div>
     </div>
 
-<script type="text/javascript">
+<!--script type="text/javascript">
   totalesSIS();
-</script>
+</script-->

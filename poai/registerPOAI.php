@@ -6,6 +6,7 @@ $dbh = new Conexion();
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
+
 $globalNombreGestion=$_SESSION["globalNombreGestion"];
 $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
@@ -22,15 +23,21 @@ $codAreaX=0;
 
 $areaIndicador=$area;
 $unidadIndicador=$unidad;
+$actividadIndicador=$actividad;
+$vistaIndicador=$vista;
+
 
 $codUnidadX=$unidad;
 $codAreaX=$area;
+
 
 $nameUnidad="";
 $nameArea="";
 $nameSector="-";
 $nameUnidad=abrevUnidad($unidadIndicador);
 $nameArea=abrevArea($areaIndicador);
+
+$nombreActividadPadre=nameActividad($actividadIndicador);
 
 
 $codUnidadHijosX=buscarHijosUO($codUnidadX);
@@ -40,10 +47,14 @@ $table="actividades_poa";
 $moduleName="Actividades POAI";
 $sqlCount="";
 if($globalAdmin==1){
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_estado=1 and poai=1 and cod_actividadpadre>0";	
+	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_estado=1 and poai=1 and (cod_actividadpadre>0 or cod_actividadpadre=-1000)";	
 }else{
-	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_area in ($globalArea) and cod_unidadorganizacional in ($globalUnidad) and cod_estado=1 and poai=1 and cod_actividadpadre>0";	
+	$sqlCount="SELECT count(*)as nro_registros FROM actividades_poa where cod_indicador in ($codigoIndicador) and cod_area in ($globalArea) and cod_unidadorganizacional in ($globalUnidad) and cod_estado=1 and poai=1 and cod_actividadpadre='$actividadIndicador' ";
+	if($vistaIndicador==1){
+		$sqlCount.=" and cod_personal='$globalUser' ";		
+	}	
 }
+//echo $sqlCount;
 $stmtX = $dbh->prepare($sqlCount);
 $stmtX->execute();
 while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
@@ -64,13 +75,16 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 			<input type="hidden" name="cantidad_filas" id="cantidad_filas" value="<?=$contadorRegistros;?>">
 			<input type="hidden" name="codigoUnidad" id="codigoUnidad" value="<?=$codUnidadX;?>">
 			<input type="hidden" name="codigoArea" id="codigoArea" value="<?=$codAreaX;?>">
+			<input type="hidden" name="codigoActividad" id="codigoActividad" value="<?=$actividadIndicador;?>">
+			<input type="hidden" name="vista" id="vista" value="<?=$vistaIndicador;?>">
+
 			<div class="card">
 				<div class="card-header <?=$colorCard;?> card-header-text">
 					<div class="card-icon">
                     	<i class="material-icons">assignment</i>
                   	</div>
 
-					  <h4 class="card-title">Registrar <?=$moduleName;?></h4>
+					  <h4 class="card-title">Registrar <?=$moduleName;?> - <span class="text-danger font-weight-bold"><?=$nombreActividadPadre;?></span></h4>
 					  <h6 class="card-title">Objetivo</span>: <?=$nombreObjetivo;?> - Indicador: <?=$nombreIndicador;?></h6>
 	                    <h6 class="card-title">Unidad: <span class="text-danger"><?=$nameUnidad;?></span> - Area: <span class="text-danger"><?=$nameArea;?></span> - Sector: <span class="text-danger"><?=$nameSector;?></span></h6>
 				</div>
@@ -92,8 +106,11 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 					<?php
 					$sqlLista="SELECT a.codigo, a.orden, a.nombre, a.cod_normapriorizada,
 					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado, a.cod_norma,
-					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.cod_tipoactividad, a.cod_periodo, a.cod_funcion
-					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional in ($codUnidadX) and a.cod_area in ($codAreaX) and a.poai=1 and (cod_actividadpadre>0 or cod_actividadpadre=-1000 ) and cod_personal='$globalUser' ";
+					(SELECT s.codigo from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_norma)as sector, a.producto_esperado, a.cod_tiposeguimiento, a.cod_tiporesultado, a.cod_unidadorganizacional, a.cod_area, a.cod_datoclasificador, a.cod_tipoactividad, a.cod_periodo, a.cod_funcion, a.cod_actividadpadre, a.cod_personal
+					 from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional in ($codUnidadX) and a.cod_area in ($codAreaX) and a.poai=1 and cod_actividadpadre='$actividadIndicador'  ";
+					if($vistaIndicador==1){
+						$sqlLista.=" and cod_personal='$globalUser' ";
+					}
 					$sqlLista.=" order by a.cod_unidadorganizacional, a.cod_area, a.orden";
 
 					//echo $sqlLista;
@@ -118,9 +135,11 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 					$stmtLista->bindColumn('cod_tipoactividad',$codTipoActividad);
 					$stmtLista->bindColumn('cod_periodo',$codPeriodo);
 					$stmtLista->bindColumn('cod_funcion',$codFuncion);
+					$stmtLista->bindColumn('cod_actividadpadre',$codPadreX);
+					$stmtLista->bindColumn('cod_personal',$codPersonalX);
 					?>
 					<fieldset id="fiel" style="width:100%;border:0;">
-						<button type="button" name="add" value="add" class="btn btn-danger btn-round btn-fab" onClick="addActividadPOAI(this,<?=$codigoIndicador;?>,<?=$codUnidadX;?>,<?=$codAreaX;?>)" accesskey="a">
+						<button type="button" name="add" value="add" class="btn btn-danger btn-round btn-fab" onClick="addActividadPOAI(this,<?=$codigoIndicador;?>,<?=$unidadIndicador;?>,<?=$areaIndicador;?>,<?=$actividadIndicador;?>,<?=$vistaIndicador;?>)" accesskey="a">
 		                              <i class="material-icons">add</i>
 		                </button>						
 					        	<?php
@@ -131,11 +150,12 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 			                    ?>
 						<div id="div<?=$index;?>">	
 
+                        	<input type="hidden" name="codigo<?=$index;?>" id="codigo<?=$index;?>" value="<?=$codigo;?>">
+
 		                    <div class="col-md-12">
 								<div class="row">
-									<div class="col-sm-3">
+									<!--div class="col-sm-3">
 				                        <div class="form-group">
-			                        	<input type="hidden" name="codigo<?=$index;?>" id="codigo<?=$index;?>" value="<?=$codigo;?>">
 				                        <select class="selectpicker form-control form-control-sm" name="norma_priorizada<?=$index;?>" id="norma_priorizada<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 									  		<option value="">Sector</option>
 										  	<?php
@@ -179,6 +199,25 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 											?>
 											</optgroup>
 											<?php	
+											}
+										  	?>
+										</select>
+										</div>
+		                          	</div-->
+
+			                        <div class="col-sm-6">
+			                        	<div class="form-group">
+								        <select class="selectpicker form-control form-control-sm" name="cod_padre<?=$index;?>" id="cod_padre<?=$index;?>" data-style="<?=$comboColor2;?>" data-live-search="true">
+										  	<option value="">Actividad Padre</option>
+										  	<?php
+										  	$stmt = $dbh->prepare("SELECT a.codigo, a.nombre from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_unidadorganizacional in ($codUnidadX) and a.cod_area in ($codAreaX) and a.cod_actividadpadre=0 order by a.orden");
+											$stmt->execute();
+											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+												$codigoX=$row['codigo'];
+												$nombreX=$row['nombre'];
+											?>
+												<option value="<?=$codigoX;?>" <?=($codigoX==$codPadreX)?"selected":"";?>  data-content="<span class='text-dark small font-weight-bold'><?=$nombreX;?></span>" ><?=$nombreX;?></option>	
+											<?php
 											}
 										  	?>
 										</select>
@@ -229,13 +268,33 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 							</div>
 							<div class="col-md-12">
 								<div class="row">
-									<div class="col-sm-8">
+									<div class="col-sm-5">
 					                    <div class="form-group">
 					                    <label for="actividad<?=$index;?>" class="bmd-label-floating">Actividad</label>			
-			                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" onkeyup="javascript:this.value=this.value.toUpperCase();"><?=$nombre;?>
-			                          	</textarea>	
+			                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" ><?=$nombre;?></textarea>	
 		 								</div>
 		                          	</div>
+
+		                          	<div class="col-sm-3">
+								    	<div class="form-group">
+								        <select class="selectpicker form-control form-control-sm" name="cod_personal<?=$index;?>" id="cod_personal<?=$index;?>" data-style="<?=$comboColor2;?>" data-live-search="true">
+										  	<option value="">Personal</option>
+										  	<?php
+										  	$sql="SELECT p.codigo, p.nombre, (select c.nombre from cargos c where c.codigo=pd.cod_cargo)as cargo from personal2 p, personal_datosadicionales pd, personal_unidadesorganizacionales pu where p.codigo=pd.cod_personal and p.codigo=pu.cod_personal and pu.cod_unidad='$unidadIndicador' and pd.cod_cargo in (select i.cod_cargo from indicadores_areascargos i where i.cod_indicador='$codigoIndicador' and i.cod_area='$areaIndicador') and p.codigo in ($codPersonalX) order by 1,2";
+										  	//echo $sql;
+										  	$stmt = $dbh->prepare($sql);
+											$stmt->execute();
+											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+												$codigoX=$row['codigo'];
+												$nombreX=$row['nombre'];
+											?>
+												<option value="<?=$codigoX;?>" <?=($codigoX==$codPersonalX)?"selected":"";?>  data-content="<span class='text-dark small font-weight-bold'><?=$nombreX;?></span>" selected><?=$nombreX;?></option>	
+											<?php
+											}
+										  	?>
+										</select>
+										</div>
+								  	</div>
 
                           		  	<div class="col-sm-3">
 										<div class="form-group">
@@ -300,7 +359,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 													$nombreX=$row['nombre_funcion'];
 													$nombreX=substr($nombreX, 0,100)."...";
 												?>
-													<option value="<?=$codigoX;?>"  <?=($codigoX==$codFuncion)?"selected":"";?> ><?=$nombreX;?></option>	
+													<option value="<?=$codigoX;?>"  <?=($codigoX==$codFuncion)?"selected":"";?> data-content="<span class='small font-weight-bold'><?=$nombreX;?></span>" ><?=$nombreX;?></option>	
 												<?php	
 												}
 											  	?>

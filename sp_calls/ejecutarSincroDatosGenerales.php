@@ -197,7 +197,7 @@ echo "Programas(Cursos) Sincronizado!!<br>";
 
 
 //SERVICIOS OI
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"107");
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"107", "todos"=>1);
 $url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
 $tableInsert="servicios_oi";
 $json=callService($parametros, $url);
@@ -224,7 +224,7 @@ echo "Servicios OI Sincronizado<br>";
 
 
 //SERVICIOS TLQ
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"403");
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"403", "todos"=>1);
 $url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
 $tableInsert="servicios_tlq";
 $json=callService($parametros, $url);
@@ -250,7 +250,7 @@ foreach ($detalle as $objDet){
 echo "Servicios TLQ Sincronizado!!<br>";
 
 //SERVICIOS TCP
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"108");
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"108", "todos"=>1);
 $url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
 $tableInsert="servicios_tcp";
 $json=callService($parametros, $url);
@@ -276,8 +276,8 @@ foreach ($detalle as $objDet){
 echo "Servicios TCP Sincronizado!!<br>";
 
 
-//SERVICIOS TCP
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"109");
+//SERVICIOS TCS
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"109", "todos"=>1);
 $url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
 $tableInsert="servicios_tcs";
 $json=callService($parametros, $url);
@@ -421,7 +421,7 @@ $stmt->execute();
 
 
 //DETALLE DE LOS SERVICIOS
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"Niveles", "padre"=>"80");
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"Niveles", "padre"=>"80", "todos"=>1);
 $url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
 
 $json=callService($parametros, $url);

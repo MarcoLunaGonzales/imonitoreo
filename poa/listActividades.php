@@ -15,6 +15,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 
 $codigoIndicador=$codigo;
+$unidadIndicador=$unidad;
+$areaIndicador=$area;
 
 $globalAreaPlanificacion=$_SESSION["globalAreaPlanificacion"];
 $globalUnidadPlanificacion=$_SESSION["globalUnidadPlanificacion"];
@@ -73,7 +75,7 @@ $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n wh
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area,
 (a.cod_datoclasificador)as datoclasificador, 
 (select p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, actividad_extra, clave_indicador, poai
- from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 "; 
+ from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_actividadpadre=0 "; 
   //SI EL CONTADOR IDENTIFICA QUE HAY UNA PERSONA ASIGNADA AL INDICADOR LO FILTRA POR PERSONA
 /*if($contadorVerifica>0){
   $sql.=" and a.cod_personal in ($globalUser) ";
@@ -149,8 +151,8 @@ $stmt->bindColumn('poai', $actividadPOAI);
                           <th>Norma</th>
                           <th>Act.CMI</th>
                           <th>Clasificador</th>
-                          <th>Personal POAI</th>
                           <th data-orderable="false">Actions</th>
+                          <th>Actividades POAI</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -168,6 +170,15 @@ $stmt->bindColumn('poai', $actividadPOAI);
                           }else{
                             $iconCheck="clear";
                           }
+                          $sqlVerifica="SELECT count(*)as contador from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_area in ($codArea) and a.cod_unidadorganizacional in ($codUnidad) 
+                            and a.cod_actividadpadre='$codigo' and a.poai=1 ";
+                          //echo $sqlVerifica;
+                          $stmtVerifica=$dbh->prepare($sqlVerifica);
+                          $stmtVerifica->execute();
+                          $contadorVerifica=0;
+                          while($rowVerifica = $stmtVerifica->fetch(PDO::FETCH_ASSOC)) {
+                            $contadorVerifica=$rowVerifica['contador'];
+                          }
                       ?>
                         <tr class="<?=($actividadPOAI==1)?'text-danger':''?>" >
                           <td class="text-center"><?=$index;?></td>
@@ -181,7 +192,6 @@ $stmt->bindColumn('poai', $actividadPOAI);
                             </div>
                           </td>
                           <td class="text-left small"><?=$nombreDatoClasificador;?> (<?=$datoClasificador;?>)</td>
-                          <td><?=$personal;?></td>
                           <td class="td-actions text-right">
                             <?php
                             if($codEstadoPOAGestion!=3 || $actividadExtra==1){
@@ -199,6 +209,14 @@ $stmt->bindColumn('poai', $actividadPOAI);
                               <i class="material-icons">edit</i>
                             </a>
                           </td>
+                          <td class="td-actions text-right">
+                            <a href='index.php?opcion=listActividadesPOAIDetalle&codigo=<?=$codigoIndicador;?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>&actividad=<?=$codigo;?>&vista=0' rel="tooltip"  class="<?=$buttonDetailRojo;?>">
+                              <strong>
+                                <?=($contadorVerifica==0)?"-":$contadorVerifica;?>
+                              </strong>
+                            </a>
+                          </td>
+
                         </tr>
             <?php
             							$index++;

@@ -11,17 +11,17 @@ $sIde = "monitoreo";
 $sKey = "837b8d9aa8bb73d773f5ef3d160c9b17";
 
 //SERVICIOS TLQ
-/*$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"Niveles", "padre"=>"80");
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"HijoPadre", "padre"=>"109", "todos"=>1);
 $url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
-*/
+
 
 /*$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"Clientes"); 
 $url="http://ibnored.ibnorca.org/wsibno/cliente/ws-cliente-listas.php";
 */
 
 //$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "padre"=>"45");//oficinas
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "padre"=>"107");//areas
-$url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
+//$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "padre"=>"107");//areas
+//$url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
 
 // $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "padre"=>"6");
 // $url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";

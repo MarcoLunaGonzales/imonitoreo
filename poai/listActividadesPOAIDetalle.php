@@ -22,12 +22,15 @@ $codigoIndicador=$codigo;
 
 $areaIndicador=$area;
 $unidadIndicador=$unidad;
+$actividadIndicador=$actividad;
+$vistaIndicador=$vista;
 
 //echo $area." ".$unidad;
 //echo $areaIndicador." ".$unidadIndicador;
 
 $nombreIndicador=nameIndicador($codigoIndicador);
 $nombreObjetivo=nameObjetivoxIndicador($codigoIndicador);
+$nombreActividadPadre=nameActividad($actividadIndicador);
 
 $nameUnidad="";
 $nameArea="";
@@ -37,7 +40,7 @@ $nameUnidad=abrevUnidad($unidadIndicador);
 $nameArea=abrevArea($areaIndicador);
 
 $table="actividades_poa";
-$moduleName="Actividades POA";
+$moduleName="Actividades POAI";
 $globalUser=$_SESSION["globalUser"];
 $globalGestion=$_SESSION["globalGestion"];
 $globalUnidad=$_SESSION["globalUnidad"];
@@ -65,10 +68,14 @@ $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n wh
 (a.cod_tiposeguimiento)as tipodato, 
 a.producto_esperado, a.cod_unidadorganizacional, a.cod_area,
 (SELECT c.nombre from $nombreTablaClasificador c where c.codigo=a.cod_datoclasificador)as datoclasificador, 
+(select p.nombre from personal2 p where p.codigo=a.cod_personal) as personal, a.poai,
 (select t.nombre from tipos_actividadpoa t where t.codigo=a.cod_tipoactividad) as tipo_actividad,
-(select p.nombre from periodos p where p.codigo=a.cod_periodo) as periodo
- from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_actividadpadre=0 and (a.poai is null or a.poai<>1) and cod_estado=1 "; 
- if($globalAdmin==0){
+(select p.nombre from periodos p where p.codigo=a.cod_periodo) as periodo, a.cod_funcion, (select cf.nombre_funcion from cargos_funciones cf where cf.cod_funcion=a.cod_funcion)as funcion, a.cod_actividadpadre
+ from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.poai=1 and a.cod_actividadpadre='$actividadIndicador' "; 
+if($vista!=0){
+    $sql.=" and a.cod_personal='$globalUser' ";
+}
+if($globalAdmin==0){
   $sql.=" and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad)";
 } 
 if($areaIndicador!=0){
@@ -98,8 +105,13 @@ $stmt->bindColumn('producto_esperado', $productoEsperado);
 $stmt->bindColumn('cod_unidadorganizacional', $codUnidad);
 $stmt->bindColumn('cod_area', $codArea);
 $stmt->bindColumn('datoclasificador', $datoClasificador);
+$stmt->bindColumn('personal', $personal);
+$stmt->bindColumn('poai', $poai);
 $stmt->bindColumn('tipo_actividad', $tipoActividad);
 $stmt->bindColumn('periodo', $periodo);
+$stmt->bindColumn('cod_funcion', $codFuncion);
+$stmt->bindColumn('funcion', $nombreFuncion);
+$stmt->bindColumn('cod_actividadpadre', $codActividadPadreX);
 
 
 ?>
@@ -112,7 +124,7 @@ $stmt->bindColumn('periodo', $periodo);
                   <div class="card-icon">
                     <i class="material-icons">assignment</i>
                   </div>
-                  <h4 class="card-title"><?=$moduleName?></h4>
+                  <h4 class="card-title"><?=$moduleName?> - <span class="text-danger font-weight-bold"><?=$nombreActividadPadre;?></span></h4>
                   <h6 class="card-title">Objetivo: <?=$nombreObjetivo?></h6>
                   <h6 class="card-title">Indicador: <?=$nombreIndicador?> &nbsp;&nbsp;&nbsp;
                     <!--a href="#" class="<?=$buttonCeleste;?> btn-round" data-toggle="modal" data-target="#myModal"  title="Filtrar">
@@ -132,7 +144,9 @@ $stmt->bindColumn('periodo', $periodo);
                           <th>Actividad</th>
                           <th>Producto Esperado</th>
                           <th>Clasificador</th>
-                          <th data-orderable="false">SubActividades</th>
+                          <th>Personal POAI</th>
+                          <th>Funcion</th>
+                          <th data-orderable="false">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -146,16 +160,6 @@ $stmt->bindColumn('periodo', $periodo);
                           if(strlen($nombrePadre)>100){
                             $nombrePadre=substr($nombrePadre, 0, 110)."..."; 
                           }
-
-                          $sqlVerifica="SELECT count(*)as contador from actividades_poa a where a.cod_indicador='$codigoIndicador' and a.cod_estado=1 and a.cod_area in ($globalArea) and a.cod_unidadorganizacional in ($globalUnidad) 
-                            and a.cod_actividadpadre='$codigo' and a.cod_personal='$globalUser' and a.poai=1 and (a.cod_actividadpadre='$codigo')";
-                          //echo $sqlVerifica;
-                          $stmtVerifica=$dbh->prepare($sqlVerifica);
-                          $stmtVerifica->execute();
-                          $contadorVerifica=0;
-                          while($rowVerifica = $stmtVerifica->fetch(PDO::FETCH_ASSOC)) {
-                            $contadorVerifica=$rowVerifica['contador'];
-                          }
                       ?>
                         <tr>
                           <td class="text-center"><?=$index;?></td>
@@ -163,14 +167,19 @@ $stmt->bindColumn('periodo', $periodo);
                           <td class="text-left small"><?=$nombre;?></td>
                           <td class="text-left small"><?=$productoEsperado;?></td>
                           <td class="text-left small"><?=$datoClasificador;?></td>
+                          <td class="text-left small"><?=$personal;?></td>
+                          <td class="text-left small"><?=$nombreFuncion;?></td>
+                          <?php
+                          if($poai==1){
+                          ?>
                           <td class="td-actions text-right">
-                            <a href='index.php?opcion=listActividadesPOAIDetalle&codigo=<?=$codigoIndicador;?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>&actividad=<?=$codigo;?>&vista=1' rel="tooltip"  class="<?=$buttonDetailRojo;?>">
-                        <!--i class="material-icons" title="Ver Actividades">description</i-->
-                              <strong>
-                                <?=($contadorVerifica==0)?"-":$contadorVerifica;?>
-                              </strong>
-                            </a>
+                            <button rel="tooltip" class="btn btn-danger" onclick="alerts.showSwal('warning-message-and-confirmation','index.php?opcion=deletePOAAct&codigo=<?=$codigo;?>&codigo_indicador=<?=$codigoIndicador?>')">
+                              <i class="material-icons">close</i>
+                            </button>
                           </td>
+                          <?php
+                          }
+                          ?>
                         </tr>
             <?php
             							$index++;
@@ -182,10 +191,10 @@ $stmt->bindColumn('periodo', $periodo);
                 </div>
               </div>
         				<div class="card-body">
-                    <!--button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAI&codigo=<?=$codigoIndicador?>&area=<?=$area;?>&unidad=<?=$unidad;?>'">Registrar</button-->
+                    <button class="<?=$button;?>" onClick="location.href='index.php?opcion=registerPOAI&codigo=<?=$codigoIndicador?>&area=<?=$area;?>&unidad=<?=$unidad;?>&actividad=<?=$actividadIndicador;?>&vista=<?=$vistaIndicador;?>'">Registrar</button>
 
-                    <!--a href="#" onclick="javascript:window.open('poai/registerPOAIPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>')" class="<?=$button;?>">Planificar</a-->  
-                    <a href="?opcion=listPOAI&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>" class="<?=$buttonCancel;?>">Volver Atras</a> 
+                    <a href="#" onclick="javascript:window.open('poai/registerPOAIPlan.php?codigo=<?=$codigoIndicador?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>&actividad=<?=$actividadIndicador;?>')" class="<?=$button;?>">Planificar</a>  
+                    <a href="?opcion=listPOAI&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>&actividad=<?=$actividadIndicador;?>" class="<?=$buttonCancel;?>">Cancelar</a> 
                 </div>
             </div>
           </div>  

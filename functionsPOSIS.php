@@ -66,6 +66,7 @@ function presupuestoIngresosMesVersion($agencia, $anio, $mes, $organismo, $acumu
 
 function ejecutadoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cuenta){
   $dbh = new Conexion();
+  //echo "agencia: ".$agencia;
   $agencia=str_replace('|', ',', $agencia);
   $sql="SELECT distinct(pc.codigo) as codigo, pc.nivel from po_plancuentas pc where pc.codigo like '4%'";
   if($organismo!=0){
@@ -269,7 +270,7 @@ function ejecutadoEgresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cue
 //ESTA FUNCION ES IDENTICA A LA DE ejecutadoEgresosMes
 function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa){
    //en la variable dn_sa enviamos el organismo del que queremos ver
-  /*if($dn_sa==1){
+  if($dn_sa==1){
     $campo="porcentaje_dn";
     $organismoDNSA="501";
   }else{
@@ -380,17 +381,19 @@ function montoPresupuestoComponente($gestion, $anio, $mes, $componente, $nivel){
   $dbh = new Conexion();
   $codigosX="";
   $codigosX=devolverCodigos($componente,$nivel,2);
+  
   //echo $componente." -  ".$codigosX."<br>";
+  
   //$sql="SELECT sum(p.monto)as monto from sis_presupuesto p where p.cod_gestion='$gestion' and p.cod_ano='$anio' and p.cod_mes<='$mes' and p.cod_cuenta in ($codigosX)";
   $sql="SELECT sum(p.monto)as monto from sis_presupuesto p where p.cod_gestion='$gestion' and p.cod_ano='$anio' and p.cod_cuenta in ($codigosX)";
+  //echo $sql."<br>";
   //SACAMOS EL PRESUPUESTO TOTAL ESTO DEBE REVISARSE
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
   $monto=0;
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $monto=$row['monto'];
-  }*/
-  $monto=0;
+  }
   return($monto);
 }
 

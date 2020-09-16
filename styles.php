@@ -14,11 +14,16 @@ $buttonDetailMin="btn btn-info";
 $buttonCancel="btn btn-danger";
 
 $buttonDetail="btn btn-fab btn-info";
+$buttonDetailVerde="btn btn-fab btn-success";
+$buttonDetailRojo="btn btn-fab btn-danger";
+
 $buttonDetailDelete="btn btn-fab btn-danger";
 
 $buttonCard="card-header-rose card-header-icon";
 
 $comboColor="btn btn-info";
+
+$comboColor2="btn btn-success";
 
 $colorCardDetail="card-header-rose";
 

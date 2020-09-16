@@ -192,6 +192,18 @@ function nameArea($codigo){
    return($nombreX);
 }
 
+function partidaComponentesSIS($codigo){
+   $dbh = new Conexion();
+   $stmt = $dbh->prepare("select c.partida from componentessis c where c.codigo=:codigo");
+   $stmt->bindParam(':codigo',$codigo);
+   $stmt->execute();
+   $nombreX="0";
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $nombreX=$row['partida'];
+   }
+   return($nombreX);
+}
+
 function nameAccNum($codigo){
    $dbh = new Conexion();
    $stmt = $dbh->prepare("SELECT nombre_en FROM external_costs where codigo=:codigo");
@@ -314,6 +326,18 @@ function abrevOrganismo($codigo){
 function nameUnidad($codigo){
    $dbh = new Conexion();
    $stmt = $dbh->prepare("SELECT nombre FROM unidades_organizacionales where codigo=:codigo");
+   $stmt->bindParam(':codigo',$codigo);
+   $stmt->execute();
+   $nombreX="";
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $nombreX=$row['nombre'];
+   }
+   return($nombreX);
+}
+
+function nameActividad($codigo){
+   $dbh = new Conexion();
+   $stmt = $dbh->prepare("SELECT nombre FROM actividades_poa where codigo=:codigo");
    $stmt->bindParam(':codigo',$codigo);
    $stmt->execute();
    $nombreX="";
