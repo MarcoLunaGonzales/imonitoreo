@@ -313,6 +313,9 @@ $obj=json_decode($json);
 $stmtDel=$dbh->prepare("DELETE FROM $tableInsert");
 $flagDel=$stmtDel->execute();
 
+$stmtFirst = $dbh->prepare("INSERT INTO $tableInsert (codigo, nombre, abreviatura, cod_estado) VALUES (0,'Sin Código IAF','S/C',1)");
+$flagSuccessFirst=$stmtFirst->execute();
+
 $detalle=$obj->lista;
 foreach ($detalle as $objDet){
   $codigoX=$objDet->IdClasificador;
@@ -544,10 +547,13 @@ foreach ($detalle as $objDet){
 
 echo "Servicios Detalle OI, TCP, TCS y TLQ Sincronizados!!!<br>";
 
+  include "call_cursos.php";
 
+  include "call_alumnoscursos2.php";
 
-echo "<h6>Hora Fin Proceso Mayores: " . date("Y-m-d H:i:s")."</h6>";
+  include "call_servicios.php";
 
+  include "call_certificados.php";
 
 ?>
 

@@ -2337,7 +2337,133 @@ if($globalPerfilX==7){
     </div>
 <?php
 }
-?>
 
+if($globalPerfilX==8){
+?>
+<div class="sidebar" data-color="azure" data-background-color="black" data-image="assets/img/sidebar-1.jpg">
+      <div class="logo">
+        <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+          <img src="assets/img/logoibnorca.fw.png" width="30" />
+        </a>
+        <a href="http://www.creative-tim.com" class="simple-text logo-normal">
+          SIMC IBNORCA
+        </a>
+      </div>
+      <div class="sidebar-wrapper">
+        <div class="user">
+          <div class="photo">
+            <img src="assets/img/faces/persona1.png" />
+          </div>
+          <div class="user-info">
+            <a data-toggle="collapse" href="#collapseExample" class="username">
+              <span>
+                <?=$globalNameUserX;?>
+                <!--b class="caret"></b-->
+              </span>
+            </a>
+          </div>
+        </div>
+
+        <ul class="nav">
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#operativo">
+              <i class="material-icons">drag_indicator</i>
+              <p> Planificación Operativa
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="operativo">
+              <ul class="nav">
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listPOAI&area=0&unidad=0">
+                    <span class="sidebar-mini"> POAI </span>
+                    <span class="sidebar-normal">POAI Programacion</span>
+                  </a>
+                </li>                
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listPOAIEjecucion">
+                    <span class="sidebar-mini"> POAIE </span>
+                    <span class="sidebar-normal">POAI Ejecucion</span>
+                  </a>
+                </li>  
+
+              </ul>
+            </div>
+          </li>
+
+
+          <li class="nav-item ">
+            <a class="nav-link" data-toggle="collapse" href="#reportespoa">
+              <i class="material-icons">assessment</i>
+              <p> Reportes POA
+                <b class="caret"></b>
+              </p>
+            </a>
+            <div class="collapse" id="reportespoa">
+              <ul class="nav">
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="reportes/rptObjConf.php" target="_blank">
+                    <span class="sidebar-mini"> RO </span>
+                    <span class="sidebar-normal"> Reporte Obj. Estrategicos</span>
+                  </a>
+                </li>                
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPlanificacionPOADetalle">
+                    <span class="sidebar-mini"> PPOA </span>
+                    <span class="sidebar-normal"> Planificacion POA</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpPlanificacionPOASector">
+                    <span class="sidebar-mini"> PPS </span>
+                    <span class="sidebar-normal"> Planificacion POA x Sector</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpEjecucionPOA">
+                    <span class="sidebar-mini"> EPOA </span>
+                    <span class="sidebar-normal"> Ejecucion POA</span>
+                  </a>
+                </li>  
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=rptOpEjecucionPOADetalle">
+                    <span class="sidebar-mini"> EPD </span>
+                    <span class="sidebar-normal"> Ejecucion POA Detalle</span>
+                  </a>
+                </li>
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOA">
+                    <span class="sidebar-mini"> SPOA </span>
+                    <span class="sidebar-normal">Seguimiento POA</span>
+                  </a>
+                </li> 
+
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=seguimientoPOAxArea">
+                    <span class="sidebar-mini"> IxA </span>
+                    <span class="sidebar-normal">Indicadores x Area</span>
+                  </a>
+                </li> 
+
+
+              </ul>
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+<?php
+}
+?>
 
 

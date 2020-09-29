@@ -144,7 +144,7 @@ $nombreArea=nameArea($codArea);
             $codArea="12";
             $nombreArea=nameArea($codArea);
             ?>
-            <div class="col-lg-4 col-md-4 col-sm-4">
+            <!--div class="col-lg-4 col-md-4 col-sm-4">
               <div class="card card-stats">
                 <div class="card-header card-header-danger card-header-icon">
                   <div class="card-icon">
@@ -161,7 +161,7 @@ $nombreArea=nameArea($codArea);
                   </div>
                 </div>
               </div>
-            </div>
+            </div-->
 
 
             <?php

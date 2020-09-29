@@ -13,6 +13,7 @@ session_start();
 
 
 $mesTemporal=$_GET["mesX"];
+$mesTemporal=12;
 $anioTemporal=$_GET["anioX"];
 $vista=$_GET["vistaX"];
 

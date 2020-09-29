@@ -600,6 +600,9 @@ function totalesRptOIServ1(){
     var subtotal=0;
       for(var i=2; i<=numFilas-2; i++){
             var datoS=main.rows[i].cells[j].innerHTML;
+            if(datoS=="-"){
+              datoS="0";
+            }
             datoS=datoS.replace(/,/g,'');
             datoS=datoS.replace(/-/g,'0');
             console.log("despues del reemplazo:"+datoS);

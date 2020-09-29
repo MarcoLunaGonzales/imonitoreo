@@ -352,9 +352,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     while($rowC = $stmtC -> fetch(PDO::FETCH_BOUND)){
                       $tipoCursoX=$tipoCurso;
                       $numeroCursos=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,$tipoCursoX);
+                      $alumnosPorUnidadY=alumnosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,$tipoCursoX);
                       $totalCursos+=$numeroCursos;                
                   ?>
-                    <td class="text-right"><?=formatNumberInt($numeroCursos);?></td>
+                    <td class="text-right" title="Alumnos: <?=$alumnosPorUnidadY;?>"><?=formatNumberInt($numeroCursos);?></td>
                   <?php
                     }
                   ?>
@@ -368,9 +369,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     while($rowC = $stmtC -> fetch(PDO::FETCH_BOUND)){
                       $tipoCursoX=$tipoCurso;
                       $numeroCursos=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,1,$tipoCursoX);
+                      $alumnosPorUnidadY=alumnosPorUnidad($codigoX,$anioTemporal,$mesTemporal,1,$tipoCursoX);
                       $totalCursoAcum+=$numeroCursos;      
                   ?>
-                    <td class="text-right"><?=formatNumberInt($numeroCursos);?></td>                  
+                    <td class="text-right" title="Alumnos: <?=$alumnosPorUnidadY;?>"><?=formatNumberInt($numeroCursos);?></td>                  
                   <?php
                     }
                   ?>
@@ -455,10 +457,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $totalClientes+=$cantidadClientes;
                   ?>
                   <tr>
-                    <td class="text-left"><?=$abrevX;?></td>
-                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientesAnt);?></a></td>
-                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
-                    <td class="text-center font-weight-bold text-primary"><?=formatNumberInt($porcentajeCrec);?> %</td>
+                    <td class="text-left" style="display: none;"><?=$abrevX;?></td>
+                    <td class="text-right" style="display: none;"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientesAnt);?></a></td>
+                    <td class="text-right" style="display: none;"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
+                    <td class="text-center font-weight-bold text-primary" style="display: none;"><?=formatNumberInt($porcentajeCrec);?> %</td>
                   </tr>
                   <?php
                   }
@@ -470,7 +472,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td class="text-left font-weight-bold">Totales</td>
+                    <td class="text-left font-weight-bold">Nacional</td>
                     <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientesAnt);?></td>
                     <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientes);?></td>
                     <td class="text-center font-weight-bold"><?=formatNumberInt($porcentajeCrecTotal);?> %</td>
@@ -519,10 +521,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $totalClientes+=$cantidadClientes;
                   ?>
                   <tr>
-                    <td class="text-left"><?=$abrevX;?></td>
-                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
-                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadRetenidos);?></a></td>
-                    <td class="text-center font-weight-bold text-primary"><?=formatNumberInt($porcentajeCrec);?> %</td>
+                    <td class="text-left" style="display: none;"><?=$abrevX;?></td>
+                    <td class="text-right" style="display: none;"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
+                    <td class="text-right" style="display: none;"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadRetenidos);?></a></td>
+                    <td class="text-center font-weight-bold text-primary" style="display: none;"><?=formatNumberInt($porcentajeCrec);?> %</td>
                   </tr>
                   <?php
                   }
@@ -534,7 +536,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td class="text-left font-weight-bold">Totales</td>
+                    <td class="text-left font-weight-bold">Nacional</td>
                     <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientes);?></td>
                     <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientesRetenidos);?></td>
                     <td class="text-center font-weight-bold"><?=formatNumberInt($porcentajeCrecTotal);?> %</td>
@@ -571,16 +573,17 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <tr>
                     <th class="text-center font-weight-bold">Unidad</th>
                   <?php
-                  $sqlGrupo="SELECT g.codigo, g.minimo, g.maximo FROM grupos_etarios g order by 1";
+                  $sqlGrupo="SELECT g.codigo, g.minimo, g.maximo, g.nombre FROM grupos_etarios g order by 1";
                   $stmtGrupo = $dbh->prepare($sqlGrupo);
                   $stmtGrupo->execute();
                   $stmtGrupo->bindColumn('codigo', $codigoG);
                   $stmtGrupo->bindColumn('minimo', $edadMinimo);
                   $stmtGrupo->bindColumn('maximo', $edadMaximo);
+                  $stmtGrupo->bindColumn('nombre', $nombreGrupo);
 
                   while($rowGrupo = $stmtGrupo -> fetch(PDO::FETCH_BOUND)){
                   ?>
-                    <th class="text-center font-weight-bold" colspan="2"><?=$edadMinimo;?>-<?=$edadMaximo;?></th>
+                    <th class="text-center font-weight-bold" colspan="2"><?=$nombreGrupo;?></th>
                   <?php
                   }
                   ?>
@@ -590,12 +593,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <tr>
                     <th class="text-center font-weight-bold">-</th>
                   <?php
-                  $sqlGrupo="SELECT g.codigo, g.minimo, g.maximo FROM grupos_etarios g order by 1";
+                  $sqlGrupo="SELECT g.codigo, g.minimo, g.maximo, g.nombre FROM grupos_etarios g order by 1";
                   $stmtGrupo = $dbh->prepare($sqlGrupo);
                   $stmtGrupo->execute();
                   $stmtGrupo->bindColumn('codigo', $codigoG);
                   $stmtGrupo->bindColumn('minimo', $edadMinimo);
                   $stmtGrupo->bindColumn('maximo', $edadMaximo);
+                  $stmtGrupo->bindColumn('nombre', $nombreGrupo);
 
                   while($rowGrupo = $stmtGrupo -> fetch(PDO::FETCH_BOUND)){
                   ?>
@@ -618,7 +622,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $stmtU->bindColumn('abreviatura', $abrevX);
 
                   while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                    $cantidadAlumnosUnidad=alumnosPorUnidad($codigoX,$anioTemporal,$mesTemporal,1,'');
+                    $cantidadAlumnosUnidad=calcularAlumnosGrupoEtario($codigoX,$codArea,$mesTemporal,$anioTemporal,0,0);
                   ?>
                   <tr>
                     <td class="text-left"><?=$abrevX;?></td>
@@ -629,10 +633,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtGrupo->bindColumn('codigo', $codigoG);
                     $stmtGrupo->bindColumn('minimo', $edadMinimo);
                     $stmtGrupo->bindColumn('maximo', $edadMaximo);
+
+                    $totalAlumnosFila=0;
                     while($rowGrupo = $stmtGrupo -> fetch(PDO::FETCH_BOUND)){
                       $cantidadAlumnos=calcularAlumnosGrupoEtario($codigoX,$codArea,$mesTemporal,$anioTemporal,$edadMinimo,$edadMaximo);
                       $porcentajeAlumnos=0;
-
+                      $totalAlumnosFila+=$cantidadAlumnos;
                       if($cantidadAlumnosUnidad>0){
                         $porcentajeAlumnos=($cantidadAlumnos/$cantidadAlumnosUnidad)*100;
                       }
@@ -643,7 +649,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <?php
                     }
                     ?> 
-                    <td class="text-right"><?=formatNumberInt($cantidadAlumnosUnidad);?></td>
+                    <td class="text-right"><?=formatNumberInt($totalAlumnosFila);?></td>
                     <td class="text-right text-primary"><?=formatNumberDec(100);?></td>                  
                   </tr>
                 </tbody>
@@ -654,6 +660,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <tr>
                     <td class="text-left font-weight-bold">Totales</td>
                     <?php
+                    $totalAlumnosTotal=0;
                     $sqlGrupo="SELECT g.codigo, g.minimo, g.maximo FROM grupos_etarios g order by 1";
                     $stmtGrupo = $dbh->prepare($sqlGrupo);
                     $stmtGrupo->execute();
@@ -661,16 +668,17 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $stmtGrupo->bindColumn('minimo', $edadMinimo);
                     $stmtGrupo->bindColumn('maximo', $edadMaximo);
                     while($rowGrupo = $stmtGrupo -> fetch(PDO::FETCH_BOUND)){
-                      $cantidadAlumnosUnidad=alumnosPorUnidad(0,$anioTemporal,$mesTemporal,1,'');
+                      $cantidadAlumnosUnidad=calcularAlumnosGrupoEtario(0,$codArea, $mesTemporal, $anioTemporal, 0, 0);
                       $cantidadAlumnos=calcularAlumnosGrupoEtario(0,$codArea,$mesTemporal,$anioTemporal,$edadMinimo,$edadMaximo);
-                      $porcentajeAlumnos=($cantidadAlumnos/$cantidadAlumnosUnidad)*100;                      
+                      $porcentajeAlumnos=($cantidadAlumnos/$cantidadAlumnosUnidad)*100;      
+                      $totalAlumnosTotal+=$cantidadAlumnos;                
                     ?>
                     <th class="text-right"><?=formatNumberInt($cantidadAlumnos);?></th>
                     <th class="text-right text-primary"><?=formatNumberDec($porcentajeAlumnos);?></th>
                     <?php
                     }
                     ?>   
-                    <th class="text-right"><?=formatNumberInt($cantidadAlumnosUnidad);?></th>
+                    <th class="text-right"><?=formatNumberInt($totalAlumnosTotal);?></th>
                     <th class="text-right text-primary"><?=formatNumberDec(100);?></th>
                   </tr>
                 </tfooter>

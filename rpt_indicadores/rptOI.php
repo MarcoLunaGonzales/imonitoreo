@@ -334,14 +334,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         </thead>
                         <tbody>
                         <?php
-                        $sqlTotal="SELECT sum(e.monto_facturado)monto from ext_servicios e where YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)<=$mesTemporal and e.id_area=$codArea and e.id_oficina in ($codigoX)";
+                        $sqlTotal="SELECT sum(e.monto_facturado*0.87)monto from ext_servicios e where YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)<=$mesTemporal and e.id_area=$codArea and e.id_oficina in ($codigoX)";
                         $stmtT = $dbh->prepare($sqlTotal);
                         $stmtT->execute();
                         $stmtT->bindColumn('monto', $montoTotalClientes);
                         while($rowT = $stmtT -> fetch(PDO::FETCH_BOUND)){
                         }
 
-                        $sqlClientes="SELECT e.id_cliente, (select c.nombre from clientes c where c.codigo=e.id_cliente)nombrecliente, sum(e.monto_facturado)monto from ext_servicios e where YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)<=$mesTemporal and e.id_area=$codArea and e.id_oficina in ($codigoX) group by id_cliente, nombrecliente order by 3 desc limit 0,5";
+                        $sqlClientes="SELECT e.id_cliente, (select c.nombre from clientes c where c.codigo=e.id_cliente)nombrecliente, sum(e.monto_facturado*0.87)monto from ext_servicios e where YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)<=$mesTemporal and e.id_area=$codArea and e.id_oficina in ($codigoX) group by id_cliente, nombrecliente order by 3 desc limit 0,5";
                         //echo $sqlClientes;
                         $stmtC = $dbh->prepare($sqlClientes);
                         $stmtC->execute();

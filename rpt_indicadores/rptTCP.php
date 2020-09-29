@@ -349,14 +349,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         </thead>
                         <tbody>
                         <?php
-                        $sqlTotal="SELECT sum(e.monto_facturado)monto from ext_servicios e where YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)<=$mesTemporal and e.id_area=$codArea and e.id_oficina in ($codigoX)";
+                        $sqlTotal="SELECT sum(e.monto_facturado*0.87)monto from ext_servicios e where YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)<=$mesTemporal and e.id_area=$codArea and e.id_oficina in ($codigoX)";
                         $stmtT = $dbh->prepare($sqlTotal);
                         $stmtT->execute();
                         $stmtT->bindColumn('monto', $montoTotalClientes);
                         while($rowT = $stmtT -> fetch(PDO::FETCH_BOUND)){
                         }
 
-                        $sqlClientes="SELECT e.id_cliente, (select c.nombre from clientes c where c.codigo=e.id_cliente)nombrecliente, sum(e.monto_facturado)monto from ext_servicios e where YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)<=$mesTemporal and e.id_area=$codArea and e.id_oficina in ($codigoX) group by id_cliente, nombrecliente order by 3 desc limit 0,5";
+                        $sqlClientes="SELECT e.id_cliente, (select c.nombre from clientes c where c.codigo=e.id_cliente)nombrecliente, sum(e.monto_facturado*0.87)monto from ext_servicios e where YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)<=$mesTemporal and e.id_area=$codArea and e.id_oficina in ($codigoX) group by id_cliente, nombrecliente order by 3 desc limit 0,5";
                         //echo $sqlClientes;
                         $stmtC = $dbh->prepare($sqlClientes);
                         $stmtC->execute();
@@ -434,10 +434,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $totalClientes+=$cantidadClientes;
                   ?>
                   <tr>
-                    <td class="text-left"><?=$abrevX;?></td>
-                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientesAnt);?></a></td>
-                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
-                    <td class="text-center font-weight-bold text-primary"><?=formatNumberInt($porcentajeCrec);?> %</td>
+                    <td class="text-left" style="display: none;"><?=$abrevX;?></td>
+                    <td class="text-right" style="display: none;"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientesAnt);?></a></td>
+                    <td class="text-right" style="display: none;"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
+                    <td class="text-center font-weight-bold text-primary" style="display: none;"><?=formatNumberInt($porcentajeCrec);?> %</td>
                   </tr>
                   <?php
                   }
@@ -449,7 +449,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td class="text-left font-weight-bold">Totales</td>
+                    <td class="text-left font-weight-bold">Nacional</td>
                     <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientesAnt);?></td>
                     <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientes);?></td>
                     <td class="text-center font-weight-bold"><?=formatNumberInt($porcentajeCrecTotal);?> %</td>
@@ -498,10 +498,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $totalClientes+=$cantidadClientes;
                   ?>
                   <tr>
-                    <td class="text-left"><?=$abrevX;?></td>
-                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
-                    <td class="text-right"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadRetenidos);?></a></td>
-                    <td class="text-center font-weight-bold text-primary"><?=formatNumberInt($porcentajeCrec);?> %</td>
+                    <td class="text-left" style="display: none;"><?=$abrevX;?></td>
+                    <td class="text-right" style="display: none;"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadClientes);?></a></td>
+                    <td class="text-right" style="display: none;"><a href="rptIncrementoClientes.php?codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&codArea=<?=$codArea;?>" target="_blank"><?=formatNumberInt($cantidadRetenidos);?></a></td>
+                    <td class="text-center font-weight-bold text-primary" style="display: none;"><?=formatNumberInt($porcentajeCrec);?> %</td>
                   </tr>
                   <?php
                   }
@@ -513,7 +513,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td class="text-left font-weight-bold">Totales</td>
+                    <td class="text-left font-weight-bold">Nacional</td>
                     <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientes);?></td>
                     <td class="text-right font-weight-bold"><?=formatNumberInt($totalClientesRetenidos);?></td>
                     <td class="text-center font-weight-bold"><?=formatNumberInt($porcentajeCrecTotal);?> %</td>

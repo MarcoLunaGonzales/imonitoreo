@@ -42,11 +42,12 @@ while($resp = $query->fetch()){
 
 	$insert_str .= "('$indice','$gestion','$idOficina','$idPrograma','$sigla','$codigoCurso','$cargaHoraria','$tipo','$nombreCurso','$cantidadModulos','$estado','$costoModulo','$empresa','$nroModulo','$tema','$fechaInicio','$fechaFin','$dDocente','$alumnosModulo'),";	
 
-	if($indice%2==0){
+	if($indice%100==0){
 		$insert_str = substr_replace($insert_str, '', -1, 1);
 		$sqlInserta="INSERT INTO ext_cursos (codigo, gestion, id_oficina, id_programa, sigla, codigocurso, carga_horaria, tipo, nombre_curso, cantidad_modulos, estado, costo_modulo, empresa, nro_modulo, tema, fecha_inicio, fecha_fin, docente, alumnos_modulo) 
 			values ".$insert_str.";";
-		echo $sqlInserta;
+		//echo $sqlInserta;
+		echo "INSERTANDO.... Tuplas -> $indice <br>";
 		$stmtInsert=$dbh->prepare($sqlInserta);
 		$stmtInsert->execute();
 		$insert_str="";

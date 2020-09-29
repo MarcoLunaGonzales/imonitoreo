@@ -50,7 +50,7 @@ while($resp = $query->fetch()){
 		$sqlInserta="INSERT INTO ext_alumnos_cursos (idcurso, curso_gestion, d_oficina, d_programa, d_tipo, d_empresa, d_aprobacion, nombre_curso, curso_cantmodulos, estado, cod_curso, cialumno, d_alumno, idmodulo, fechainicio, fechafin, nromodulo, fechanacimiento) 
 			values ".$insert_str.";";
 		//echo $sqlInserta;
-		echo "INSERT TUPLAS $indice";
+		echo "INSERT TUPLAS $indice <br>";
 		$stmtInsert=$dbh->prepare($sqlInserta);
 		$stmtInsert->execute();
 		$insert_str="";
@@ -111,7 +111,7 @@ while($resp = $query->fetch()){
 		$sqlInserta="INSERT INTO ext_alumnos_cursos (idcurso, curso_gestion, d_oficina, d_programa, d_tipo, d_empresa, d_aprobacion, nombre_curso, curso_cantmodulos, estado, cod_curso, cialumno, d_alumno, idmodulo, fechainicio, fechafin, nromodulo, fechanacimiento, fecha_factura, monto_factura) 
 			values ".$insert_str.";";
 		//echo $sqlInserta;
-		echo "INSERT TUPLAS $indice";
+		echo "INSERT TUPLAS $indice <br>";
 		$stmtInsert=$dbh->prepare($sqlInserta);
 		$stmtInsert->execute();
 		$insert_str="";

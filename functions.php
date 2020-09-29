@@ -688,7 +688,7 @@ function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
 
 function alumnosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   $dbh = new Conexion();
-  $sql="SELECT eac.d_oficina, eac.cod_curso, eac.nromodulo ,count(*)as cuenta from ext_alumnos_cursos eac where eac.curso_gestion='$anio' and eac.cod_curso not in ('') and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec  ";
+  $sql="SELECT eac.d_oficina, eac.cod_curso, eac.idmodulo ,count(*)as cuenta from ext_alumnos_cursos eac where eac.curso_gestion='$anio' and eac.cod_curso not in ('') and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec  ";
   
   if($unidad!=0){
     $sql.=" where ec.id_oficina in ($unidad)) ";
@@ -703,9 +703,9 @@ function alumnosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
     $sql.=" and YEAR(eac.fechainicio)='$anio' and MONTH(eac.fechainicio)<='$mes' ";  
   }
   if($tipocurso!=""){
-    $sql.=" and eac.tipo in ('$tipocurso')";
+    $sql.=" and eac.d_tipo in ('$tipocurso')";
   }
-  $sql.=" GROUP BY eac.d_oficina, eac.cod_curso, eac.nromodulo ";
+  $sql.=" GROUP BY eac.d_oficina, eac.cod_curso, eac.idmodulo ";
 
   //echo $sql."<br>";
 
@@ -765,7 +765,7 @@ function serviciosPorUnidadTCP($unidad, $area, $anio, $mes, $acumulado, $tipoSer
     $tablaServiciosDet="servicios_tlq_detalle";
   }
 
-  $sql="SELECT sum(e.monto_facturado)as monto, sum(e.cantidad)as cantidad from ext_servicios e, $tablaServiciosDet sd, $tablaServicios so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anio and e.id_oficina in ($unidad) and so.codigo in ($tipoServicio)";
+  $sql="SELECT sum(e.monto_facturado*0.87)as monto, sum(e.cantidad)as cantidad from ext_servicios e, $tablaServiciosDet sd, $tablaServicios so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anio and e.id_oficina in ($unidad) and so.codigo in ($tipoServicio)";
   if($acumulado==0){
     $sql.=" and MONTH(e.fecha_factura)=$mes ";
   }
@@ -792,7 +792,7 @@ function serviciosPorUnidadTCP($unidad, $area, $anio, $mes, $acumulado, $tipoSer
 
 function serviciosPorUnidadDetalle($unidad, $anio, $mes, $acumulado, $tipoServicio, $vista){//vista 1 cantidad, 2 monto bs.
   $dbh = new Conexion();
-  $sql="SELECT sum(e.monto_facturado)as monto, sum(e.cantidad)as cantidad from ext_servicios e, servicios_oi_detalle sd, servicios_oi so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anio and e.id_oficina in ($unidad) and sd.codigo in ($tipoServicio)";
+  $sql="SELECT sum(e.monto_facturado*0.87)as monto, sum(e.cantidad)as cantidad from ext_servicios e, servicios_oi_detalle sd, servicios_oi so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anio and e.id_oficina in ($unidad) and sd.codigo in ($tipoServicio)";
   if($acumulado==0){
     $sql.=" and MONTH(e.fecha_factura)=$mes ";
   }
@@ -833,7 +833,7 @@ function serviciosPorUnidadDetalleTCP($unidad, $area, $anio, $mes, $acumulado, $
     $tablaServicios="servicios_tlq";
     $tablaServiciosDet="servicios_tlq_detalle";
   }
-  $sql="SELECT sum(e.monto_facturado)as monto, sum(e.cantidad)as cantidad from ext_servicios e, $tablaServiciosDet sd, $tablaServicios so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anio and e.id_oficina in ($unidad) and sd.codigo in ($tipoServicio)";
+  $sql="SELECT sum(e.monto_facturado*0.87)as monto, sum(e.cantidad)as cantidad from ext_servicios e, $tablaServiciosDet sd, $tablaServicios so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anio and e.id_oficina in ($unidad) and sd.codigo in ($tipoServicio)";
   if($acumulado==0){
     $sql.=" and MONTH(e.fecha_factura)=$mes ";
   }
@@ -994,6 +994,7 @@ function buscarAreasAdicionales($cod_personal,$tipo){//1 codigos , 2 nombres
         $cadena.=",".$nombreAreaAdi;
       }
   }
+  $cadena=substr($cadena, 2);
   return($cadena);  
 }
 
@@ -1015,6 +1016,7 @@ function buscarUnidadesAdicionales($cod_personal,$tipo){//1 codigos , 2 nombres
         $cadena.=",".$nombreAreaAdi;
       }
   }
+  $cadena=substr($cadena, 2);
   return($cadena);  
 }
 
@@ -1331,7 +1333,7 @@ function calcularClientesSECPeriodo($unidad,$area,$mes,$anio){
   $fechaFin=date('Y-m-d',strtotime($fechaFin.'+1 month'));
   $fechaFin=date('Y-m-d',strtotime($fechaFin.'-1 day'));
 
-  $sql="SELECT count(distinct(eac.cialumno))as cantidad from ext_alumnos_cursos eac where eac.fechainicio BETWEEN '$fechaIni' and '$fechaFin' and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.id_oficina in ($unidad) and ec.estado in ($cadenaEstados));";
+  $sql="SELECT count(distinct(eac.cialumno))as cantidad from ext_alumnos_cursos eac where eac.fechainicio BETWEEN '$fechaIni' and '$fechaFin' and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.id_oficina in ($unidad));";
   //echo $sql;
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
@@ -1395,7 +1397,11 @@ function calcularAlumnosGrupoEtario($unidad,$area,$mes,$anio,$edadmin,$edadmax){
   if($unidad!=0){
     $sql.=" and ec.id_oficina in ($unidad) ";
   }
-  $sql.=") and TIMESTAMPDIFF(YEAR, eac.fechanacimiento, '$fechaActual')>$edadmin and TIMESTAMPDIFF(YEAR, eac.fechanacimiento, '$fechaActual')<=$edadmax ";
+  if($edadmin==0 && $edadmax==0){
+    $sql.=")";
+  }else{
+      $sql.=") and IFNULL(TIMESTAMPDIFF(YEAR, eac.fechanacimiento, '$fechaActual'),-1000)>$edadmin and IFNULL(TIMESTAMPDIFF(YEAR, eac.fechanacimiento, '$fechaActual'),-1000)<=$edadmax ";
+  }
   
 //  echo $sql;
   $stmt = $dbh->prepare($sql);
@@ -1556,11 +1562,11 @@ function obtenerCantCertificadosIAF($unidad,$anioTemporal,$mesTemporal,$area1,$i
 
   $dbh = new Conexion();
   $sql="SELECT count(*)as cantidad from ext_certificados e where e.idarea=$area1 and e.idestado not in ($estadosOmitir) and e.norma not like '%$txtOmitirRM%' and e.norma not in ('N/A','') ";
-  if($iaf==0){
+  if($iaf==-1){
     if($vista==1){
-      $sql.=" and e.iaf in (SELECT ee.iaf from ext_certificados ee where ee.iaf not in ('0') and YEAR(ee.fechaemision)=$anioTemporal and ee.idarea='$area1') ";
+      $sql.=" and e.iaf in (SELECT ee.iaf from ext_certificados ee where  YEAR(ee.fechaemision)=$anioTemporal and ee.idarea='$area1') ";
     }else{
-      $sql.=" and e.iaf in (SELECT ee.iaf from ext_certificados ee where ee.iaf not in ('0') and e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' and ee.idarea='$area1') ";
+      $sql.=" and e.iaf in (SELECT ee.iaf from ext_certificados ee where e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' and ee.idarea='$area1') ";
     }
   }else{
     $sql.=" and e.iaf='$iaf' ";

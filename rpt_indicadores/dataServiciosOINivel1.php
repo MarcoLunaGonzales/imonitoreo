@@ -61,7 +61,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 }
 
 
-$sql="SELECT so.codigo, so.nombre, so.abreviatura, sum(e.cantidad)as totalCantidadServicios, sum(e.monto_facturado)as montoTotalFactura from ext_servicios e, servicios_oi_detalle sd, servicios_oi so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)=$mesTemporal group by so.codigo, so.nombre, so.abreviatura order by 4 desc limit 0,15";
+$sql="SELECT so.codigo, so.nombre, so.abreviatura, sum(e.cantidad)as totalCantidadServicios, sum(e.monto_facturado*0.87)as montoTotalFactura from ext_servicios e, servicios_oi_detalle sd, servicios_oi so where so.codigo=sd.cod_servicio and e.idclaservicio=sd.codigo and YEAR(e.fecha_factura)=$anioTemporal and MONTH(e.fecha_factura)=$mesTemporal group by so.codigo, so.nombre, so.abreviatura order by 4 desc limit 0,15";
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 $stmt->bindColumn('codigo', $codigoServicio);

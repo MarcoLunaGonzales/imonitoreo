@@ -53,8 +53,8 @@ while($resp = $query->fetch()){
       echo $sqlInserta."<br>";
       break;
     }
-    if($indice%100==0){
-      echo "vamos $indice <br>";
+    if($indice%200==0){
+      echo "Insertando Tuplas $indice <br>";
     }
 	$indice++;
 }

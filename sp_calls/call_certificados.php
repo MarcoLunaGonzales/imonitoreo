@@ -66,12 +66,12 @@ while ($resp = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
 	$insert_str .= "('$IdCertificadoServicios','$IdServicio','$IdTipoCertificado','$idCliente','$Norma','$Descripcion','$NumeroAnterior','$FechaEmision','$FechaValido','$FechaEntrega','$FechaRegistro','$FechaEstado','$ProductoServicio','$Observaciones','$idCabeceraFormInspeccion','$NroHoja','$decliente','$TipoCertificado','$idCertificadorExterno','$Codigo','$idestado','$estado','$dcertificadorExt','$stipo','$idarea','$idTipoEstado','$idoficina','$idDocumentoBase','$idFormularioCertificado','$idTipoServicio','$codigoIAF'),";	
 
-	if($indice%10==0){
+	if($indice%200==0){
 		$insert_str = substr_replace($insert_str, '', -1, 1);
 		$sqlInserta="INSERT INTO ext_certificados (idcertificadoservicios,idservicio,idtipocertificado,idcliente,norma,descripcion,
   numeroanterior,fechaemision,fechavalido,fechaentrega,fecharegistro,fechaestado,productoservicio,observaciones,idcabeceraforminspeccion,nrohoja,decliente,tipocertificado,idcertificadorexterno,codigo,idestado,estado,dcertificadorext,stipo,idarea,idtipoestado,
   idoficina,iddocumentobase,idformulariocertificado,idtiposervicio,iaf) values ".$insert_str.";";
-		echo $sqlInserta;
+		echo "Insertando tuplas $indice";
 		$stmtInsert=$dbh->prepare($sqlInserta);
 		$flagSuccess=$stmtInsert->execute();
 		$insert_str="";
@@ -81,8 +81,8 @@ while ($resp = $stmt->fetch(PDO::FETCH_ASSOC)) {
       echo $sqlInserta."<br>";
       break;
     }
-    if($indice%10==0){
-      echo "vamos $indice <br>";
+    if($indice%200==0){
+      echo "Insertando Tuplas $indice <br>";
     }
 	$indice++;
 }

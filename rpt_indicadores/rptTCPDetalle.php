@@ -139,8 +139,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                       $cantidadServicios=serviciosPorUnidadDetalleTCP($codigoX,$codArea,$anioTemporal,$mesTemporal,0,$codigoServicio,1);
                       $montoServicios=serviciosPorUnidadDetalleTCP($codigoX,$codArea,$anioTemporal,$mesTemporal,0,$codigoServicio,2);
                     ?>
-                    <td class="text-right"><a href="rptTCPDetalleCliente.php?area=<?=$codArea;?>&codServicio=<?=$codigoServicio;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&unidad_organizacional=<?=$codigoX;?>" target="_blank"><?=($cantidadServicios=="")?"-":formatNumberInt($cantidadServicios);?></a></td>
-                    <td class="text-right"><a href="rptTCPDetalleCliente.php?area=<?=$codArea;?>&codServicio=<?=$codigoServicio;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&unidad_organizacional=<?=$codigoX;?>" target="_blank"><?=($montoServicios=="")?"-":formatNumberInt($montoServicios);?></a></td>
+                    <!--td class="text-right"><a href="rptTCPDetalleCliente.php?area=<?=$codArea;?>&codServicio=<?=$codigoServicio;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&unidad_organizacional=<?=$codigoX;?>" target="_blank"><?=($cantidadServicios=="")?"-":formatNumberInt($cantidadServicios);?></a></td>
+                    <td class="text-right"><a href="rptTCPDetalleCliente.php?area=<?=$codArea;?>&codServicio=<?=$codigoServicio;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>&unidad_organizacional=<?=$codigoX;?>" target="_blank"><?=($montoServicios=="")?"-":formatNumberInt($montoServicios);?></a></td-->
+                    <td class="text-right"><?=($cantidadServicios=="")?"-":formatNumberInt($cantidadServicios);?></td>
+                    <td class="text-right"><?=($montoServicios=="")?"-":formatNumberInt($montoServicios);?></td>
                     <?php
                     }    
                     ?>                

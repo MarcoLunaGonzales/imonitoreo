@@ -360,6 +360,9 @@ function devolverCodigos($componente, $nivel, $tipo){
   $codigosComp=str_replace("''","'-1'",$codigosComp);
   $codigosPartida=str_replace("''","'-1'",$codigosPartida);
 
+  $codigosComp=substr($codigosComp, 4);
+  $codigosPartida=substr($codigosPartida, 4);
+
   if($tipo==1){return($codigosComp);} 
   if($tipo==2){return($codigosPartida);} 
 }
@@ -406,7 +409,9 @@ function montoEjecucionComponente($anio, $mes, $componente, $nivel){
   $monto=0;
   if($codigosX!=''){
     $sql="SELECT sum(m.monto)as monto from po_mayores m where m.anio='$anio' and m.mes<='$mes' and m.ml_partida in ($codigosX) and m.fondo=2001 and m.cuenta like '5%'";
+    
     //echo $sql;
+    
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

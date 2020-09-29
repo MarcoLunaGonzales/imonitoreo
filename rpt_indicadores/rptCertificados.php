@@ -452,7 +452,7 @@ $txtOmitirRM=obtieneValorConfig(30);
                   }else{
                     $sqlN.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";
                   }
-                  $sqlN.=" and e.idarea='$areaCertificacion' and e.iaf<>'0' group by e.iaf order by 2 desc ";
+                  $sqlN.=" and e.idarea='$areaCertificacion' group by e.iaf order by 2 desc ";
                   $stmtN = $dbh->prepare($sqlN);
                   $stmtN->execute();
                   $stmtN->bindColumn('iaf', $codigoIAF);
@@ -460,7 +460,10 @@ $txtOmitirRM=obtieneValorConfig(30);
 
 
                   while($rowN = $stmtN -> fetch(PDO::FETCH_BOUND)){
-                    $nombreIAF=nameIAF($codigoIAF);
+                    $nombreIAF="Sin Código IAF";
+                    if($codigoIAF>0){
+                      $nombreIAF=nameIAF($codigoIAF);                    
+                    }
                   ?>
                   <tr>
                     <td class="text-left"><?=$nombreIAF;?>.(<?=$codigoIAF;?>)</td>
@@ -469,7 +472,7 @@ $txtOmitirRM=obtieneValorConfig(30);
                     $stmtU->bindColumn('codigo', $codigoX);
                     $stmtU->bindColumn('abreviatura', $abrevX);
                     while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
+                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,-1,1,$vista);
                       $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,$codigoIAF,1,$vista);
                       $participacionNorma=0;
                       if($cantCertificadosUnidad>0){
@@ -483,7 +486,7 @@ $txtOmitirRM=obtieneValorConfig(30);
                     <td class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberInt($participacionNorma);?></td>
                     <?php
                     }
-                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
+                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,-1,1,$vista);
                     $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,$codigoIAF,1,$vista);
                     $participacionNorma=0;
                     if($cantCertificadosUnidad>0){
@@ -506,8 +509,8 @@ $txtOmitirRM=obtieneValorConfig(30);
                     $stmtU->bindColumn('codigo', $codigoX);
                     $stmtU->bindColumn('abreviatura', $abrevX);
                     while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
-                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
-                      $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
+                      $cantCertificadosUnidad=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,-1,1,$vista);
+                      $cantCertificados=obtenerCantCertificadosIAF($codigoX,$anioTemporal,$mesTemporal,$areaCertificacion,-1,1,$vista);
                       $participacionNorma=0;
                       if($cantCertificadosUnidad>0){
                         $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;
@@ -517,8 +520,8 @@ $txtOmitirRM=obtieneValorConfig(30);
                     <th class="table-primary text-center"><?=($participacionNorma==0)?"-":formatNumberInt(100);?></th>
                     <?php
                     }
-                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
-                    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,0,1,$vista);
+                    $cantCertificadosUnidad=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,-1,1,$vista);
+                    $cantCertificados=obtenerCantCertificadosIAF(0,$anioTemporal,$mesTemporal,$areaCertificacion,-1,1,$vista);
                     $participacionNorma=0;
                     if($cantCertificadosUnidad>0){
                       $participacionNorma=($cantCertificados/$cantCertificadosUnidad)*100;

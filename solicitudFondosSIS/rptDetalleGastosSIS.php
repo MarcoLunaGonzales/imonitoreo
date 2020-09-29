@@ -81,6 +81,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                       <tbody>
                       <?php
                         $indice=0;
+                        $montoEjecucionComponente=0;
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
                           if($nivelComponente==1){
                             $styleText="text-left font-weight-bold text-danger";
@@ -90,7 +91,8 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           }
                           if($nivelComponente==3){
                             $styleText="text-left font-weight-bold small";
-                          }                          
+                          }      
+                          $montoEjecucionComponente=0;                    
                           $montoEjecucionComponente=montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);
 
                           if($montoEjecucionComponente>0){
