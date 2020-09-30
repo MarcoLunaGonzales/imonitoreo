@@ -28,12 +28,16 @@ foreach ($detalle as $objDet){
 	$idArea=$objDet->IdArea;
 	$idOficina=$objDet->IdOficina;
 	$cargo=$objDet->Cargo;
+	$idUsuario=$objDet->IdUsuario;
+	$idPersonal=$objDet->IdPersonal;
 
-	$stmt = $dbh->prepare("INSERT INTO $tableInsert (codigo, nombre, cod_area, cod_unidad) VALUES (:codigo, :nombre, :cod_area, :cod_unidad)");
+	$stmt = $dbh->prepare("INSERT INTO $tableInsert (codigo, nombre, cod_area, cod_unidad, cod_usuario, cod_personal) VALUES (:codigo, :nombre, :cod_area, :cod_unidad, :cod_usuario, :cod_personal)");
 	$stmt->bindParam(':codigo', $codigoX);
 	$stmt->bindParam(':nombre', $nombreX);
 	$stmt->bindParam(':cod_area', $idArea);
 	$stmt->bindParam(':cod_unidad', $idOficina);
+	$stmt->bindParam(':cod_usuario', $idUsuario);
+	$stmt->bindParam(':cod_personal', $idPersonal);
 	$flagSuccess=$stmt->execute();
 }
 echo "ok PERSONAL<br>";

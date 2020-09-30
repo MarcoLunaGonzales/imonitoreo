@@ -11,8 +11,8 @@
 		$claveuser="789";
 		*/
 
-	$nombreuser="luis.rojas@ibnorca.org";
-	$claveuser=md5("rojas");	
+	$nombreuser="juan.quenallata@ibnorca.org";
+	$claveuser=md5("juanito2020");	
 	/*//Usuario operativo
 		$nombreuser="diego.vargas@prueba.com";
 		$claveuser="456";
@@ -20,17 +20,17 @@
 	//preparar array de parametros	
 	/* descomentar	*/
 
-	/*$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
+	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
 				 "operacion"=>"Login", "nombreUser"=>$nombreuser, "claveUser"=>$claveuser);
-	 */
+	
 			 
 	/******************************************
 	*   parametros obtener de Menu de usuario *
 	******************************************/
 	// descomentar 
-	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
+	/*$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
 				 "operacion"=>"Menu", "IdUsuario"=>183);
-
+*/
 	
 	$datos=json_encode($datos);
 	
@@ -39,7 +39,7 @@
 	$ch = curl_init();
 	// definimos la URL a la que hacemos la petición
 	//curl_setopt($ch, CURLOPT_URL,"http://ibnored.ibnorca.org/wsibno/verifica/ws-user-personal.php");
-	curl_setopt($ch, CURLOPT_URL,"http://ibnored.ibnorca.org/wsibno19/verifica/ws-user-personal.php");
+	curl_setopt($ch, CURLOPT_URL,"http://ibnored.ibnorca.org/wsibno/verifica/ws-user-personal.php");
 	// indicamos el tipo de petición: POST
 	curl_setopt($ch, CURLOPT_POST, TRUE);
 	// definimos cada uno de los parámetros

@@ -15,8 +15,8 @@ $sKey = "837b8d9aa8bb73d773f5ef3d160c9b17";
 $url="http://ibnored.ibnorca.org/wsibno/clasificador/ws-clasificador-post.php";
 */
 
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "lista"=>"Clientes"); 
-$url="http://ibnored.ibnorca.org/wsibno/cliente/ws-cliente-listas.php";
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey,"accion"=>"ListarPersonal");
+$url="http://ibnored.ibnorca.org/wsibno/lista/ws-lst-personal.php";
 
 $json=callService($parametros, $url);
 
