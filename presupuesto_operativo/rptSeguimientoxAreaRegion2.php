@@ -80,6 +80,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $sqlOrganismos="SELECT o.codigo, o.nombre from po_organismos o where o.codigo in ($cadenaOrganismos)";
         $stmtOrganismo=$dbh->prepare($sqlOrganismos);
         $stmtOrganismo->execute();
+        $superIndex=0;
         while($rowOrganismo=$stmtOrganismo->fetch(PDO::FETCH_ASSOC)){
           $codOrganismoX=$rowOrganismo['codigo']; 
           $nombreOrganismoX=$rowOrganismo['nombre']; 
@@ -101,7 +102,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $nombreConjunto=nameGrupoFondo(0);
             $codigosConjunto=codigosGrupoFondo(0);
           ?>
-      <div class="col-md-8">
+      <div class="col-md-4">
         <div class="card">
           <div class="card-header card-header-info card-header-icon">
             <div class="card-icon">
@@ -159,6 +160,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 
 
                 $colorPorcentajeIngreso=colorPorcentajeIngreso($porcentajeIngConjunto);
+
+                $valorIngresoFormat=number_format(calcularValorEnPoncentaje($montoEjIngConjunto,$montoPresIngConjunto),2,'.','');
                 ?>
                 <tr>
                   <td class="text-left font-weight-bold">
@@ -224,6 +227,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 }
 
                 $colorPorcentajeEgreso=colorPorcentajeEgreso($porcentajeEgConjunto);
+                $valorEgresoFormat=number_format(calcularValorEnPoncentaje($montoEjEgConjunto,$montoPresEgConjunto),2,'.','');
                 ?>
                 <tr>
                   <td class="text-left font-weight-bold">
@@ -324,7 +328,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   }
                   $colorPorcentajeIngresoGestion=colorPorcentajeIngreso($porcentajeIngGestion);
 
-
+                 $valorIngresoFormatAcumulado=number_format(calcularValorEnPoncentaje($montoEjIngAcumulado,$montoPresIngAcumulado),2,'.','');
                  ?>
                  <tr>
                   <td class="font-weight-bold">
@@ -347,6 +351,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     $porcentajeEgAcum=($montoEjEgAcumulado/$montoPresEgAcumulado)*100;
                   }
                   $colorPorcentajeEgreso=colorPorcentajeEgreso($porcentajeEgAcum);
+
+                  $valorEgresoFormatAcumulado=number_format(calcularValorEnPoncentaje($montoEjEgAcumulado,$montoPresEgAcumulado),2,'.','');
                  ?>
                  <tr>
                   <td class="font-weight-bold">
@@ -414,6 +420,60 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
           <!--/div-->
         </div>
       </div>
+                          <div class="col-md-4 div-center">
+                            <div class="card card-chart text-center">
+                              <div class="card-header card-header-rose" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
+                                 <h4>INGRESOS Y EGRESOS</h4>
+                              </div>
+                              <div class="card-body">
+                                <div class="card-actions">  
+                                </div>
+                                <center>
+                                  <h4 class="card-title">INGRESOS</h4>
+                                  <div id="ingreso_general_chart<?=$superIndex?>" class="div-center"></div>
+                                  <h4 class="card-title">EGRESOS</h4>
+                                  <div id="ingreso_general_chart_eg<?=$superIndex?>" class="div-center"></div>
+                                </center>                                
+                                
+                              </div>
+                              <div class="card-footer">
+                                <div class="stats">
+                                  <i class="material-icons">access_time</i><small id="actualizado_ingresos<?=$superIndex?>"></small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+           <?php 
+               $fondoTemporal=$codigosConjunto;
+               $nombreFondo=$nombreConjunto;
+               $mesTemporal=$mes;
+               $anioTemporal=$anio;
+               $organismoTemporal=$codOrganismoX;
+
+               $_SESSION["fondoTemporal"]=$fondoTemporal;
+               $_SESSION["nombreFondoTemporal"]=$nombreFondo;
+               $_SESSION["mesTemporal"]=$mesTemporal;
+               $_SESSION["anioTemporal"]=$anioTemporal;
+               $_SESSION["organismoTemporal"]=$organismoTemporal;
+               $_SESSION["filaTemporal"]=$superIndex;
+           ?>
+           <div class="col-md-4">
+                <div class="card">
+                  <div class="card-header card-header-icon card-header-info">
+                    <div class="card-icon">
+                      <i class="material-icons">timeline</i>
+                    </div>
+                    <h4 class="card-title">Tendencia de Ingresos <?=$nombreFondo;?>
+                    </h4>
+                  </div>
+                  <div class="card-body">
+                    <?php
+                      
+                    require("../graficos/chartIngresosTendenciaVarios.php");
+                    ?>
+                  </div>
+                </div>
+              </div>               
           <?php
           //}
           ?>
@@ -449,7 +509,39 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     </div-->
 
     </br></br></br> 
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['gauge']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['MES', <?=$valorIngresoFormat?>],
+          ['ACUMULADO', <?=$valorIngresoFormatAcumulado?>]
+        ]);
+        var dataEg = google.visualization.arrayToDataTable([
+          ['Label', 'Value'],
+          ['MES', <?=$valorEgresoFormat?>],
+          ['ACUMULADO', <?=$valorEgresoFormatAcumulado?>]
+        ]);
+        var options = {
+          width: 270, height: 270,
+          redFrom: 0, redTo: 25,
+          yellowFrom:25, yellowTo: 75,
+          greenFrom:75, greenTo: 100,
+          minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('ingreso_general_chart<?=$superIndex?>'));
+        chart.draw(data, options);
+        var chartEg = new google.visualization.Gauge(document.getElementById('ingreso_general_chart_eg<?=$superIndex?>'));
+        chartEg.draw(dataEg, options);
+          $('#actualizado_ingresos<?=$superIndex?>').html(obtenerHoraFechaActualFormato());
+      }
+    </script>
         <?php
+        $superIndex++;
         }
         ?>
 

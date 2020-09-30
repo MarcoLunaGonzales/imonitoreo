@@ -117,7 +117,7 @@ $arrayAreaServicios = explode(",", $codAreaServicios);
 				  	$stmt = $dbh->prepare($sql);
 					$stmt->execute();
 					?>
-					  <select class="selectpicker form-control" name="organismos[]" id="organismos" data-style="select-with-transition" title="Seleccione una opcion" multiple required>
+					  <select class="selectpicker form-control" name="organismos[]" id="organismos" data-style="select-with-transition" title="Seleccione una opcion" multiple data-actions-box="true" data-live-search="true" required>
 					  	<option disabled selected value=""></option>
 					  	<?php
 						while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
