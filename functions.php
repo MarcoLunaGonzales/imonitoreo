@@ -1681,5 +1681,12 @@ function obtener_nombre_proyecto($codigo){
   return $nombre;
 }
 
+function calcularValorEnPoncentaje($valor,$total){
+  $porcentaje=0;
+  if($total>0){
+    $porcentaje=($valor*100)/$total;
+  }     
+  return $porcentaje;
+}
 
 ?>

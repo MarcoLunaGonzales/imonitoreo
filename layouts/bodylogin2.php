@@ -40,13 +40,17 @@
   <script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
   <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="../assets/js/material-dashboard.js?v=2.1.0" type="text/javascript"></script>
+
+  <!--CHART GOOGLE-->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  
   <!--  Plugin for Sweet Alert -->
   <script src="../assets/js/plugins/sweetalert2.js"></script>
   <script src="../assets/alerts/alerts.js"></script>
   <script src="../assets/alerts/functionsGeneral.js"></script>
   <script src="../assets/js/plugins/jquery.dataTables.min.js"></script>
   <script src="../assets/js/plugins/dataTables.fixedHeader.min.js"></script>
-
+  
   <!--ESTE ES EL DOCUMENTO DEL BODYLOGIN -->
   <script>
     $(document).ready(function() {
