@@ -58,7 +58,6 @@ $stmt->bindColumn('usuariopon', $usuarioPON);
                           <th>Unidad Trabajo</th>
                           <th>Area Trabajo</th>
                           <th>Perfil</th>
-                          <th>Usuario PON</th>
                           <th>Actions</th>
                         </tr>
                       </thead>
@@ -79,6 +78,9 @@ $stmt->bindColumn('usuariopon', $usuarioPON);
                           $unidadesAdicionales="";
                           $unidadesAdicionales=buscarUnidadesAdicionales($codigo,2);
 
+                          $areasAdicionalesMostrar=substr($areasAdicionales, 2);
+                          $unidadesAdicionalesMostrar=substr($unidadesAdicionales, 2);
+
                           if($estado!=2){
 ?>
                         <tr>
@@ -87,10 +89,9 @@ $stmt->bindColumn('usuariopon', $usuarioPON);
                           <td><?=$cargo;?></td>
                           <td><?=$unidad;?></td>
                           <td><?=$area;?></td>
-                          <td><?=$unidadesAdicionales;?></td>
-                          <td><?=$areasAdicionales;?></td>
+                          <td><?=$unidadesAdicionalesMostrar;?></td>
+                          <td><?=$areasAdicionalesMostrar;?></td>
                           <td><?=$perfil;?></td>
-                          <td><?=$estadoUsuarioPON;?></td>
                           <td class="td-actions text-right">
                             <?php
                             if($globalAdmin==1){

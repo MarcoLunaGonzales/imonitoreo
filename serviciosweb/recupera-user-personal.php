@@ -20,17 +20,16 @@
 	//preparar array de parametros	
 	/* descomentar	*/
 
-	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
+/*	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
 				 "operacion"=>"Login", "nombreUser"=>$nombreuser, "claveUser"=>$claveuser);
-	
+*/	
 			 
 	/******************************************
 	*   parametros obtener de Menu de usuario *
 	******************************************/
 	// descomentar 
-	/*$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
-				 "operacion"=>"Menu", "IdUsuario"=>183);
-*/
+	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
+				 "operacion"=>"Menu", "IdUsuario"=>90);
 	
 	$datos=json_encode($datos);
 	

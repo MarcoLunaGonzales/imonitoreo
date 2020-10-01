@@ -50,9 +50,9 @@ if($banderaLogin==1 || $tipoLogin==1){
 	$sql="";
 	if($tipoLogin==1){
 		//SI TIPO LOGIN ES 1 VEMOS SI EXISTE EL USUARIO EN MONITOREO
-		$sql="SELECT p.codigo, p.nombre, p.cod_area, p.cod_unidad, pd.perfil from personal2 p, personal_datosadicionales pd where p.codigo=pd.cod_personal and pd.usuario='$user' and pd.contrasena='$password'";
+		$sql="SELECT p.codigo, p.nombre, p.cod_area, p.cod_unidad, pd.perfil, 1 as cod_usuario from personal2 p, personal_datosadicionales pd where p.codigo=pd.cod_personal and pd.usuario='$user' and pd.contrasena='$password'";
 	}else{
-		$sql="SELECT p.codigo, p.nombre, p.cod_area, p.cod_unidad, 1 as perfil from personal2 p 
+		$sql="SELECT p.codigo, p.nombre, p.cod_area, p.cod_unidad, 1 as perfil, p.cod_usuario from personal2 p 
 		where p.cod_usuario='$idUsuarioSW'";
 	}
 
@@ -64,6 +64,7 @@ if($banderaLogin==1 || $tipoLogin==1){
 	$stmt->bindColumn('cod_area', $codArea);
 	$stmt->bindColumn('cod_unidad', $codUnidad);
 	$stmt->bindColumn('perfil', $perfil);
+	$stmt->bindColumn('cod_usuario', $codUsuario);
 
 	while ($rowDetalle = $stmt->fetch(PDO::FETCH_BOUND)) {
 		$nombreUnidad=abrevUnidad($codUnidad);
@@ -76,7 +77,7 @@ if($banderaLogin==1 || $tipoLogin==1){
 		if($codUnidadTrabajo!="" && $codUnidadTrabajo!=0){
 			$codUnidadTrabajo=substr($codUnidadTrabajo, 1);
 		}
-		//echo $codAreaTrabajo;
+		//echo "area unidad: ".$codAreaTrabajo." ".$codUnidadTrabajo;
 
 		$nombreArea=abrevArea($codAreaTrabajo);
 		$nombreUnidad=abrevUnidad($codUnidadTrabajo);
@@ -142,7 +143,7 @@ if($banderaLogin==1 || $tipoLogin==1){
 
 		$sIdentificador = "monitoreo";
 		$sKey="837b8d9aa8bb73d773f5ef3d160c9b17";
-		$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, "operacion"=>"Menu", "IdUsuario"=>$codigo);
+		$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, "operacion"=>"Menu", "IdUsuario"=>$codUsuario);
 		$datos=json_encode($datos);
 		$ch = curl_init();
 		//curl_setopt($ch, CURLOPT_URL,"http://ibnored.ibnorca.org/wsibno19/verifica/ws-user-personal.php");

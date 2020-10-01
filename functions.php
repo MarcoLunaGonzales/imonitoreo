@@ -994,7 +994,7 @@ function buscarAreasAdicionales($cod_personal,$tipo){//1 codigos , 2 nombres
         $cadena.=",".$nombreAreaAdi;
       }
   }
-  $cadena=substr($cadena, 2);
+  //$cadena=substr($cadena, 2);
   return($cadena);  
 }
 
@@ -1016,7 +1016,7 @@ function buscarUnidadesAdicionales($cod_personal,$tipo){//1 codigos , 2 nombres
         $cadena.=",".$nombreAreaAdi;
       }
   }
-  $cadena=substr($cadena, 2);
+  //$cadena=substr($cadena, 2);
   return($cadena);  
 }
 
