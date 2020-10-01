@@ -10,6 +10,8 @@ require_once '../styles.php';
 
 $dbh = new Conexion();
 
+session_start();
+
 $gestion=$_GET["gestion"];
 $anio=nameGestion($gestion);
 $mes=$_GET["mes"];
@@ -161,7 +163,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
                 $colorPorcentajeIngreso=colorPorcentajeIngreso($porcentajeIngConjunto);
 
-                $valorIngresoFormat=number_format(calcularValorEnPoncentaje($montoEjIngConjunto,$montoPresIngConjunto),2,'.','');
+                $valorIngresoFormat=number_format(calcularValorEnPoncentaje($montoEjIngConjunto,$montoPresIngConjunto),0,'.','');
                 ?>
                 <tr>
                   <td class="text-left font-weight-bold">
@@ -227,7 +229,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 }
 
                 $colorPorcentajeEgreso=colorPorcentajeEgreso($porcentajeEgConjunto);
-                $valorEgresoFormat=number_format(calcularValorEnPoncentaje($montoEjEgConjunto,$montoPresEgConjunto),2,'.','');
+                $valorEgresoFormat=number_format(calcularValorEnPoncentaje($montoEjEgConjunto,$montoPresEgConjunto),0,'.','');
                 ?>
                 <tr>
                   <td class="text-left font-weight-bold">
@@ -328,7 +330,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   }
                   $colorPorcentajeIngresoGestion=colorPorcentajeIngreso($porcentajeIngGestion);
 
-                 $valorIngresoFormatAcumulado=number_format(calcularValorEnPoncentaje($montoEjIngAcumulado,$montoPresIngAcumulado),2,'.','');
+                 $valorIngresoFormatAcumulado=number_format(calcularValorEnPoncentaje($montoEjIngAcumulado,$montoPresIngAcumulado),0,'.','');
                  ?>
                  <tr>
                   <td class="font-weight-bold">
@@ -352,7 +354,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   }
                   $colorPorcentajeEgreso=colorPorcentajeEgreso($porcentajeEgAcum);
 
-                  $valorEgresoFormatAcumulado=number_format(calcularValorEnPoncentaje($montoEjEgAcumulado,$montoPresEgAcumulado),2,'.','');
+                  $valorEgresoFormatAcumulado=number_format(calcularValorEnPoncentaje($montoEjEgAcumulado,$montoPresEgAcumulado),0,'.','');
                  ?>
                  <tr>
                   <td class="font-weight-bold">
