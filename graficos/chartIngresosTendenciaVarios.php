@@ -12,19 +12,20 @@ $fila=$_SESSION["filaTemporal"];
 }
 </style>
 
-<script>var filaChart=<?=$fila?>;</script>
-<script type="text/javascript" src="../assets/chartjs/js/jquery.min.js"></script>
-<script type="text/javascript" src="../assets/chartjs/js/Chart.bundle.js"></script>
-<script type="text/javascript" src="../assets/chartjs/js/utils.js"></script>
+<script>filaChart=<?=$fila?>;</script>
 
-
-</head>
 
     <div id="chart-container<?=$fila?>" style="margin-left:auto; margin-right:auto">
         <canvas id="graphCanvas<?=$fila?>"></canvas>
     </div>
 
     <script>
+        $(document).ready(function () {
+            showGraph<?=$fila?>();
+        });
+        function showGraph<?=$fila?>()
+        {
+            {
        console.log("antes de los datos;");
                 $.get("../graficos/dataIngresosTendenciaVarios.php",
                 {},
@@ -85,7 +86,7 @@ $fila=$_SESSION["filaTemporal"];
                         ]
                     };
 
-                    var graphTarget = $("#graphCanvas"+filaChart);
+                    var graphTarget = $("#graphCanvas<?=$fila?>");
 
                     var barGraph = new Chart(graphTarget, {
                         type: 'line',
@@ -102,4 +103,6 @@ $fila=$_SESSION["filaTemporal"];
                     });
 
                 });
+           }
+        }
         </script>

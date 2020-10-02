@@ -62,7 +62,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   $cadenaFondosTodo=$row['valor_configuracion'];
 }
 ?>
-
+<script type="text/javascript" src="../assets/chartjs/js/jquery.min.js"></script>
+<script type="text/javascript" src="../assets/chartjs/js/Chart.bundle.js"></script>
+<script type="text/javascript" src="../assets/chartjs/js/utils.js"></script>
+<script>var filaChart=0;</script>
 <div class="content">
 	<div class="container-fluid">
     <div class="row">
@@ -471,7 +474,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <div class="card-body">
                     <?php
                       
-                    require("../graficos/chartIngresosTendenciaVarios.php");
+                    include("../graficos/chartIngresosTendenciaVarios.php");
                     ?>
                   </div>
                 </div>
