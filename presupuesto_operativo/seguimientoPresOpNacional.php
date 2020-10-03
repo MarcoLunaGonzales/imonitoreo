@@ -172,6 +172,10 @@ $_SESSION['mesTemporal']=$mes;
 
 
 
+
+
+
+
         <div class="row">
             <div class="col-md-12">
               <div class="card">
@@ -300,7 +304,68 @@ $_SESSION['mesTemporal']=$mes;
                 </div>
               </div>
             </div>
-          </div>  
+          </div> 
+
+          <script type="text/javascript" src="../assets/chartjs/js/jquery.min.js"></script>
+<script type="text/javascript" src="../assets/chartjs/js/Chart.bundle.js"></script>
+<script type="text/javascript" src="../assets/chartjs/js/utils.js"></script>
+<script type="text/javascript" src="../assets/chartjs/js/chartjs-plugin-labels.js"></script>
+<script>var filaChart=0;
+function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+var coloresRandom = []; 
+for (var i = 1; i <=11; i++) { //cantidad de organizaciones
+     coloresRandom.push(getRandomColor());   
+};
+</script>
+<?php
+$_SESSION["nombreFondoTemporal"]="";
+$_SESSION["organismoTemporal"]="800,710,501,502,503,504,505,506,507,508,510";
+?>
+<div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header card-header-icon card-header-info">
+                    <div class="card-icon">
+                      <i class="material-icons">pie_chart</i>
+                    </div>
+                    <h4 class="card-title">PARTICIPACION INGRESOS
+                    </h4>
+                  </div>
+                  <div class="card-body">
+                    <?php
+                    $_SESSION["filaTemporal"]=1;
+                    $_SESSION["acumuladoTemporal"]=0;  
+                    include ("../graficos/chartIngresosParticipacion.php");
+                    ?>
+                  </div>
+                </div>
+              </div> 
+             <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header card-header-icon card-header-info">
+                    <div class="card-icon">
+                      <i class="material-icons">pie_chart</i>
+                    </div>
+                    <h4 class="card-title">PARTICIPACION INGRESOS ACUMULADO
+                    </h4>
+                  </div>
+                  <div class="card-body">
+                    <?php
+                    $_SESSION["filaTemporal"]=2;
+                    $_SESSION["acumuladoTemporal"]=1;    
+                    include ("../graficos/chartIngresosParticipacion.php");
+                    ?>
+                  </div>
+                </div>
+              </div> 
+</div> 
         </div>
     </div>
 
