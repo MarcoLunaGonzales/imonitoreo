@@ -29,19 +29,18 @@ $fila=$_SESSION["filaTemporal"];
         {
             {
        console.log("antes de los datos;");
-                $.get("../graficos/dataIngresosParticipacion.php",
+                $.get("../graficos/dataIngresosParticipacion.php?filaTemporal=<?=$_SESSION['filaTemporal']?>&acumuladoTemporal=<?=$_SESSION['acumuladoTemporal']?>",
                 {},
                 function (data){
                     console.log("aqui mostramos los datos:"+data);
                     var nombreOrganismo = [];
                     var montoIngresoTotal = [];                        
-                    var participacionPorcent = [];                       
-                                          
+                    var participacionPorcent = [];                                             
 
                     for (var i in data) {
                         nombreOrganismo.push(data[i].nombreOrganismo);
                         montoIngresoTotal.push(data[i].montoIngresoTotal);
-                        participacionPorcent.push(data[i].participacionPorcent);   
+                        participacionPorcent.push(data[i].participacionPorcent);     
                     }
                     //alert(labs);
                     var chartdata = {

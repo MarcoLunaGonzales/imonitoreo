@@ -310,7 +310,7 @@ $_SESSION['mesTemporal']=$mes;
 <script type="text/javascript" src="../assets/chartjs/js/Chart.bundle.js"></script>
 <script type="text/javascript" src="../assets/chartjs/js/utils.js"></script>
 <script type="text/javascript" src="../assets/chartjs/js/chartjs-plugin-labels.js"></script>
-<script>var filaChart=0;
+<script>
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
@@ -320,13 +320,16 @@ function getRandomColor() {
   return color;
 }
 var coloresRandom = []; 
-for (var i = 1; i <=11; i++) { //cantidad de organizaciones
+for (var i = 1; i <=6; i++) { //cantidad de organizaciones
      coloresRandom.push(getRandomColor());   
 };
+var filaChart=0;
 </script>
 <?php
 $_SESSION["nombreFondoTemporal"]="";
-$_SESSION["organismoTemporal"]="800,710,501,502,503,504,505,506,507,508,510";
+$_SESSION["organismoTemporal"]="503,505,506,507,508,510";
+$_SESSION["organismoTemporalAgrupado"]="503,505,506,507";
+$_SESSION["nombreTemporalAgrupado"]="EC";
 ?>
 <div class="row">
               <div class="col-md-6">
@@ -353,7 +356,7 @@ $_SESSION["organismoTemporal"]="800,710,501,502,503,504,505,506,507,508,510";
                     <div class="card-icon">
                       <i class="material-icons">pie_chart</i>
                     </div>
-                    <h4 class="card-title">PARTICIPACION INGRESOS ACUMULADO
+                    <h4 class="card-title">PARTICIPACION INGRESOS
                     </h4>
                   </div>
                   <div class="card-body">

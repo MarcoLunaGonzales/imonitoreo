@@ -2,13 +2,11 @@
 header('Content-Type: application/json');
 set_time_limit(0);
 
-
 session_start();
 
 require_once '../conexion.php';
 require_once '../functions.php';
 require_once '../functionsPOSIS.php';
-require_once '../styles.php';
 
 $areasValorConfig=0;
 $areasValorConfig=obtieneValorConfig(29);
@@ -18,7 +16,9 @@ $nombreFondo=$_SESSION["nombreFondoTemporal"];
 $mesTemporal=$_SESSION["mesTemporal"];
 $anioTemporal=$_SESSION["anioTemporal"];
 $organismoTemporal=$_SESSION["organismoTemporal"];
-$acumuladoTemporal=$_SESSION["acumuladoTemporal"];  
+$organismoTemporalAgrupado=$_SESSION["organismoTemporalAgrupado"];
+$acumuladoTemporal=$_GET["acumuladoTemporal"];  
+$nombreTemporalAgrupado=$_SESSION["nombreTemporalAgrupado"];
 $fondo1=$fondoTemporal;
 $nameFondo1=$nombreFondo;
 
@@ -49,11 +49,12 @@ $nameFondo1=$nombreFondo;
 	$emparray[] = array();
     
     $organismoTemporalArray = explode(",",$organismoTemporal);
-
-	for($i=0;$i<count($organismoTemporalArray);$i++){
-	  	$montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],$acumuladoTemporal,0));
-		$montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],$acumuladoTemporal,0));
-		$montoEjTotal=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,0,$acumuladoTemporal,0));
+    
+    if($acumuladoTemporal==0){
+       for($i=0;$i<count($organismoTemporalArray);$i++){
+	  	$montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],0,0));
+		$montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],0,0));
+		$montoEjTotal=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,0,0,0));
 
 		$participacionPorcent=0;
 		if($montoEjTotal>0){
@@ -61,7 +62,39 @@ $nameFondo1=$nombreFondo;
 		}
 		$nombreOrganismo=nameOrganismo($organismoTemporalArray[$i]);		
 		$emparray[]=array("nombreOrganismo"=>$nombreOrganismo, "montoIngresoTotal"=>$montoEjIngreso1,"participacionPorcent"=>number_format($participacionPorcent,0,',',''));
-	}
+	 }
+    }else{
+
+      for($i=0;$i<count($organismoTemporalArray);$i++){
+      	if ($organismoTemporalArray[$i]=="503"||$organismoTemporalArray[$i]=="505"||$organismoTemporalArray[$i]=="506"||$organismoTemporalArray[$i]=="507") {
+      		
+      	}else{
+      		$montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],0,0));
+		   $montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],0,0));
+		   $montoEjTotal=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,0,0,0));
+
+		   $participacionPorcent=0;
+		   if($montoEjTotal>0){
+		     $participacionPorcent=($montoEjIngreso1*100)/$montoEjTotal;	
+		   }
+		  $nombreOrganismo=nameOrganismo($organismoTemporalArray[$i]);		
+		  $emparray[]=array("nombreOrganismo"=>$nombreOrganismo, "montoIngresoTotal"=>$montoEjIngreso1,"participacionPorcent"=>number_format($participacionPorcent,0,',','')); 
+      	}
+	 }
+
+	 $montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalAgrupado,0,0));
+	 $montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalAgrupado,0,0));
+	 $montoEjTotal=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,0,0,0));
+
+     $participacionPorcent=0;
+	 if($montoEjTotal>0){
+		     $participacionPorcent=($montoEjIngreso1*100)/$montoEjTotal;	
+	 }
+	 $nombreOrganismo=$nombreTemporalAgrupado;		
+	 $emparray[]=array("nombreOrganismo"=>$nombreOrganismo, "montoIngresoTotal"=>$montoEjIngreso1,"participacionPorcent"=>number_format($participacionPorcent,0,',',''));
+
+    }
+	 
 
 array_splice($emparray, 0,1);
 	//echo json_encode(utf8json($emparray));
