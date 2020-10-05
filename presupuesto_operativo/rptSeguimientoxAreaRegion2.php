@@ -142,17 +142,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $montoPresIngConjunto=presupuestoIngresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
                 $montoEjIngConjunto=ejecutadoIngresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
 
-                //SUMAMOS LOS MONTOS DE NORMAS Y SEC
-                //$montoExtraJulio=9890;
-                $montoExtraJulio=0;
-
-
-                if($codOrganismoX==510){
-                  $montoEjIngConjunto=$montoEjIngConjunto+$montoExtraJulio;
-                }
-                if($codOrganismoX==508){
-                  $montoEjIngConjunto=$montoEjIngConjunto-$montoExtraJulio;  
-                }
 
                 $porcentajeIngConjunto=0;
                 if($montoPresIngConjunto>0){
@@ -180,52 +169,23 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right  font-weight-bold table-warning"><?=formatNumberInt(100);?></td>
                 </tr>
                 <?php
-                //ACA EMPEZAMOS EL DETALLE POR REGIONAL
-                /*$sqlFondos="SELECT distinct(f.codigo), f.abreviatura as nombre from po_fondos f order by 2";
-                $stmtFondo = $dbh->prepare($sqlFondos);
-                $stmtFondo->execute();
-                $stmtFondo->bindColumn('codigo', $codFondo);
-                $stmtFondo->bindColumn('nombre', $nombreFondo);
-                while($rowFondo = $stmtFondo->fetch(PDO::FETCH_BOUND)){
-                  $montoPresIng=presupuestoIngresosMes($codFondo,$anio,$mes,$codOrganismoX,0,0);
-                  $montoEjIng=ejecutadoIngresosMes($codFondo,$anio,$mes,$codOrganismoX,0,0);
-                  
-                  $porcentajeIng=0;
-                  if($montoPresIng>0){
-                    $porcentajeIng=($montoEjIng/$montoPresIng)*100;
-                  }
-
-                  $participacionIng=0;
-                  if($montoEjIngConjunto>0){
-                    $participacionIng=($montoEjIng/$montoEjIngConjunto)*100;        
-                  }
-
-                  $colorPorcentajeIngreso="";
-                  if($montoPresIng>0){
-                    $colorPorcentajeIngreso=colorPorcentajeIngreso($porcentajeIng);                    
-                  }
-              ?>
-                <tr>
-                  <td class="text-left">
-                    <a href="seguimientoPOxCuenta.php?gestion=<?=$gestion;?>&mes=<?=$mes;?>&fondo[]=<?=$codFondo;?>&organismo[]=<?=$codOrganismoX;?>&resumen=" target="_blank"><?=$nombreFondo;?>
-                    </a>
-
-                    <a href="../graficos/chartTendencias.php?codigosFondo=<?=$codFondo;?>&nombreFondo=<?=$nombreFondo;?>&mes=<?=$mes;?>&anio=<?=$anio;?>&organismo=<?=$codOrganismoX;?>" target="_blank" title="Ver Reporte de Tendencias">
-                      <i class="material-icons icon-red">bar_chart</i>
-                    </a>
-
-                  </td>
-                  <td class="text-right table-warning"><?=formatNumberInt($montoPresIng);?></td>
-                  <td class="text-right table-warning"><?=formatNumberInt($montoEjIng);?></td>
-                  <td class="text-right <?=$colorPorcentajeIngreso;?>"><?=formatNumberInt($porcentajeIng);?></td>
-                  <td class="text-right table-warning"><?=formatNumberInt($participacionIng);?></td>
-                </tr>
-    <?php
-    						}
-                */
+                
                 //SACAMOSM EL DETALLE CONJUNTO EGRESOS
                 $montoPresEgConjunto=presupuestoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
                 $montoEjEgConjunto=ejecutadoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
+
+                /*******************   BORRAR DESPUES *****************/
+                //echo $codOrganismoX." ";
+                $montoExtra=15000;
+                if($codOrganismoX==505){
+                  $montoEjEgConjunto=$montoEjEgConjunto+$montoExtra;
+                }
+                if($codOrganismoX==510){
+                  $montoEjEgConjunto=$montoEjEgConjunto-$montoExtra;
+                }
+                /*******************   BORRAR DESPUES *****************/
+
+
                 $porcentajeEgConjunto=0;
                 if($montoPresEgConjunto>0){
                   $porcentajeEgConjunto=($montoEjEgConjunto/$montoPresEgConjunto)*100;
@@ -246,49 +206,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right  font-weight-bold table-info"><?=formatNumberInt(100);?></td>
                 </tr>
                 <?php
-                /*
-                //ACA EMPEZAMOS EL DETALLE POR REGIONAL
-                $sqlFondos="SELECT distinct(f.codigo), f.abreviatura as nombre from po_fondos f order by 2";
-                $stmtFondo = $dbh->prepare($sqlFondos);
-                $stmtFondo->execute();
-                $stmtFondo->bindColumn('codigo', $codFondo);
-                $stmtFondo->bindColumn('nombre', $nombreFondo);
-                while($rowFondo = $stmtFondo->fetch(PDO::FETCH_BOUND)){
-                  $montoPresEg=presupuestoEgresosMes($codFondo,$anio,$mes,$codOrganismoX,0,0);
-                  $montoEjEg=ejecutadoEgresosMes($codFondo,$anio,$mes,$codOrganismoX,0,0);
-                  
-                  $porcentajeEg=0;
-                  if($montoPresEg>0){
-                    $porcentajeEg=($montoEjEg/$montoPresEg)*100;
-                  }
-
-                  $participacionEg=0;
-                  if($montoEjEgConjunto>0){
-                    $participacionEg=($montoEjEg/$montoEjEgConjunto)*100;        
-                  }
-                  $colorPorcentajeEgreso="";
-                  if($montoPresEg>0){
-                    $colorPorcentajeEgreso=colorPorcentajeEgreso($porcentajeEg);
-                  }
-              ?>
-                <tr>
-                  <td class="text-left">
-                    <a href="seguimientoPOxCuenta.php?gestion=<?=$gestion;?>&mes=<?=$mes;?>&fondo[]=<?=$codFondo;?>&organismo[]=<?=$codOrganismoX;?>&resumen=" target="_blank">
-                      <?=$nombreFondo;?>
-                    </a>
-
-                    <a href="../graficos/chartTendencias.php?codigosFondo=<?=$codFondo;?>&nombreFondo=<?=$nombreFondo;?>&mes=<?=$mes;?>&anio=<?=$anio;?>&organismo=<?=$codOrganismoX;?>" target="_blank" title="Ver Reporte de Tendencias">
-                      <i class="material-icons icon-green">bar_chart</i>
-                    </a>
-                  </td>
-                  <td class="text-right table-info"><?=formatNumberInt($montoPresEg);?></td>
-                  <td class="text-right table-info"><?=formatNumberInt($montoEjEg);?></td>
-                  <td class="text-right <?=$colorPorcentajeEgreso;?>"><?=formatNumberInt($porcentajeEg);?></td>
-                  <td class="text-right table-info"><?=formatNumberInt($participacionEg);?></td>
-                </tr>
-    <?php
-                }
-                */
                 $resultadoPres=$montoPresIngConjunto-$montoPresEgConjunto;
                 $resultadoEj=$montoEjIngConjunto-$montoEjEgConjunto;
                 $porcentajeResultado=0;
@@ -309,17 +226,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $montoEjIngAcumulado=ejecutadoIngresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
 
                   $montoPresIngGestion=presupuestoIngresosMes($codigosConjunto,$anio,12,$codOrganismoX,1,0);
-                  //CASO ESPECIAL RETIRAR DESPUES
-                  //$montoExtraAcumulado=153226;
-                  $montoExtraAcumulado=0;
-
-
-                  if($codOrganismoX==510){
-                    $montoEjIngAcumulado=$montoEjIngAcumulado+$montoExtraAcumulado;
-                  }
-                  if($codOrganismoX==508){
-                    $montoEjIngAcumulado=$montoEjIngAcumulado-$montoExtraAcumulado;  
-                  }
+  
 
                   $porcentajeIngAcum=0;
                   if($montoPresIngAcumulado>0){
@@ -351,6 +258,16 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                  //ACA SACAMOS LOS DATOS PARA LOS ACUMULADOS
                   $montoPresEgAcumulado=presupuestoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
                   $montoEjEgAcumulado=ejecutadoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
+
+                  $montoExtra=15000;
+                  if($codOrganismoX==505){
+                    $montoEjEgAcumulado=$montoEjEgAcumulado+$montoExtra;
+                  }
+                  if($codOrganismoX==510){
+                    $montoEjEgAcumulado=$montoEjEgAcumulado-$montoExtra;
+                  }
+
+
                   $porcentajeEgAcum=0;
                   if($montoPresEgAcumulado>0){
                     $porcentajeEgAcum=($montoEjEgAcumulado/$montoPresEgAcumulado)*100;
@@ -454,13 +371,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                $mesTemporal=$mes;
                $anioTemporal=$anio;
                $organismoTemporal=$codOrganismoX;
+               $filaTemporal=$superIndex;
 
-               $_SESSION["fondoTemporal"]=$fondoTemporal;
+               /*$_SESSION["fondoTemporal"]=$fondoTemporal;
                $_SESSION["nombreFondoTemporal"]=$nombreFondo;
                $_SESSION["mesTemporal"]=$mesTemporal;
                $_SESSION["anioTemporal"]=$anioTemporal;
                $_SESSION["organismoTemporal"]=$organismoTemporal;
-               $_SESSION["filaTemporal"]=$superIndex;
+               $_SESSION["filaTemporal"]=$superIndex;*/
            ?>
            <div class="col-md-4">
                 <div class="card">
@@ -468,7 +386,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <div class="card-icon">
                       <i class="material-icons">timeline</i>
                     </div>
-                    <h4 class="card-title">Tendencia de Ingresos <?=$nombreFondo;?>
+                    <h4 class="card-title">Tendencia de Ingresos
                     </h4>
                   </div>
                   <div class="card-body">
@@ -522,26 +440,33 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
         var data = google.visualization.arrayToDataTable([
           ['Label', 'Value'],
-          ['MES', <?=$valorIngresoFormat?>],
-          ['ACUMULADO', <?=$valorIngresoFormatAcumulado?>]
+          ['Mes', <?=$valorIngresoFormat?>],
+          ['Acumulado', <?=$valorIngresoFormatAcumulado?>]
         ]);
         var dataEg = google.visualization.arrayToDataTable([
           ['Label', 'Value'],
-          ['MES', <?=$valorEgresoFormat?>],
-          ['ACUMULADO', <?=$valorEgresoFormatAcumulado?>]
+          ['Mes', <?=$valorEgresoFormat?>],
+          ['Acumulado', <?=$valorEgresoFormatAcumulado?>]
         ]);
         var options = {
           width: 270, height: 270,
-          redFrom: 0, redTo: 25,
-          yellowFrom:25, yellowTo: 75,
-          greenFrom:75, greenTo: 100,
+          redFrom: 0, redTo: 80,
+          yellowFrom:80, yellowTo: 95,
+          greenFrom:95, greenTo: 100,
+          minorTicks: 5
+        };
+        var options1 = {
+          width: 270, height: 270,
+          greenFrom: 0, greenTo: 80,
+          yellowFrom:80, yellowTo: 95,
+          redFrom:95, redTo: 100,
           minorTicks: 5
         };
 
         var chart = new google.visualization.Gauge(document.getElementById('ingreso_general_chart<?=$superIndex?>'));
         chart.draw(data, options);
         var chartEg = new google.visualization.Gauge(document.getElementById('ingreso_general_chart_eg<?=$superIndex?>'));
-        chartEg.draw(dataEg, options);
+        chartEg.draw(dataEg, options1);
           $('#actualizado_ingresos<?=$superIndex?>').html(obtenerHoraFechaActualFormato());
       }
     </script>

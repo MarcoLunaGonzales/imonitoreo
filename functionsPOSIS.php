@@ -267,10 +267,98 @@ function ejecutadoEgresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cue
    return($montoEgresoEjecutado);
 }
 
+
+function ejecutadoEgresosMesSinRedist($agencia, $anio, $mes, $organismo, $acumulado, $cuenta){
+  $dbh = new Conexion();
+  //SACAMOS LA CONFIGURACION PARA REDIST 
+  $banderaRedistIT=0;
+  $stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=1");
+  $stmt->execute();
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $banderaRedistIT=$row['valor_configuracion'];
+  }
+  $cuentaIT="";
+  $stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=3");
+  $stmt->execute();
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $cuentaIT=$row['valor_configuracion'];
+  }
+  $cuentaDN="";
+  $stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=4");
+  $stmt->execute();
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $cuentaDN=$row['valor_configuracion'];
+  }
+  $cuentaSA="";
+  $stmt = $dbh->prepare("SELECT valor_configuracion FROM configuraciones where id_configuracion=5");
+  $stmt->execute();
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $cuentaSA=$row['valor_configuracion'];
+  }
+
+   $agenciaX=str_replace('|', ',', $agencia);
+   if($organismo!=0){
+      $sqlEgresos="SELECT pc.codigo from po_plancuentas pc where pc.codigo like '5%' and pc.nivel=5";
+      if($cuenta!=0){
+        $sqlEgresos.=" and pc.codigo='$cuenta'";
+      }
+      $stmt = $dbh->prepare($sqlEgresos);
+      $stmt->execute();
+      $montoEgresoEjecutado=0;
+      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+          $codPlanCuenta=$row['codigo'];
+
+          if($acumulado==1){
+            $sqlMayor="SELECT sum(p.monto)as monto from po_mayores p where p.fondo in ($agenciaX) and p.cuenta='$codPlanCuenta' and p.anio='$anio' and p.mes<='$mes' and p.organismo in ($organismo)";
+          }else{
+            $sqlMayor="SELECT sum(p.monto)as monto from po_mayores p where p.fondo in ($agenciaX) and p.cuenta='$codPlanCuenta' and p.anio='$anio' and p.mes='$mes' and p.organismo in ($organismo)";
+          }          
+          $stmtMayor=$dbh->prepare($sqlMayor);
+          $stmtMayor->execute();
+          while ($rowMayor = $stmtMayor->fetch(PDO::FETCH_ASSOC)) {
+              $montoEjecutado=$rowMayor['monto'];
+              $montoEgresoEjecutado=$montoEgresoEjecutado+$montoEjecutado;
+          }
+
+          //REDISTRIBUCION DEL IT
+          $montoRedistribucionIT=0;
+          if($banderaRedistIT==1 && $cuentaIT==$codPlanCuenta){
+            $montoRedistribucionIT=montoRedistribucionIT($agencia,$anio,$mes,$organismo,$acumulado,$codPlanCuenta);
+            $montoEgresoEjecutado=$montoEgresoEjecutado+$montoRedistribucionIT;
+          }
+      } 
+   }else{
+      $sqlEgresos="SELECT pc.codigo from po_plancuentas pc where pc.codigo like '5%' and pc.nivel=5";
+      if($cuenta!=0){
+        $sqlEgresos.=" and pc.codigo='$cuenta'";
+      }
+      //echo $sqlEgresos;
+      $stmt = $dbh->prepare($sqlEgresos);
+      $stmt->execute();
+      $montoEgresoEjecutado=0;
+      while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+          $codPlanCuenta=$row['codigo'];
+
+          if($acumulado==1){
+            $sqlMayor="SELECT sum(p.monto)as monto from po_mayores p where p.fondo in ($agenciaX) and p.cuenta='$codPlanCuenta' and p.anio='$anio' and p.mes<='$mes'";
+          }else{
+            $sqlMayor="SELECT sum(p.monto)as monto from po_mayores p where p.fondo in ($agenciaX) and p.cuenta='$codPlanCuenta' and p.anio='$anio' and p.mes='$mes'";
+          }
+          $stmtMayor=$dbh->prepare($sqlMayor);
+          $stmtMayor->execute();
+          while ($rowMayor = $stmtMayor->fetch(PDO::FETCH_ASSOC)) {
+              $montoEjecutado=$rowMayor['monto'];
+              $montoEgresoEjecutado=$montoEgresoEjecutado+$montoEjecutado;
+          }
+      }
+   }
+   return($montoEgresoEjecutado);
+}
+
 //ESTA FUNCION ES IDENTICA A LA DE ejecutadoEgresosMes
 function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa){
    //en la variable dn_sa enviamos el organismo del que queremos ver
-  if($dn_sa==1){
+  /*if($dn_sa==1){
     $campo="porcentaje_dn";
     $organismoDNSA="501";
   }else{
@@ -331,6 +419,9 @@ function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa)
     $montoEgresoOrganismo=$montoEgresoEjecutado*($porcentaje/100);
     $totalMontoEgresoDNSA=$totalMontoEgresoDNSA+$montoEgresoOrganismo;
   }
+  */
+  $totalMontoEgresoDNSA=0;
+  
   return($totalMontoEgresoDNSA);
 }
 

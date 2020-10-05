@@ -13,14 +13,18 @@ require_once '../styles.php';
 $areasValorConfig=0;
 $areasValorConfig=obtieneValorConfig(29);
 
-$fondoTemporal=$_SESSION["fondoTemporal"];
-$nombreFondo=$_SESSION["nombreFondoTemporal"];
-$mesTemporal=$_SESSION["mesTemporal"];
-$anioTemporal=$_SESSION["anioTemporal"];
-$organismoTemporal=$_SESSION["organismoTemporal"];
+$fondoTemporal=$_GET["fondo"];
+$mesTemporal=$_GET["mes"];
+$anioTemporal=$_GET["anio"];
+$organismoTemporal=$_GET["organismo"];
+
+$fondoTemporal=str_replace("|",",",$fondoTemporal);
+
+$fondoTemporal="1010,1011,1012,1020,1030,1040,1050,1060,1070,2001,0";
+//echo $fondoTemporal." ".$mesTemporal." ".$anioTemporal." ".$organismoTemporal;
 
 $fondo1=$fondoTemporal;
-$nameFondo1=$nombreFondo;
+//$nameFondo1=$nombreFondo;
 
 
 	function utf8json($inArray) { 

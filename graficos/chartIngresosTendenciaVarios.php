@@ -2,8 +2,18 @@
 //session_start();
 //$fondoTemporal='1011|1020';//echo "hola como vamos";
 //
-$fila=$_SESSION["filaTemporal"];
 
+$fondoTemporal=$fondoTemporal;
+$nombreFondo=$nombreFondo;
+$mesTemporal=$mesTemporal;
+$anioTemporal=$anioTemporal;
+$organismoTemporal=$organismoTemporal;
+
+$fila=$filaTemporal;
+
+$fondoTemporal=str_replace(",","|",$fondoTemporal);
+
+//echo $fondoTemporal." ".$nombreFondo." ".$mesTemporal." ".$anioTemporal." ".$organismoTemporal." ".$fila;
 ?>
 <style type="text/css">
 
@@ -27,8 +37,9 @@ $fila=$_SESSION["filaTemporal"];
         {
             {
        console.log("antes de los datos;");
+       console.log("variablesFondoOrganismo: "+<?=$fondoTemporal?>+" "+<?=$organismoTemporal;?>);
                 $.get("../graficos/dataIngresosTendenciaVarios.php",
-                {},
+                {fondo:<?=$fondoTemporal;?>,mes:<?=$mesTemporal;?>,anio:<?=$anioTemporal;?>,organismo:<?=$organismoTemporal;?>},
                 function (data){
                     console.log("aqui mostramos los datos:"+data);
                     var mes = [];
@@ -44,8 +55,8 @@ $fila=$_SESSION["filaTemporal"];
 
                     for (var i in data) {
                         mes.push(data[i].mes);
-                        console.log(data[i].mes);
                         montoPresIngreso.push(data[i].montoPresIngreso);
+                        console.log("pres: "+data[i].montoPresIngreso+" eje:"+data[i].montoEjIngreso);
                         montoEjIngreso.push(data[i].montoEjIngreso);   
                         montoPresIngresoAnt.push(data[i].montoPresIngresoAnt);
                         montoEjIngresoAnt.push(data[i].montoEjIngresoAnt);

@@ -59,6 +59,7 @@ $stmt->execute();
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   $cadenaFondosTodo=$row['valor_configuracion'];
 }
+
 ?>
 
 <div class="content">
@@ -83,6 +84,20 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         while($rowOrganismo=$stmtOrganismo->fetch(PDO::FETCH_ASSOC)){
           $codOrganismoX=$rowOrganismo['codigo']; 
           $nombreOrganismoX=$rowOrganismo['nombre']; 
+
+          //SACAMOS EL TOTAL A DISTRIBUIR
+          $montoTotalDNMes=distribucionDNSA($cadenaFondosTodo,$anio,$mes,$codOrganismoX,0,1);
+          $montoTotalSAMes=distribucionDNSA($cadenaFondosTodo,$anio,$mes,$codOrganismoX,0,2);
+
+          $montoTotalDNAcumulado=distribucionDNSA($cadenaFondosTodo,$anio,$mes,$codOrganismoX,1,1);
+          $montoTotalSAAcumulado=distribucionDNSA($cadenaFondosTodo,$anio,$mes,$codOrganismoX,1,2);
+
+          //echo $montoTotalDNMes." ".$montoTotalSAMes."<br>";
+          $montoTotalDNADistribuir=$montoTotalSAMes+$montoTotalDNMes;
+          $montoTotalDNADistribuirAcumulado=$montoTotalSAAcumulado+$montoTotalDNAcumulado;
+
+          //$montoTotalDNADistribuir=0;
+          //$montoTotalDNADistribuirAcumulado=0;
 
         ?>
     <div class="row">
@@ -211,17 +226,19 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     						}
                 //SACAMOSM EL DETALLE CONJUNTO EGRESOS
                 $montoPresEgConjunto=presupuestoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
-                $montoEjEgConjunto=ejecutadoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
+                $montoEjEgConjunto=ejecutadoEgresosMesSinRedist($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
 
-                if($i==1 && $codOrganismoX==503){
-                  $montoEjEgConjunto=133565;
+                /********DIVIDIDO EN 3 LPZ 30 % CBBA 30 % SCZ 40% *******/
+                if($i==1){
+                  $montoEjEgConjunto=$montoEjEgConjunto+($montoTotalDNADistribuir*0.3);
                 }
-                if($i==2 && $codOrganismoX==503){
-                  $montoEjEgConjunto=109503;                  
+                if($i==2){
+                  $montoEjEgConjunto=$montoEjEgConjunto+($montoTotalDNADistribuir*0.3);
                 }
-                if($i==3 && $codOrganismoX==503){
-                  $montoEjEgConjunto=139054;
+                if($i==3){
+                  $montoEjEgConjunto=$montoEjEgConjunto+($montoTotalDNADistribuir*0.4);
                 }
+                /******** FIN DIVIDIDO EN 3 LPZ 30 % CBBA 30 % SCZ 40%   *******/
 
 
                 $porcentajeEgConjunto=0;
@@ -323,17 +340,19 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <?php
                  //ACA SACAMOS LOS DATOS PARA LOS ACUMULADOS
                   $montoPresEgAcumulado=presupuestoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
-                  $montoEjEgAcumulado=ejecutadoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
+                  $montoEjEgAcumulado=ejecutadoEgresosMesSinRedist($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
 
-                   if($i==1 && $codOrganismoX==503){
-                    $montoEjEgAcumulado=786214;
+                  /********DIVIDIDO EN 3 LPZ 30 % CBBA 30 % SCZ 40% *******/
+                  if($i==1){
+                    $montoEjEgAcumulado=$montoEjEgAcumulado+($montoTotalDNADistribuirAcumulado*0.3);
                   }
-                  if($i==2 && $codOrganismoX==503){
-                    $montoEjEgAcumulado=842898;                  
+                  if($i==2){
+                    $montoEjEgAcumulado=$montoEjEgAcumulado+($montoTotalDNADistribuirAcumulado*0.3);
                   }
-                  if($i==3 && $codOrganismoX==503){
-                    $montoEjEgAcumulado=993029;
+                  if($i==3){
+                    $montoEjEgAcumulado=$montoEjEgAcumulado+($montoTotalDNADistribuirAcumulado*0.4);
                   }
+                  /******** FIN DIVIDIDO EN 3 LPZ 30 % CBBA 30 % SCZ 40%   *******/
 
 
                   $porcentajeEgAcum=0;

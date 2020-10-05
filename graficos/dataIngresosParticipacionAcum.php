@@ -52,9 +52,9 @@ $nameFondo1=$nombreFondo;
     
     if($acumuladoTemporal==0){
        for($i=0;$i<count($organismoTemporalArray);$i++){
-	  	$montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],0,0));
-		$montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],0,0));
-		$montoEjTotal=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,0,0,0));
+	  	$montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],1,0));
+		$montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],1,0));
+		$montoEjTotal=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,0,1,0));
 
 		$participacionPorcent=0;
 		if($montoEjTotal>0){
@@ -68,9 +68,9 @@ $nameFondo1=$nombreFondo;
       	if ($organismoTemporalArray[$i]=="503"||$organismoTemporalArray[$i]=="505"||$organismoTemporalArray[$i]=="506"||$organismoTemporalArray[$i]=="507") {
       		
       	}else{
-      		$montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],0,0));
-		   $montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],0,0));
-		   $montoEjTotal=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,0,0,0));
+      		$montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],1,0));
+		   $montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalArray[$i],1,0));
+		   $montoEjTotal=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,0,1,0));
 
 		   $participacionPorcent=0;
 		   if($montoEjTotal>0){
@@ -81,9 +81,9 @@ $nameFondo1=$nombreFondo;
       	}
 	 }
 
-	 $montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalAgrupado,0,0));
-	 $montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalAgrupado,0,0));
-	 $montoEjTotal=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,0,0,0));
+	 $montoPresIngreso1=round(presupuestoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalAgrupado,1,0));
+	 $montoEjIngreso1=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,$organismoTemporalAgrupado,1,0));
+	 $montoEjTotal=round(ejecutadoIngresosMes($fondo1,$anioTemporal,$mesTemporal,0,1,0));
 
      $participacionPorcent=0;
 	 if($montoEjTotal>0){

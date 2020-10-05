@@ -29,7 +29,7 @@ $fila=$_SESSION["filaTemporal"];
         {
             {
        console.log("antes de los datos;");
-                $.get("../graficos/dataIngresosParticipacion.php?filaTemporal=<?=$_SESSION['filaTemporal']?>&acumuladoTemporal=<?=$_SESSION['acumuladoTemporal']?>",
+                $.get("../graficos/dataIngresosParticipacionAcum.php?filaTemporal=<?=$_SESSION['filaTemporal']?>&acumuladoTemporal=<?=$_SESSION['acumuladoTemporal']?>",
                 {},
                 function (data){
                     console.log("aqui mostramos los datos:"+data);
