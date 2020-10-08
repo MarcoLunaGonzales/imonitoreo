@@ -125,24 +125,12 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                           </strong>
                       </a>
                     </td>
-                    <?php
-                    if($globalAdmin==1){
-                    ?>
                     <td class="text-center">
                       <button class="<?=$buttonDetail;?>" data-toggle="modal" data-target="#myModal1" onClick="ajaxCargosPOAI(<?=$codigoIndicador?>);"> 
                           <i class="material-icons" title="Registrar Cargos POAI">settings</i>
                       </button>
                     </td>
-                    <?php
-                    }else{
-                    ?>
-                    <td class="text-center">
-                      -
-                    </td>
-                    <?php
-                    }
-                    ?>
-
+                    
                     <?php
                     if($globalAdmin==1){
                     ?>

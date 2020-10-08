@@ -55,6 +55,9 @@ require_once '../styles.php';
 
 
 for($i=2015;$i<=$anioTemporal;$i++){
+	if($i!=2020){
+		$mesTemporal=12;
+	}
 	$certificadosTCP=obtenerCantCertificados(0,$i,$mesTemporal,39,0,1,$vista);
 	$certificadosTCS=obtenerCantCertificados(0,$i,$mesTemporal,38,0,1,$vista);
 

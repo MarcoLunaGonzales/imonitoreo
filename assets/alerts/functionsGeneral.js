@@ -266,7 +266,7 @@ function addActividadPOAIAsignacion(codigoPadre, codUnidad, codArea, codIndicado
       var divDetalle;
       divDetalle=document.getElementById("div"+numFilas);
       ajax=nuevoAjax();
-      ajax.open("GET","poai/ajaxActividadesPOAIAsignacion.php?cod_indicador="+codIndicador+"&cod_unidad="+codUnidad+"&cod_area="+codArea+"&codActividad="+codigoPadre+"&codigo="+numFilas,true);
+      ajax.open("GET","poai/ajaxActividadesPOAIAsignacion2.php?cod_indicador="+codIndicador+"&cod_unidad="+codUnidad+"&cod_area="+codArea+"&codActividad="+codigoPadre+"&codigo="+numFilas,true);
       ajax.onreadystatechange=function(){
         if (ajax.readyState==4) {
           divDetalle.innerHTML=ajax.responseText;

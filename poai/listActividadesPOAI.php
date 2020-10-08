@@ -156,6 +156,17 @@ $stmt->bindColumn('periodo', $periodo);
                           while($rowVerifica = $stmtVerifica->fetch(PDO::FETCH_ASSOC)) {
                             $contadorVerifica=$rowVerifica['contador'];
                           }
+
+                          $sqlVerifica2="SELECT count(*)as contador from actividades_personal ap where ap.cod_actividad='$codigo' and ap.cod_personal='$globalUser'";
+                          //echo $sqlVerifica;
+                          $stmtVerifica2=$dbh->prepare($sqlVerifica2);
+                          $stmtVerifica2->execute();
+                          $contadorVerifica2=0;
+                          while($rowVerifica2 = $stmtVerifica2->fetch(PDO::FETCH_ASSOC)) {
+                            $contadorVerifica2=$rowVerifica2['contador'];
+                          }
+
+
                       ?>
                         <tr>
                           <td class="text-center"><?=$index;?></td>
@@ -164,12 +175,18 @@ $stmt->bindColumn('periodo', $periodo);
                           <td class="text-left small"><?=$productoEsperado;?></td>
                           <td class="text-left small"><?=$datoClasificador;?></td>
                           <td class="td-actions text-right">
+                            <?php
+                            if($contadorVerifica2>0){
+                            ?>
                             <a href='index.php?opcion=listActividadesPOAIDetalle&codigo=<?=$codigoIndicador;?>&area=<?=$areaIndicador;?>&unidad=<?=$unidadIndicador;?>&actividad=<?=$codigo;?>&vista=1' rel="tooltip"  class="<?=$buttonDetailRojo;?>">
                         <!--i class="material-icons" title="Ver Actividades">description</i-->
                               <strong>
-                                <?=($contadorVerifica==0)?"-":$contadorVerifica;?>
+                                <?=($contadorVerifica==0)?"0":$contadorVerifica;?>
                               </strong>
                             </a>
+                            <?php
+                            }
+                            ?>
                           </td>
                         </tr>
             <?php

@@ -517,7 +517,7 @@
 			$area=$_GET['area'];
 			$unidad=$_GET['unidad'];
 			$sector=$_GET['sector'];
-			require_once('poai/asignarPOAI.php');
+			require_once('poai/asignarPersonalPOAI.php');
 		}
 		if ($_GET['opcion']=='listPOAI') {
 			$area=$_GET['area'];

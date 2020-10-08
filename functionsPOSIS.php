@@ -358,7 +358,7 @@ function ejecutadoEgresosMesSinRedist($agencia, $anio, $mes, $organismo, $acumul
 //ESTA FUNCION ES IDENTICA A LA DE ejecutadoEgresosMes
 function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa){
    //en la variable dn_sa enviamos el organismo del que queremos ver
-  /*if($dn_sa==1){
+  if($dn_sa==1){
     $campo="porcentaje_dn";
     $organismoDNSA="501";
   }else{
@@ -418,10 +418,7 @@ function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa)
     //echo "anio ".$anio." ".$porcentaje."% ".$montoEgresoEjecutado."monto  dnsa".$dn_sa."<br>";
     $montoEgresoOrganismo=$montoEgresoEjecutado*($porcentaje/100);
     $totalMontoEgresoDNSA=$totalMontoEgresoDNSA+$montoEgresoOrganismo;
-  }
-  */
-  $totalMontoEgresoDNSA=0;
-  
+  }  
   return($totalMontoEgresoDNSA);
 }
 

@@ -1487,6 +1487,7 @@ function obtenerCantCertificados($unidad,$anioTemporal,$mesTemporal,$area1,$ambo
     }
   }else{
     $sql.=" and e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' ";    
+    //$sql.=" and e.fechavalido>='$fechaVistaFin' ";    
   }
   if($unidad>0){
     $sql.=" and e.idoficina in ($unidad) ";
