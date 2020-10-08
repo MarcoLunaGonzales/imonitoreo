@@ -870,3 +870,18 @@ function obtenerHoraFechaActualFormato(){
 
   return diasSemana[f.getDay()] + ", " + f.getDate() + " de " + meses[f.getMonth()] + " de " + f.getFullYear()+"  "+hora;
 }
+
+function cambiarFuncionesPersonalPOAI(codigo){
+  var cod_personal=$("#cod_personal"+codigo).val();
+  var parametros={"cod_personal":cod_personal};
+  $.ajax({
+        type: "GET",
+        dataType: 'html',
+        url: "poai/ajaxListFuncionesCargoPersonal.php",
+        data: parametros,
+        success:  function (resp) {
+          $("#funcion"+codigo).html(resp);
+          $('.selectpicker').selectpicker('refresh');
+        }
+    });
+}

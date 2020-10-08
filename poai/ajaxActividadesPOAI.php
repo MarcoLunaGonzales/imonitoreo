@@ -104,7 +104,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 		</div>
 		<div class="col-sm-3">
 	    	<div class="form-group">
-	        <select class="selectpicker form-control form-control-sm" name="cod_personal<?=$codigo;?>" id="cod_personal<?=$codigo;?>" data-style="<?=$comboColor2;?>" data-live-search="true">
+	        <select class="selectpicker form-control form-control-sm" name="cod_personal<?=$codigo;?>" id="cod_personal<?=$codigo;?>" data-style="<?=$comboColor2;?>" data-live-search="true" onchange="cambiarFuncionesPersonalPOAI(<?=$codigo;?>)">
 			  	<option value="">Personal</option>
 			  	<?php
 			  	$sql="SELECT p.codigo, p.nombre, (select c.nombre from cargos c where c.codigo=pd.cod_cargo)as cargo from personal2 p, personal_datosadicionales pd, personal_unidadesorganizacionales pu where p.codigo=pd.cod_personal and p.codigo=pu.cod_personal and pu.cod_unidad='$codUnidad' and pd.cod_cargo in (select i.cod_cargo from indicadores_areascargos i where i.cod_indicador='$codigoIndicador' and i.cod_area='$codArea') ";
