@@ -831,7 +831,7 @@ function calcularTotalPlanificado(indice, mes){
             console.log("DIV A AFECTAR: "+divContenedor);
             var formData = new FormData(document.getElementById("formuploadajaxsis"));
             $.ajax({
-                url: "http://ibnored.ibnorca.org/itranet/documentos/guardar_archivo.php",
+                url: "http://200.105.199.164:8008/itranet/documentos/guardar_archivo.php",
                 type: "post",
                 dataType: "html",
                 data: formData,
