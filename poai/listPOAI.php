@@ -68,16 +68,20 @@ $globalArea=$_SESSION["globalArea"];
 $globalAdmin=$_SESSION["globalAdmin"];
 
 if($globalAdmin==0){
-  $sql="SELECT (select p.nombre from perspectivas p where p.codigo=o.cod_perspectiva)as perspectiva, o.codigo, o.abreviatura, o.descripcion, (SELECT g.nombre from gestiones g WHERE g.codigo=o.cod_gestion) as gestion, i.nombre as nombreindicador, i.codigo as codigoindicador
+  $sql="SELECT (SELECT count(*) from actividades_poa a where a.cod_unidadorganizacional in ($globalUnidad) and a.cod_area in ($globalArea) and a.cod_indicador=i.codigo and a.cod_estado=1 and a.cod_actividadpadre=0) as contador,
+  (select p.nombre from perspectivas p where p.codigo=o.cod_perspectiva)as perspectiva, o.codigo, o.abreviatura, o.descripcion, (SELECT g.nombre from gestiones g WHERE g.codigo=o.cod_gestion) as gestion, i.nombre as nombreindicador, i.codigo as codigoindicador
     FROM objetivos o, indicadores i, indicadores_unidadesareas iua
   WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion' and i.codigo=iua.cod_indicador and iua.cod_area in ($globalArea) and iua.cod_unidadorganizacional in ($globalUnidad) 
   group by perspectiva, o.codigo, o.abreviatura, o.descripcion, gestion, nombreindicador, codigoindicador
+  HAVING contador>0
   ORDER BY perspectiva, abreviatura";
 }else{
-  $sql="SELECT (select p.nombre from perspectivas p where p.codigo=o.cod_perspectiva)as perspectiva, o.codigo, o.abreviatura, o.descripcion, (SELECT g.nombre from gestiones g WHERE g.codigo=o.cod_gestion) as gestion, i.nombre as nombreindicador, i.codigo as codigoindicador
+  $sql="SELECT (SELECT count(*) from actividades_poa a where a.cod_unidadorganizacional in ($globalUnidad) and a.cod_area in ($globalArea) and a.cod_indicador=i.codigo and a.cod_estado=1 and a.cod_actividadpadre=0) as contador,
+  (select p.nombre from perspectivas p where p.codigo=o.cod_perspectiva)as perspectiva, o.codigo, o.abreviatura, o.descripcion, (SELECT g.nombre from gestiones g WHERE g.codigo=o.cod_gestion) as gestion, i.nombre as nombreindicador, i.codigo as codigoindicador
     FROM objetivos o, indicadores i
   WHERE o.codigo=i.cod_objetivo and o.cod_estado=1 and i.cod_estado=1 and o.cod_tipoobjetivo=1 and o.cod_gestion='$globalGestion'
   group by perspectiva, o.codigo, o.abreviatura, o.descripcion, gestion, nombreindicador, codigoindicador
+  HAVING contador>0
   ORDER BY perspectiva, abreviatura";
 }
 
@@ -94,6 +98,7 @@ $stmt->bindColumn('descripcion', $descripcion);
 $stmt->bindColumn('gestion', $gestion);
 $stmt->bindColumn('nombreindicador', $nombreIndicador);
 $stmt->bindColumn('codigoindicador', $codigoIndicador);
+$stmt->bindColumn('contador', $nroActividadesIndicador);
 ?>
 <div class="content">
 	<div class="container-fluid">
@@ -125,17 +130,17 @@ $stmt->bindColumn('codigoindicador', $codigoIndicador);
                         $index=1;
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
 
-                          $sqlNroAct="SELECT count(*)as contador from actividades_poa a where a.cod_unidadorganizacional in ($globalUnidad) and a.cod_area in ($globalArea) and a.cod_indicador='$codigoIndicador' and a.cod_estado=1 
-                            and a.cod_actividadpadre=0";
+                          //$sqlNroAct="SELECT count(*)as contador from actividades_poa a where a.cod_unidadorganizacional in ($globalUnidad) and a.cod_area in ($globalArea) and a.cod_indicador='$codigoIndicador' and a.cod_estado=1 
+                            //and a.cod_actividadpadre=0";
                           
                           //echo $sqlNroAct;
 
-                          $stmtNroAct = $dbh->prepare($sqlNroAct);
-                          $stmtNroAct->execute();
-                          $nroActividadesIndicador=0;
-                          while ($rowNroAct = $stmtNroAct->fetch(PDO::FETCH_ASSOC)) {
-                              $nroActividadesIndicador=$rowNroAct['contador'];
-                          }
+                          //$stmtNroAct = $dbh->prepare($sqlNroAct);
+                          //$stmtNroAct->execute();
+                          //$nroActividadesIndicador=0;
+                          //while ($rowNroAct = $stmtNroAct->fetch(PDO::FETCH_ASSOC)) {
+                          //    $nroActividadesIndicador=$rowNroAct['contador'];
+                          //}
                       ?>
                         <tr>
                           <td class="text-center"><?=$index;?></td>
