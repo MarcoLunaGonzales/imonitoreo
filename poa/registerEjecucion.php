@@ -235,7 +235,7 @@ $moduleName="Registro de Ejecucion POA";
 	                    		<td class="td-actions text-center">
 	                    			<div id="divArchivo<?=$i;?>">
 	                    			<?php
-			                          if($banderaArchivo>0){
+			                          //if($banderaArchivo>0){
 	                          		?>
 			                            <a href='<?=$globalServerArchivos?>descargar_archivo.php?idR=<?=$banderaArchivo;?>' rel="tooltip" class="" target="_blank">
 			                              <i class="material-icons">attachment</i>
@@ -244,13 +244,13 @@ $moduleName="Registro de Ejecucion POA";
 			                                <i class="material-icons">delete_forever</i>
 			                            </a>
 		                          	<?php
-		                          	}else{
+		                          	//}else{
 		                          	?>
 		                    			<a href="#" class="<?=$buttonMorado;?> btn-round" data-toggle="modal" data-target="#myModal" onClick="ajaxArchivosEj('<?=$nombre;?>',<?=$idRegistroEjecucion?>,'divArchivo<?=$i;?>');">
     	    		                    	<i class="material-icons">cloud_upload</i>
 			                          	</a>
 		                          	<?php
-		                          	}
+		                          	//}
 		                          	?>
 		                          </div>
 	                    		</td>
