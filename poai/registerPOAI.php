@@ -61,6 +61,7 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 	$contadorRegistros=$row['nro_registros'];
 }
 $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$codAreaX);
+
 ?>
 <script>
 	numFilas=<?=$contadorRegistros;?>;
@@ -154,25 +155,8 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 
 		                    <div class="col-md-12">
 								<div class="row">
-									<!--div class="col-sm-3">
-				                        <div class="form-group">
-				                        <select class="selectpicker form-control form-control-sm" name="norma_priorizada<?=$index;?>" id="norma_priorizada<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
-									  		<option value="">Sector</option>
-										  	<?php
-										  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
-											$stmt->execute();
-											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-												$codigoX=$row['codigo'];
-												$nombreX=$row['nombre'];
-											?>
-													<option value="<?=$codigoX;?>" <?=($codigoX==$normaPriorizada)?"selected":"";?>  ><?=$nombreX;?></option>	
-											<?php	
-											}
-										  	?>
-										</select>
-										</div>
-			                        </div>
-			                        <div class="col-sm-3">
+
+			                        <!--div class="col-sm-3">
 			                        	<div class="form-group">
 								        <select class="selectpicker form-control form-control-sm" name="norma<?=$index;?>" id="norma<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 										  	<option value="">Norma</option>
@@ -205,7 +189,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 										</div>
 		                          	</div-->
 
-			                        <div class="col-sm-6">
+			                        <div class="col-sm-4">
 			                        	<div class="form-group">
 								        <select class="selectpicker form-control form-control-sm" name="cod_padre<?=$index;?>" id="cod_padre<?=$index;?>" data-style="<?=$comboColor2;?>" data-live-search="true">
 										  	<option value="">Actividad Padre</option>
@@ -223,6 +207,25 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 										</select>
 										</div>
 		                          	</div>
+
+									<div class="col-sm-2">
+				                        <div class="form-group">
+				                        <select class="selectpicker form-control form-control-sm" name="norma_priorizada<?=$index;?>" id="norma_priorizada<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+									  		<option value="">Sector</option>
+										  	<?php
+										  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
+											$stmt->execute();
+											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+												$codigoX=$row['codigo'];
+												$nombreX=$row['nombre'];
+											?>
+													<option value="<?=$codigoX;?>" <?=($codigoX==$normaPriorizada)?"selected":"";?>  ><?=$nombreX;?></option>	
+											<?php	
+											}
+										  	?>
+										</select>
+										</div>
+			                        </div>
 
 		                          	<div class="col-sm-3">
 		                          		<div class="form-group">
@@ -248,7 +251,8 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 												}
 										  	}
 										  	if($nombreTablaClasificador=="clientes"){
-											  	$sqlClasificadorX="SELECT c.codigo, c.nombre, u.nombre as unidad from clientes c, unidades_organizacionales u where c.cod_unidad=u.codigo and c.cod_unidad in ($codUnidadHijosX) order by 2;";
+											  	$sqlClasificadorX="SELECT c.codigo, c.nombre, u.nombre as unidad from clientes c, unidades_organizacionales u where c.cod_unidad=u.codigo order by 2";
+											  	//echo $sqlClasificadorX;
 											  	$stmt = $dbh->prepare($sqlClasificadorX);
 												$stmt->execute();
 												while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -268,27 +272,30 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 							</div>
 							<div class="col-md-12">
 								<div class="row">
-									<div class="col-sm-5">
+									<div class="col-sm-4">
 					                    <div class="form-group">
 					                    <label for="actividad<?=$index;?>" class="bmd-label-floating">Actividad</label>			
 			                          	<textarea class="form-control" type="text" name="actividad<?=$index;?>" id="actividad<?=$index;?>" required="true" ><?=$nombre;?></textarea>	
 		 								</div>
 		                          	</div>
 
-		                          	<div class="col-sm-3">
+		                          	<div class="col-sm-4">
 								    	<div class="form-group">
 								        <select class="selectpicker form-control form-control-sm" name="cod_personal<?=$index;?>" id="cod_personal<?=$index;?>" data-style="<?=$comboColor2;?>" data-live-search="true">
 										  	<option value="">Personal</option>
 										  	<?php
-										  	$sql="SELECT p.codigo, p.nombre, (select c.nombre from cargos c where c.codigo=pd.cod_cargo)as cargo from personal2 p, personal_datosadicionales pd, personal_unidadesorganizacionales pu where p.codigo=pd.cod_personal and p.codigo=pu.cod_personal and pu.cod_unidad='$unidadIndicador' and pd.cod_cargo in (select i.cod_cargo from indicadores_areascargos i where i.cod_indicador='$codigoIndicador' and i.cod_area='$areaIndicador') and p.codigo in ($codPersonalX) order by 1,2";
+										  	$codPersonalLista=0;
+										  	$sql="SELECT p.codigo, p.nombre, (select c.abreviatura from cargos c where c.codigo=pd.cod_cargo)as cargo from personal2 p, personal_datosadicionales pd, personal_unidadesorganizacionales pu where p.codigo=pd.cod_personal and p.codigo=pu.cod_personal and pu.cod_unidad='$unidadIndicador' and pd.cod_cargo in (select i.cod_cargo from indicadores_areascargos i where i.cod_indicador='$codigoIndicador' and i.cod_area='$areaIndicador') and p.codigo in ($codPersonalX) order by 1,2";
 										  	//echo $sql;
 										  	$stmt = $dbh->prepare($sql);
 											$stmt->execute();
 											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 												$codigoX=$row['codigo'];
 												$nombreX=$row['nombre'];
+												$nombreCargoX=$row['cargo'];
+												$codPersonalLista=$codigoX;
 											?>
-												<option value="<?=$codigoX;?>" <?=($codigoX==$codPersonalX)?"selected":"";?>  data-content="<span class='text-dark small font-weight-bold'><?=$nombreX;?></span>" selected><?=$nombreX;?></option>	
+												<option value="<?=$codigoX;?>" <?=($codigoX==$codPersonalX)?"selected":"";?> data-content="<span class='small font-weight-bold'><?=$nombreX;?>(<?=$nombreCargoX;?>)</span>"><?=$nombreX;?>(<?=$nombreCargoX;?>)</option>	
 											<?php
 											}
 										  	?>
@@ -352,7 +359,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidadX,$
 											<select class="selectpicker form-control form-control-sm" name="funcion<?=$index;?>" id="funcion<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true">
 											  	<option value="">Funcion Asociada a la Actividad</option>
 											  	<?php
-											  	$stmt = $dbh->prepare("SELECT cf.cod_funcion, cf.nombre_funcion from personal_datosadicionales p, cargos_funciones cf where p.cod_personal='$globalUser' and p.cod_cargo=cf.cod_cargo;");
+											  	$stmt = $dbh->prepare("SELECT cf.cod_funcion, cf.nombre_funcion from personal_datosadicionales p, cargos_funciones cf where p.cod_personal='$codPersonalLista' and p.cod_cargo=cf.cod_cargo;");
 												$stmt->execute();
 												while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 													$codigoX=$row['cod_funcion'];

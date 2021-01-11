@@ -31,7 +31,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 		<input type="hidden" name="codigo<?=$codigo;?>" id="codigo<?=$codigo;?>" value="0">
 				
 
-		<div class="col-sm-6">
+		<div class="col-sm-4">
 	    	<div class="form-group">
 	        <select class="selectpicker form-control form-control-sm" name="cod_padre<?=$codigo;?>" id="cod_padre<?=$codigo;?>" data-style="<?=$comboColor2;?>" data-live-search="true">
 			  	<option value="">Actividad Padre</option>
@@ -51,6 +51,25 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 			</select>
 			</div>
 	  	</div>
+
+		<div class="col-sm-2">
+            <div class="form-group">
+            <select class="selectpicker form-control form-control-sm" name="norma_priorizada<?=$codigo;?>" id="norma_priorizada<?=$codigo;?>" data-style="<?=$comboColor;?>" data-live-search="true">
+		  		<option value="">Sector</option>
+			  	<?php
+			  	$stmt = $dbh->prepare("SELECT codigo, nombre FROM sectores where cod_estado=1 order by 2");
+				$stmt->execute();
+				while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+					$codigoX=$row['codigo'];
+					$nombreX=$row['nombre'];
+				?>
+						<option value="<?=$codigoX;?>" <?=($codigoX==$normaPriorizada)?"selected":"";?>  ><?=$nombreX;?></option>	
+				<?php	
+				}
+			  	?>
+			</select>
+			</div>
+        </div>
 
 	  	<div class="col-sm-3">
 			<div class="form-group">
@@ -76,8 +95,7 @@ $nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$codUnidad,$c
 					}
 			  	}
 			  	if($nombreTablaClasificador=="clientes"){
-				  	$stmt = $dbh->prepare("SELECT c.codigo, c.nombre, u.nombre as unidad from clientes c, unidades_organizacionales u where c.cod_unidad=u.codigo 
-				  		and c.cod_unidad in ($codUnidadHijosX) order by 2;");
+				  	$stmt = $dbh->prepare("SELECT c.codigo, c.nombre, u.nombre as unidad from clientes c, unidades_organizacionales u where c.cod_unidad=u.codigo order by 2;");
 					$stmt->execute();
 					while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 						$codigoX=$row['codigo'];

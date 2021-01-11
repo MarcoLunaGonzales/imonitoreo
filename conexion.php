@@ -9,11 +9,11 @@
     private $port = '3306';
 */
    private $tipo_de_base = 'mysql';
-   private $host = 'localhost';
-   private $nombre_de_base = 'ibnmonitoreo4000';
-   private $usuario = 'root';
-   private $contrasena = '';
-   private $port = '3306';
+   private $host = '200.105.199.166';
+   private $nombre_de_base = 'ibnmonitoreo';
+   private $usuario = 'ingresofm';
+   private $contrasena = 'minka123';
+   private $port = '4606';
 
 
    public function __construct() {

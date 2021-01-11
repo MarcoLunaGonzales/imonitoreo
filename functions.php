@@ -1457,6 +1457,7 @@ function obtenerCantEmpresasCertificados($unidad,$anioTemporal,$mesTemporal,$are
   if($unidad>0){
     $sql.=" and e.idoficina in ($unidad) ";
   } 
+  
   //echo $sql;
   
   $stmt = $dbh->prepare($sql);

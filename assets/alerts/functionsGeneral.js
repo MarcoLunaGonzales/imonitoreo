@@ -10,7 +10,7 @@ function number_format(amount, decimals) {
         return parseFloat(0).toFixed(decimals);
 
     // si es mayor o menor que cero retorno el valor formateado como numero
-    amount = '' + amount.toFixed(decimals);
+    amount = '' + amount.toFixed(decimals);totalesSIS
 
     var amount_parts = amount.split('.'),
         regexp = /(\d+)(\d{3})/;

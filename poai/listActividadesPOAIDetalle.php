@@ -51,15 +51,8 @@ $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
-//SACAMOS LA TABLA RELACIONADA
-$sqlClasificador="SELECT c.tabla FROM indicadores i, clasificadores c where i.codigo='$codigoIndicador' and i.cod_clasificador=c.codigo";
-$stmtClasificador = $dbh->prepare($sqlClasificador);
-$stmtClasificador->execute();
-$nombreTablaClasificador="";
-while ($rowClasificador = $stmtClasificador->fetch(PDO::FETCH_ASSOC)) {
-  $nombreTablaClasificador=$rowClasificador['tabla'];
-}
-if($nombreTablaClasificador==""){$nombreTablaClasificador="areas";}//ESTO PARA QUE NO DE ERROR
+$nombreTablaClasificador=obtieneTablaClasificador($codigoIndicador,$unidadIndicador,$areaIndicador);
+
 // Preparamos
 $sql="SELECT a.codigo, a.orden, a.nombre, (SELECT n.abreviatura from normas n where n.codigo=a.cod_normapriorizada)as normapriorizada,
 (SELECT s.abreviatura from normas n, sectores s where n.cod_sector=s.codigo and n.codigo=a.cod_normapriorizada)as sectorpriorizado,

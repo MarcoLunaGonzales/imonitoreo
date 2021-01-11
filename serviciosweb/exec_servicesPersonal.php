@@ -30,15 +30,28 @@ foreach ($detalle as $objDet){
 	$cargo=$objDet->Cargo;
 	$idUsuario=$objDet->IdUsuario;
 	$idPersonal=$objDet->IdPersonal;
+	$idCliente=$objDet->IdCliente;
 
-	$stmt = $dbh->prepare("INSERT INTO $tableInsert (codigo, nombre, cod_area, cod_unidad, cod_usuario, cod_personal) VALUES (:codigo, :nombre, :cod_area, :cod_unidad, :cod_usuario, :cod_personal)");
-	$stmt->bindParam(':codigo', $codigoX);
-	$stmt->bindParam(':nombre', $nombreX);
-	$stmt->bindParam(':cod_area', $idArea);
-	$stmt->bindParam(':cod_unidad', $idOficina);
-	$stmt->bindParam(':cod_usuario', $idUsuario);
-	$stmt->bindParam(':cod_personal', $idPersonal);
-	$flagSuccess=$stmt->execute();
+
+	if($codigoX=="" || $codigoX==0){
+		$codigoX=$idCliente;
+	}
+
+	$sql="INSERT INTO $tableInsert (codigo, nombre, cod_area, cod_unidad, cod_usuario, cod_personal) VALUES (:codigo, :nombre, :cod_area, :cod_unidad, :cod_usuario, :cod_personal)";
+	$stmt = $dbh->prepare($sql);
+	$values = array( ':codigo' => $codigoX,
+        ':nombre' => $nombreX,
+        ':cod_area' => $idArea,
+        ':cod_unidad' => $idOficina,
+        ':cod_usuario' => $idUsuario,
+        ':cod_personal' => $idPersonal
+    	);
+
+	$exQuery=str_replace(array_keys($values), array_values($values), $sql);
+	
+	//echo $exQuery;
+
+	$flagSuccess=$stmt->execute($values);
 }
 echo "ok PERSONAL<br>";
 

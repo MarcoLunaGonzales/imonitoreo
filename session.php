@@ -70,12 +70,13 @@ if($banderaLogin==1 || $tipoLogin==1){
 		$nombreUnidad=abrevUnidad($codUnidad);
 		
 		$codAreaTrabajo=buscarAreasAdicionales($codigo, 1);
+		//echo $codAreaTrabajo."codareatrab";
 		if($codAreaTrabajo!="" && $codAreaTrabajo!=0){
-			$codAreaTrabajo=substr($codAreaTrabajo, 1); ;
+			//$codAreaTrabajo=substr($codAreaTrabajo, 1); ;
 		}
 		$codUnidadTrabajo=buscarUnidadesAdicionales($codigo,1);
 		if($codUnidadTrabajo!="" && $codUnidadTrabajo!=0){
-			$codUnidadTrabajo=substr($codUnidadTrabajo, 1);
+			//$codUnidadTrabajo=substr($codUnidadTrabajo, 1);
 		}
 		//echo "area unidad: ".$codAreaTrabajo." ".$codUnidadTrabajo;
 
