@@ -180,6 +180,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <tbody>
                   <?php
                   $sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
+                  //echo $sqlU;
                   $stmtU = $dbh->prepare($sqlU);
                   $stmtU->execute();
                   $stmtU->bindColumn('codigo', $codigoX);
@@ -195,12 +196,19 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
                     $codFondo=obtenerFondosReport($codigoX);
                     $codOrganismo=obtenerOrganismosReport($codArea);
-                    
-                    $ingresosMes=ejecutadoIngresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,0,0);
-                    $ingresosMesAcum=ejecutadoIngresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,1,0);
 
-                    $egresosMes=ejecutadoEgresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,0,0);
-                    $egresosMesAcum=ejecutadoEgresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,1,0);
+                    $ingresosMes=0;
+                    $ingresosMesAcum=0;
+                    $egresosMes=0;
+                    $egresosMesAcum=0;
+
+                    if($codFondo!=""){
+                      $ingresosMes=ejecutadoIngresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,0,0);
+                      $ingresosMesAcum=ejecutadoIngresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,1,0);
+
+                      $egresosMes=ejecutadoEgresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,0,0);
+                      $egresosMesAcum=ejecutadoEgresosMes($codFondo,$anioTemporal,$mesTemporal,$codOrganismo,1,0);
+                    }
 
                     $resultado=$ingresosMes-$egresosMes;
                     $resultadoAcum=$ingresosMesAcum-$egresosMesAcum;

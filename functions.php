@@ -671,7 +671,7 @@ function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   if($tipocurso!=""){
     $sql.=" and eac.d_tipo in ('$tipocurso')";
   }
-  $sql.=" GROUP BY eac.d_oficina, eac.cod_curso, eac.nromodulo ";
+  $sql.=" GROUP BY eac.d_oficina, eac.cod_curso, eac.idmodulo ";
 
   //echo $sql."<br>";
 

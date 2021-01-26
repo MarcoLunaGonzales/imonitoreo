@@ -99,7 +99,7 @@ function ejecutadoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cu
         $sqlMayor="SELECT sum(p.monto)as monto from po_mayores p where p.fondo in ($agencia) and $campoTablaCuenta='$codPlanCuenta' and p.anio='$anio' and p.mes='$mes'";
       }
       
-      //echo $sqlMayor;
+      //echo $sqlMayor."<br>";
       
       $stmtMayor=$dbh->prepare($sqlMayor);
       $stmtMayor->execute();
