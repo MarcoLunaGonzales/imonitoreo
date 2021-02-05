@@ -80,7 +80,7 @@ $stmt->bindColumn('estadopoa', $estadopoa);
                 </div>
               </div>
 				<div class="card-body">
-                    <!--button class="btn" onClick="location.href='index.php?opcion=registerArea'">Registrar</button-->
+                    <button class="btn btn-rose" onClick="location.href='index.php?opcion=listGestionesExtendidas'">Configurar Gestiones Extendidas</button>
                 </div>
 			  
             </div>
