@@ -67,7 +67,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   $codAnioX=$row['anio'];
   $fechaFinRegistroX=$row['fecha_fin'];
 }
-$nombreMes=nameMes($codMesX);
+$nombreMes=abrevMes($codMesX);
 //FIN FECHAS
 
 

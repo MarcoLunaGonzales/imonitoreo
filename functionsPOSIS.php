@@ -99,7 +99,7 @@ function ejecutadoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cu
         $sqlMayor="SELECT sum(p.monto)as monto from po_mayores p where p.fondo in ($agencia) and $campoTablaCuenta='$codPlanCuenta' and p.anio='$anio' and p.mes='$mes'";
       }
       
-      //echo $sqlMayor;
+      //echo $sqlMayor."<br>";
       
       $stmtMayor=$dbh->prepare($sqlMayor);
       $stmtMayor->execute();
@@ -430,13 +430,13 @@ function devolverCodigos($componente, $nivel, $tipo){
   $codigosPartida="'0'";
   $sql="";
   if($nivel==3){
-    $sql="SELECT c.codigo, c.partida from componentessis c where c.codigo='$componente'";
+    $sql="SELECT c.codigo, c.partida from componentessis c where c.codigo='$componente' and c.cod_gestion='1205'";
   }
   if($nivel==2){
-    $sql="SELECT c.codigo, c.partida from componentessis c where c.cod_padre in (select cd.codigo from componentessis cd where cd.codigo='$componente')";
+    $sql="SELECT c.codigo, c.partida from componentessis c where c.cod_padre in (select cd.codigo from componentessis cd where cd.codigo='$componente'  and cd.cod_gestion='1205')  and c.cod_gestion='1205'";
   }
   if($nivel==1){
-    $sql="SELECT c1.codigo, c1.partida from componentessis c1 where c1.cod_padre in (select c.codigo from componentessis c where c.cod_padre in (select cd.codigo from componentessis cd where cd.codigo='$componente'))";
+    $sql="SELECT c1.codigo, c1.partida from componentessis c1 where c1.cod_padre in (select c.codigo from componentessis c where c.cod_padre in (select cd.codigo from componentessis cd where cd.codigo='$componente'  and cd.cod_gestion='1205')  and c.cod_gestion='1205')  and c1.cod_gestion='1205'";
   }
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
@@ -445,11 +445,11 @@ function devolverCodigos($componente, $nivel, $tipo){
       $codigosPartida=$codigosPartida.",'".$row['partida']."'";
   }  
 
-  $codigosComp=str_replace("''","'-1'",$codigosComp);
-  $codigosPartida=str_replace("''","'-1'",$codigosPartida);
+  //$codigosComp=str_replace("''","'-1'",$codigosComp);
+  //$codigosPartida=str_replace("''","'-1'",$codigosPartida);
 
-  $codigosComp=substr($codigosComp, 4);
-  $codigosPartida=substr($codigosPartida, 4);
+  //$codigosComp=substr($codigosComp, 4);
+  //$codigosPartida=substr($codigosPartida, 4);
 
   if($tipo==1){return($codigosComp);} 
   if($tipo==2){return($codigosPartida);} 
@@ -457,6 +457,7 @@ function devolverCodigos($componente, $nivel, $tipo){
 function montoSolicitudComponente($solicitud, $componente, $nivel){
   $dbh = new Conexion();
   $codigosX=devolverCodigos($componente,$nivel,1);
+  //echo "cod: ".$codigosX."<br>";
   $sql="SELECT sum(sd.monto)as monto from solicitudfondos_detalle sd where sd.codigo='$solicitud' and sd.cod_componente in ($codigosX)";
   //echo $sql;
   $stmt = $dbh->prepare($sql);
@@ -492,11 +493,14 @@ function montoPresupuestoComponente($gestion, $anio, $mes, $componente, $nivel){
 function montoEjecucionComponente($anio, $mes, $componente, $nivel){
   $dbh = new Conexion();
   $codigosX=devolverCodigos($componente,$nivel,2);
+  
   //echo $componente." ".$codigosX."<br>";
   //$sql="SELECT sum(m.monto)as monto from po_mayores m where m.anio='$anio' and m.mes<='$mes' and m.ml_partida in ($codigosX) and m.fondo=2001";
+  
   $monto=0;
   if($codigosX!=''){
-    $sql="SELECT sum(m.monto)as monto from po_mayores m where m.anio='$anio' and m.mes<='$mes' and m.ml_partida in ($codigosX) and m.fondo=2001 and m.cuenta like '5%'";
+    $sql="SELECT sum(m.monto)as monto from po_mayores m where m.anio='$anio' and m.mes<='$mes' and 
+	m.ml_partida in ($codigosX) and m.ml_partida not in ('0') and m.fondo=2001 and m.cuenta like '5%'";
     
     //echo $sql;
     

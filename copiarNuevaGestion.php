@@ -10,8 +10,8 @@ $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
-$gestionAnterior="1204";
-$gestionNueva="1205";
+$gestionAnterior="1205";
+$gestionNueva="3584";
 
 $sqlDelete="DELETE from actividades_poaplanificacion where cod_actividad in (select codigo from actividades_poa where 
 	cod_gestion='$gestionNueva')";

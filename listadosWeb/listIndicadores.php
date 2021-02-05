@@ -11,7 +11,7 @@ $stmtX->execute();
 $table="indicadores";
 $moduleName="Indicadores";
 
-$gestionNueva="1205";
+$gestionNueva="3584";
 
 // Preparamos
 $stmt = $dbh->prepare("SELECT a.codigo, a.nombre, a.cod_objetivo as abreviatura FROM $table a where a.cod_estado=1 and a.cod_gestion='$gestionNueva' order by 1");

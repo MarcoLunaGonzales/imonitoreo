@@ -33,7 +33,7 @@ $globalUsuario=$_SESSION["globalUser"];
 
 
 $sqlDetalleX="SELECT pc.codigo, m.glosa_detalle, m.fecha, m.monto, m.fondo, m.organismo, m.ml_partida, 
-(select c.abreviatura from componentessis c where c.partida=m.ml_partida limit 0,1)as codigoact from po_mayores m, po_plancuentas pc where pc.codigo=m.cuenta and m.fondo=2001 and YEAR(m.fecha)='$anio' and MONTH(m.fecha)='$mes' and m.ml_partida<>'' order by m.fecha;";
+(select c.abreviatura from componentessis c where c.partida=m.ml_partida limit 0,1)as codigoact from po_mayores m, po_plancuentas pc where pc.codigo=m.cuenta and m.fondo=2001 and YEAR(m.fecha)='$anio' and MONTH(m.fecha)='$mes' and m.ml_partida<>'' and pc.codigo like '5%' order by m.fecha;";
 
 //echo $sqlDetalleX;
 
@@ -88,6 +88,13 @@ $stmtDetalleX->bindColumn('codigoact', $codigoActividad);
                         while ($row = $stmtDetalleX->fetch(PDO::FETCH_BOUND)) {
                           //SANITIZAMOS LA CADENA PARA COMPARAR EL STRING
                           $glosaComparar=string_sanitize($glosa);
+
+                          $glosaCompararMostrar=$glosaComparar;
+                          $cantidadCortar=120;
+                          if(strlen($glosaCompararMostrar)>$cantidadCortar){
+                            $glosaCompararMostrar=substr($glosaCompararMostrar, 0, $cantidadCortar);
+                            $glosaCompararMostrar.="...";
+                          }
                          
                           $sqlVerifica="SELECT cod_externalcost from gastos_externalcosts where fecha='$fecha' and ml_partida='$mlPartida' and glosa_detalle='$glosaComparar'";
                           //echo $sqlVerifica;
@@ -104,7 +111,7 @@ $stmtDetalleX->bindColumn('codigoact', $codigoActividad);
                         <td class="text-center small"><?=$fecha;?></td>
                         <td class="text-center small"><?=$codigoActividad;?></td>
                         
-                        <td class="text-left small"><?=$glosa;?></td>
+                        <td class="text-left small"><?=$glosaCompararMostrar;?></td>
                         
                         <td class="text-right"><?=formatNumberInt($monto);?></td>
                         <td class="text-center">

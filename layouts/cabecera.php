@@ -19,11 +19,12 @@
             <?php 
               require_once 'conexion.php';
               $dbh = new Conexion();
+              $fechaMayoresX="";
               $sqlFechaMayores="SELECT max(p.fecha)as fecha from po_mayores p";
               $stmtMayores= $dbh->prepare($sqlFechaMayores);
               $stmtMayores->execute();
               $stmtMayores->bindColumn('fecha', $fechaMayores);
-              while ($rowMayores = $stmtMayores->fetch(PDO::FETCH_BOUND)) {
+              while ($rowMayores = $stmtMayores->fetch(PDO::FETCH_ASSOC)) {
                 $fechaMayoresX=$rowMayores["fecha"];
               }
               

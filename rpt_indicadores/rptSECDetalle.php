@@ -97,7 +97,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $stmt->bindColumn('cod_curso', $codigoCurso);
                   $stmt->bindColumn('d_tipo', $tipoCurso);
                   $stmt->bindColumn('nombre_curso', $nombreCurso);
-                  $stmt->bindColumn('cantidad_modulos', $cantidadModulos);
+                  //$stmt->bindColumn('cantidad_modulos', $cantidadModulos);
+                  $stmt->bindColumn('estado', $estadoCurso);
                   $stmt->bindColumn('d_empresa', $empresaCurso);
                   $stmt->bindColumn('nromodulo', $nroModulo);
                   $stmt->bindColumn('fechainicio', $fechaInicio);

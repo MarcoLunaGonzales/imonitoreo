@@ -11,8 +11,8 @@
 		$claveuser="789";
 		*/
 
-	$nombreuser="juan.quenallata@ibnorca.org";
-	$claveuser=md5("juanito2020");	
+	$nombreuser="jonas.noren@norcon.se";
+	$claveuser=md5("123456");	
 	/*//Usuario operativo
 		$nombreuser="diego.vargas@prueba.com";
 		$claveuser="456";
@@ -20,16 +20,16 @@
 	//preparar array de parametros	
 	/* descomentar	*/
 
-/*	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
+	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
 				 "operacion"=>"Login", "nombreUser"=>$nombreuser, "claveUser"=>$claveuser);
-*/	
+	
 			 
 	/******************************************
 	*   parametros obtener de Menu de usuario *
 	******************************************/
 	// descomentar 
-	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
-				 "operacion"=>"Menu", "IdUsuario"=>90);
+//	$datos=array("sIdentificador"=>$sIdentificador, "sKey"=>$sKey, 
+//				 "operacion"=>"Menu", "IdUsuario"=>90);
 	
 	$datos=json_encode($datos);
 	

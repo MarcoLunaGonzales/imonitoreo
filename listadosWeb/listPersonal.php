@@ -3,24 +3,16 @@
 require_once '../conexion.php';
 $dbh = new Conexion();
 
-$sqlX="SET NAMES 'utf8'";
-$stmtX = $dbh->prepare($sqlX);
-$stmtX->execute();
-
-
-$table="objetivos";
-$moduleName="Objetivos";
-
-$gestionNueva="3584";
+$table="personal2";
+$moduleName="Personal";
 
 // Preparamos
-$stmt = $dbh->prepare("SELECT a.codigo, a.nombre, a.abreviatura FROM $table a where a.cod_estado=1 and a.cod_gestion='$gestionNueva' order by 1");
+$stmt = $dbh->prepare("SELECT a.cod_personal as codigo, a.nombre FROM $table a order by 2");
 // Ejecutamos
 $stmt->execute();
 // bindColumn
 $stmt->bindColumn('codigo', $codigo);
 $stmt->bindColumn('nombre', $nombre);
-$stmt->bindColumn('abreviatura', $abreviatura);
 
 ?>
 
@@ -29,7 +21,6 @@ $stmt->bindColumn('abreviatura', $abreviatura);
     <tr>
       <th class="text-center">#</th>
       <th>Nombre</th>
-      <th>Abreviatura</th>
     </tr>
   </thead>
   <tbody>
@@ -40,7 +31,6 @@ $stmt->bindColumn('abreviatura', $abreviatura);
     <tr>
       <td align="center"><?=$codigo;?></td>
       <td><?=$nombre;?></td>
-      <td><?=$abreviatura;?></td>
     </tr>
 <?php
 $index++;

@@ -115,7 +115,7 @@ $fechaVistaFin=date('Y-m-d',strtotime($fechaVistaFin.'-1 day'));
                       $sql.=" and YEAR(e.fechaemision)='$anioTemporal' and MONTH(e.fechaemision)<=$mesTemporal ";
                     }                    
                   }else{
-                    $sql.=" and e.fechaemision<='$fechaVistaIni' and e.fechavalido>='$fechaVistaFin' ";
+                    $sql.=" and e.fechaemision<='$fechaVistaFin' and e.fechavalido>='$fechaVistaFin' ";
                   }
 
                   if($norma!=""){

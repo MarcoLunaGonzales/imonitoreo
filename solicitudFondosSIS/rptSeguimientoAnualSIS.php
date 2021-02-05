@@ -47,7 +47,9 @@ $stmt->execute();
 
 
 $sql="SELECT codigo, nombre, abreviatura, nivel, cod_padre, cod_estado, partida, indice, cod_usuario from componentessis_orden 
-  where cod_usuario='$globalUsuario' ORDER BY indice";
+  where cod_usuario='$globalUsuario'  ORDER BY indice";
+
+//echo $sql;
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 
