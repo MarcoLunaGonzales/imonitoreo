@@ -66,6 +66,17 @@
 			require_once('gestiones/config.php');
 		}
 
+		//GESTIONES EXTENDIDAS
+		if ($_GET['opcion']=='listGestionesExtendidas') {
+			require_once('gestiones_extendidas/list.php');
+		}
+        if ($_GET['opcion']=='registerGestionExtendida') {
+			require_once('gestiones_extendidas/register.php');
+		}
+		if ($_GET['opcion']=='configurarGestionExtendida') {
+			$id_gestion=$_GET['id_gestion'];
+			require_once('gestiones_extendidas/config.php');
+		}
 		//PERSONAL
 		if ($_GET['opcion']=='listPersonal') {
 			require_once('personal/list.php');

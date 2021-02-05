@@ -1689,5 +1689,16 @@ function calcularValorEnPoncentaje($valor,$total){
   }     
   return $porcentaje;
 }
+function obtenerCodigoGestionNombre($nombre){
+   $dbh = new Conexion();
+   $stmt = $dbh->prepare("SELECT codigo FROM gestiones where nombre=:nombre");
+   $stmt->bindParam(':nombre',$nombre);
+   $stmt->execute();
+   $codigoX=0;
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $codigoX=$row['codigo'];
+   }
+   return($codigoX);
+}
 
 ?>

@@ -71,6 +71,12 @@ if($globalPerfilX==1){
                     <span class="sidebar-normal"> Gestiones </span>
                   </a>
                 </li>
+                <li class="nav-item ">
+                  <a class="nav-link" href="?opcion=listGestionesExtendidas">
+                    <span class="sidebar-mini"> GE </span>
+                    <span class="sidebar-normal"> Gestiones Extendidas</span>
+                  </a>
+                </li>
 
                 <li class="nav-item ">
                   <a class="nav-link" href="?opcion=listHitos">

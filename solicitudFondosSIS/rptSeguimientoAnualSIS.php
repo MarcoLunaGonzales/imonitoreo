@@ -14,9 +14,18 @@ $dbh = new Conexion();
 $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
-
-$gestion=$_GET["gestion"];
 $mes=$_GET["mes"];
+$gestion=$_GET["gestion"];
+$datosMes=explode("####", $_GET["mes"]);
+if(count($datosMes)>0){
+  $mes=$datosMes[0];
+  if($datosMes[1]>0){
+    $gestion=$datosMes[1];
+  }  
+}
+
+
+
 
 $anio=nameGestion($gestion);
 $nombreMes=nameMes($mes);
