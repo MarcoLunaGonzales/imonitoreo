@@ -489,6 +489,27 @@ function montoPresupuestoComponente($gestion, $anio, $mes, $componente, $nivel){
   return($monto);
 }
 
+function montoPresupuestoComponenteMeses($gestion, $anio, $mes, $componente, $nivel){
+  $dbh = new Conexion();
+  $codigosX="";
+  $codigosX=devolverCodigos($componente,$nivel,2);
+  
+  //echo $componente." -  ".$codigosX."<br>";
+  
+  //$sql="SELECT sum(p.monto)as monto from sis_presupuesto p where p.cod_gestion='$gestion' and p.cod_ano='$anio' and p.cod_mes<='$mes' and p.cod_cuenta in ($codigosX)";
+  //$sql="SELECT sum(p.monto)as monto from sis_presupuesto p where p.cod_gestion='$gestion' and p.cod_ano='$anio' and p.cod_cuenta in ($codigosX)";
+  $sql="SELECT sum(p.monto)as monto from sis_presupuesto p where p.cod_gestion='$gestion' and p.cod_ano='$anio' and p.cod_mes<='$mes' and p.cod_cuenta in ($codigosX)";
+  //echo $sql."<br>";
+  //SACAMOS EL PRESUPUESTO TOTAL ESTO DEBE REVISARSE
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $monto=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $monto=$row['monto'];
+  }
+  return($monto);
+}
+
 
 function montoEjecucionComponente($anio, $mes, $componente, $nivel){
   $dbh = new Conexion();
