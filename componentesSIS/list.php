@@ -9,8 +9,10 @@ $globalAdmin=$_SESSION["globalAdmin"];
 $globalGestion=$_SESSION["globalGestion"];
 // $codigo_proy=$codigo;
 $codigo_proy=$_SESSION["globalProyecto"];
-// echo $codigo_proy;
-if($codigo_proy==''){
+
+//echo "cod proye: ".$codigo_proy." fin";
+
+if($codigo_proy=="" || $codigo_proy=='' || $codigo_proy=="0"){
   $codigo_proy=$codigo_proy;
   include("principal_actividades.php");
 }else{
