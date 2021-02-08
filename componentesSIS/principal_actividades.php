@@ -10,7 +10,12 @@ $globalProyecto=$_SESSION["globalProyecto"];
 $codigo_proy=$codigo_proy;
 $_SESSION["globalProyecto"]=$codigo_proy;
 
-$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
+  
+  $nombre_proyecto="";
+  if($codigo_proy=="" || $codigo_proy=='' || $codigo_proy=="0"){
+    $nombre_proyecto=obtener_nombre_proyecto($codigo_proy);    
+  }
+
 // echo "proy: ".$globalProyecto;
 // if($globalProyecto==''){
   $dbh = new Conexion();

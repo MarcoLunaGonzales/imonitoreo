@@ -1673,12 +1673,14 @@ function obtenerCantCertificadosOrganismo($unidad,$anioTemporal,$mesTemporal,$ar
 function obtener_nombre_proyecto($codigo){
   $dbh = new Conexion();
   $nombre = '';
-  $sql="SELECT nombre
-  from proyectos_financiacionexterna where codigo=$codigo";
-  $stmt = $dbh->prepare($sql);
-  $stmt->execute();
-  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-      $nombre=$row['nombre'];
+  if($codigo!="" || $codigo!="0"){
+    $sql="SELECT nombre
+    from proyectos_financiacionexterna where codigo=$codigo";
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $nombre=$row['nombre'];
+    }    
   }
   return $nombre;
 }
