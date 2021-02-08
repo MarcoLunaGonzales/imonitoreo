@@ -90,6 +90,7 @@ $stmt->bindColumn('mes_final', $mes_final);
               </div>
 				<div class="card-body">
                     <button class="btn" onClick="location.href='index.php?opcion=registerGestionExtendida'">Registrar</button>
+                    <button class="btn btn-danger" onClick="location.href='index.php?opcion=listGestiones'">Volver</button>
                 </div>
 			            
             </div>
