@@ -149,8 +149,8 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           $montoAnteriorPresupuesto=0;
                           $montoAnteriorEjecucion=0;
                           if(isset($gestiones[1])){
-                            $montoAnteriorPresupuesto=montoPresupuestoComponente($gestiones[0],nameGestion($gestiones[1]),12,$codigoComponente,$nivelComponente);
-                            $montoAnteriorEjecucion=montoEjecucionComponente(nameGestion($gestiones[1]),12,$codigoComponente,$nivelComponente);
+                            $montoAnteriorPresupuesto=montoPresupuestoComponente($gestiones[0],nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
+                            $montoAnteriorEjecucion=montoEjecucionComponente(nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
                           }
                           $montoPresComponente=$montoAnteriorPresupuesto+montoPresupuestoComponenteMeses($gestion,$anio,$mes,$codigoComponente,$nivelComponente);
                           $montoEjecucionComponente=$montoAnteriorEjecucion+montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);
