@@ -306,6 +306,11 @@
 		if ($_GET['opcion']=='cargarPOA') {
 			require_once('utilitarios/cargarPOA.php');
 		}
+
+		if ($_GET['opcion']=='cargarPOAI') {
+			require_once('utilitarios/cargarPOAI.php');
+		}
+
 		//ENLACES EXTERNOS
 		if ($_GET['opcion']=='listEnlacesExternos') {
 			require_once('enlaces_externos/list.php');
