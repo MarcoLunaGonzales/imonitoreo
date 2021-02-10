@@ -29,14 +29,17 @@ $codMesDefault=mesDefaultReport();
           <label class="col-sm-2 col-form-label">Gestion</label>
           <div class="col-sm-7">
           <div class="form-group">
-            <select class="selectpicker" title="Seleccionar" name="gestion" id="gestion" data-style="<?=$comboColor;?>" required>
+            <select class="selectpicker" title="Seleccionar" name="gestion" id="gestion" data-style="<?=$comboColor;?>" required onchange="AjaxGestionMesCambio(this)">
               <option disabled selected value=""></option>
               <?php
-              $stmt = $dbh->prepare("SELECT codigo, nombre FROM gestiones order by 2 desc");
+              $stmt = $dbh->prepare("SELECT g.codigo, g.nombre,(SELECT anio_final from gestiones_extendidas where id_gestion=g.codigo) as extendida FROM gestiones g order by 2 desc");
             $stmt->execute();
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               $codigoX=$row['codigo'];
               $nombreX=$row['nombre'];
+              if($row['extendida']!=""||$row['extendida']!=null||$row['extendida']!=0){
+                  $nombreX.=" - ".$row['extendida'];
+                }
             ?>
             <option value="<?=$codigoX;?>"  <?=($codigoX==$codGestionDefault)?"selected":"";?> ><?=$nombreX;?></option>
             <?php 
@@ -51,20 +54,9 @@ $codMesDefault=mesDefaultReport();
         <div class="row">
           <label class="col-sm-2 col-form-label">Mes</label>
           <div class="col-sm-7">
-          <div class="form-group">
+          <div class="form-group" id="contenedor_meses">
             <select class="selectpicker" title="Seleccione una opcion" name="mes" id="mes" data-style="<?=$comboColor;?>" required>
-              <option disabled selected value=""></option>
-              <?php
-              $stmt = $dbh->prepare("SELECT codigo, nombre FROM meses order by 1");
-            $stmt->execute();
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-              $codigoX=$row['codigo'];
-              $nombreX=$row['nombre'];
-            ?>
-            <option value="<?=$codigoX;?>"  <?=($codigoX==$codMesDefault)?"selected":"";?> ><?=$nombreX;?></option>
-            <?php 
-            }
-              ?>
+              
             </select>
           </div>
           </div>
@@ -81,3 +73,23 @@ $codMesDefault=mesDefaultReport();
   
   </div>
 </div>
+<script>
+$(document).ready(function() {
+  AjaxGestionMesCambio(document.getElementById('gestion'));
+});
+function AjaxGestionMesCambio(combo){
+  var contenedor;
+  var cod_gestion=combo.value;
+  contenedor= document.getElementById('contenedor_meses');
+  ajax=nuevoAjax();
+  ajax.open('GET', 'solicitudFondosSIS/ajaxMesGestion.php?id_gestion='+cod_gestion,true);
+  ajax.onreadystatechange=function() {
+    if (ajax.readyState==4) {
+      contenedor.innerHTML = ajax.responseText;
+      $('.selectpicker').selectpicker(["refresh"]);
+    }
+  }
+  ajax.send(null)  
+
+}
+</script>

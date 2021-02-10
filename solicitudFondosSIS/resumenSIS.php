@@ -10,11 +10,14 @@ $globalUnidad=$_SESSION["globalUnidad"];
 $globalArea=$_SESSION["globalArea"];
 $globalServerArchivos=$_SESSION["globalServerArchivos"];
 
-$anio=nameGestion($globalGestion);
+$anioInicio=nameGestion($globalGestion);
+$datosExtendida=obtenerAnioFinMesFinGestionExtendia($globalGestion);
+$anioFin=$datosExtendida[0];
+$mesFinal=$datosExtendida[1];
 
 $dbh = new Conexion();
 
-$banderaReg=verificaRegistrosSIS($anio);
+$banderaReg=verificaRegistrosSIS($anioInicio);
 //echo $banderaReg;
 ?>
 <div class="content">
@@ -48,7 +51,14 @@ $banderaReg=verificaRegistrosSIS($anio);
                       </thead>
                       <tbody>
 <?php
-                      	for($i=1;$i<=12;$i++) {
+                  for ($anio=$anioInicio; $anio<=(int)$anioFin; $anio++) { 
+                         if($anio==$anioInicio){
+                           $finMes=12;
+                         }else{
+                           $finMes=$mesFinal;
+                         }
+
+                      	for($i=1;$i<=$finMes;$i++) {
                           $sqlCount="";
                           $sqlCount="SELECT archivo, id FROM sis_archivos where anio='$anio' and mes='$i' and nro_archivo=1"; 
                           $stmtX = $dbh->prepare($sqlCount);
@@ -171,7 +181,8 @@ $banderaReg=verificaRegistrosSIS($anio);
 
                         </tr>
 <?php
-						}
+                    }
+						}//for anio
 ?>
                       </tbody>
                     </table>

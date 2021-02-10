@@ -18,10 +18,25 @@ $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
-$gestion=$_GET["gestion"];
 $mes=$_GET["mes"];
+$gestion=$_GET["gestion"];
+$desde=nameGestion($gestion)."-01-01";
+$datosMes=explode("####", $_GET["mes"]);
+$gestiones[0]=$gestion;
+if(count($datosMes)>0){
+  $mes=$datosMes[0];
+  if($datosMes[1]>0){
+    $gestion=$datosMes[1];
+    $gestiones[1]=$datosMes[1];
+  }  
+}
+$stringGestiones=implode(",", $gestiones);
+$diaUltimo=date("d",(mktime(0,0,0,$mes,1,nameGestion($gestion))-1));
+$hasta=nameGestion($gestion)."-".$mes."-".$diaUltimo;
+
 $codigo_proy=$_GET["codigo_proy"];
 $nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
+
 
 
 $anio=nameGestion($gestion);
@@ -92,8 +107,13 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           if($nivelComponente==3){
                             $styleText="text-left font-weight-bold small";
                           }      
-                          $montoEjecucionComponente=0;                    
-                          $montoEjecucionComponente=montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);
+                          $montoEjecucionComponente=0;
+                          $montoAnteriorEjecucion=0;
+                          if(isset($gestiones[1])){                          
+                            $montoAnteriorEjecucion=montoEjecucionComponente(nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
+                          }                          
+                          $montoEjecucionComponente=$montoAnteriorEjecucion+montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);                    
+                          //$montoEjecucionComponente=montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);
 
                           if($montoEjecucionComponente>0){
                       ?>
@@ -106,7 +126,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                         </tr>
                       <?php
                           }
-                        $sqlDetalle="SELECT p.codigo, p.nombre, sum(m.monto)as monto from po_mayores m, po_plancuentas p where m.ml_partida in ($partidaComponente) and m.cuenta=p.codigo and m.anio='$anio' and m.mes<='$mes' group by p.codigo, p.nombre order by 2";
+                        $sqlDetalle="SELECT p.codigo, p.nombre, sum(m.monto)as monto from po_mayores m, po_plancuentas p where m.ml_partida in ($partidaComponente) and m.cuenta=p.codigo and m.fecha BETWEEN '$desde' and '$hasta' group by p.codigo, p.nombre order by 2";
                         $stmtDetalle = $dbh->prepare($sqlDetalle);
                         $stmtDetalle->execute();
                         $stmtDetalle->bindColumn('codigo', $codigo);
@@ -132,7 +152,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                               <div id="collapse<?=$indice;?>" class="collapse" role="tabpanel" aria-labelledby="heading<?=$indice;?>" data-parent="#accordion<?=$indice;?>" style="">
                                 <div class="card-body">
                                   <?php
-                                  $sqlDetalleX="SELECT s.indice, s.glosa_detalle, s.fecha, s.monto, s.ml_partida from po_mayores s, po_plancuentas pc where pc.codigo=s.cuenta and s.fondo=2001 and YEAR(s.fecha)='$anio' and MONTH(s.fecha)<='$mes' and s.ml_partida='$partidaComponente' and pc.codigo='$codigo' order by s.fecha;";
+                                  $sqlDetalleX="SELECT s.indice, s.glosa_detalle, s.fecha, s.monto, s.ml_partida from po_mayores s, po_plancuentas pc where pc.codigo=s.cuenta and s.fondo=2001 and s.fecha BETWEEN '$desde' and '$hasta' and s.ml_partida='$partidaComponente' and pc.codigo='$codigo' order by s.fecha;";
                                   
                                   //echo $sqlDetalle;
                                   

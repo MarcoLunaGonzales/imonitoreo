@@ -13,8 +13,22 @@ $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
-$gestion=$_GET["gestion"];
 $mes=$_GET["mes"];
+$gestion=$_GET["gestion"];
+$desde=nameGestion($gestion)."-01-01";
+$datosMes=explode("####", $_GET["mes"]);
+$gestiones[0]=$gestion;
+if(count($datosMes)>0){
+  $mes=$datosMes[0];
+  if($datosMes[1]>0){
+    $gestion=$datosMes[1];
+    $gestiones[1]=$datosMes[1];
+  }  
+}
+$stringGestiones=implode(",", $gestiones);
+$diaUltimo=date("d",(mktime(0,0,0,$mes,1,nameGestion($gestion))-1));
+$hasta=nameGestion($gestion)."-".$mes."-".$diaUltimo;
+
 
 $anio=nameGestion($gestion);
 $nombreMes=nameMes($mes);
@@ -69,7 +83,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           <th class="text-center font-weight-bold">&nbsp;</th>
                           <th class="text-center font-weight-bold">&nbsp;</th>
                           <?php
-                          $sqlSolicitudes="SELECT count(*)as nroregistros from solicitud_fondos s where s.cod_estado=1 and s.cod_gestion='$gestion' and YEAR(s.fecha)='$anio' and MONTH(s.fecha)<='$mes' order by s.fecha;";
+                          $sqlSolicitudes="SELECT count(*)as nroregistros from solicitud_fondos s where s.cod_estado=1 and s.cod_gestion in ($stringGestiones) and s.fecha BETWEEN '$desde' and '$hasta' order by s.fecha;";
                           $stmtSolicitudes = $dbh->prepare($sqlSolicitudes);
                           $stmtSolicitudes->execute();
                           $stmtSolicitudes->bindColumn('nroregistros', $nroRegistros);
@@ -90,7 +104,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           <th class="text-center font-weight-bold">Actividad</th>
                           <th class="text-center font-weight-bold">Presupuesto</th>
                           <?php
-                          $sqlSolicitudes="SELECT s.codigo, s.fecha from solicitud_fondos s where s.cod_estado=1 and s.cod_gestion='$gestion' and YEAR(s.fecha)='$anio' and MONTH(s.fecha)<='$mes' order by s.fecha;";
+                          $sqlSolicitudes="SELECT s.codigo, s.fecha from solicitud_fondos s where s.cod_estado=1 and s.cod_gestion in ($stringGestiones) and s.fecha BETWEEN '$desde' and '$hasta' order by s.fecha;";
                           $stmtSolicitudes = $dbh->prepare($sqlSolicitudes);
                           $stmtSolicitudes->execute();
                           $stmtSolicitudes->bindColumn('codigo', $codSolicitud);
@@ -128,8 +142,19 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           }
                           $montoPresComponente=0;
                           $montoEjecucionComponente=0;
+
+                          $montoAnteriorPresupuesto=0;
+                          $montoAnteriorEjecucion=0;
+                          if(isset($gestiones[1])){
+                            $montoAnteriorPresupuesto=montoPresupuestoComponente($gestiones[0],nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
+                            $montoAnteriorEjecucion=montoEjecucionComponente(nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
+                          }
+
+                           $montoPresComponente=$montoAnteriorPresupuesto+montoPresupuestoComponenteMeses($gestion,$anio,$mes,$codigoComponente,$nivelComponente);
+                          $montoEjecucionComponente=$montoAnteriorEjecucion+montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);
+                          /*
                           $montoPresComponente=montoPresupuestoComponente($gestion,$anio,$mes,$codigoComponente,$nivelComponente);
-                          $montoEjecucionComponente=montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);
+                          $montoEjecucionComponente=montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);*/
                       ?>
                         <tr>
                           <td class="<?=$styleText;?>" ><?=$abreviaturaComponente;?></td>

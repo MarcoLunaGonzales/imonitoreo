@@ -1704,4 +1704,20 @@ function obtenerCodigoGestionNombre($nombre){
    return($codigoX);
 }
 
+function obtenerAnioFinMesFinGestionExtendia($codigo){
+   $dbh = new Conexion();
+   $stmt = $dbh->prepare("SELECT g.codigo, g.nombre,(SELECT anio_final from gestiones_extendidas where id_gestion=g.codigo) as anio_final,(SELECT mes_final from gestiones_extendidas where id_gestion=g.codigo) as mes_final FROM gestiones g where codigo=$codigo");
+   $stmt->execute();
+   $datosX=array(0,0);
+   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+     if($row['anio_final']==""||$row['anio_final']==0){
+       $datosX[0]=nameGestion($row['codigo']); 
+     }else{
+       $datosX[0]=$row['anio_final'];
+     }      
+      $datosX[1]=$row['mes_final'];
+   }
+   return($datosX);
+}
+
 ?>
