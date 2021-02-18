@@ -3,7 +3,7 @@
 require_once 'conexion.php';
 $dbh = new Conexion();
 
-$table="areas";
+$table="ibnfinanciero2000.areas";
 $moduleName="Definir Areas para POA";
 
 // Preparamos

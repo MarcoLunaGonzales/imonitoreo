@@ -7,20 +7,21 @@ $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
-$table="cargos";
+$table="ibnfinanciero2000.cargos";
 $moduleName="Cargos";
 
 $globalAdmin=$_SESSION["globalAdmin"];
 
 // Preparamos
-$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM $table where cod_estado=1 order by 2");
+//$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM $table where cod_estado=1 order by 2");
+$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM $table where cod_estadoreferencial=1 order by 2");
 // Ejecutamos
 $stmt->execute();
 // bindColumn
 $stmt->bindColumn('codigo', $codigo);
 $stmt->bindColumn('nombre', $nombre);
 $stmt->bindColumn('abreviatura', $abreviatura);
-
+$urlIfinanciero="../ifinanciero/index.php?opcion=cargosLista&q=".$_SESSION["globalUser"];
 ?>
 
 <div class="content">
@@ -62,9 +63,9 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                             <?php
                             if($globalAdmin==1){
                             ?>
-                            <a href='index.php?opcion=listFunciones&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-info">
+                            <!--<a href='index.php?opcion=listFunciones&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-info">
                               <i class="material-icons">list</i>
-                            </a>
+                            </a>-->
 
                             <?php
                             }
@@ -73,13 +74,14 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                           <td class="td-actions text-right">
                             <?php
                             if($globalAdmin==1){
+                              echo "<small class='text-rose'>Editar desde Financiero</small>";
                             ?>
-                            <a href='index.php?opcion=editCargo&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success">
+                            <!--<a href='index.php?opcion=editCargo&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success">
                               <i class="material-icons">edit</i>
                             </a>
                             <button rel="tooltip" class="btn btn-danger" onclick="alerts.showSwal('warning-message-and-confirmation','index.php?opcion=deleteCargo&codigo=<?=$codigo;?>')">
                               <i class="material-icons">close</i>
-                            </button>
+                            </button>-->
                             <?php
                             }
                             ?>
@@ -98,7 +100,10 @@ $stmt->bindColumn('abreviatura', $abreviatura);
               if($globalAdmin==1){
               ?>
               <div class="card-body">
-                    <button class="btn" onClick="location.href='index.php?opcion=registerCargo'">Registrar</button>
+                    <!--<button class="btn" onClick="location.href='index.php?opcion=registerCargo'">Registrar</button>-->
+                    <a href='<?=$urlIfinanciero?>' target="_blank" class="btn btn-warning" title="Lista de Unidades - FINANCIERO">
+                              <i class="material-icons">link</i> Cargos del Financiero
+                    </a>
                 </div>
 		          <?php
               }
