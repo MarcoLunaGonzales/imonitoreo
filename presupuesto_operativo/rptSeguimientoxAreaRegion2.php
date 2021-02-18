@@ -174,17 +174,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $montoPresEgConjunto=presupuestoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
                 $montoEjEgConjunto=ejecutadoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
 
-                /*******************   BORRAR DESPUES *****************/
-                //echo $codOrganismoX." ";
-                $montoExtra=15000;
-                if($codOrganismoX==505){
-                  $montoEjEgConjunto=$montoEjEgConjunto+$montoExtra;
-                }
-                if($codOrganismoX==510){
-                  $montoEjEgConjunto=$montoEjEgConjunto-$montoExtra;
-                }
-                /*******************   BORRAR DESPUES *****************/
-
 
                 $porcentajeEgConjunto=0;
                 if($montoPresEgConjunto>0){

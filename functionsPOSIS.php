@@ -153,19 +153,21 @@ function montoRedistribucionIT($agencia, $anio, $mes, $organismo, $acumulado, $c
     $cuentaIT=$row['valor_configuracion'];
   }
   $montoIngreso=0;
-  if($acumulado==1 && $mes>=7){
-    $mes=6;
-  }
-  $montoIngreso=ejecutadoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, 0);
   $montoRedistIT=0;
-  $montoRedistIT=(($montoIngreso*100)/87)*0.03;
-  
-  if($acumulado==0 && $mes>=7){
+
+  //el monto por IT solo se redistribuye si es año 2020 y mes de ene a JUN
+  if($anio==2020){
+    if($acumulado==1 && $mes>=7){
+      $mes=6;
+    }
+    $montoIngreso=ejecutadoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, 0);
     $montoRedistIT=0;
+    $montoRedistIT=(($montoIngreso*100)/87)*0.03;
+    
+    if($acumulado==0 && $mes>=7){
+      $montoRedistIT=0;
+    }    
   }
-  
-  //$montoRedistIT=0;
-  //echo $montoRedistIT;
   return($montoRedistIT);
 }
 
