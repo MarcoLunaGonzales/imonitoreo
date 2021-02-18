@@ -14,8 +14,25 @@ $sqlX="SET NAMES 'utf8'";
 $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
-$gestion=$_GET["gestion"];
 $mes=$_GET["mes"];
+$gestion=$_GET["gestion"];
+$desde=nameGestion($gestion)."-01-01";
+$datosMes=explode("####", $_GET["mes"]);
+$gestiones[0]=$gestion;
+if(count($datosMes)>0){
+  $mes=$datosMes[0];
+  if($datosMes[1]>0){
+    $gestion=$datosMes[1];
+    $gestiones[1]=$datosMes[1];
+  }  
+}
+$stringGestiones=implode(",", $gestiones);
+$diaUltimo=date("d",(mktime(0,0,0,$mes,1,nameGestion($gestion))-1));
+$hasta=nameGestion($gestion)."-".$mes."-".$diaUltimo;
+
+$desdeFinal=nameGestion($gestion)."-".$mes."-01";
+$hastaFinal=nameGestion($gestion)."-".$mes."-".$diaUltimo;
+
 $tiporeporte=$_GET["tiporeporte"];
 
 $anio=nameGestion($gestion);
@@ -26,11 +43,11 @@ $globalUsuario=$_SESSION["globalUser"];
 
 
 $sqlDetalleX="SELECT pc.codigo, m.glosa_detalle, m.fecha, m.monto, m.fondo, m.organismo, m.ml_partida, 
-(select c.abreviatura from componentessis c where c.partida=m.ml_partida limit 0,1)as codigoact from po_mayores m, po_plancuentas pc where pc.codigo=m.cuenta and m.fondo=2001 and YEAR(m.fecha)='$anio' and m.ml_partida<>'' and m.cuenta like '5%'";
+(select c.abreviatura from componentessis c where c.partida=m.ml_partida limit 0,1)as codigoact from po_mayores m, po_plancuentas pc where pc.codigo=m.cuenta and m.fondo=2001 and m.ml_partida<>'' and m.cuenta like '5%'";
 if($tiporeporte==0){
-  $sqlDetalleX.=" and MONTH(m.fecha)='$mes' order by m.fecha;";  
+  $sqlDetalleX.=" and m.fecha BETWEEN '$desdeFinal' and '$hastaFinal' order by m.fecha;";  
 }else if($tiporeporte==1){
-  $sqlDetalleX.=" and MONTH(m.fecha)<='$mes' order by m.fecha;";  
+  $sqlDetalleX.=" and m.fecha BETWEEN '$desde' and '$hasta' order by m.fecha;";  
 }
 
 //echo $sqlDetalleX;

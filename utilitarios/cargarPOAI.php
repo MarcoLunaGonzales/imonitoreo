@@ -12,11 +12,11 @@ $dbh = new Conexion();
   <div class="container-fluid">
 
     <div class="col-md-12">
-      <form id="form1" class="form-horizontal" action="utilitarios/saveCargarPOA.php" method="post" enctype="multipart/form-data" target="_BLANK">
+      <form id="form1" class="form-horizontal" action="utilitarios/saveCargarPOAI.php" method="post" enctype="multipart/form-data" target="_BLANK">
       <div class="card ">
         <div class="card-header <?=$colorCard;?> card-header-text">
         <div class="card-text">
-          <h4 class="card-title">Cargar POA</h4>
+          <h4 class="card-title">Cargar POAI</h4>
         </div>
         </div>
         <div class="card-body ">
@@ -67,13 +67,8 @@ $dbh = new Conexion();
 
 
         </div>
-        <div class="card-footer">
-          <div class="ml-auto mr-auto">
-            <button type="submit" class="<?=$button;?>">Guardar</button>
-          </div>
-          <div class="float-right">
-              <a href="index.php?opcion=cargarPOAI" class="btn btn-rose" target="_blank">Cargar POAI</a>
-          </div>
+        <div class="card-footer ml-auto mr-auto">
+        <button type="submit" class="<?=$button;?>">Guardar</button>
         </div>
       </div>
       </form>

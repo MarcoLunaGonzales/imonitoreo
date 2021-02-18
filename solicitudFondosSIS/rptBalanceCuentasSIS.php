@@ -13,12 +13,27 @@ $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 
 
-$gestion=$_GET["gestion"];
 $mes=$_GET["mes"];
+$gestion=$_GET["gestion"];
+$desde=nameGestion($gestion)."-01-01";
+$datosMes=explode("####", $_GET["mes"]);
+$gestiones[0]=$gestion;
+if(count($datosMes)>0){
+  $mes=$datosMes[0];
+  if($datosMes[1]>0){
+    $gestion=$datosMes[1];
+    $gestiones[1]=$datosMes[1];
+  }  
+}
+$stringGestiones=implode(",", $gestiones);
+$diaUltimo=date("d",(mktime(0,0,0,$mes,1,nameGestion($gestion))-1));
+$hasta=nameGestion($gestion)."-".$mes."-".$diaUltimo;
+
+
 $anio=nameGestion($gestion);
 $nombreMes=nameMes($mes);
 
-$sql="SELECT pc.codigo, pc.nombre from po_mayores s, po_plancuentas pc where pc.codigo=s.cuenta and s.fondo=2001 and YEAR(s.fecha)='$anio' and MONTH(s.fecha)<='$mes' and (pc.codigo not like '4%' and pc.codigo not like '5%') group by pc.codigo, pc.nombre order by pc.codigo";
+$sql="SELECT pc.codigo, pc.nombre from po_mayores s, po_plancuentas pc where pc.codigo=s.cuenta and s.fondo=2001 and s.fecha BETWEEN '$desde' and '$hasta' and (pc.codigo not like '4%' and pc.codigo not like '5%') group by pc.codigo, pc.nombre order by pc.codigo";
 //echo $sql;
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
@@ -78,7 +93,7 @@ $stmt->bindColumn('nombre', $nombreCuenta);
                               <div id="collapse<?=$indice;?>" class="collapse" role="tabpanel" aria-labelledby="heading<?=$indice;?>" data-parent="#accordion<?=$indice;?>" style="">
                                 <div class="card-body">
                                   <?php
-                                  $sqlDetalle="SELECT s.indice, s.glosa, s.fecha from po_mayores s, po_plancuentas pc where pc.codigo=s.cuenta and s.fondo=2001 and YEAR(s.fecha)='$anio' and MONTH(s.fecha)<='$mes' and s.cuenta='$codigoCuenta' order by s.fecha;";
+                                  $sqlDetalle="SELECT s.indice, s.glosa, s.fecha from po_mayores s, po_plancuentas pc where pc.codigo=s.cuenta and s.fondo=2001 and s.fecha BETWEEN '$desde' and '$hasta' and s.cuenta='$codigoCuenta' order by s.fecha;";
                                   //echo $sql;
                                   $stmtDetalle = $dbh->prepare($sqlDetalle);
                                   $stmtDetalle->execute();
