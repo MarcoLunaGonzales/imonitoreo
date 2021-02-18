@@ -549,6 +549,8 @@ echo "Servicios Detalle OI, TCP, TCS y TLQ Sincronizados!!!<br>";
 
   include "call_cursos.php";
 
+  include "call_cursosNew.php";
+
   include "call_alumnoscursos2.php";
 
   include "call_servicios.php";

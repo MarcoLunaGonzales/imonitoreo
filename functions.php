@@ -1675,7 +1675,7 @@ function obtener_nombre_proyecto($codigo){
   $nombre = '';
   if($codigo!="" || $codigo!="0"){
     $sql="SELECT nombre
-    from proyectos_financiacionexterna where codigo=$codigo";
+    from proyectos_financiacionexterna where codigo='$codigo'";
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {

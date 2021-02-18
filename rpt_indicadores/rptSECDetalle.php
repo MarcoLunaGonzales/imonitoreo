@@ -85,7 +85,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 </thead>
                 <tbody>
                   <?php
-                  $sql="SELECT eac.d_oficina, eac.d_programa, eac.cod_curso, eac.d_tipo, eac.nombre_curso, eac.estado, eac.d_empresa, eac.nromodulo, eac.nombre_curso, eac.fechainicio, eac.fechafin, count(*)as cuenta from ext_alumnos_cursos eac where eac.curso_gestion='$anioTemporal' and eac.cod_curso not in ('') and YEAR(eac.fechainicio)='$anioTemporal' and MONTH(eac.fechainicio)<='$mesTemporal' GROUP BY eac.d_oficina, eac.cod_curso, eac.idmodulo";
+                  $sql="SELECT eac.d_oficina, eac.d_programa, eac.cod_curso, eac.d_tipo, eac.nombre_curso, eac.estado, eac.d_empresa, eac.nromodulo, eac.nombre_curso, eac.fechainicio, eac.fechafin, count(*)as cuenta from ext_alumnos_cursos eac where eac.curso_gestion='$anioTemporal' and eac.cod_curso not in ('') and YEAR(eac.fechainicio)='$anioTemporal' and MONTH(eac.fecha_factura)<='$mesTemporal' GROUP BY eac.d_oficina, eac.cod_curso, eac.idmodulo";
 
                   
                   //echo $sql;
