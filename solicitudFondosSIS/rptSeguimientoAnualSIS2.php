@@ -15,6 +15,17 @@ $stmtX->execute();
 
 $mes=$_GET["mes"];
 $gestion=$_GET["gestion"];
+
+$globalGestion=$_SESSION["globalGestion"];
+$globalUsuario=$_SESSION["globalUser"];
+$codigo_proy=$_GET["codigo_proy"];
+$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
+//LLAMAMOS A UN SP QUE ORDENA LOS COMPONENTES O ACTIVIDADES SIS
+
+
+echo $globalGestion." ".$gestion;
+
+
 $desde=nameGestion($gestion)."-01-01";
 $datosMes=explode("####", $_GET["mes"]);
 $gestiones[0]=$gestion;
@@ -33,11 +44,10 @@ $hasta=nameGestion($gestion)."-".$mes."-".$diaUltimo;
 $anio=nameGestion($gestion);
 $nombreMes=nameMes($mes);
 
-$globalGestion=$_SESSION["globalGestion"];
-$globalUsuario=$_SESSION["globalUser"];
-$codigo_proy=$_GET["codigo_proy"];
-$nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
-//LLAMAMOS A UN SP QUE ORDENA LOS COMPONENTES O ACTIVIDADES SIS
+
+
+
+
 $sql = 'CALL ordenar_componentes(?,?,?)';
 $stmt = $dbh->prepare($sql);
 $stmt->bindParam(1, $globalUsuario, PDO::PARAM_INT, 10);
@@ -49,6 +59,7 @@ $stmt->execute();
 $sql="SELECT codigo, nombre, abreviatura, nivel, cod_padre, cod_estado, partida, indice, cod_usuario from componentessis_orden 
   where cod_usuario='$globalUsuario' and nivel in (1,2) ORDER BY indice";
 
+echo $sql;
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 
@@ -84,6 +95,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           <th class="text-center font-weight-bold">&nbsp;</th>
                           <?php
                           $sqlSolicitudes="SELECT count(*)as nroregistros from solicitud_fondos s where s.cod_estado=1 and s.cod_gestion in ($stringGestiones) and s.fecha BETWEEN '$desde' and '$hasta' order by s.fecha;";
+                          echo $sqlSolicitudes;
                           $stmtSolicitudes = $dbh->prepare($sqlSolicitudes);
                           $stmtSolicitudes->execute();
                           $stmtSolicitudes->bindColumn('nroregistros', $nroRegistros);
@@ -126,7 +138,8 @@ $stmt->bindColumn('nivel', $nivelComponente);
                       <tbody>
                       <?php
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
-                          //echo "entro1";
+                          
+                          echo "entro1";
 
                           $responsable=obtenerResponsableSIS($codigoComponente);
 
