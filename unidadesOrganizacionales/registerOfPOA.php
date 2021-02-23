@@ -3,7 +3,7 @@
 require_once 'conexion.php';
 $dbh = new Conexion();
 
-$table="unidades_organizacionales";
+$table="ibnfinanciero2000.unidades_organizacionales";
 $moduleName="Definir Oficinas para POA";
 
 // Preparamos

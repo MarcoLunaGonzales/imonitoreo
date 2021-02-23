@@ -5,7 +5,7 @@ require_once 'styles.php';
 
 $dbh = new Conexion();
 
-$table="unidades_organizacionales";
+$table="ibnfinanciero2000.unidades_organizacionales";
 $moduleName="Unidades Organizacionales";
 
 $globalAdmin=$_SESSION["globalAdmin"];
@@ -19,6 +19,7 @@ $stmt->bindColumn('nombre', $nombre);
 $stmt->bindColumn('abreviatura', $abreviatura);
 $stmt->bindColumn('bandera', $bandera);
 
+$urlIfinanciero="../ifinanciero/index.php?opcion=uoLista&q=".$_SESSION["globalUser"];
 ?>
 
 <div class="content">
@@ -67,13 +68,14 @@ $stmt->bindColumn('bandera', $bandera);
                           <td class="td-actions text-right">
                             <?php
                             if($globalAdmin==1){
-                            ?>
-                            <a href='index.php?opcion=registerOfArea&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success" title="Registrar Areas">
+                              echo "<small class='text-rose'>Editar desde Financiero</small>";
+                            ?>                            
+                            <!--<a href='index.php?opcion=registerOfArea&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success" title="Registrar Areas">
                               <i class="material-icons">edit</i>
                             </a>
                             <a href='index.php?opcion=registerOfHijo&codigo=<?=$codigo;?>' rel="tooltip" class="btn btn-success" title="Registrar Hijos">
                               <i class="material-icons">edit</i>
-                            </a>
+                            </a>-->
                             <?php
                             }
                             ?>
@@ -94,6 +96,9 @@ $stmt->bindColumn('bandera', $bandera);
               ?>
               <div class="card-body">
                     <button class="btn" onClick="location.href='index.php?opcion=registerOfPOA'">Registrar Oficinas para POA</button>
+                    <a href='<?=$urlIfinanciero?>' target="_blank" class="btn btn-warning" title="Lista de Unidades - FINANCIERO">
+                              <i class="material-icons">link</i> Oficinas del Financiero
+                    </a>
               </div>
               <?php
               }

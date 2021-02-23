@@ -3,7 +3,7 @@
 require_once 'conexion.php';
 $dbh = new Conexion();
 
-$table="areas";
+$table="ibnfinanciero2000.areas";
 $moduleName="Areas";
 
 $globalAdmin=$_SESSION["globalAdmin"];
@@ -19,7 +19,7 @@ $stmt->bindColumn('nombre', $nombre);
 $stmt->bindColumn('abreviatura', $abreviatura);
 $stmt->bindColumn('bandera', $bandera);
 
-
+$urlIfinanciero="../ifinanciero/index.php?opcion=areasLista&q=".$_SESSION["globalUser"];
 ?>
 
 <div class="content">
@@ -93,6 +93,9 @@ $stmt->bindColumn('bandera', $bandera);
               ?>
               <div class="card-body">
                     <button class="btn" onClick="location.href='index.php?opcion=registerAreaPOA'">Registrar Areas para POA</button>
+                    <a href='<?=$urlIfinanciero?>' target="_blank" class="btn btn-warning" title="Lista de Unidades - FINANCIERO">
+                              <i class="material-icons">link</i> Areas del Financiero
+                    </a>
               </div>
               <?php
               }
