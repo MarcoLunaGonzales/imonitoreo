@@ -61,12 +61,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">list</i>
               </div>
-              <h4 class="card-title">Detalle de Estudiantes
+              <h4 class="card-title">Detalle de Cursos
               </h4>
             </div>
             
             <div class="card-body">
-              <table width="100%" class="table table-condensed" id="main">
+              <table width="100%" class="table table-condensed" id="mainX">
                 <thead>
                   <tr>
                     <th class="text-center">Indice</th>
@@ -74,20 +74,18 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <th class="text-center font-weight-bold small">Programa</th>
                     <th class="text-center font-weight-bold small">Codigo</th>
                     <th class="text-center font-weight-bold small">Tipo</th>
-                    <th class="text-center font-weight-bold small">Nombre</th>
+                    <th class="text-center font-weight-bold small">Curso</th>
                     <th class="text-center font-weight-bold small">Estado</th>
                     <th class="text-center font-weight-bold small">Empresa</th>
                     <th class="text-center font-weight-bold small"># Modulo</th>
-                    <th class="text-center font-weight-bold small">FechaFactura</th>
-                    <th class="text-center font-weight-bold small">CI</th>
-                    <th class="text-center font-weight-bold small">Nombre</th>
-                    <th class="text-center font-weight-bold small">MontoFactura</th>
+                    <th class="text-center font-weight-bold small">Inicio</th>
+                    <th class="text-center font-weight-bold small">Fin</th>
+                    <!--th class="text-center font-weight-bold small"># Alumnos</th-->
                   </tr>
                 </thead>
                 <tbody>
                   <?php
-                  $sql="SELECT eac.d_oficina, eac.d_programa, eac.cod_curso, eac.d_tipo, eac.nombre_curso, eac.estado, eac.d_empresa, eac.nromodulo, eac.nombre_curso, eac.fecha_factura, eac.cialumno, eac.d_alumno, eac.monto_factura
-                    from ext_alumnos_cursos eac where eac.cod_curso not in ('') and YEAR(eac.fecha_factura)='$anioTemporal' and MONTH(eac.fecha_factura)<='$mesTemporal' order by eac.fecha_factura, eac.d_alumno";
+                  $sql="SELECT eac.d_oficina, eac.d_programa, eac.cod_curso, eac.d_tipo, eac.nombre_curso, eac.estado, eac.d_empresa, eac.nromodulo, eac.nombre_curso, eac.fechainicio, eac.fechafin, count(*)as cuenta from ext_alumnos_cursos eac where eac.cod_curso not in ('') and YEAR(eac.fechainicio)='$anioTemporal' and MONTH(eac.fechainicio)<='$mesTemporal' GROUP BY eac.d_oficina, eac.cod_curso, eac.idmodulo";
 
                   
                   //echo $sql;
@@ -103,10 +101,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $stmt->bindColumn('estado', $estadoCurso);
                   $stmt->bindColumn('d_empresa', $empresaCurso);
                   $stmt->bindColumn('nromodulo', $nroModulo);
-                  $stmt->bindColumn('fecha_factura', $fechaFactura);
-                  $stmt->bindColumn('cialumno', $ciAlumno);
-                  $stmt->bindColumn('d_alumno', $nombreAlumno);
-                  $stmt->bindColumn('monto_factura', $montoFactura);
+                  $stmt->bindColumn('fechainicio', $fechaInicio);
+                  $stmt->bindColumn('fechafin', $fechaFin);
+                  $stmt->bindColumn('cuenta', $numeroAlumnos);
 
                   $indice=1;
                   $totalAlumnosCursos=0;
@@ -122,20 +119,23 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <td class="text-left small"><?=$estadoCurso;?></td>
                     <td class="text-left small"><?=$empresaCurso;?></td>
                     <td class="text-left small"><?=$nroModulo;?></td>
-                    <td class="text-left small"><?=$fechaFactura;?></td>
-                    <td class="text-left small"><?=$ciAlumno;?></td>
-                    <td class="text-left small"><?=$nombreAlumno;?></td>
-                    <td class="text-right small"><?=$montoFactura;?></td>
+                    <td class="text-left small"><?=$fechaInicio;?></td>
+                    <td class="text-left small"><?=$fechaFin;?></td>
+                    <!--td class="text-right small"><?=$numeroAlumnos;?></td-->
                 </tr>
                 <?php
                   $indice++;
+                  $totalAlumnosCursos=$totalAlumnosCursos+$numeroAlumnos;
                 }
                 ?>
             </tbody>
-            <tfoot>
+            <!--tfoot>
               <tr>
+                <th>-</th>
+                <th class="text-center font-weight-bold" colspan="15">Totales</th>
+                <th class="text-right font-weight-bold text-primary"><?=$totalAlumnosCursos;?></th>
               </tr>
-            </tfoot>
+            </tfoot-->
           </table>
         </div>
           </div>

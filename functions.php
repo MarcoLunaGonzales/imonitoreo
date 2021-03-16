@@ -660,7 +660,7 @@ function cursosPorUnidadAnt($unidad, $anio, $mes, $acumulado, $tipocurso){
 
 function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   $dbh = new Conexion();
-  $sql="SELECT eac.d_oficina, eac.cod_curso, eac.nromodulo ,count(*)as cuenta from ext_alumnos_cursos eac where eac.curso_gestion='$anio' and eac.cod_curso not in ('') and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.id_oficina in ($unidad)) ";
+  $sql="SELECT eac.d_oficina, eac.cod_curso, eac.nromodulo ,count(*)as cuenta from ext_alumnos_cursos eac where eac.cod_curso not in ('') and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.id_oficina in ($unidad)) ";
 
   if($acumulado==0){
     $sql.=" and YEAR(eac.fechainicio)='$anio' and MONTH(eac.fechainicio)='$mes' ";
@@ -688,7 +688,7 @@ function cursosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
 
 function alumnosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   $dbh = new Conexion();
-  $sql="SELECT eac.d_oficina, eac.cod_curso, eac.idmodulo ,count(*)as cuenta from ext_alumnos_cursos eac where eac.curso_gestion='$anio' and eac.cod_curso not in ('') and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec  ";
+  $sql="SELECT eac.d_oficina, eac.cod_curso, eac.idmodulo ,count(*)as cuenta from ext_alumnos_cursos eac where eac.cod_curso not in ('') and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec  ";
   
   if($unidad!=0){
     $sql.=" where ec.id_oficina in ($unidad)) ";
@@ -697,10 +697,10 @@ function alumnosPorUnidad($unidad, $anio, $mes, $acumulado, $tipocurso){
   }
 
   if($acumulado==0){
-    $sql.=" and YEAR(eac.fechainicio)='$anio' and MONTH(eac.fechainicio)='$mes' ";
+    $sql.=" and YEAR(eac.fecha_factura)='$anio' and MONTH(eac.fecha_factura)='$mes' ";
   }
   if($acumulado==1){
-    $sql.=" and YEAR(eac.fechainicio)='$anio' and MONTH(eac.fechainicio)<='$mes' ";  
+    $sql.=" and YEAR(eac.fecha_factura)='$anio' and MONTH(eac.fecha_factura)<='$mes' ";  
   }
   if($tipocurso!=""){
     $sql.=" and eac.d_tipo in ('$tipocurso')";
@@ -1333,7 +1333,7 @@ function calcularClientesSECPeriodo($unidad,$area,$mes,$anio){
   $fechaFin=date('Y-m-d',strtotime($fechaFin.'+1 month'));
   $fechaFin=date('Y-m-d',strtotime($fechaFin.'-1 day'));
 
-  $sql="SELECT count(distinct(eac.cialumno))as cantidad from ext_alumnos_cursos eac where eac.fechainicio BETWEEN '$fechaIni' and '$fechaFin' and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.id_oficina in ($unidad));";
+  $sql="SELECT count(distinct(eac.cialumno))as cantidad from ext_alumnos_cursos eac where eac.fecha_factura BETWEEN '$fechaIni' and '$fechaFin' and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.id_oficina in ($unidad));";
   //echo $sql;
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
@@ -1393,17 +1393,17 @@ function calcularAlumnosGrupoEtario($unidad,$area,$mes,$anio,$edadmin,$edadmax){
 
   $fechaActual=$anio."-".$mes."-01";
 
-  $sql="SELECT count(distinct(eac.cialumno))as cantidad from ext_alumnos_cursos eac where YEAR(eac.fechainicio)=$anio and  MONTH(eac.fechainicio)<='$mes' and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.gestion='$anio' ";
+  $sql="SELECT count(distinct(eac.cialumno))as cantidad from ext_alumnos_cursos eac where YEAR(eac.fecha_factura)=$anio and  MONTH(eac.fecha_factura)<='$mes' and eac.cod_curso in (select distinct(ec.codigocurso) from ext_cursos ec where ec.gestion='$anio' ";
   if($unidad!=0){
     $sql.=" and ec.id_oficina in ($unidad) ";
   }
   if($edadmin==0 && $edadmax==0){
     $sql.=")";
   }else{
-      $sql.=") and IFNULL(TIMESTAMPDIFF(YEAR, eac.fechanacimiento, '$fechaActual'),-1000)>$edadmin and IFNULL(TIMESTAMPDIFF(YEAR, eac.fechanacimiento, '$fechaActual'),-1000)<=$edadmax ";
+      $sql.=") and IFNULL(TIMESTAMPDIFF(YEAR, eac.fechanacimiento, '$fechaActual'),-10000)>$edadmin and IFNULL(TIMESTAMPDIFF(YEAR, eac.fechanacimiento, '$fechaActual'),-10000)<=$edadmax ";
   }
   
-//  echo $sql;
+  //  echo $sql;
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
   $cantidad=0;

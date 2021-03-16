@@ -56,7 +56,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               <div class="card-icon">
                 <i class="material-icons">list</i>
               </div>
-              <h4 class="card-title"># de Cursos y Estudiantes por Unidad Organizacional
+              <h4 class="card-title"># de Cursos por Unidad Organizacional
               </h4>
             </div>
             
@@ -65,15 +65,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <thead>
                   <tr>
                     <th class="text-center font-weight-bold">-</th>
-                    <th class="text-center font-weight-bold" colspan="2"><?=$nombreMes?></th>
-                    <th class="text-center font-weight-bold" colspan="2">Acum. <?=$nombreMes?></th>
+                    <th class="text-center font-weight-bold" colspan="1"><?=$nombreMes?></th>
+                    <th class="text-center font-weight-bold" colspan="1">Acum. <?=$nombreMes?></th>
                   </tr>
                   <tr>
                     <th class="text-center font-weight-bold">Unidad</th>
                     <th class="text-center font-weight-bold">#Cursos</th>
-                    <th class="text-center font-weight-bold">#Alumnos</th>
                     <th class="text-center font-weight-bold">#Cursos</th>
-                    <th class="text-center font-weight-bold">#Alumnos</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -90,22 +88,16 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $totalAlumnosAcum=0;
                   while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
                     $numeroCursos=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,'');
-                    $numeroAlumnos=alumnosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,'');
                     $numeroCursosAcum=cursosPorUnidad($codigoX,$anioTemporal,$mesTemporal,1,'');
-                    $numeroAlumnosAcum=alumnosPorUnidad($codigoX,$anioTemporal,$mesTemporal,1,'');
 
                     $totalCursos+=$numeroCursos;
                     $totalCursosAcum+=$numeroCursosAcum;
-                    $totalAlumnos+=$numeroAlumnos;
-                    $totalAlumnosAcum+=$numeroAlumnosAcum;
                   ?>
                   <tr>
                     <td class="text-left"><a href="rptSECxUnidad.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=$abrevX;?></a>
                     </td>
                     <td class="text-right"><?=formatNumberInt($numeroCursos);?></td>
-                    <td class="text-right"><?=formatNumberInt($numeroAlumnos);?></td>
-                    <td class="text-right"><a href="rptSECDetalle.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=formatNumberInt($numeroCursosAcum);?></a></td>
-                    <td class="text-right"><a href="rptSECDetalle.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=formatNumberInt($numeroAlumnosAcum);?></a></td>
+                    <td class="text-right"><a href="rptSECDetalleCursos.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=formatNumberInt($numeroCursosAcum);?></a></td>
                   </tr>
                   <?php
                   }
@@ -115,9 +107,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <tr>
                     <td class="text-left font-weight-bold">Totales</td>
                     <td class="text-right font-weight-bold"><?=formatNumberInt($totalCursos);?></td>
-                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalAlumnos);?></td>
                     <td class="text-right font-weight-bold"><?=formatNumberInt($totalCursosAcum);?></td>
-                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalAlumnosAcum);?></td>
                   </tr>
                 </tfooter>
               </table>
@@ -126,6 +116,70 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         </div>
 
         <div class="col-md-6">
+          <div class="card">
+            <div class="card-header card-header-icon card-header-primary">
+              <div class="card-icon">
+                <i class="material-icons">list</i>
+              </div>
+              <h4 class="card-title"># de Estudiantes por Unidad Organizacional
+              </h4>
+            </div>
+            
+            <div class="card-body">
+              <table width="100%" class="table table-condensed">
+                <thead>
+                  <tr>
+                    <th class="text-center font-weight-bold">-</th>
+                    <th class="text-center font-weight-bold" colspan="1"><?=$nombreMes?></th>
+                    <th class="text-center font-weight-bold" colspan="1">Acum. <?=$nombreMes?></th>
+                  </tr>
+                  <tr>
+                    <th class="text-center font-weight-bold">Unidad</th>
+                    <th class="text-center font-weight-bold">#Estudiantes</th>
+                    <th class="text-center font-weight-bold">#Estudiantes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php
+                  $sqlU="SELECT u.codigo, u.nombre, u.abreviatura FROM unidades_organizacionales u WHERE u.codigo in ($cadenaUnidades) order by 2";
+                  $stmtU = $dbh->prepare($sqlU);
+                  $stmtU->execute();
+                  $stmtU->bindColumn('codigo', $codigoX);
+                  $stmtU->bindColumn('abreviatura', $abrevX);
+
+                  $totalCursos=0;
+                  $totalCursosAcum=0;
+                  $totalAlumnos=0;
+                  $totalAlumnosAcum=0;
+                  while($rowU = $stmtU -> fetch(PDO::FETCH_BOUND)){
+                    $numeroAlumnos=alumnosPorUnidad($codigoX,$anioTemporal,$mesTemporal,0,'');
+                    $numeroAlumnosAcum=alumnosPorUnidad($codigoX,$anioTemporal,$mesTemporal,1,'');
+
+                    $totalAlumnos+=$numeroAlumnos;
+                    $totalAlumnosAcum+=$numeroAlumnosAcum;
+                  ?>
+                  <tr>
+                    <td class="text-left"><a href="rptSECxUnidad.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=$abrevX;?></a>
+                    </td>
+                    <td class="text-right"><?=formatNumberInt($numeroAlumnos);?></td>
+                    <td class="text-right"><a href="rptSECDetalle.php?codArea=<?=$codArea;?>&codUnidad=<?=$codigoX;?>&mes=<?=$mesTemporal;?>&anio=<?=$anioTemporal;?>" target="_blank"><?=formatNumberInt($numeroAlumnosAcum);?></a></td>
+                  </tr>
+                  <?php
+                  }
+                  ?>                  
+                </tbody>
+                <tfooter>
+                  <tr>
+                    <td class="text-left font-weight-bold">Totales</td>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalAlumnos);?></td>
+                    <td class="text-right font-weight-bold"><?=formatNumberInt($totalAlumnosAcum);?></td>
+                  </tr>
+                </tfooter>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!--div class="col-md-6">
           <div class="card">
             <div class="card-header card-header-icon card-header-info">
               <div class="card-icon">
@@ -142,7 +196,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
               ?>
             </div>
           </div>
-        </div>
+        </div-->
 
       </div><!--ACA TERMINA ROW-->
         

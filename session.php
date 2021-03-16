@@ -139,7 +139,7 @@ if($banderaLogin==1 || $tipoLogin==1){
 		$_SESSION['globalAreasReports']=$arrayAreasReports;
 		$_SESSION['globalOrganismosReports']=$arrayOrganismosReports;
 		$_SESSION['globalFondosReports']=$arrayFondosReports;
-		$_SESSION['globalServerArchivos']="http://200.105.199.164:8008/itranet/documentos/";
+		$_SESSION['globalServerArchivos']="http://ibnored.ibnorca.org/itranet/documentos/";
 
 
 		$sIdentificador = "monitoreo";

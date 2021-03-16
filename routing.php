@@ -590,6 +590,9 @@
 		if ($_GET['opcion']=='rptOpEjecucionPOADetalle') {
 			require_once('reportes/rptOpEjecucionPOADet.php');
 		}
+		if ($_GET['opcion']=='rptOpEjecucionPOAIDetalle') {
+			require_once('reportes/rptOpEjecucionPOAIDet.php');
+		}
 		if ($_GET['opcion']=='rptOpPlanificacionPOADetalle') {
 			require_once('reportes/rptOpPlanificacionPOADet.php');
 		}
