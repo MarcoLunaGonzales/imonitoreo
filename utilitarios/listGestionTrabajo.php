@@ -32,7 +32,7 @@ $dbh = new Conexion();
                       <tbody>
                         <tr>
                           <td align="center">
-                            <select class="selectpicker" title="Seleccione una opcion" name="gestion" id="gestion" data-style="<?=$comboColor;?>" required>
+                            <select class="selectpicker" data-container="body" title="Seleccione una opcion" name="gestion" id="gestion" data-style="<?=$comboColor;?>" required>
                               <option disabled selected value=""></option>
                               <?php
                               $stmt = $dbh->prepare("SELECT g.codigo, g.nombre FROM gestiones g where g.cod_estado=1 order by 2 desc");

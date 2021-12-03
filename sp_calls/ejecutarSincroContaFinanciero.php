@@ -28,7 +28,7 @@ $dbh = new Conexion();
 <?php
 
 
-$sqlDelete = "DELETE from po_mayores where fecha>='2020-10-01 00:00:00'";
+$sqlDelete = "DELETE from po_mayores where fecha>='2021-01-01 00:00:00'";
 $stmtDelete = $dbh->prepare($sqlDelete);
 $flagSuccess=$stmtDelete->execute();
 
@@ -46,7 +46,7 @@ echo "<h6>Hora Inicio Nuevo Sistema Proceso Mayores: " . date("Y-m-d H:i:s")."</
   $sqlFinanciero="SELECT cd.cod_unidadorganizacional, year(c.fecha)as anio, month(c.fecha)as mes, c.fecha, p.numero as codcuenta, (debe-haber)as monto, cd.cod_area, 
   c.glosa, cd.glosa as glosadetalle, c.cod_tipocomprobante, c.numero, cd.cod_actividadproyecto
   from $bdFinanciero.comprobantes c, $bdFinanciero.comprobantes_detalle cd, $bdFinanciero.plan_cuentas p where c.codigo=cd.cod_comprobante and cd.cod_cuenta=p.codigo and 
-  year(c.fecha)=2020 and month(c.fecha)=10 and c.cod_estadocomprobante<>2;";
+  year(c.fecha)=2021 and month(c.fecha)>=1 and c.cod_estadocomprobante<>2;";
   //echo $sqlFinanciero;
   $stmtFin = $dbh->prepare($sqlFinanciero);
   $stmtFin->execute();

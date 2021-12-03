@@ -12,13 +12,17 @@ $table="hitos";
 $moduleName="Hitos";
 
 // Preparamos
-$stmt = $dbh->prepare("SELECT a.codigo, a.nombre, a.abreviatura FROM $table a where a.cod_estado=1 order by 2");
+$stmt = $dbh->prepare("SELECT a.codigo, a.nombre, a.abreviatura, a.cod_area, 
+  (select nombre from areas where codigo=a.cod_area)as area 
+  FROM $table a where a.cod_estado=1 order by 2");
 // Ejecutamos
 $stmt->execute();
 // bindColumn
 $stmt->bindColumn('codigo', $codigo);
 $stmt->bindColumn('nombre', $nombre);
 $stmt->bindColumn('abreviatura', $abreviatura);
+$stmt->bindColumn('cod_area', $codArea);
+$stmt->bindColumn('area', $nombreArea);
 
 ?>
 
@@ -28,6 +32,8 @@ $stmt->bindColumn('abreviatura', $abreviatura);
       <th class="text-center">#</th>
       <th>Nombre</th>
       <th>Abreviatura</th>
+      <th>codArea</th>
+      <th>Area</th>
     </tr>
   </thead>
   <tbody>
@@ -39,6 +45,8 @@ $stmt->bindColumn('abreviatura', $abreviatura);
       <td align="center"><?=$codigo;?></td>
       <td><?=$nombre;?></td>
       <td><?=$abreviatura;?></td>
+      <td><?=$codArea;?></td>
+      <td><?=$nombreArea;?></td>
     </tr>
 <?php
 $index++;

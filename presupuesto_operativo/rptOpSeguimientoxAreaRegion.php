@@ -7,6 +7,9 @@ function enviarFormRepSegPO(id){
 	if(id==2){
 		form1.action="presupuesto_operativo/rptSeguimientoxAreaRegion2.php";
 	}
+	if(id==3){
+		form1.action="presupuesto_operativo/rptSeguimientoxAreaRegion3.php";
+	}
 	form1.submit();
 }	
 
@@ -139,6 +142,7 @@ $arrayAreaServicios = explode(",", $codAreaServicios);
 			  <div class="card-footer ml-auto mr-auto">
 				<button type="button" id="boton1" class="<?=$button;?>" onClick="javascript:enviarFormRepSegPO(1);">Ver Reporte 1</button>
 				<button type="button" id="boton2" class="<?=$button;?>" onClick="javascript:enviarFormRepSegPO(2);">Ver Reporte 2</button>
+				<button type="button" id="boton3" class="<?=$button;?>" onClick="javascript:enviarFormRepSegPO(3);">Ver Reporte 3</button>
 				<a href="?opcion=listObjetivos" class="<?=$buttonCancel;?>">Cancelar</a>
 			  </div>
 			</div>

@@ -16,16 +16,24 @@ $stmtX = $dbh->prepare($sqlX);
 $stmtX->execute();
 $mes=$_GET["mes"];
 $gestion=$_GET["gestion"];
+$gestionOficial=$gestion;
+
+//echo "gestion:".$gestion." mes: ".$mes;
 $desde=nameGestion($gestion)."-01-01";
 $datosMes=explode("####", $_GET["mes"]);
 $gestiones[0]=$gestion;
-if(count($datosMes)>0){
+//echo " datosmes[1] ".$datosMes[1];
+if(count($datosMes)>0 && $datosMes[1]!="NONE"){
+  //echo "entro";
   $mes=$datosMes[0];
   if($datosMes[1]>0){
     $gestion=$datosMes[1];
     $gestiones[1]=$datosMes[1];
   }  
+}else{
+  $mes=$datosMes[0];
 }
+//echo "gestion:".$gestion." mes: ".$mes;
 $stringGestiones=implode(",", $gestiones);
 $diaUltimo=date("d",(mktime(0,0,0,$mes,1,nameGestion($gestion))-1));
 $hasta=nameGestion($gestion)."-".$mes."-".$diaUltimo;
@@ -90,6 +98,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           <?php
                           //$sqlSolicitudes="SELECT count(*)as nroregistros from solicitud_fondos s where s.cod_estado=1 and s.cod_gestion in ($stringGestiones) and YEAR(s.fecha)='$anio' and MONTH(s.fecha)<='$mes' order by s.fecha;";
                           $sqlSolicitudes="SELECT count(*)as nroregistros from solicitud_fondos s where s.cod_estado=1 and s.cod_gestion in ($stringGestiones) and s.fecha BETWEEN '$desde' and '$hasta' order by s.fecha;";
+                          //echo $sqlSolicitudes;
                           $stmtSolicitudes = $dbh->prepare($sqlSolicitudes);
                           $stmtSolicitudes->execute();
                           $stmtSolicitudes->bindColumn('nroregistros', $nroRegistros);
@@ -123,8 +132,11 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           ?>
                           <th class="text-center font-weight-bold">Total</br>Sol.Fondos</th>
                           <th class="text-center font-weight-bold">Ejecucion</th>
-                          <th class="text-center font-weight-bold">Diferencia</th>
-                          <th class="text-center font-weight-bold">% Ejecucion</th>
+                          <th class="text-center font-weight-bold">Dif. Vs. Desembolsos</th>
+                          <th class="text-center font-weight-bold">% Ejecucion </br>Vs. Desembolso</th>
+                          <th class="text-center font-weight-bold">Dif. Vs. Pres.</th>
+                          <th class="text-center font-weight-bold">% Ejecucion </br> Vs. Pres.</th>
+
                         </tr>
                       </thead>
 
@@ -150,10 +162,10 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           $montoAnteriorEjecucion=0;
                           if(isset($gestiones[1])){
                             $montoAnteriorPresupuesto=montoPresupuestoComponente($gestiones[0],nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
-                            $montoAnteriorEjecucion=montoEjecucionComponente(nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
+                            $montoAnteriorEjecucion=montoEjecucionComponente($gestionOficial, nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
                           }
-                          $montoPresComponente=$montoAnteriorPresupuesto+montoPresupuestoComponenteMeses($gestion,$anio,$mes,$codigoComponente,$nivelComponente);
-                          $montoEjecucionComponente=$montoAnteriorEjecucion+montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);
+                          $montoPresComponente=$montoAnteriorPresupuesto+montoPresupuestoComponenteMeses($gestionOficial,$anio,$mes,$codigoComponente,$nivelComponente);
+                          $montoEjecucionComponente=$montoAnteriorEjecucion+montoEjecucionComponente($gestionOficial,$anio,$mes,$codigoComponente, $nivelComponente);
                       ?>
                         <tr>
                           <td class="<?=$styleText;?>" ><?=$abreviaturaComponente;?></td>
@@ -163,7 +175,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           $stmtSolicitudes->execute();
                           $totalSolicitudes=0;
                           while($rowSolicitudes = $stmtSolicitudes->fetch(PDO::FETCH_BOUND)) {
-                            $montoSolicitudComponente=montoSolicitudComponente($codSolicitud, $codigoComponente,$nivelComponente);
+                            $montoSolicitudComponente=montoSolicitudComponente($gestionOficial, $codSolicitud, $codigoComponente,$nivelComponente);
                             $totalSolicitudes+=$montoSolicitudComponente;
                           ?>
                           <td class="text-right"><?=formatNumberInt($montoSolicitudComponente,2);?></td><?php
@@ -177,8 +189,14 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           if($montoPresComponente>0){
                             $porcentajeEjecucion=($montoEjecucionComponente/$montoPresComponente)*100;
                           }
+                          $porcentajeEjecucionDesembolso=0;
+                          if($totalSolicitudes>0){
+                            $porcentajeEjecucionDesembolso=($montoEjecucionComponente/$totalSolicitudes)*100;
+                          }
                           ?>
-                          <td class="text-right"><?=formatNumberDec($porcentajeEjecucion,2);?>%</td>
+                          <td class="text-right"><?=formatNumberDec($porcentajeEjecucionDesembolso,2);?>%</td>
+                          <td class="text-right"><?=formatNumberDec(($montoPresComponente-$montoEjecucionComponente),2);?></td>
+                          <td class="text-right"><?=formatNumberDec($porcentajeEjecucion,2);?>%</td>                          
                         </tr>
                       <?php
                       }

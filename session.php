@@ -92,6 +92,14 @@ if($banderaLogin==1 || $tipoLogin==1){
 		}
 		$nombreGestion=nameGestion($codGestionActiva);
 
+		if($idUsuarioSW==49299){
+			$codGestionActiva=1205;
+			$nombreGestion="2020";
+			$codMesActiva=12;
+			$codUnidad=3000;
+			$nombreUnidad="SIS";
+		}
+		
 		$_SESSION['globalUser']=$codigo;
 		$_SESSION['globalNameUser']=$nombre;
 		$_SESSION['globalGestion']=$codGestionActiva;
@@ -109,7 +117,7 @@ if($banderaLogin==1 || $tipoLogin==1){
 		$_SESSION['globalProyecto']='';
 
 
-		if($codigo==423 || $codigo==332 || $codigo==195){
+		if($codigo==90 || $codigo==332 || $codigo==195){
 			$_SESSION['globalAdmin']=1;			
 		}else{
 			$_SESSION['globalAdmin']=0;	

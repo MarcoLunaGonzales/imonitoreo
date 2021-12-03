@@ -158,7 +158,7 @@ $_SESSION['mesTemporal']=$mes;
                           <!--td class="text-right"><?=formatNumberInt($porcResultadoAnt);?></td-->
                           <td class="text-right">-</td>
                           <td class="text-right"><?=formatNumberInt($diferenciaAniosResult);?></td>
-                          <td class="text-right"><?=formatNumberInt($porcentajeAniosResult);?></td>
+                          <td class="text-right">-</td>
                         </tr>
 
                       </tbody>
@@ -358,7 +358,7 @@ $_SESSION["nombreTemporalAgrupado"]="EC";
                           <!--td class="text-right"><?=formatNumberInt($porcResultadoAnt);?></td-->
                           <td class="text-right">-</td>
                           <td class="text-right"><?=formatNumberInt($diferenciaAniosResult);?></td>
-                          <td class="text-right"><?=formatNumberInt($porcentajeAniosResult);?></td>
+                          <td class="text-right">-</td>
                         </tr>
 
 

@@ -63,7 +63,7 @@ $stmt->bindColumn('peso', $peso);
                           <td><?=$peso;?></td>
                           <td class="td-actions text-right">
                             <?php
-                            if($globalAdmin==1){
+                            if($globalAdmin==50){
                             ?>
                             <a href='index.php?opcion=editFuncionCargo&codigo=<?=$codFuncion;?>' rel="tooltip" class="btn btn-success">
                               <i class="material-icons">edit</i>
@@ -86,7 +86,7 @@ $stmt->bindColumn('peso', $peso);
                 </div>
               </div>
       				<?php
-              if($globalAdmin==1){
+              if($globalAdmin==50){
               ?>
               <div class="card-body">
                     <button class="btn" onClick="location.href='index.php?opcion=registerFuncionCargo&codigo=<?=$codigoCargo;?>'">Registrar</button>

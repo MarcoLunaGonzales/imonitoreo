@@ -106,15 +106,16 @@ while ($row = $stmtX->fetch(PDO::FETCH_ASSOC)) {
 										<select class="selectpicker form-control" name="componente<?=$index;?>" id="componente<?=$index;?>" data-style="<?=$comboColor;?>" data-live-search="true" required="true">
 										  	<option value="">Actividad</option>
 										  	<?php
-										  	$stmt = $dbh->prepare("SELECT codigo, abreviatura, nombre FROM componentessis where cod_estado=1 and nivel=3 order by 2,3");
+										  	$stmt = $dbh->prepare("SELECT codigo, abreviatura, nombre, cod_gestion FROM componentessis where cod_estado=1 and nivel=3 order by 2,3");
 											$stmt->execute();
 											while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 												$codigoX=$row['codigo'];
 												$nombreX=$row['nombre'];
 												$nombreX=substr($nombreX, 0,90);
 												$abreviaturaX=$row['abreviatura'];
+												$codGestionX=$row['cod_gestion'];
 											?>
-												<option value="<?=$codigoX;?>" <?=($codigoX==$codComponenteX)?"selected":"";?> ><?=$abreviaturaX." ".$nombreX;?></option>	
+												<option value="<?=$codigoX;?>" <?=($codigoX==$codComponenteX)?"selected":"";?> ><?=$abreviaturaX." ".$nombreX." ".$codGestionX;?></option>	
 											<?php
 											}
 										  	?>

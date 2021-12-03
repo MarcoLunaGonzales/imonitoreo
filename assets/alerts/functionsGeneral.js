@@ -479,13 +479,23 @@ function totalesSIS(){
    }   
    var datoPresS=main.rows[numFilas-1].cells[2].innerHTML;
    datoPresS=datoPresS.replace(/,/g,'');
-   console.log(datoPresS);
-   var datoEjeS=main.rows[numFilas-1].cells[numCols-3].innerHTML;
-    datoEjeS=datoEjeS.replace(/,/g,'');
-   console.log(datoEjeS);
+   console.log("presupuesto: "+datoPresS);
+   var datoEjeS=main.rows[numFilas-1].cells[numCols-5].innerHTML;
+   datoEjeS=datoEjeS.replace(/,/g,'');
+   console.log("ejecutado: "+datoEjeS);
+
+   var datoDesembS=main.rows[numFilas-1].cells[numCols-6].innerHTML;
+   datoDesembS=datoDesembS.replace(/,/g,'');
+   console.log("desembolso: "+datoDesembS);
+
     var porcentajeTotal=(parseFloat(datoEjeS)/parseFloat(datoPresS))*100;
     var porcentajeTotalF=number_format(porcentajeTotal,2);
-   main.rows[numFilas-1].cells[numCols-1].innerHTML=porcentajeTotalF+" %";
+    main.rows[numFilas-1].cells[numCols-1].innerHTML=porcentajeTotalF+" %";
+
+    var porcentajeTotalDesem=(parseFloat(datoEjeS)/parseFloat(datoDesembS))*100;
+    var porcentajeTotalDesemF=number_format(porcentajeTotalDesem,2);
+    main.rows[numFilas-1].cells[numCols-3].innerHTML=porcentajeTotalDesemF+" %";
+
 
     //ACA OCULTAMOS LAS FILAS QUE TIENEN 0
     for(var j=2; j<=numFilas-1; j++){

@@ -15,6 +15,7 @@ $stmtX->execute();
 
 $mes=$_GET["mes"];
 $gestion=$_GET["gestion"];
+$gestionOficial=$gestion;
 
 $globalGestion=$_SESSION["globalGestion"];
 $globalUsuario=$_SESSION["globalUser"];
@@ -23,19 +24,22 @@ $nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
 //LLAMAMOS A UN SP QUE ORDENA LOS COMPONENTES O ACTIVIDADES SIS
 
 
-echo $globalGestion." ".$gestion;
+//echo $globalGestion." ".$gestion;
 
 
 $desde=nameGestion($gestion)."-01-01";
 $datosMes=explode("####", $_GET["mes"]);
 $gestiones[0]=$gestion;
-if(count($datosMes)>0){
+if(count($datosMes)>0 && $datosMes[1]!="NONE"){
   $mes=$datosMes[0];
   if($datosMes[1]>0){
     $gestion=$datosMes[1];
     $gestiones[1]=$datosMes[1];
   }  
+}else{
+  $mes=$datosMes[0];
 }
+
 $stringGestiones=implode(",", $gestiones);
 $diaUltimo=date("d",(mktime(0,0,0,$mes,1,nameGestion($gestion))-1));
 $hasta=nameGestion($gestion)."-".$mes."-".$diaUltimo;
@@ -59,7 +63,7 @@ $stmt->execute();
 $sql="SELECT codigo, nombre, abreviatura, nivel, cod_padre, cod_estado, partida, indice, cod_usuario from componentessis_orden 
   where cod_usuario='$globalUsuario' and nivel in (1,2) ORDER BY indice";
 
-echo $sql;
+//echo $sql;
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 
@@ -95,7 +99,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           <th class="text-center font-weight-bold">&nbsp;</th>
                           <?php
                           $sqlSolicitudes="SELECT count(*)as nroregistros from solicitud_fondos s where s.cod_estado=1 and s.cod_gestion in ($stringGestiones) and s.fecha BETWEEN '$desde' and '$hasta' order by s.fecha;";
-                          echo $sqlSolicitudes;
+                          //echo $sqlSolicitudes;
                           $stmtSolicitudes = $dbh->prepare($sqlSolicitudes);
                           $stmtSolicitudes->execute();
                           $stmtSolicitudes->bindColumn('nroregistros', $nroRegistros);
@@ -139,7 +143,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                       <?php
                       	while ($row = $stmt->fetch(PDO::FETCH_BOUND)) {
                           
-                          echo "entro1";
+                          //echo "entro1";
 
                           $responsable=obtenerResponsableSIS($codigoComponente);
 
@@ -160,11 +164,11 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           $montoAnteriorEjecucion=0;
                           if(isset($gestiones[1])){
                             $montoAnteriorPresupuesto=montoPresupuestoComponente($gestiones[0],nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
-                            $montoAnteriorEjecucion=montoEjecucionComponente(nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
+                            $montoAnteriorEjecucion=montoEjecucionComponente($gestionOficial,nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
                           }
 
                            $montoPresComponente=$montoAnteriorPresupuesto+montoPresupuestoComponenteMeses($gestion,$anio,$mes,$codigoComponente,$nivelComponente);
-                          $montoEjecucionComponente=$montoAnteriorEjecucion+montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);
+                          $montoEjecucionComponente=$montoAnteriorEjecucion+montoEjecucionComponente($gestionOficial,$anio,$mes,$codigoComponente, $nivelComponente);
                           /*
                           $montoPresComponente=montoPresupuestoComponente($gestion,$anio,$mes,$codigoComponente,$nivelComponente);
                           $montoEjecucionComponente=montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);*/
@@ -177,7 +181,7 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           $stmtSolicitudes->execute();
                           $totalSolicitudes=0;
                           while($rowSolicitudes = $stmtSolicitudes->fetch(PDO::FETCH_BOUND)) {
-                            $montoSolicitudComponente=montoSolicitudComponente($codSolicitud, $codigoComponente,$nivelComponente);
+                            $montoSolicitudComponente=montoSolicitudComponente($gestionOficial, $codSolicitud, $codigoComponente,$nivelComponente);
                             $totalSolicitudes+=$montoSolicitudComponente;
                           ?>
                           <td class="text-right"><?=formatNumberInt($montoSolicitudComponente,2);?></td><?php

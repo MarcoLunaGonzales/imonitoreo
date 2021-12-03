@@ -13,13 +13,14 @@ $moduleName="Hitos";
 $globalAdmin=$_SESSION["globalAdmin"];
 
 // Preparamos
-$stmt = $dbh->prepare("SELECT codigo, nombre, abreviatura FROM $table where cod_estado=1");
+$stmt = $dbh->prepare("SELECT h.codigo, h.nombre, h.abreviatura, (select a.nombre from areas a where a.codigo=h.cod_area) as area FROM $table h where h.cod_estado=1");
 // Ejecutamos
 $stmt->execute();
 // bindColumn
 $stmt->bindColumn('codigo', $codigo);
 $stmt->bindColumn('nombre', $nombre);
 $stmt->bindColumn('abreviatura', $abreviatura);
+$stmt->bindColumn('area', $area);
 
 ?>
 
@@ -42,6 +43,7 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                           <th class="text-center">#</th>
                           <th>Nombre</th>
                           <th>Abreviatura</th>
+                          <th>Area</th>
                           <th class="text-right">Actions</th>
                         </tr>
                       </thead>
@@ -54,6 +56,7 @@ $stmt->bindColumn('abreviatura', $abreviatura);
                           <td align="center"><?=$index;?></td>
                           <td><?=$nombre;?></td>
                           <td><?=$abreviatura;?></td>
+                          <td><?=$area;?></td>
                           <td class="td-actions text-right">
                             <?php
                             if($globalAdmin==1){

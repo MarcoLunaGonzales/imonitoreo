@@ -62,19 +62,8 @@ require("chartPorServicio.php");
                   <h4 class="card-title">Agencia(s): <?=$nombreFondo;?></h4>
                 </div>
                 <div class="card-body">
-
-                  <!--DESDE ACA LA TABLA-->
-                  <?php
-                  $sqlServicios="SELECT codigo, nombre from po_organismos where codigo in ($cadenaOrganismos) order by 2";
-                  $stmtServicios = $dbh->prepare($sqlServicios);
-                  $stmtServicios->execute();
-                  while ($rowServicios= $stmtServicios->fetch(PDO::FETCH_ASSOC)) {
-                      $codigoServicio=$rowServicios['codigo'];
-                      $nombreServicio=$rowServicios['nombre'];
-                  
-                  ?>
                   <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-condensed">
                       <thead>
                         <tr>
                           <th class="text-center font-weight-bold" width="12.5%">-</th>
@@ -90,6 +79,17 @@ require("chartPorServicio.php");
                         </tr>
                       </thead>
                       <tbody>
+
+                  <!--DESDE ACA LA TABLA-->
+                  <?php
+                  $sqlServicios="SELECT codigo, nombre from po_organismos where codigo in ($cadenaOrganismos) order by 2";
+                  $stmtServicios = $dbh->prepare($sqlServicios);
+                  $stmtServicios->execute();
+                  while ($rowServicios= $stmtServicios->fetch(PDO::FETCH_ASSOC)) {
+                      $codigoServicio=$rowServicios['codigo'];
+                      $nombreServicio=$rowServicios['nombre'];
+                  
+                  ?>
                       <?php
                           //INGRESOS
                           $montoPresIngresoAnt=presupuestoIngresosMes($fondoArray,$anioAnt,$mes,$codigoServicio,0,0);
@@ -111,6 +111,43 @@ require("chartPorServicio.php");
                           $colorPorcIngAnt=colorPorcentajeIngreso($porcIngresoAnt);
                           $colorPorcIng=colorPorcentajeIngreso($porcIngreso);
 
+                      ?>
+                        <tr>
+                          <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
+                          <td class="text-left font-weight-bold">Ingresos</td>
+                          <td class="text-right"><?=formatNumberInt($montoPresIngreso);?></td>
+                          <td class="text-right"><?=formatNumberInt($montoEjIngreso);?></td>
+                          <td class="text-right <?=$colorPorcIng;?>"><?=formatNumberInt($porcIngreso);?></td>
+                          <td class="text-right "><?=formatNumberInt($montoPresIngresoAnt);?></td>
+                          <td class="text-right "><?=formatNumberInt($montoEjIngresoAnt);?></td>
+                          <td class="text-right <?=$colorPorcIngAnt;?>"><?=formatNumberInt($porcIngresoAnt);?></td>
+                          <td class="text-right "><?=formatNumberInt($diferenciaAniosIngresos);?></td>
+                          <td class="text-right "><?=formatNumberInt($porcentajeAniosIngresos);?></td>
+                        </tr>
+
+                  <?php
+                  }
+                  ?>
+                        <!--tr>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                        </tr-->
+
+                  <?php
+                  /*$sqlServicios="SELECT codigo, nombre from po_organismos where codigo in ($cadenaOrganismos) order by 2";
+                  $stmtServicios = $dbh->prepare($sqlServicios);
+                  $stmtServicios->execute();
+                  while ($rowServicios= $stmtServicios->fetch(PDO::FETCH_ASSOC)) {
+                      $codigoServicio=$rowServicios['codigo'];
+                      $nombreServicio=$rowServicios['nombre'];                  
 
                           //EGRESOS
                           $montoPresEgresoAnt=presupuestoEgresosMes($fondoArray,$anioAnt,$mes,$codigoServicio,0,0);
@@ -130,58 +167,10 @@ require("chartPorServicio.php");
                             $porcEgreso=($montoEjEgreso/$montoPresEgreso)*100;
                           }
                           $colorPorcEgAnt=colorPorcentajeEgreso($porcEgresoAnt);
-                          $colorPorcEg=colorPorcentajeEgreso($porcEgreso);
-                          
-                          //RESULTADOS
-                          $resultadoPresAnt=$montoPresIngresoAnt-$montoPresEgresoAnt;
-                          $resultadoEjAnt=$montoEjIngresoAnt-$montoEjEgresoAnt;
-
-                          $resultadoPres=$montoPresIngreso-$montoPresEgreso;
-                          $resultadoEj=$montoEjIngreso-$montoEjEgreso;
-
-                          $porcResultadoAnt=0;
-                          $porcResultado=0;
-                          if($resultadoPresAnt>0){
-                            $porcResultadoAnt=(($resultadoEjAnt-$resultadoPresAnt)/$resultadoPresAnt)*100;                            
-                          }
-                          if($resultadoPres>0){
-                            $porcResultado=(($resultadoEj-$resultadoPres)/$resultadoPres)*100;
-                          }
-
-                          $diferenciaAniosIngresos=$montoEjIngreso-$montoEjIngresoAnt;
-                          $porcentajeAniosIngresos=0;
-                          if($montoEjIngresoAnt>0){
-                            $porcentajeAniosIngresos=($montoEjIngreso/$montoEjIngresoAnt)*100;
-                          }
-
-                          $diferenciaAniosEgresos=$montoEjEgreso-$montoEjEgresoAnt;
-                          $porcentajeAniosEgresos=0;
-                          if($montoEjEgresoAnt>0){
-                            $porcentajeAniosEgresos=($montoEjEgreso/$montoEjEgresoAnt)*100;
-                          }
-
-                          $diferenciaAniosResult=$resultadoEj-$resultadoEjAnt;
-                          $porcentajeAniosResult=0;
-                          if($resultadoEjAnt>0){
-                            $porcentajeAniosResult=($resultadoEj/$resultadoEjAnt)*100;
-                          }
-
+                          $colorPorcEg=colorPorcentajeEgreso($porcEgreso);*/
 
                       ?>
-                        <tr>
-                          <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
-                          <td align="text-left">Ingresos</td>
-                          <td class="text-right"><?=formatNumberInt($montoPresIngreso);?></td>
-                          <td class="text-right"><?=formatNumberInt($montoEjIngreso);?></td>
-                          <td class="text-right <?=$colorPorcIng;?>"><?=formatNumberInt($porcIngreso);?></td>
-                          <td class="text-right"><?=formatNumberInt($montoPresIngresoAnt);?></td>
-                          <td class="text-right"><?=formatNumberInt($montoEjIngresoAnt);?></td>
-                          <td class="text-right <?=$colorPorcIngAnt;?>"><?=formatNumberInt($porcIngresoAnt);?></td>
-                          <td class="text-right"><?=formatNumberInt($diferenciaAniosIngresos);?></td>
-                          <td class="text-right"><?=formatNumberInt($porcentajeAniosIngresos);?></td>
-                        </tr>
-
-                        <tr>
+                        <!--tr>
                           <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
                           <td class="text-left">Egresos</td>
                           <td class="text-right"><?=formatNumberInt($montoPresEgreso);?></td>
@@ -192,31 +181,16 @@ require("chartPorServicio.php");
                           <td class="text-right <?=$colorPorcEgAnt;?>"><?=formatNumberInt($porcEgresoAnt);?></td>
                           <td class="text-right"><?=formatNumberInt($diferenciaAniosEgresos);?></td>
                           <td class="text-right"><?=formatNumberInt($porcentajeAniosEgresos);?></td>
-                        </tr>
+                        </tr-->
 
-                        <tr>
-                          <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
-                          <td class="text-left">Resultado</td>
-                          <td class="text-right"><?=formatNumberInt($resultadoPres);?></td>
-                          <td class="text-right"><?=formatNumberInt($resultadoEj);?></td>
-                          <!--td class="text-right"><?=formatNumberInt($porcResultado);?></td-->
-                          <td class="text-right">-</td>
-                          <td class="text-right"><?=formatNumberInt($resultadoPresAnt);?></td>
-                          <td class="text-right"><?=formatNumberInt($resultadoEjAnt);?></td>
-                          <!--td class="text-right"><?=formatNumberInt($porcResultadoAnt);?></td-->
-                          <td class="text-right">-</td>
-                          <td class="text-right"><?=formatNumberInt($diferenciaAniosResult);?></td>
-                          <td class="text-right"><?=formatNumberInt($porcentajeAniosResult);?></td>
-                        </tr>
-
+                  <?php
+                  //}
+                  ?>
                       </tbody>
                     </table>
                   </div>
-                  <?php
-                  }
-                  ?>
                   <!--HASTA AQUI LA TABLA-->
-
+                  
                 </div>
               </div>
             </div>
@@ -237,17 +211,8 @@ require("chartPorServicio.php");
                 <div class="card-body">
 
                   <!--DESDE ACA LA TABLA-->
-                  <?php
-                  $sqlServicios="SELECT codigo, nombre from po_organismos where codigo in ($cadenaOrganismos) order by 2";
-                  $stmtServicios = $dbh->prepare($sqlServicios);
-                  $stmtServicios->execute();
-                  while ($rowServicios= $stmtServicios->fetch(PDO::FETCH_ASSOC)) {
-                      $codigoServicio=$rowServicios['codigo'];
-                      $nombreServicio=$rowServicios['nombre'];
-                  
-                  ?>
                   <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-condensed">
                       <thead>
                         <tr>
                           <th class="text-center font-weight-bold" width="12.5%">-</th>
@@ -263,6 +228,16 @@ require("chartPorServicio.php");
                         </tr>
                       </thead>
                       <tbody>
+
+                  <?php
+                  $sqlServicios="SELECT codigo, nombre from po_organismos where codigo in ($cadenaOrganismos) order by 2";
+                  $stmtServicios = $dbh->prepare($sqlServicios);
+                  $stmtServicios->execute();
+                  while ($rowServicios= $stmtServicios->fetch(PDO::FETCH_ASSOC)) {
+                      $codigoServicio=$rowServicios['codigo'];
+                      $nombreServicio=$rowServicios['nombre'];
+                  
+                  ?>
                       <?php
                           //INGRESOS
                           $montoPresIngresoAnt=presupuestoIngresosMes($fondoArray,$anioAnt,$mes,$codigoServicio,1,0);
@@ -284,7 +259,46 @@ require("chartPorServicio.php");
                           $colorPorcIngAnt=colorPorcentajeIngreso($porcIngresoAnt);
                           $colorPorcIng=colorPorcentajeIngreso($porcIngreso);
 
+                      ?>
+                        <tr>
+                          <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
+                          <td class="text-left">Ingresos</td>
+                          <td class="text-right"><?=formatNumberInt($montoPresIngreso);?></td>
+                          <td class="text-right"><?=formatNumberInt($montoEjIngreso);?></td>
+                          <td class="text-right <?=$colorPorcIng;?>"><?=formatNumberInt($porcIngreso);?></td>
+                          <td class="text-right"><?=formatNumberInt($montoPresIngresoAnt);?></td>
+                          <td class="text-right"><?=formatNumberInt($montoEjIngresoAnt);?></td>
+                          <td class="text-right <?=$colorPorcIngAnt;?>"><?=formatNumberInt($porcIngresoAnt);?></td>
+                          <td class="text-right"><?=formatNumberInt($diferenciaAniosIngresos);?></td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosIngresos);?></td>
+                        </tr>
 
+                  <?php
+                  }
+                  ?>
+                   <!--tr>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                          <td class="text-center">-</td>
+                        </tr-->
+                  <?php
+                  /*
+                  $sqlServicios="SELECT codigo, nombre from po_organismos where codigo in ($cadenaOrganismos) order by 2";
+                  $stmtServicios = $dbh->prepare($sqlServicios);
+                  $stmtServicios->execute();
+                  while ($rowServicios= $stmtServicios->fetch(PDO::FETCH_ASSOC)) {
+                      $codigoServicio=$rowServicios['codigo'];
+                      $nombreServicio=$rowServicios['nombre'];
+                  
+                  ?>
+                      <?php
                           //EGRESOS
                           $montoPresEgresoAnt=presupuestoEgresosMes($fondoArray,$anioAnt,$mes,$codigoServicio,1,0);
                           $montoPresEgreso=presupuestoEgresosMes($fondoArray,$anio,$mes,$codigoServicio,1,0);
@@ -304,57 +318,9 @@ require("chartPorServicio.php");
                           }
                           $colorPorcEgAnt=colorPorcentajeEgreso($porcEgresoAnt);
                           $colorPorcEg=colorPorcentajeEgreso($porcEgreso);
-                          
-                          //RESULTADOS
-                          $resultadoPresAnt=$montoPresIngresoAnt-$montoPresEgresoAnt;
-                          $resultadoEjAnt=$montoEjIngresoAnt-$montoEjEgresoAnt;
-
-                          $resultadoPres=$montoPresIngreso-$montoPresEgreso;
-                          $resultadoEj=$montoEjIngreso-$montoEjEgreso;
-
-                          $porcResultadoAnt=0;
-                          $porcResultado=0;
-                          if($resultadoPresAnt>0){
-                            $porcResultadoAnt=(($resultadoEjAnt-$resultadoPresAnt)/$resultadoPresAnt)*100;                            
-                          }
-                          if($resultadoPres>0){
-                            $porcResultado=(($resultadoEj-$resultadoPres)/$resultadoPres)*100;
-                          }
-
-                          $diferenciaAniosIngresos=$montoEjIngreso-$montoEjIngresoAnt;
-                          $porcentajeAniosIngresos=0;
-                          if($montoEjIngresoAnt>0){
-                            $porcentajeAniosIngresos=($montoEjIngreso/$montoEjIngresoAnt)*100;
-                          }
-
-                          $diferenciaAniosEgresos=$montoEjEgreso-$montoEjEgresoAnt;
-                          $porcentajeAniosEgresos=0;
-                          if($montoEjEgresoAnt>0){
-                            $porcentajeAniosEgresos=($montoEjEgreso/$montoEjEgresoAnt)*100;
-                          }
-
-                          $diferenciaAniosResult=$resultadoEj-$resultadoEjAnt;
-                          $porcentajeAniosResult=0;
-                          if($resultadoEjAnt>0){
-                            $porcentajeAniosResult=($resultadoEj/$resultadoEjAnt)*100;
-                          }
-
-
+                          */
                       ?>
-                        <tr>
-                          <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
-                          <td align="text-left">Ingresos</td>
-                          <td class="text-right"><?=formatNumberInt($montoPresIngreso);?></td>
-                          <td class="text-right"><?=formatNumberInt($montoEjIngreso);?></td>
-                          <td class="text-right <?=$colorPorcIng;?>"><?=formatNumberInt($porcIngreso);?></td>
-                          <td class="text-right"><?=formatNumberInt($montoPresIngresoAnt);?></td>
-                          <td class="text-right"><?=formatNumberInt($montoEjIngresoAnt);?></td>
-                          <td class="text-right <?=$colorPorcIngAnt;?>"><?=formatNumberInt($porcIngresoAnt);?></td>
-                          <td class="text-right"><?=formatNumberInt($diferenciaAniosIngresos);?></td>
-                          <td class="text-right"><?=formatNumberInt($porcentajeAniosIngresos);?></td>
-                        </tr>
-
-                        <tr>
+                        <!--tr>
                           <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
                           <td class="text-left">Egresos</td>
                           <td class="text-right"><?=formatNumberInt($montoPresEgreso);?></td>
@@ -365,29 +331,14 @@ require("chartPorServicio.php");
                           <td class="text-right <?=$colorPorcEgAnt;?>"><?=formatNumberInt($porcEgresoAnt);?></td>
                           <td class="text-right"><?=formatNumberInt($diferenciaAniosEgresos);?></td>
                           <td class="text-right"><?=formatNumberInt($porcentajeAniosEgresos);?></td>
-                        </tr>
+                        </tr-->
 
-                        <tr>
-                          <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
-                          <td class="text-left">Resultado</td>
-                          <td class="text-right"><?=formatNumberInt($resultadoPres);?></td>
-                          <td class="text-right"><?=formatNumberInt($resultadoEj);?></td>
-                          <!--td class="text-right"><?=formatNumberInt($porcResultado);?></td-->
-                          <td class="text-right">-</td>
-                          <td class="text-right"><?=formatNumberInt($resultadoPresAnt);?></td>
-                          <td class="text-right"><?=formatNumberInt($resultadoEjAnt);?></td>
-                          <!--td class="text-right"><?=formatNumberInt($porcResultadoAnt);?></td-->
-                          <td class="text-right">-</td>
-                          <td class="text-right"><?=formatNumberInt($diferenciaAniosResult);?></td>
-                          <td class="text-right"><?=formatNumberInt($porcentajeAniosResult);?></td>
-                        </tr>
-
+                  <?php
+                  //}                  
+                  ?>
                       </tbody>
                     </table>
                   </div>
-                  <?php
-                  }
-                  ?>
                   <!--HASTA AQUI LA TABLA-->
 
                 </div>

@@ -4,7 +4,7 @@
 $sIde = "monitoreo"; // De acuerdo al sistema
 $sKey = "837b8d9aa8bb73d773f5ef3d160c9b17"; // llave de acuerdo al sistema
 
-/*PARAMETROS PARA LA OPTENCION DEL CATALOGO*/
+/*PARAMETROS PARA SACAR DEL CATALOGO*/
 // cambiar esta linea por las demas opciones
 	//$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "TipoLista"=>"Todos"); //Lista todas las normas
 	$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, "TipoLista"=>"Detalle", "IdNorma"=>"3347"); // Lista el detalle de una norma

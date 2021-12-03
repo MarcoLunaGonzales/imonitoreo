@@ -20,19 +20,27 @@ $stmtX->execute();
 
 $mes=$_GET["mes"];
 $gestion=$_GET["gestion"];
+$gestionOficial=$gestion;
+
 $desde=nameGestion($gestion)."-01-01";
 $datosMes=explode("####", $_GET["mes"]);
 $gestiones[0]=$gestion;
-if(count($datosMes)>0){
+if(count($datosMes)>0 && $datosMes[1]!="NONE"){
   $mes=$datosMes[0];
   if($datosMes[1]>0){
     $gestion=$datosMes[1];
     $gestiones[1]=$datosMes[1];
   }  
+}else{
+  $mes=$datosMes[0];
 }
+
 $stringGestiones=implode(",", $gestiones);
 $diaUltimo=date("d",(mktime(0,0,0,$mes,1,nameGestion($gestion))-1));
-$hasta=nameGestion($gestion)."-".$mes."-".$diaUltimo;
+$hasta=nameGestion($gestion)."-".$mes."-01";
+
+$hasta=date('Y-m-d',strtotime($hasta.'+1 month'));
+$hasta=date('Y-m-d',strtotime($hasta.'-1 day'));
 
 $codigo_proy=$_GET["codigo_proy"];
 $nombre_proyecto=obtener_nombre_proyecto($codigo_proy);
@@ -45,6 +53,8 @@ $nombreMes=nameMes($mes);
 $globalGestion=$_SESSION["globalGestion"];
 $globalUsuario=$_SESSION["globalUser"];
 
+//$globalGestion=1205;
+
 //LLAMAMOS A UN SP QUE ORDENA LOS COMPONENTES O ACTIVIDADES SIS
 $sql = 'CALL ordenar_componentes(?,?,?)';
 $stmt = $dbh->prepare($sql);
@@ -54,8 +64,11 @@ $stmt->bindParam(3, $codigo_proy, PDO::PARAM_INT, 10);
 $stmt->execute();
 
 
+//echo $globalUsuario." ".$globalGestion." ".$codigo_proy;
+
 $sql="SELECT codigo, partida, nombre, abreviatura, nivel from componentessis_orden 
   where cod_usuario='$globalUsuario' ORDER BY indice";
+//echo $sql;
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 
@@ -66,6 +79,7 @@ $stmt->bindColumn('nombre', $nombreComponente);
 $stmt->bindColumn('abreviatura', $abreviaturaComponente);
 $stmt->bindColumn('nivel', $nivelComponente);
 
+//echo $codigoComponente."<br>";
 ?>
 
 <div class="content">
@@ -110,9 +124,9 @@ $stmt->bindColumn('nivel', $nivelComponente);
                           $montoEjecucionComponente=0;
                           $montoAnteriorEjecucion=0;
                           if(isset($gestiones[1])){                          
-                            $montoAnteriorEjecucion=montoEjecucionComponente(nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
+                            $montoAnteriorEjecucion=montoEjecucionComponente($gestionOficial,nameGestion($gestiones[0]),12,$codigoComponente,$nivelComponente);
                           }                          
-                          $montoEjecucionComponente=$montoAnteriorEjecucion+montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);                    
+                          $montoEjecucionComponente=$montoAnteriorEjecucion+montoEjecucionComponente($gestionOficial,$anio,$mes,$codigoComponente, $nivelComponente);                    
                           //$montoEjecucionComponente=montoEjecucionComponente($anio,$mes,$codigoComponente, $nivelComponente);
 
                           if($montoEjecucionComponente>0){
@@ -126,7 +140,14 @@ $stmt->bindColumn('nivel', $nivelComponente);
                         </tr>
                       <?php
                           }
+                        $sqlDetalle="";
+                        if($partidaComponente==''){
+                          $partidaComponente='-100';
+                        }
                         $sqlDetalle="SELECT p.codigo, p.nombre, sum(m.monto)as monto from po_mayores m, po_plancuentas p where m.ml_partida in ($partidaComponente) and m.cuenta=p.codigo and m.fecha BETWEEN '$desde' and '$hasta' group by p.codigo, p.nombre order by 2";
+                        
+                        //echo "cod: ".$codigoComponente." ".$sqlDetalle;
+                        
                         $stmtDetalle = $dbh->prepare($sqlDetalle);
                         $stmtDetalle->execute();
                         $stmtDetalle->bindColumn('codigo', $codigo);
@@ -169,8 +190,8 @@ $stmt->bindColumn('nivel', $nivelComponente);
                                   ?>
                                   <table width="100%">
                                     <tr>
-                                      <th>Detalle</th>
                                       <th>Fecha</th>
+                                      <th>Detalle</th>
                                       <th class="text-center font-weight-bold">AccNum</th>
                                       <th class="text-center font-weight-bold">ExternalCost</th>
                                       <th>Monto</th>

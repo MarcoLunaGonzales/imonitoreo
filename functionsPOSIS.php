@@ -113,6 +113,55 @@ function ejecutadoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cu
   return($montoIngresoEjecutado);
 }
 
+
+
+function ejecutadoIngresosMesNOEspecial($agencia, $anio, $mes, $organismo, $acumulado, $cuenta){
+  $dbh = new Conexion();
+  //echo "agencia: ".$agencia;
+  $agencia=str_replace('|', ',', $agencia);
+  $sql="SELECT distinct(pc.codigo) as codigo, pc.nivel from po_plancuentas pc where pc.codigo like '4%'";
+  if($organismo!=0){
+    $sql.=" and pc.codigo in (select distinct(pp.cod_cuenta) from po_presupuesto pp where pp.cod_organismo in ($organismo) and pp.cod_cuenta like '4%' and pp.monto>0 and pp.cod_ano='$anio')";
+  }else{
+    $sql.=" and pc.nivel=5 ";
+  }
+  if($cuenta!=0){
+    $sql.=" and pc.codigo='$cuenta'";
+  }
+  
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $montoIngresoEjecutado=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $codPlanCuenta=$row['codigo'];
+      $nivelCuenta=$row['nivel'];
+      $campoTablaCuenta="";
+      if($nivelCuenta==4){
+        $campoTablaCuenta="p.cta_n4";
+      }else{
+        $campoTablaCuenta="p.cuenta";
+      }
+
+      if($acumulado==1){
+        $sqlMayor="SELECT sum(p.monto)as monto from po_mayores p where p.fondo in ($agencia) and $campoTablaCuenta='$codPlanCuenta' and p.anio='$anio' and p.mes<='$mes' and p.clase like '%T%'";
+      }else{
+        $sqlMayor="SELECT sum(p.monto)as monto from po_mayores p where p.fondo in ($agencia) and $campoTablaCuenta='$codPlanCuenta' and p.anio='$anio' and p.mes='$mes' and p.clase like '%T%'";
+      }
+      
+      //echo $sqlMayor."<br>";
+      
+      $stmtMayor=$dbh->prepare($sqlMayor);
+      $stmtMayor->execute();
+      while ($rowMayor = $stmtMayor->fetch(PDO::FETCH_ASSOC)) {
+          $montoEjecutado=$rowMayor['monto'];
+          $montoIngresoEjecutado=$montoIngresoEjecutado+$montoEjecutado;
+          //echo $codPlanCuenta." nivel ".$nivelCuenta." ".$montoEjecutado." <br>";
+      }
+  }
+  $montoIngresoEjecutado=$montoIngresoEjecutado*(-1);
+  return($montoIngresoEjecutado);
+}
+
 //and p.cod_cuenta not in ('5030150','5030151','5030190')
 function presupuestoEgresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cuenta){
   $dbh = new Conexion();
@@ -426,19 +475,19 @@ function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa)
 
 
 //ESTAS FUNCIONES SON PARA EL PROYECTO SIS
-function devolverCodigos($componente, $nivel, $tipo){
+function devolverCodigos($componente, $nivel, $tipo, $gestion){
   $dbh = new Conexion();
   $codigosComp="0";
   $codigosPartida="'0'";
   $sql="";
   if($nivel==3){
-    $sql="SELECT c.codigo, c.partida from componentessis c where c.codigo='$componente' and c.cod_gestion='1205'";
+    $sql="SELECT c.codigo, c.partida from componentessis c where c.codigo='$componente' and c.cod_gestion='$gestion'";
   }
   if($nivel==2){
-    $sql="SELECT c.codigo, c.partida from componentessis c where c.cod_padre in (select cd.codigo from componentessis cd where cd.codigo='$componente'  and cd.cod_gestion='1205')  and c.cod_gestion='1205'";
+    $sql="SELECT c.codigo, c.partida from componentessis c where c.cod_padre in (select cd.codigo from componentessis cd where cd.codigo='$componente'  and cd.cod_gestion='$gestion')  and c.cod_gestion='$gestion'";
   }
   if($nivel==1){
-    $sql="SELECT c1.codigo, c1.partida from componentessis c1 where c1.cod_padre in (select c.codigo from componentessis c where c.cod_padre in (select cd.codigo from componentessis cd where cd.codigo='$componente'  and cd.cod_gestion='1205')  and c.cod_gestion='1205')  and c1.cod_gestion='1205'";
+    $sql="SELECT c1.codigo, c1.partida from componentessis c1 where c1.cod_padre in (select c.codigo from componentessis c where c.cod_padre in (select cd.codigo from componentessis cd where cd.codigo='$componente'  and cd.cod_gestion='$gestion')  and c.cod_gestion='$gestion')  and c1.cod_gestion='$gestion'";
   }
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
@@ -456,9 +505,10 @@ function devolverCodigos($componente, $nivel, $tipo){
   if($tipo==1){return($codigosComp);} 
   if($tipo==2){return($codigosPartida);} 
 }
-function montoSolicitudComponente($solicitud, $componente, $nivel){
+function montoSolicitudComponente($gestion, $solicitud, $componente, $nivel){
   $dbh = new Conexion();
-  $codigosX=devolverCodigos($componente,$nivel,1);
+  //echo $gestion;
+  $codigosX=devolverCodigos($componente,$nivel,1,$gestion);
   //echo "cod: ".$codigosX."<br>";
   $sql="SELECT sum(sd.monto)as monto from solicitudfondos_detalle sd where sd.codigo='$solicitud' and sd.cod_componente in ($codigosX)";
   //echo $sql;
@@ -474,7 +524,7 @@ function montoSolicitudComponente($solicitud, $componente, $nivel){
 function montoPresupuestoComponente($gestion, $anio, $mes, $componente, $nivel){
   $dbh = new Conexion();
   $codigosX="";
-  $codigosX=devolverCodigos($componente,$nivel,2);
+  $codigosX=devolverCodigos($componente,$nivel,2,$gestion);
   
   //echo $componente." -  ".$codigosX."<br>";
   
@@ -494,7 +544,7 @@ function montoPresupuestoComponente($gestion, $anio, $mes, $componente, $nivel){
 function montoPresupuestoComponenteMeses($gestion, $anio, $mes, $componente, $nivel){
   $dbh = new Conexion();
   $codigosX="";
-  $codigosX=devolverCodigos($componente,$nivel,2);
+  $codigosX=devolverCodigos($componente,$nivel,2,$gestion);
   
   //echo $componente." -  ".$codigosX."<br>";
   
@@ -513,9 +563,9 @@ function montoPresupuestoComponenteMeses($gestion, $anio, $mes, $componente, $ni
 }
 
 
-function montoEjecucionComponente($anio, $mes, $componente, $nivel){
+function montoEjecucionComponente($gestion, $anio, $mes, $componente, $nivel){
   $dbh = new Conexion();
-  $codigosX=devolverCodigos($componente,$nivel,2);
+  $codigosX=devolverCodigos($componente,$nivel,2, $gestion);
   
   //echo $componente." ".$codigosX."<br>";
   //$sql="SELECT sum(m.monto)as monto from po_mayores m where m.anio='$anio' and m.mes<='$mes' and m.ml_partida in ($codigosX) and m.fondo=2001";

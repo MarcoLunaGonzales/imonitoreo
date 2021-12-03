@@ -13,13 +13,14 @@ $moduleName="Indicadores";
 $gestionNueva="3584";
 
 // Preparamos
-$stmt = $dbh->prepare("SELECT a.codigo, a.nombre, a.cod_objetivo as abreviatura FROM $table a where a.cod_estado=1 and a.cod_gestion='$gestionNueva' order by 1");
+$stmt = $dbh->prepare("SELECT a.codigo, a.nombre, a.cod_objetivo as abreviatura, a.descripcion_calculo FROM $table a where a.cod_estado=1 and a.cod_gestion='$gestionNueva' order by 1");
 // Ejecutamos
 $stmt->execute();
 // bindColumn
 $stmt->bindColumn('codigo', $codigo);
 $stmt->bindColumn('nombre', $nombre);
 $stmt->bindColumn('abreviatura', $abreviatura);
+$stmt->bindColumn('descripcion_calculo', $descripcionCalculo);
 
 ?>
 
@@ -28,6 +29,7 @@ $stmt->bindColumn('abreviatura', $abreviatura);
     <tr>
       <th class="text-center">#</th>
       <th>Nombre</th>
+      <th>Descricion Calculo</th>
       <th>CodObjetivo</th>
     </tr>
   </thead>
@@ -39,6 +41,7 @@ $stmt->bindColumn('abreviatura', $abreviatura);
     <tr>
       <td align="center"><?=$codigo;?></td>
       <td><?=$nombre;?></td>
+      <td><?=$descripcionCalculo;?></td>
       <td><?=$abreviatura;?></td>
     </tr>
 <?php

@@ -107,7 +107,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $nombreConjunto=nameGrupoFondo(0);
             $codigosConjunto=codigosGrupoFondo(0);
           ?>
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="card">
           <div class="card-header card-header-info card-header-icon">
             <div class="card-icon">
@@ -133,7 +133,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <th class="text-center font-weight-bold">Pres.</th>
                   <th class="text-center font-weight-bold">Eje.</th>
                   <th class="text-center font-weight-bold">%</th>
-                  <th class="text-center font-weight-bold">Part.</th>
+                  <!--th class="text-center font-weight-bold">Part.</th-->
                 </tr>
               </thead>
               <tbody>
@@ -167,7 +167,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right font-weight-bold table-warning">
                     <?=formatNumberInt($montoEjIngConjunto);?></td>
                   <td class="text-right font-weight-bold <?=$colorPorcentajeIngreso;?>"><?=formatNumberInt($porcentajeIngConjunto);?></td>
-                  <td class="text-right  font-weight-bold table-warning"><?=formatNumberInt(100);?></td>
+                  <!--td class="text-right  font-weight-bold table-warning"><?=formatNumberInt(100);?></td-->
                 </tr>
 
                 <?php
@@ -216,7 +216,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right text-muted table-warning">
                     <?=formatNumberInt($ejecutadoCuenta2);?></td>
                   <td class="text-right text-muted"><?=formatNumberInt($porcentajeCuenta2NO);?></td>
-                  <td class="text-center text-muted table-warning">-</td>
+                  <!--td class="text-center text-muted table-warning">-</td-->
                 </tr>
                 <tr>
                   <td class="text-left text-muted">
@@ -226,7 +226,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right text-muted table-warning">
                     <?=formatNumberInt($ejecutadoCuenta3);?></td>
                   <td class="text-right text-muted"><?=formatNumberInt($porcentajeCuenta3NO);?></td>
-                  <td class="text-center text-muted table-warning">-</td>
+                  <!--td class="text-center text-muted table-warning">-</td-->
                 </tr>                
                 <?php
                 }
@@ -252,7 +252,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right  font-weight-bold table-info"><?=formatNumberInt($montoPresEgConjunto);?></td>
                   <td class="text-right font-weight-bold table-info"><?=formatNumberInt($montoEjEgConjunto);?></td>
                   <td class="text-right font-weight-bold <?=$colorPorcentajeEgreso;?>"><?=formatNumberInt($porcentajeEgConjunto);?></td>
-                  <td class="text-right  font-weight-bold table-info"><?=formatNumberInt(100);?></td>
+                  <!--td class="text-right  font-weight-bold table-info"><?=formatNumberInt(100);?></td-->
                 </tr>
                 <?php
                 $resultadoPres=$montoPresIngConjunto-$montoPresEgConjunto;
@@ -267,7 +267,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right font-weight-bold"><?=formatNumberInt($resultadoPres);?></td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($resultadoEj);?></td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($porcentajeResultado);?></td>
-                  <td class="text-right font-weight-bold">-</td>
+                  <!--td class="text-right font-weight-bold">-</td-->
                  </tr>
                  <?php
                  //ACA SACAMOS LOS DATOS PARA LOS ACUMULADOS
@@ -290,6 +290,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $colorPorcentajeIngresoGestion=colorPorcentajeIngreso($porcentajeIngGestion);
 
                  $valorIngresoFormatAcumulado=number_format(calcularValorEnPoncentaje($montoEjIngAcumulado,$montoPresIngAcumulado),0,'.','');
+
+
+                 $valorPlanificadoMes=100;
+                 $valorEjecutadoMes=90;
+
+                 $valorPlanificadoAcum=200;
+                 $valorEjecutadoAcum=190;
                  ?>
                  <tr>
                   <td class="font-weight-bold">
@@ -300,7 +307,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right font-weight-bold table-warning"><?=formatNumberInt($montoPresIngAcumulado);?></td>
                   <td class="text-right font-weight-bold table-warning"><?=formatNumberInt($montoEjIngAcumulado);?></td>
                   <td class="text-right font-weight-bold <?=$colorPorcentajeIngreso;?>"><?=formatNumberInt($porcentajeIngAcum);?></td>
-                  <td class="text-right font-weight-bold  table-warning">-</td>
+                  <!--td class="text-right font-weight-bold  table-warning">-</td-->
+                </tr>
+                   
 
                 <?php
                 $codCuentaIngresos1="4010103001";
@@ -337,7 +346,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right text-muted table-warning">
                     <?=formatNumberInt($ejecutadoCuenta1);?></td>
                   <td class="text-right text-muted"><?=formatNumberInt($porcentajeCuenta1NO);?></td>
-                  <td class="text-center text-muted table-warning">-</td>
+                  <!--td class="text-center text-muted table-warning">-</td-->
                 </tr>
                 <tr>
                   <td class="text-left text-muted">
@@ -347,7 +356,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right text-muted table-warning">
                     <?=formatNumberInt($ejecutadoCuenta2);?></td>
                   <td class="text-right text-muted"><?=formatNumberInt($porcentajeCuenta2NO);?></td>
-                  <td class="text-center text-muted table-warning">-</td>
+                  <!--td class="text-center text-muted table-warning">-</td-->
                 </tr>
                 <tr>
                   <td class="text-left text-muted">
@@ -357,7 +366,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right text-muted table-warning">
                     <?=formatNumberInt($ejecutadoCuenta3);?></td>
                   <td class="text-right text-muted"><?=formatNumberInt($porcentajeCuenta3NO);?></td>
-                  <td class="text-center text-muted table-warning">-</td>
+                  <!--td class="text-center text-muted table-warning">-</td-->
                 </tr>                
                 <?php
                 }
@@ -391,7 +400,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right font-weight-bold table-info"><?=formatNumberInt($montoPresEgAcumulado);?></td>
                   <td class="text-right font-weight-bold table-info"><?=formatNumberInt($montoEjEgAcumulado);?></td>
                   <td class="text-right font-weight-bold <?=$colorPorcentajeEgreso;?>"><?=formatNumberInt($porcentajeEgAcum);?></td>
-                  <td class="text-right font-weight-bold table-info">-</td>
+                  <!--td class="text-right font-weight-bold table-info">-</td-->
                  </tr>
 
                 <?php
@@ -408,7 +417,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-right font-weight-bold"><?=formatNumberInt($resultadoPresAcum);?></td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($resultadoEjAcum);?></td>
                   <td class="text-right font-weight-bold"><?=formatNumberInt($porcentajeResultado);?></td>
-                  <td class="text-right font-weight-bold">-</td>
+                  <!--td class="text-right font-weight-bold">-</td-->
                </tr>
 
 
@@ -451,28 +460,190 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       </div>
 
 
-      <div class="col-md-4 div-center">
+
+
+      <div class="col-md-5 div-center">
         <div class="card card-chart text-center">
-          <div class="card-header card-header-rose" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
-             <h4>INGRESOS Y EGRESOS</h4>
+          <div class="card-header card-header" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
+             <h4>Seguimiento Actividades</h4>
           </div>
-          <div class="card-body">
-            <div class="card-actions">  
-            </div>
-            <center>
-              <h4 class="card-title">INGRESOS</h4>
-              <div id="ingreso_general_chart<?=$superIndex?>" class="div-center"></div>
-              <h4 class="card-title">EGRESOS</h4>
-              <div id="ingreso_general_chart_eg<?=$superIndex?>" class="div-center"></div>
-            </center>                                
+        </div>  
+          <?php
+          $sqlActividades="SELECT e.nombre,e.planificado, e.ejecutado, e.planificado_acum, e.ejecutado_acum from ejecucion_temporal e, po_organismos po where po.codigo='$codOrganismoX' and po.cod_area=e.cod_area;";
+          $stmtActividades=$dbh->prepare($sqlActividades);
+          $stmtActividades->execute();
+          while($rowActividades=$stmtActividades->fetch(PDO::FETCH_ASSOC)){
+            $nombreActividad=$rowActividades['nombre'];
+            $planificadoMes=$rowActividades['planificado']; 
+            $ejecutadoMes=$rowActividades['ejecutado']; 
             
+            $porcentajeActMes=($ejecutadoMes/$planificadoMes)*100;
+            $colorPorcentajeAct=colorPorcentajeIngreso($porcentajeActMes);
+            $colorPorcentajeAct=substr($colorPorcentajeAct, 3);
+            //echo $colorPorcentajeAct;
+
+            $planificadoMesAcum=$rowActividades['planificado_acum']; 
+            $ejecutadoMesAcum=$rowActividades['ejecutado_acum']; 
+
+            $porcentajeActMesAcum=($ejecutadoMesAcum/$planificadoMesAcum)*100;
+            $colorPorcentajeActAcum=colorPorcentajeIngreso($porcentajeActMesAcum);
+            $colorPorcentajeActAcum=substr($colorPorcentajeActAcum, 3);
+
+          ?>
+
+          <div class="row">
+
+          <div class="col-md-6">
+                <div class="card card-stats">
+                  <div class="card-header card-header-<?=$colorPorcentajeAct;?> card-header-icon">
+                    <div class="card-icon">
+                      <h3><?=formatNumberInt($porcentajeActMes);?>%</h3>
+                    </div>
+                    <p class="card-category"><small>Planificado</small></p>
+                    <h3 class="card-title"><?=$planificadoMes;?></h3>
+
+                    <p class="card-category"><small>Ejecutado</small></p>
+                    <h3 class="card-title"><?=$ejecutadoMes;?></h3>
+                  </div>
+                  <div class="card-footer">
+                    <div class="stats">
+                      <i class="material-icons">local_offer</i> <p class="font-weight-bold"><?=$nombreActividad;?> - Mes</p>
+                    </div>
+                  </div>
+                </div>
           </div>
-          <div class="card-footer">
+
+          <div class="col-md-6">
+                <div class="card card-stats">
+                  <div class="card-header card-header-<?=$colorPorcentajeActAcum;?> card-header-icon">
+                    <div class="card-icon">
+                      <h3><?=formatNumberInt($porcentajeActMesAcum);?>%</h3>
+                    </div>
+                    <p class="card-category"><small>Planificado</small></p>
+                    <h3 class="card-title"><?=$planificadoMesAcum;?></h3>
+
+                    <p class="card-category"><small>Ejecutado</small></p>
+                    <h3 class="card-title"><?=$ejecutadoMesAcum;?></h3>
+                  </div>
+                  <div class="card-footer">
+                    <div class="stats">
+                      <i class="material-icons">local_offer</i> <b><?=$nombreActividad;?> - Acumulado</b>
+                    </div>
+                  </div>
+                </div>
+          </div>
+          
+          </div>
+
+          <?php          
+          }
+          ?>
+
+          <?php
+          if($codOrganismoX==505){
+          ?>
+          <div class="row">
+            <div class="card card-stats">
+                  <div class="card-header card-header" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
+                      <h4>Certificaciones <?php echo $nombreOrganismoX;?></h4>
+
+          <table class="table table-striped table-bordered table-dark">
+          <thead>
+            <tr class="text-center font-weight-bold">
+              <th><small>Tipo</small></th>
+              <th><small>Ini</small></th>
+              <th><small>Suspendidas</small></th>
+              <th><small>Retiradas</small></th>
+              <th><small>Nuevas</small></th>
+              <th><small>Total</small></th>
+              <th><small>Planificado Gestion</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mes</td>
+              <td class="text-right">147</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+              <td class="text-right">1</td>
+              <td class="text-right">148</td>
+              <td class="text-right">-</td>
+            </tr>
+            <tr>
+              <td>Acum</td>
+              <td class="text-right">153</td>
+              <td class="text-right">3</td>
+              <td class="text-right">15</td>
+              <td class="text-right">10</td>
+              <td class="text-right">148</td>
+              <td class="text-right">173</td>
+            </tr>
+          </tbody>
+        </table>
+
+                  </div>
+            </div>   
+          </div>
+          <?php
+          }
+          ?>
+
+          <?php
+          if($codOrganismoX==506){
+          ?>
+          <div class="row">
+            <div class="card card-stats">
+                  <div class="card-header card-header" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
+                      <h4>Certificaciones <?php echo $nombreOrganismoX;?></h4>
+
+          <table class="table table-striped table-bordered table-dark">
+          <thead>
+            <tr class="text-center font-weight-bold">
+              <th><small>Tipo</small></th>
+              <th><small>Ini</small></th>
+              <th><small>Suspendidas</small></th>
+              <th><small>Retiradas</small></th>
+              <th><small>Nuevas</small></th>
+              <th><small>Total</small></th>
+              <th><small>Planificado Gestion</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Mes</td>
+              <td class="text-right">68</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+              <td class="text-right">68</td>
+              <td class="text-right">-</td>
+            </tr>
+            <tr>
+              <td>Acum</td>
+              <td class="text-right">65</td>
+              <td class="text-right">0</td>
+              <td class="text-right">2</td>
+              <td class="text-right">5</td>
+              <td class="text-right">68</td>
+              <td class="text-right">73</td>
+            </tr>
+          </tbody>
+        </table>
+
+                  </div>
+            </div>   
+          </div>
+          <?php
+          }
+          ?>
+
+
+
+          <!--div class="card-footer">
             <div class="stats">
               <i class="material-icons">access_time</i><small id="actualizado_ingresos<?=$superIndex?>"></small>
             </div>
-          </div>
-        </div>
+          </div-->        
       </div>
            <?php 
                $fondoTemporal=$codigosConjunto;
@@ -482,12 +653,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                $organismoTemporal=$codOrganismoX;
                $filaTemporal=$superIndex;
 
-               /*$_SESSION["fondoTemporal"]=$fondoTemporal;
-               $_SESSION["nombreFondoTemporal"]=$nombreFondo;
-               $_SESSION["mesTemporal"]=$mesTemporal;
-               $_SESSION["anioTemporal"]=$anioTemporal;
-               $_SESSION["organismoTemporal"]=$organismoTemporal;
-               $_SESSION["filaTemporal"]=$superIndex;*/
+               
            ?>
            <div class="col-md-4">
                 <div class="card">
@@ -517,48 +683,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $participacion1=($montoEjecutadoGrupo1/$montoIngresosTotalGrupos)*100;
     $participacion2=($montoEjecutadoGrupo2/$montoIngresosTotalGrupos)*100;
     $participacion3=($montoEjecutadoGrupo3/$montoIngresosTotalGrupos)*100;
-
     ?>
-
-    </br></br></br> 
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['gauge']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-
-        var data = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['Mes', <?=$valorIngresoFormat?>],
-          ['Acumulado', <?=$valorIngresoFormatAcumulado?>]
-        ]);
-        var dataEg = google.visualization.arrayToDataTable([
-          ['Label', 'Value'],
-          ['Mes', <?=$valorEgresoFormat?>],
-          ['Acumulado', <?=$valorEgresoFormatAcumulado?>]
-        ]);
-        var options = {
-          width: 270, height: 270,
-          redFrom: 0, redTo: 80,
-          yellowFrom:80, yellowTo: 95,
-          greenFrom:95, greenTo: 100,
-          minorTicks: 5
-        };
-        var options1 = {
-          width: 270, height: 270,
-          greenFrom: 0, greenTo: 80,
-          yellowFrom:80, yellowTo: 95,
-          redFrom:95, redTo: 100,
-          minorTicks: 5
-        };
-
-        var chart = new google.visualization.Gauge(document.getElementById('ingreso_general_chart<?=$superIndex?>'));
-        chart.draw(data, options);
-        var chartEg = new google.visualization.Gauge(document.getElementById('ingreso_general_chart_eg<?=$superIndex?>'));
-        chartEg.draw(dataEg, options1);
-          $('#actualizado_ingresos<?=$superIndex?>').html(obtenerHoraFechaActualFormato());
-      }
-    </script>
         <?php
         $superIndex++;
         }

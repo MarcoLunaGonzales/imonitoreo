@@ -28,7 +28,11 @@ if(count($datosMes)>0){
 }
 $stringGestiones=implode(",", $gestiones);
 $diaUltimo=date("d",(mktime(0,0,0,$mes,1,nameGestion($gestion))-1));
-$hasta=nameGestion($gestion)."-".$mes."-".$diaUltimo;
+$hasta=nameGestion($gestion)."-".$mes."-01";
+
+$hasta=date('Y-m-d',strtotime($hasta.'+1 month'));
+$hasta=date('Y-m-d',strtotime($hasta.'-1 day'));
+
 
 $desdeFinal=nameGestion($gestion)."-".$mes."-01";
 $hastaFinal=nameGestion($gestion)."-".$mes."-".$diaUltimo;
