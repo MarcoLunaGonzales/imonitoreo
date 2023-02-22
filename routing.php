@@ -342,6 +342,9 @@
 		if ($_GET['opcion']=='filtroRevisionPORegionArea') {
 			require_once('presupuesto_operativo/rptOpSeguimientoxAreaRegion.php');
 		}
+		if ($_GET['opcion']=='filtroRevisionPORegionAreabk') {
+			require_once('presupuesto_operativo/rptOpSeguimientoxAreaRegionbk.php');
+		}
 		if ($_GET['opcion']=='configuracionDistribucion') {
 			require_once('presupuesto_operativo/configurarDistribucionDNSA.php');
 		}

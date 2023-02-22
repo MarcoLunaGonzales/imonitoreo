@@ -3,7 +3,7 @@
 
    
    private $tipo_de_base = 'mysql';
-   private $host = '200.105.199.166';
+   private $host = 'lpsit.ibnorca.org';
    private $nombre_de_base = 'ibnmonitoreo';
    private $usuario = 'ingresofm';
    private $contrasena = 'minka123';

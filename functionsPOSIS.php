@@ -458,7 +458,10 @@ function distribucionDNSA($agencia, $anio, $mes, $organismo, $acumulado, $dn_sa)
       }
       //echo $montoEgresoEjecutado." ";
     //SACAMOS EL PORCENTAJE DE DISTRIBUCIONC
-    $sqlDetalle="SELECT $campo from po_distribucionunidadesareas where cod_fondo in ($codRegional) and cod_organismo='$organismo'";
+      //SACAMOS LA GESTION DESDE EL ANIO
+      $codigoGestionX=obtenerCodigoGestionNombre($anio);
+
+    $sqlDetalle="SELECT $campo from po_distribucionunidadesareas where cod_fondo in ($codRegional) and cod_organismo='$organismo' and cod_gestion='$codigoGestionX'";
     //echo $sqlDetalle;
     $porcentaje=0;
     $stmtDetalle = $dbh->prepare($sqlDetalle);

@@ -399,13 +399,30 @@ foreach ($detalle as $objDet){
   $idArea=$objDet->IdArea;
   $idOficina=$objDet->IdOficina;
   $cargo=$objDet->Cargo;
+  $idUsuario=$objDet->IdUsuario;
+  $idPersonal=$objDet->IdPersonal;
+  $idCliente=$objDet->IdCliente;
 
-  $stmt = $dbh->prepare("INSERT INTO $tableInsert (codigo, nombre, cod_area, cod_unidad) VALUES (:codigo, :nombre, :cod_area, :cod_unidad)");
-  $stmt->bindParam(':codigo', $codigoX);
-  $stmt->bindParam(':nombre', $nombreX);
-  $stmt->bindParam(':cod_area', $idArea);
-  $stmt->bindParam(':cod_unidad', $idOficina);
-  $flagSuccess=$stmt->execute();
+
+  if($codigoX=="" || $codigoX==0){
+    $codigoX=$idCliente;
+  }
+
+  $sql="INSERT INTO $tableInsert (codigo, nombre, cod_area, cod_unidad, cod_usuario, cod_personal) VALUES (:codigo, :nombre, :cod_area, :cod_unidad, :cod_usuario, :cod_personal)";
+  $stmt = $dbh->prepare($sql);
+  $values = array( ':codigo' => $codigoX,
+        ':nombre' => $nombreX,
+        ':cod_area' => $idArea,
+        ':cod_unidad' => $idOficina,
+        ':cod_usuario' => $idUsuario,
+        ':cod_personal' => $idPersonal
+      );
+
+  $exQuery=str_replace(array_keys($values), array_values($values), $sql);
+  
+  //echo $exQuery;
+
+  $flagSuccess=$stmt->execute($values);
 }
 echo "Personal Sincronizado!!<br>";
 

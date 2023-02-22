@@ -111,6 +111,9 @@ require("chartPorServicio.php");
                           $colorPorcIngAnt=colorPorcentajeIngreso($porcIngresoAnt);
                           $colorPorcIng=colorPorcentajeIngreso($porcIngreso);
 
+                          $diferenciaAniosIngresos=($montoEjIngreso-$montoEjIngresoAnt);
+                          $porcentajeAniosIngresos=(($montoEjIngreso-$montoEjIngresoAnt)/$montoEjIngresoAnt)*100;
+
                       ?>
                         <tr>
                           <td class="text-left font-weight-bold"><?=$nombreServicio;?></td>
@@ -231,6 +234,7 @@ require("chartPorServicio.php");
 
                   <?php
                   $sqlServicios="SELECT codigo, nombre from po_organismos where codigo in ($cadenaOrganismos) order by 2";
+                  //echo $sqlServicios;
                   $stmtServicios = $dbh->prepare($sqlServicios);
                   $stmtServicios->execute();
                   while ($rowServicios= $stmtServicios->fetch(PDO::FETCH_ASSOC)) {
@@ -258,6 +262,9 @@ require("chartPorServicio.php");
                           }
                           $colorPorcIngAnt=colorPorcentajeIngreso($porcIngresoAnt);
                           $colorPorcIng=colorPorcentajeIngreso($porcIngreso);
+
+                          $diferenciaAniosIngresos=($montoEjIngreso-$montoEjIngresoAnt);
+                          $porcentajeAniosIngresos=(($montoEjIngreso-$montoEjIngresoAnt)/$montoEjIngresoAnt)*100;
 
                       ?>
                         <tr>

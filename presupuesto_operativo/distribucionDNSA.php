@@ -7,6 +7,9 @@ require_once 'functions.php';
 $dbh = new Conexion();
 
 $moduleName="Distribucion Porcentajes DN & SA";
+$globalGestionX=$_SESSION['globalGestion'];
+$nombreGestion=$_SESSION['globalNombreGestion'];
+
 
 ?>
 
@@ -19,7 +22,7 @@ $moduleName="Distribucion Porcentajes DN & SA";
               <div class="card">
                 <div class="card-header card-header-text <?=$colorCardDetail?>">
                   <div class="card-text">
-                    <p class="card-category">Distribucion Porcentajes - PO</p>
+                    <p class="card-category">Distribucion Porcentajes - PO  Gestion: <?=$nombreGestion;?></p>
                   </div>
                 </div>
                 <div class="card-body table-responsive">
@@ -76,7 +79,7 @@ $moduleName="Distribucion Porcentajes DN & SA";
 								$codigoO=$rowA['codigo'];
 								$nombreO=$rowA['nombre'];
 
-								$sqlDetalle="SELECT porcentaje_dn, porcentaje_sa from po_distribucionunidadesareas where cod_fondo='$codigoF' and cod_organismo='$codigoO'";
+								$sqlDetalle="SELECT porcentaje_dn, porcentaje_sa from po_distribucionunidadesareas where cod_fondo='$codigoF' and cod_organismo='$codigoO' and cod_gestion='$globalGestionX'";
 								//echo $sqlDetalle;
 								$porcentajeDNX=0;
 								$porcentajeSAX=0;

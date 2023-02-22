@@ -999,6 +999,7 @@ function buscarAreasAdicionales($cod_personal,$tipo){//1 codigos , 2 nombres
         $cadena.=",".$nombreAreaAdi;
       }
   }
+  //ESTO PARA MKT
   //$cadena=substr($cadena, 2);
   return($cadena);  
 }

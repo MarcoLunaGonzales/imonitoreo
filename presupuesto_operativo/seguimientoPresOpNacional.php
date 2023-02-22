@@ -111,13 +111,18 @@ $_SESSION['mesTemporal']=$mes;
                           $porcResultado=(($resultadoEj-$resultadoPres)/$resultadoPres)*100;
 
                           $diferenciaAniosIngresos=$montoEjIngreso-$montoEjIngresoAnt;
-                          $porcentajeAniosIngresos=($montoEjIngreso/$montoEjIngresoAnt)*100;
+                          //$porcentajeAniosIngresos=($montoEjIngreso/$montoEjIngresoAnt)*100;
+                          //diferencia porcentual
+                          $porcentajeAniosIngresos=(($montoEjIngreso-$montoEjIngresoAnt)/$montoEjIngresoAnt)*100;
+                          
 
                           $diferenciaAniosEgresos=$montoEjEgreso-$montoEjEgresoAnt;
-                          $porcentajeAniosEgresos=($montoEjEgreso/$montoEjEgresoAnt)*100;
+                          //$porcentajeAniosEgresos=($montoEjEgreso/$montoEjEgresoAnt)*100;
+                          $porcentajeAniosEgresos=(($montoEjEgreso-$montoEjEgresoAnt)/$montoEjEgresoAnt)*100;
 
                           $diferenciaAniosResult=$resultadoEj-$resultadoEjAnt;
-                          $porcentajeAniosResult=($resultadoEj/$resultadoEjAnt)*100;
+                          //$porcentajeAniosResult=($resultadoEj/$resultadoEjAnt)*100;
+                          $porcentajeAniosResult=(($resultadoEj-$resultadoEjAnt)/$resultadoEjAnt)*100;
 
                       ?>
                         <tr>
@@ -158,7 +163,7 @@ $_SESSION['mesTemporal']=$mes;
                           <!--td class="text-right"><?=formatNumberInt($porcResultadoAnt);?></td-->
                           <td class="text-right">-</td>
                           <td class="text-right"><?=formatNumberInt($diferenciaAniosResult);?></td>
-                          <td class="text-right">-</td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosResult);?></td>
                         </tr>
 
                       </tbody>
@@ -310,13 +315,17 @@ $_SESSION["nombreTemporalAgrupado"]="EC";
                           $porcResultado=(($resultadoEj-$resultadoPres)/$resultadoPres)*100;
 
                           $diferenciaAniosIngresos=$montoEjIngreso-$montoEjIngresoAnt;
-                          $porcentajeAniosIngresos=($montoEjIngreso/$montoEjIngresoAnt)*100;
+                          //$porcentajeAniosIngresos=($montoEjIngreso/$montoEjIngresoAnt)*100;
+                          $porcentajeAniosIngresos=(($montoEjIngreso-$montoEjIngresoAnt)/$montoEjIngresoAnt)*100;
 
                           $diferenciaAniosEgresos=$montoEjEgreso-$montoEjEgresoAnt;
-                          $porcentajeAniosEgresos=($montoEjEgreso/$montoEjEgresoAnt)*100;
+                          //$porcentajeAniosEgresos=($montoEjEgreso/$montoEjEgresoAnt)*100;
+                          $porcentajeAniosEgresos=(($montoEjEgreso-$montoEjEgresoAnt)/$montoEjEgresoAnt)*100;
 
                           $diferenciaAniosResult=$resultadoEj-$resultadoEjAnt;
-                          $porcentajeAniosResult=($resultadoEj/$resultadoEjAnt)*100;
+                          //$porcentajeAniosResult=($resultadoEj/$resultadoEjAnt)*100;
+                          $porcentajeAniosResult=(($resultadoEj-$resultadoEjAnt)/$resultadoEjAnt)*100;
+
 
 
                       ?>
@@ -358,7 +367,7 @@ $_SESSION["nombreTemporalAgrupado"]="EC";
                           <!--td class="text-right"><?=formatNumberInt($porcResultadoAnt);?></td-->
                           <td class="text-right">-</td>
                           <td class="text-right"><?=formatNumberInt($diferenciaAniosResult);?></td>
-                          <td class="text-right">-</td>
+                          <td class="text-right"><?=formatNumberInt($porcentajeAniosResult);?></td>
                         </tr>
 
 

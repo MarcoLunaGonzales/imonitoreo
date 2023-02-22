@@ -38,10 +38,13 @@ if($tipoLogin==2){
 	curl_close ($ch);
 	$obj=json_decode($remote_server_output);
 
+	//	echo $obj;
 	$banderaLogin=$obj->estado;
 	$idUsuarioSW=$obj->usuario->IdUsuario;
 
+	
 	//echo "codigo: ".$idUsuarioSW;
+
 }
 
 
@@ -80,6 +83,13 @@ if($banderaLogin==1 || $tipoLogin==1){
 		}
 		//echo "area unidad: ".$codAreaTrabajo." ".$codUnidadTrabajo;
 
+		//PARA MKT
+		if($codAreaTrabajo==2978){
+			$codAreaTrabajo="11,12,13,38,39,40";
+		}
+		//FIN MKT
+
+
 		$nombreArea=abrevArea($codAreaTrabajo);
 		$nombreUnidad=abrevUnidad($codUnidadTrabajo);
 
@@ -93,11 +103,11 @@ if($banderaLogin==1 || $tipoLogin==1){
 		$nombreGestion=nameGestion($codGestionActiva);
 
 		if($idUsuarioSW==49299){
-			$codGestionActiva=1205;
-			$nombreGestion="2020";
+			$codGestionActiva=3584;
+			$nombreGestion="2021";
 			$codMesActiva=12;
-			$codUnidad=3000;
-			$nombreUnidad="SIS";
+			$codUnidad=5;
+			$nombreUnidad="RLP";
 		}
 		
 		$_SESSION['globalUser']=$codigo;
@@ -117,7 +127,7 @@ if($banderaLogin==1 || $tipoLogin==1){
 		$_SESSION['globalProyecto']='';
 
 
-		if($codigo==90 || $codigo==332 || $codigo==195){
+		if($codigo==90 || $codigo==332 || $codigo==195 || $codigo==183 || $codigo==500){
 			$_SESSION['globalAdmin']=1;			
 		}else{
 			$_SESSION['globalAdmin']=0;	

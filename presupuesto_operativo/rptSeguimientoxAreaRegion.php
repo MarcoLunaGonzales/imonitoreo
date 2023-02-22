@@ -15,6 +15,10 @@ $anio=nameGestion($gestion);
 $mes=$_GET["mes"];
 
 $organismoV=$_GET["organismos"];
+//$organismoV=503;
+
+//echo "ORGANISMO: ".var_dump($organismoV);
+
 $organismos=implode(",", $organismoV);
 $organismoArray=str_replace(',', '|', $organismos);
 
@@ -26,6 +30,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
   $cadenaOrganismos=$row['valor_configuracion'];
 }
 $cadenaOrganismos=$organismos;
+
+//FIJAMOS OI
+$cadenaOrganismos=503;
 
 //echo $cadenaOrganismos;
 
@@ -230,13 +237,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
                 /********DIVIDIDO EN 3 LPZ 30 % CBBA 30 % SCZ 40% *******/
                 if($i==1){
-                  $montoEjEgConjunto=$montoEjEgConjunto+($montoTotalDNADistribuir*0.3);
+                  $montoEjEgConjunto=$montoEjEgConjunto+($montoTotalDNADistribuir*0.35);
                 }
                 if($i==2){
                   $montoEjEgConjunto=$montoEjEgConjunto+($montoTotalDNADistribuir*0.3);
                 }
                 if($i==3){
-                  $montoEjEgConjunto=$montoEjEgConjunto+($montoTotalDNADistribuir*0.4);
+                  $montoEjEgConjunto=$montoEjEgConjunto+($montoTotalDNADistribuir*0.35);
                 }
                 /******** FIN DIVIDIDO EN 3 LPZ 30 % CBBA 30 % SCZ 40%   *******/
 
@@ -344,13 +351,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
                   /********DIVIDIDO EN 3 LPZ 30 % CBBA 30 % SCZ 40% *******/
                   if($i==1){
-                    $montoEjEgAcumulado=$montoEjEgAcumulado+($montoTotalDNADistribuirAcumulado*0.3);
+                    $montoEjEgAcumulado=$montoEjEgAcumulado+($montoTotalDNADistribuirAcumulado*0.35);
                   }
                   if($i==2){
                     $montoEjEgAcumulado=$montoEjEgAcumulado+($montoTotalDNADistribuirAcumulado*0.3);
                   }
                   if($i==3){
-                    $montoEjEgAcumulado=$montoEjEgAcumulado+($montoTotalDNADistribuirAcumulado*0.4);
+                    $montoEjEgAcumulado=$montoEjEgAcumulado+($montoTotalDNADistribuirAcumulado*0.35);
                   }
                   /******** FIN DIVIDIDO EN 3 LPZ 30 % CBBA 30 % SCZ 40%   *******/
 
@@ -449,10 +456,225 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         </td>
       </tr>
     </table>
-    </div></br></br></br> 
+    </div> 
         <?php
         }
         ?>
+
+  
+
+
+
+  <div class="row">
+
+
+    <div class="col-md-4 div-center">
+      <div class="card card-chart text-center">
+        <div class="card-header card-header" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
+          <h4>Actividades RLP</h4>
+        </div>
+      </div>
+      <?php
+        $nombreActividad="Inspecciones";
+        $planificadoMes=140; 
+        $ejecutadoMes=143; 
+        
+        $porcentajeActMes=($ejecutadoMes/$planificadoMes)*100;
+        $colorPorcentajeAct=colorPorcentajeIngreso($porcentajeActMes);
+        $colorPorcentajeAct=substr($colorPorcentajeAct, 3);
+
+        $planificadoMesAcum=140; 
+        $ejecutadoMesAcum=143; 
+
+        $porcentajeActMesAcum=($ejecutadoMesAcum/$planificadoMesAcum)*100;
+        $colorPorcentajeActAcum=colorPorcentajeIngreso($porcentajeActMesAcum);
+        $colorPorcentajeActAcum=substr($colorPorcentajeActAcum, 3);
+      ?>
+      <div class="row">        
+        <div class="col-md-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-<?=$colorPorcentajeAct;?> card-header-icon">
+              <div class="card-icon">
+                <h3><?=formatNumberInt($porcentajeActMes);?>%</h3>
+              </div>
+              <p class="card-category"><small>Planificado</small></p>
+              <h3 class="card-title"><?=$planificadoMes;?></h3>
+
+              <p class="card-category"><small>Ejecutado</small></p>
+              <h3 class="card-title"><?=$ejecutadoMes;?></h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">local_offer</i> <p class="font-weight-bold"><?=$nombreActividad;?> - Mes</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-<?=$colorPorcentajeActAcum;?> card-header-icon">
+              <div class="card-icon">
+                <h3><?=formatNumberInt($porcentajeActMesAcum);?>%</h3>
+              </div>
+              <p class="card-category"><small>Planificado</small></p>
+              <h3 class="card-title"><?=$planificadoMesAcum;?></h3>
+
+              <p class="card-category"><small>Ejecutado</small></p>
+              <h3 class="card-title"><?=$ejecutadoMesAcum;?></h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">local_offer</i> <b><?=$nombreActividad;?> - Acumulado</b>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div>
+
+
+
+
+
+    <div class="col-md-4 div-center">
+      <div class="card card-chart text-center">
+        <div class="card-header card-header" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
+          <h4>Actividades RCB</h4>
+        </div>
+      </div>
+      <?php
+        $nombreActividad="Inspecciones";
+        $planificadoMes=65; 
+        $ejecutadoMes=43; 
+        
+        $porcentajeActMes=($ejecutadoMes/$planificadoMes)*100;
+        $colorPorcentajeAct=colorPorcentajeIngreso($porcentajeActMes);
+        $colorPorcentajeAct=substr($colorPorcentajeAct, 3);
+
+        $planificadoMesAcum=65; 
+        $ejecutadoMesAcum=43; 
+
+        $porcentajeActMesAcum=($ejecutadoMesAcum/$planificadoMesAcum)*100;
+        $colorPorcentajeActAcum=colorPorcentajeIngreso($porcentajeActMesAcum);
+        $colorPorcentajeActAcum=substr($colorPorcentajeActAcum, 3);
+      ?>
+      <div class="row">        
+        <div class="col-md-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-<?=$colorPorcentajeAct;?> card-header-icon">
+              <div class="card-icon">
+                <h3><?=formatNumberInt($porcentajeActMes);?>%</h3>
+              </div>
+              <p class="card-category"><small>Planificado</small></p>
+              <h3 class="card-title"><?=$planificadoMes;?></h3>
+
+              <p class="card-category"><small>Ejecutado</small></p>
+              <h3 class="card-title"><?=$ejecutadoMes;?></h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">local_offer</i> <p class="font-weight-bold"><?=$nombreActividad;?> - Mes</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-<?=$colorPorcentajeActAcum;?> card-header-icon">
+              <div class="card-icon">
+                <h3><?=formatNumberInt($porcentajeActMesAcum);?>%</h3>
+              </div>
+              <p class="card-category"><small>Planificado</small></p>
+              <h3 class="card-title"><?=$planificadoMesAcum;?></h3>
+
+              <p class="card-category"><small>Ejecutado</small></p>
+              <h3 class="card-title"><?=$ejecutadoMesAcum;?></h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">local_offer</i> <b><?=$nombreActividad;?> - Acumulado</b>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div>
+
+
+
+
+    <div class="col-md-4 div-center">
+      <div class="card card-chart text-center">
+        <div class="card-header card-header" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
+          <h4>Actividades RSC</h4>
+        </div>
+      </div>
+      <?php
+        $nombreActividad="Inspecciones";
+        $planificadoMes=123; 
+        $ejecutadoMes=106; 
+        
+        $porcentajeActMes=($ejecutadoMes/$planificadoMes)*100;
+        $colorPorcentajeAct=colorPorcentajeIngreso($porcentajeActMes);
+        $colorPorcentajeAct=substr($colorPorcentajeAct, 3);
+
+        $planificadoMesAcum=123; 
+        $ejecutadoMesAcum=106; 
+
+        $porcentajeActMesAcum=($ejecutadoMesAcum/$planificadoMesAcum)*100;
+        $colorPorcentajeActAcum=colorPorcentajeIngreso($porcentajeActMesAcum);
+        $colorPorcentajeActAcum=substr($colorPorcentajeActAcum, 3);
+      ?>
+      <div class="row">        
+        <div class="col-md-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-<?=$colorPorcentajeAct;?> card-header-icon">
+              <div class="card-icon">
+                <h3><?=formatNumberInt($porcentajeActMes);?>%</h3>
+              </div>
+              <p class="card-category"><small>Planificado</small></p>
+              <h3 class="card-title"><?=$planificadoMes;?></h3>
+
+              <p class="card-category"><small>Ejecutado</small></p>
+              <h3 class="card-title"><?=$ejecutadoMes;?></h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">local_offer</i> <p class="font-weight-bold"><?=$nombreActividad;?> - Mes</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card card-stats">
+            <div class="card-header card-header-<?=$colorPorcentajeActAcum;?> card-header-icon">
+              <div class="card-icon">
+                <h3><?=formatNumberInt($porcentajeActMesAcum);?>%</h3>
+              </div>
+              <p class="card-category"><small>Planificado</small></p>
+              <h3 class="card-title"><?=$planificadoMesAcum;?></h3>
+
+              <p class="card-category"><small>Ejecutado</small></p>
+              <h3 class="card-title"><?=$ejecutadoMesAcum;?></h3>
+            </div>
+            <div class="card-footer">
+              <div class="stats">
+                <i class="material-icons">local_offer</i> <b><?=$nombreActividad;?> - Acumulado</b>
+              </div>
+            </div>
+          </div>
+        </div> 
+      </div>
+    </div>
+
+
+
+
+  </div>    
+  
+
+
+
 
 
       </div>

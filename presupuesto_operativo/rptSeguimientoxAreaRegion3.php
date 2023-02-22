@@ -67,7 +67,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 <script type="text/javascript" src="../assets/chartjs/js/utils.js"></script>
 <script>var filaChart=0;</script>
 <div class="content">
-	<div class="container-fluid">
+  <div class="container-fluid">
     <div class="row">
       <div class="card">
         <div class="card-header <?=$colorCard;?> card-header-icon">
@@ -143,6 +143,15 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $montoEjIngConjunto=ejecutadoIngresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,0,0);
 
 
+                /*BORRAR SOLO TEMPORAL PARA MAYO Y JUNIO 2022*/
+                if($anio==2022 && $mes==5 && $codOrganismoX==508){
+                  $montoEjIngConjunto=$montoEjIngConjunto+133632;
+                }
+                if($anio==2022 && $mes==6 && $codOrganismoX==508){
+                  $montoEjIngConjunto=$montoEjIngConjunto-133632;
+                }
+                /*FIN BORRAR*/
+
                 $porcentajeIngConjunto=0;
                 if($montoPresIngConjunto>0){
                   $porcentajeIngConjunto=($montoEjIngConjunto/$montoPresIngConjunto)*100;
@@ -173,9 +182,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <?php
                 $codCuentaIngresos1="4010103001";
                 $codCuentaIngresos2="4010103003";
+                $codCuentaIngresos3="4010103004";
+
                 $nombreCuenta1=nameCuenta($codCuentaIngresos1);
                 $nombreCuenta2=nameCuenta($codCuentaIngresos2);
-                $nombreCuenta3="Ingresos por Acceso Normas";
+                $nombreCuenta3="Ingresos FOR a NO";
 
                 $ejecutadoCuenta1=ejecutadoIngresosMes($codigosConjunto, $anio, $mes, $codOrganismoX, 0, $codCuentaIngresos1);
                 $ejecutadoCuenta2=ejecutadoIngresosMes($codigosConjunto, $anio, $mes, $codOrganismoX, 0, $codCuentaIngresos2);
@@ -183,7 +194,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
                 $presupuestoCuenta1=presupuestoIngresosMes($codigosConjunto, $anio, $mes, $codOrganismoX, 0, $codCuentaIngresos1);
                 $presupuestoCuenta2=presupuestoIngresosMes($codigosConjunto, $anio, $mes, $codOrganismoX, 0, $codCuentaIngresos2);
-                $presupuestoCuenta3=0;
+                $presupuestoCuenta3=presupuestoIngresosMes($codigosConjunto, $anio, $mes, $codOrganismoX, 0, $codCuentaIngresos3);
 
                 $ejecutadoCuenta1=$ejecutadoCuenta1-$ejecutadoCuenta3;  
 
@@ -193,7 +204,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 
                 if($ejecutadoCuenta1>0){ $porcentajeCuenta1NO=($ejecutadoCuenta1/$presupuestoCuenta1)*100;               }
                 if($ejecutadoCuenta2>0){ $porcentajeCuenta2NO=($ejecutadoCuenta2/$presupuestoCuenta2)*100;               }
-                if($ejecutadoCuenta3>0){ $porcentajeCuenta3NO=0;               }
+                if($ejecutadoCuenta3>0){ $porcentajeCuenta3NO=($ejecutadoCuenta3/$presupuestoCuenta3)*100;;               }
 
                 if($codOrganismoX==510){
                 ?>
@@ -222,7 +233,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-left text-muted">
                     <?=$nombreCuenta3;?>
                   </td>
-                  <td class="text-center text-muted table-warning">-</td>
+                  <td class="text-center text-muted table-warning"><?=formatNumberInt($presupuestoCuenta3);?></td>
                   <td class="text-right text-muted table-warning">
                     <?=formatNumberInt($ejecutadoCuenta3);?></td>
                   <td class="text-right text-muted"><?=formatNumberInt($porcentajeCuenta3NO);?></td>
@@ -274,6 +285,16 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $montoPresIngAcumulado=presupuestoIngresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
                   $montoEjIngAcumulado=ejecutadoIngresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
 
+                  /*BORRAR SOLO TEMPORAL PARA MAYO Y JUNIO 2022*/
+                  if($anio==2022 && $mes==5 && $codOrganismoX==508){
+                    $montoEjIngAcumulado=$montoEjIngAcumulado+133632;
+                  }
+                  if($anio==2022 && $mes==6 && $codOrganismoX==508){
+                    //$montoEjIngAcumulado=$montoEjIngAcumulado-133632;
+                  }
+                  /*FIN BORRAR*/
+
+
                   $montoPresIngGestion=presupuestoIngresosMes($codigosConjunto,$anio,12,$codOrganismoX,1,0);
   
 
@@ -314,9 +335,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <?php
                 $codCuentaIngresos1="4010103001";
                 $codCuentaIngresos2="4010103003";
+                $codCuentaIngresos3="4010103004";
+
                 $nombreCuenta1=nameCuenta($codCuentaIngresos1);
                 $nombreCuenta2=nameCuenta($codCuentaIngresos2);
-                $nombreCuenta3="Ingresos por Acceso Normas";
+                $nombreCuenta3="Ingresos FOR a NO";
 
                 $ejecutadoCuenta1=ejecutadoIngresosMes($codigosConjunto, $anio, $mes, $codOrganismoX, 1, $codCuentaIngresos1);
                 $ejecutadoCuenta2=ejecutadoIngresosMes($codigosConjunto, $anio, $mes, $codOrganismoX, 1, $codCuentaIngresos2);
@@ -324,7 +347,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
                 $presupuestoCuenta1=presupuestoIngresosMes($codigosConjunto, $anio, $mes, $codOrganismoX, 1, $codCuentaIngresos1);
                 $presupuestoCuenta2=presupuestoIngresosMes($codigosConjunto, $anio, $mes, $codOrganismoX, 1, $codCuentaIngresos2);
-                $presupuestoCuenta3=0;
+                $presupuestoCuenta3=presupuestoIngresosMes($codigosConjunto, $anio, $mes, $codOrganismoX, 1, $codCuentaIngresos3);
 
                 $ejecutadoCuenta1=$ejecutadoCuenta1-$ejecutadoCuenta3;  
 
@@ -334,7 +357,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 
                 if($ejecutadoCuenta1>0){ $porcentajeCuenta1NO=($ejecutadoCuenta1/$presupuestoCuenta1)*100;               }
                 if($ejecutadoCuenta2>0){ $porcentajeCuenta2NO=($ejecutadoCuenta2/$presupuestoCuenta2)*100;               }
-                if($ejecutadoCuenta3>0){ $porcentajeCuenta3NO=0;               }
+                if($ejecutadoCuenta3>0){ $porcentajeCuenta3NO=($ejecutadoCuenta3/$presupuestoCuenta3)*100;;               }
 
                 if($codOrganismoX==510){
                 ?>
@@ -362,7 +385,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <td class="text-left text-muted">
                     <?=$nombreCuenta3;?>
                   </td>
-                  <td class="text-center text-muted table-warning">-</td>
+                  <td class="text-center text-muted table-warning"><?=formatNumberInt($presupuestoCuenta3);?></td>
                   <td class="text-right text-muted table-warning">
                     <?=formatNumberInt($ejecutadoCuenta3);?></td>
                   <td class="text-right text-muted"><?=formatNumberInt($porcentajeCuenta3NO);?></td>
@@ -375,13 +398,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   $montoPresEgAcumulado=presupuestoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
                   $montoEjEgAcumulado=ejecutadoEgresosMes($codigosConjunto,$anio,$mes,$codOrganismoX,1,0);
 
-                  $montoExtra=15000;
+                  /*CASO EXCEPCIONAL*/
+                  /*$montoExtra=15000;
                   if($codOrganismoX==505){
                     $montoEjEgAcumulado=$montoEjEgAcumulado+$montoExtra;
                   }
                   if($codOrganismoX==510){
                     $montoEjEgAcumulado=$montoEjEgAcumulado-$montoExtra;
-                  }
+                  }*/
 
 
                   $porcentajeEgAcum=0;
@@ -547,36 +571,54 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <div class="card-header card-header" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
                       <h4>Certificaciones <?php echo $nombreOrganismoX;?></h4>
 
-          <table class="table table-striped table-bordered table-dark">
+        <table class="table table-striped table-bordered table-condensed">
           <thead>
-            <tr class="text-center font-weight-bold">
-              <th><small>Tipo</small></th>
-              <th><small>Ini</small></th>
-              <th><small>Suspendidas</small></th>
-              <th><small>Retiradas</small></th>
-              <th><small>Nuevas</small></th>
-              <th><small>Total</small></th>
-              <th><small>Planificado Gestion</small></th>
+            <tr class="text-left font-weight-bold">
+              <th colspan="4"><small>CERTIFICACION SISTEMAS DE GESTIÓN (TCS)</small></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Mes</td>
-              <td class="text-right">147</td>
-              <td class="text-right">0</td>
-              <td class="text-right">0</td>
-              <td class="text-right">1</td>
-              <td class="text-right">148</td>
-              <td class="text-right">-</td>
+              <th class="text-left" colspan="1">Descripcion</th>
+              <th class="text-left" colspan="1">Contratos Firmados</th>
+              <th class="text-left" colspan="1">Empresas Certificadas</th>
+              <th class="text-left" colspan="1">Certificados</th>
             </tr>
             <tr>
-              <td>Acum</td>
-              <td class="text-right">153</td>
+              <td class="text-left">Cierre Diciembre 2022</td>
+              <td class="text-right">135</td>
+              <td class="text-right">128</td>
+              <td class="text-right">200</td>
+            </tr>
+            <tr>
+              <td class="text-left">Acumulado Diciembre 2022</td>
+              <td class="text-right">135</td>
+              <td class="text-right">128</td>
+              <td class="text-right">200</td>
+            </tr>
+            <tr>
+              <td class="text-left">Nuevas Enero (SG)</td>
+              <td class="text-right">0</td>
+              <td class="text-right">2</td>
               <td class="text-right">3</td>
-              <td class="text-right">15</td>
-              <td class="text-right">10</td>
-              <td class="text-right">148</td>
-              <td class="text-right">173</td>
+            </tr>
+            <tr>
+              <td class="text-left">Retiradas Enero (SG)</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+            </tr>
+            <tr>
+              <td class="text-left">Suspendidas Enero (SG)</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+            </tr>
+            <tr>
+              <th class="text-left">Totales</th>
+              <th class="text-right">135</th>
+              <th class="text-right">130</th>
+              <th class="text-right">203</th>
             </tr>
           </tbody>
         </table>
@@ -596,36 +638,104 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                   <div class="card-header card-header" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
                       <h4>Certificaciones <?php echo $nombreOrganismoX;?></h4>
 
-          <table class="table table-striped table-bordered table-dark">
+        <table class="table table-striped table-bordered table-condensed">
           <thead>
-            <tr class="text-center font-weight-bold">
-              <th><small>Tipo</small></th>
-              <th><small>Ini</small></th>
-              <th><small>Suspendidas</small></th>
-              <th><small>Retiradas</small></th>
-              <th><small>Nuevas</small></th>
-              <th><small>Total</small></th>
-              <th><small>Planificado Gestion</small></th>
+            <tr class="text-left font-weight-bold">
+              <th colspan="4"><small>CERTIFICACIONES SELLO PRODUCTO Y BPM (TCP)</small></th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Mes</td>
-              <td class="text-right">68</td>
-              <td class="text-right">0</td>
-              <td class="text-right">0</td>
-              <td class="text-right">0</td>
-              <td class="text-right">68</td>
-              <td class="text-right">-</td>
+              <th colspan="1">Descripcion (Producto)</th>
+              <th colspan="1">Contratos Firmados</th>
+              <th colspan="1">Empresas Certificadas</th>
+              <th colspan="1">Certificados</th>
             </tr>
             <tr>
-              <td>Acum</td>
-              <td class="text-right">65</td>
+              <td class="text-left">Cierre Diciembre 2022</td>
+              <td class="text-right">47</td>
+              <td class="text-right">47</td>
+              <td class="text-right">231</td>
+            </tr>
+            <tr>
+              <td class="text-left">Acumulado Diciembre 2022</td>
+              <td class="text-right">47</td>
+              <td class="text-right">47</td>
+              <td class="text-right">231</td>
+            </tr>
+            <tr>
+              <td class="text-left">Nuevas Enero</td>
+              <td class="text-right">0</td>
               <td class="text-right">0</td>
               <td class="text-right">2</td>
+            </tr>
+            <tr>
+              <td class="text-left">Retiradas Enero (SG)</td>
+              <td class="text-right">1</td>
+              <td class="text-right">1</td>
               <td class="text-right">5</td>
-              <td class="text-right">68</td>
-              <td class="text-right">73</td>
+            </tr>
+            <tr>
+              <td class="text-left">Suspendidas Enero (SG)</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+            </tr>
+            <tr>
+              <th class="text-left">Totales</th>
+              <th class="text-right">46</th>
+              <th class="text-right">46</th>
+              <th class="text-right">228</th>
+            </tr>
+
+            <tr>
+              <th colspan="1">Descripcion (BPM)</th>
+              <th colspan="1">Contratos Firmados</th>
+              <th colspan="1">Empresas Certificadas</th>
+              <th colspan="1">Certificados</th>
+            </tr>
+            <tr>
+              <td class="text-left">Cierre Diciembre 2022</td>
+              <td class="text-right">19</td>
+              <td class="text-right">17</td>
+              <td class="text-right">23</td>
+            </tr>
+            <tr>
+              <td class="text-left">Acumulado Diciembre 2022</td>
+              <td class="text-right">19</td>
+              <td class="text-right">17</td>
+              <td class="text-right">23</td>
+            </tr>
+            <tr>
+              <td class="text-left">Nuevas Enero (BPM)</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+            </tr>
+            <tr>
+              <td class="text-left">Retiradas Enero (BPM)</td>
+              <td class="text-right">1</td>
+              <td class="text-right">1</td>
+              <td class="text-right">1</td>
+            </tr>
+            <tr>
+              <td class="text-left">Suspendidas Enero (BPM)</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+              <td class="text-right">0</td>
+            </tr>
+            <tr>
+              <th class="text-left">Totales</th>
+              <th class="text-right">18</th>
+              <th class="text-right">16</th>
+              <th class="text-right">22</th>
+            </tr>
+
+            <tr>
+              <th class="text-left">Totales (Producto & BPM)</th>
+              <th class="text-right">64</th>
+              <th class="text-right">62</th>
+              <th class="text-right">250</th>
             </tr>
           </tbody>
         </table>
@@ -638,6 +748,192 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
           ?>
 
 
+          <?php
+          if($codOrganismoX==508){
+          ?>
+          <div class="row">
+            <div class="card card-stats">
+                  <div class="card-header card-header" data-header-animation="false" style="background:<?=$estiloHome?> !important;">
+                      <h4>DETALLE <?php echo $nombreOrganismoX;?></h4>
+
+        <table class="table table-striped table-bordered table-condensed">
+          <thead>
+            <tr class="text-left font-weight-bold">
+              <th colspan="5"><small>FORMACION CURSOS</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center text-danger">Enero</td>
+              <td class="text-center text-danger">Planificado</td>
+              <td class="text-center text-danger">Ejecutado</td>
+              <td class="text-center text-danger">%</td>
+            </tr>
+
+            <tr>
+              <td class="text-left">Programas Formación</td>
+              <td class="text-center">22</td>
+              <td class="text-center">21</td>
+              <td class="text-center">95 %</td>
+            </tr>
+            <tr>
+              <td class="text-left">Cursos Cortos</td>
+              <td class="text-center">14</td>
+              <td class="text-center">11</td>
+              <td class="text-center">79 %</td>
+            </tr>
+            <tr>
+              <td class="text-left">Cursos a Medida</td>
+              <td class="text-center">6</td>
+              <td class="text-center">5</td>
+              <td class="text-center">83 %</td>
+            </tr>  
+            <tr>
+              <td class="text-left">Cursos Internacionales</td>
+              <td class="text-center">0</td>
+              <td class="text-center">0</td>
+              <td class="text-center">0 %</td>
+            </tr>              
+            <tr>
+              <td class="text-left">Total Mes</td>
+              <td class="text-center">42</td>
+              <td class="text-center">37</td>
+              <td class="text-center">88 %</td>
+            </tr>              
+
+            <tr>
+              <td class="text-center text-danger">Acumulado a Enero</td>
+              <td class="text-center text-danger">Planificado</td>
+              <td class="text-center text-danger">Ejecutado</td>
+              <td class="text-center text-danger">%</td>
+            </tr>
+
+            <tr>
+              <td class="text-left">Programas Formación</td>
+              <td class="text-center">22</td>
+              <td class="text-center">21</td>
+              <td class="text-center">95 %</td>
+            </tr>
+\            <tr>
+              <td class="text-left">Cursos Cortos</td>
+              <td class="text-center">14</td>
+              <td class="text-center">11</td>
+              <td class="text-center">79 %</td>
+            </tr>
+            <tr>
+              <td class="text-left">Cursos a Medida</td>
+              <td class="text-center">6</td>
+              <td class="text-center">5</td>
+              <td class="text-center">83 %</td>
+            </tr>  
+            <tr>
+              <td class="text-left">Cursos Internacionales</td>
+              <td class="text-center">0</td>
+              <td class="text-center">0</td>
+              <td class="text-center">0 %</td>
+            </tr>                          
+            <tr>
+              <td class="text-left">Total Acumulado</td>
+              <td class="text-center">42</td>
+              <td class="text-center">37</td>
+              <td class="text-center">88 %</td>
+            </tr>                          
+          </tbody>
+        </table>
+
+
+
+        <table class="table table-striped table-bordered table-condensed">
+          <thead>
+            <tr class="text-left font-weight-bold">
+              <th colspan="5"><small>FORMACION ALUMNOS</small></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center text-danger">Enero</td>
+              <td class="text-center text-danger">Planificado</td>
+              <td class="text-center text-danger">Ejecutado</td>
+              <td class="text-center text-danger">%</td>
+            </tr>
+
+            <tr>
+              <td class="text-left">Programas Formación</td>
+              <td class="text-center">547</td>
+              <td class="text-center">498</td>
+              <td class="text-center">91 %</td>
+            </tr>
+            <tr>
+              <td class="text-left">Cursos Cortos</td>
+              <td class="text-center">280</td>
+              <td class="text-center">296</td>
+              <td class="text-center">106 %</td>
+            </tr>
+            <tr>
+              <td class="text-left">Cursos a Medida</td>
+              <td class="text-center">150</td>
+              <td class="text-center">127</td>
+              <td class="text-center">85 %</td>
+            </tr>  
+            <tr>
+              <td class="text-left">Cursos Internacionales</td>
+              <td class="text-center">0</td>
+              <td class="text-center">0</td>
+              <td class="text-center">0 %</td>
+            </tr>              
+            <tr>
+              <td class="text-left">Total Mes</td>
+              <td class="text-center">977</td>
+              <td class="text-center">921</td>
+              <td class="text-center">94 %</td>
+            </tr>    
+
+            <tr>
+              <td class="text-center text-danger">Acumulado a Diciembre</td>
+              <td class="text-center text-danger">Planificado</td>
+              <td class="text-center text-danger">Ejecutado</td>
+              <td class="text-center text-danger">%</td>
+            </tr>
+
+            <tr>
+              <td class="text-left">Programas Formación</td>
+              <td class="text-center">547</td>
+              <td class="text-center">498</td>
+              <td class="text-center">91 %</td>
+            </tr>
+            <tr>
+              <td class="text-left">Cursos Cortos</td>
+              <td class="text-center">280</td>
+              <td class="text-center">296</td>
+              <td class="text-center">106 %</td>
+            </tr>
+            <tr>
+              <td class="text-left">Cursos a Medida</td>
+              <td class="text-center">150</td>
+              <td class="text-center">127</td>
+              <td class="text-center">85 %</td>
+            </tr>  
+            <tr>
+              <td class="text-left">Cursos Internacionales</td>
+              <td class="text-center">0</td>
+              <td class="text-center">0</td>
+              <td class="text-center">0 %</td>
+            </tr>              
+            <tr>
+              <td class="text-left">Total Acumulado</td>
+              <td class="text-center">977</td>
+              <td class="text-center">921</td>
+              <td class="text-center">94 %</td>
+            </tr>    
+            <tr>              
+          </tbody>
+        </table>
+                  </div>
+            </div>   
+          </div>
+          <?php
+          }
+          ?>
 
           <!--div class="card-footer">
             <div class="stats">
