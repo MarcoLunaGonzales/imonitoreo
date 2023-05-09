@@ -113,7 +113,20 @@ function ejecutadoIngresosMes($agencia, $anio, $mes, $organismo, $acumulado, $cu
   return($montoIngresoEjecutado);
 }
 
+function ejecutadoIngresosMesDevengados($agencia, $anio, $mes, $organismo){
+  $dbh = new Conexion();
+  $agencia=str_replace('|', ',', $agencia);
 
+  $sql="select sum(i.monto)as monto from ingresos_devengados i where YEAR(i.fecha_sf)='$anio' and MONTH(i.fecha_sf)='$mes' and i.cod_area in ($organismo)";
+  //echo $sql; 
+  $stmt = $dbh->prepare($sql);
+  $flagSuccess2=$stmt->execute();
+  $montoIngreso=0;
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $montoIngreso=$row['monto'];
+  }
+  return($montoIngreso);
+}
 
 function ejecutadoIngresosMesNOEspecial($agencia, $anio, $mes, $organismo, $acumulado, $cuenta){
   $dbh = new Conexion();

@@ -163,25 +163,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 
 
                 $colorPorcentajeIngreso=colorPorcentajeIngreso($porcentajeIngConjunto);
-                $valorIngresoFormat=number_format(calcularValorEnPoncentaje($montoEjIngConjunto,$montoPresIngConjunto),0,'.','');
 
-                
+                $valorIngresoFormat=number_format(calcularValorEnPoncentaje($montoEjIngConjunto,$montoPresIngConjunto),0,'.','');
                 
                 /*AQUI SACAREMOS LOS INGRESOS DEVENGADOS*/
-                $codAreasX=obtenerOrganismosReport2($codOrganismoX);
-                $ingresosDevengados=ejecutadoIngresosMesDevengados($codigosConjunto,$anio,$mes,$codAreasX);
-
-                $ingresosTotalesMasDevengados=$montoEjIngConjunto+$ingresosDevengados;
-
-                $porcentajeIngConjuntoDev=0;
-                if($montoPresIngConjunto>0){
-                  $porcentajeIngConjuntoDev=(($montoEjIngConjunto+$ingresosDevengados)/$montoPresIngConjunto)*100;
-                }
-
-                $colorPorcentajeIngresoDev=colorPorcentajeIngreso($porcentajeIngConjuntoDev);
-                $valorIngresoFormatDev=number_format(calcularValorEnPoncentaje($montoEjIngConjunto,$montoPresIngConjunto),0,'.','');
-
-                /*FIN INGRESOS DEVENGADOS*/
 
                 ?>
                 <tr>
@@ -195,23 +180,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     <?=formatNumberInt($montoEjIngConjunto);?></td>
                   <td class="text-right font-weight-bold <?=$colorPorcentajeIngreso;?>"><?=formatNumberInt($porcentajeIngConjunto);?></td>
                   <!--td class="text-right  font-weight-bold table-warning"><?=formatNumberInt(100);?></td-->
-                </tr>
-
-                <tr>
-                  <td class="text-left font-weight-bold"><a href="ingresosDevengadosDetalle.php?gestion=<?=$gestion;?>&mes=<?=$mes;?>&area=<?=$codAreasX;?>" target="_blank">Ingresos Devengados</a></td>
-                  <td class="text-right  font-weight-bold table-warning">-</td>
-                  <td class="text-right font-weight-bold table-warning">
-                    <?=formatNumberInt($ingresosDevengados);?></td>
-                  <td class="text-right font-weight-bold">-</td>
-                </tr>
-
-                <tr>
-                  <td class="text-left font-weight-bold">Ingresos Totales</td>
-                  <td class="text-right  font-weight-bold table-warning"><?=formatNumberInt($montoPresIngConjunto);?>
-                  </td>
-                  <td class="text-right font-weight-bold table-warning">
-                    <?=formatNumberInt($ingresosTotalesMasDevengados);?></td>
-                  <td class="text-right font-weight-bold <?=$colorPorcentajeIngresoDev;?>"><?=formatNumberInt($porcentajeIngConjuntoDev);?></td>
                 </tr>
 
                 <?php

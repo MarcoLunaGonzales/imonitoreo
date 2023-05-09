@@ -549,11 +549,32 @@ function obtenerOrganismosReport($codigo){
   }else{
     $sql="SELECT p.codigo, p.nombre from po_organismos p, areas a where p.cod_area=a.codigo and a.codigo in ($codigo)";
   }
+  echo $sql;
   $stmt = $dbh->prepare($sql);
   $stmt->execute();
   $cadena="";
   while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       $codigo=$row['codigo'];
+      $cadena.=",".$codigo;
+  }
+  $cadena=substr($cadena, 1);
+  return($cadena);    
+}
+
+function obtenerOrganismosReport2($codigo){
+  $dbh = new Conexion();
+  $sql="";
+  if($codigo=="0"){
+    $sql="SELECT p.cod_area, p.nombre from po_organismos p";
+  }else{
+    $sql="SELECT p.cod_area, p.nombre from po_organismos p, areas a where p.cod_area=a.codigo and p.codigo in ($codigo)";
+  }
+  //echo $sql;
+  $stmt = $dbh->prepare($sql);
+  $stmt->execute();
+  $cadena="";
+  while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+      $codigo=$row['cod_area'];
       $cadena.=",".$codigo;
   }
   $cadena=substr($cadena, 1);

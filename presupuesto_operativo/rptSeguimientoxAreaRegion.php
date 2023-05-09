@@ -476,15 +476,15 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       </div>
       <?php
         $nombreActividad="Inspecciones";
-        $planificadoMes=140; 
-        $ejecutadoMes=143; 
+        $planificadoMes=157; 
+        $ejecutadoMes=171; 
         
         $porcentajeActMes=($ejecutadoMes/$planificadoMes)*100;
         $colorPorcentajeAct=colorPorcentajeIngreso($porcentajeActMes);
         $colorPorcentajeAct=substr($colorPorcentajeAct, 3);
 
-        $planificadoMesAcum=140; 
-        $ejecutadoMesAcum=143; 
+        $planificadoMesAcum=628; 
+        $ejecutadoMesAcum=648; 
 
         $porcentajeActMesAcum=($ejecutadoMesAcum/$planificadoMesAcum)*100;
         $colorPorcentajeActAcum=colorPorcentajeIngreso($porcentajeActMesAcum);
@@ -544,15 +544,15 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       </div>
       <?php
         $nombreActividad="Inspecciones";
-        $planificadoMes=65; 
-        $ejecutadoMes=43; 
+        $planificadoMes=51; 
+        $ejecutadoMes=47; 
         
         $porcentajeActMes=($ejecutadoMes/$planificadoMes)*100;
         $colorPorcentajeAct=colorPorcentajeIngreso($porcentajeActMes);
         $colorPorcentajeAct=substr($colorPorcentajeAct, 3);
 
-        $planificadoMesAcum=65; 
-        $ejecutadoMesAcum=43; 
+        $planificadoMesAcum=184; 
+        $ejecutadoMesAcum=209; 
 
         $porcentajeActMesAcum=($ejecutadoMesAcum/$planificadoMesAcum)*100;
         $colorPorcentajeActAcum=colorPorcentajeIngreso($porcentajeActMesAcum);
@@ -611,15 +611,15 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
       </div>
       <?php
         $nombreActividad="Inspecciones";
-        $planificadoMes=123; 
-        $ejecutadoMes=106; 
+        $planificadoMes=177; 
+        $ejecutadoMes=108; 
         
         $porcentajeActMes=($ejecutadoMes/$planificadoMes)*100;
         $colorPorcentajeAct=colorPorcentajeIngreso($porcentajeActMes);
         $colorPorcentajeAct=substr($colorPorcentajeAct, 3);
 
-        $planificadoMesAcum=123; 
-        $ejecutadoMesAcum=106; 
+        $planificadoMesAcum=566; 
+        $ejecutadoMesAcum=491; 
 
         $porcentajeActMesAcum=($ejecutadoMesAcum/$planificadoMesAcum)*100;
         $colorPorcentajeActAcum=colorPorcentajeIngreso($porcentajeActMesAcum);
